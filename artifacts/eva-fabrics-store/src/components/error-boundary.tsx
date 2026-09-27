@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: unknown, info: ErrorInfo): void {
-    console.error('Eva Fabrics error:', toError(error), info.componentStack)
+    console.error('Al Sifa store error:', toError(error), info.componentStack)
   }
 
   componentDidUpdate(previous: ErrorBoundaryProps): void {

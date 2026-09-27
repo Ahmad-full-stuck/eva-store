@@ -18,36 +18,34 @@ export const matchesProductSearch = (product: Product, query: string): boolean =
     product.name,
     product.type,
     product.description,
-    product.specs.composition,
+    product.specs.material,
     product.specs.use,
-    product.specs.stretch,
-    product.specs.opacity,
+    product.specs.install,
     product.specs.finish,
+    product.specs.size,
     ...product.colors.map((item) => item.name),
   ].join(' '))
-  const asksForNonStretch = cleanQuery.includes('غير مطاطي')
-  const asksForStretch = cleanQuery.includes('مطاطي') && !asksForNonStretch
-  if (asksForNonStretch && product.specs.isStretch) return false
-  if (asksForStretch && !product.specs.isStretch) return false
   return cleanQuery.split(' ').every((word) => text.includes(word))
 }
 
 export const getCartTotals = (cart: CartItem[]): { subtotal: number; deliveryFee: number; total: number } => {
-  const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.length, 0)
+  const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
   const deliveryFee = subtotal === 0 || subtotal >= 50000 ? 0 : 5000
   return { subtotal, deliveryFee, total: subtotal + deliveryFee }
 }
 
 export const formatPrice = (value: number): string => `${value.toLocaleString('ar-IQ')} د.ع`
 
-export const formatMeters = (value: number): string => `${value.toLocaleString('ar-IQ', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} م`
+export const formatNumber = (value: number): string => value.toLocaleString('ar-IQ', { minimumFractionDigits: 0, maximumFractionDigits: 2 })
 
-export const normalizeHalfMeters = (value: number): number => {
+export const formatQuantity = (value: number, unit = 'وحدة'): string => `${formatNumber(value)} ${unit}`
+
+export const normalizeQuantity = (value: number): number => {
   if (!Number.isFinite(value) || value <= 0) return 0
-  return Math.max(0.5, Math.ceil(value * 2) / 2)
+  return Math.max(1, Math.round(value))
 }
 
-export const availableMeters = (product: Product, color: ProductColor): number => Math.max(0, Math.min(product.stockMeters, color.stockMeters))
+export const availableStock = (product: Product, color: ProductColor): number => Math.max(0, Math.min(product.stock, color.stock))
 
 export const orderKey = (item: Pick<CartItem, 'product' | 'color'>): string => `${item.product.slug}:${item.color.id}`
 

@@ -11,8 +11,8 @@ export function NewsletterSection() {
 
   const subscribeUrl = siteConfig.whatsappUrl(
     email.trim()
-      ? `مرحباً إيفا ستور، أرغب بالاشتراك في النشرة عبر البريد: ${email.trim()}`
-      : 'مرحباً إيفا ستور، أرغب بالاشتراك في نشرة الأقمشة',
+      ? `مرحباً اخوان الصفا، أرغب بالاشتراك في النشرة عبر البريد: ${email.trim()}`
+      : 'مرحباً اخوان الصفا، أرغب بالاشتراك في نشرة المواد',
   )
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -30,9 +30,9 @@ export function NewsletterSection() {
     <section className="container-eva section-block" aria-label="النشرة البريدية">
       <div className="newsletter-card">
         <div>
-          <span className="eyebrow"><Mail size={14} />نشرة إيفا</span>
-          <h2>جديد الأقمشة يصل إلى بريدك أولاً</h2>
-          <p>خامة جديدة، لون متجدد، أو عرض لفترة محدودة، نرسله لك عند حدوثه فقط.</p>
+          <span className="eyebrow"><Mail size={14} />نشرة الصفا</span>
+          <h2>جديد المواد يصل إلى بريدك أولاً</h2>
+          <p>مورد جديد، مخزون متجدد، أو عرض لفترة محدودة، نرسله لك عند حدوثه فقط.</p>
         </div>
         <form className="newsletter-form" onSubmit={handleSubmit}>
           <label htmlFor="newsletter-email" className="sr-only">البريد الإلكتروني</label>
@@ -52,7 +52,7 @@ export function NewsletterSection() {
             aria-describedby="newsletter-status"
           />
           <button type="submit" className="button button-primary">
-            اشتركي بالنشرة <ArrowLeft size={15} />
+            اشترك بالنشرة <ArrowLeft size={15} />
           </button>
         </form>
         <div id="newsletter-status" role="status" aria-live="polite" style={{ minHeight: 18, fontSize: 11 }}>
@@ -60,7 +60,7 @@ export function NewsletterSection() {
           {status === 'sent' && 'فتحنا لك واتساب لإتمام الاشتراك.'}
         </div>
         <p className="newsletter-note">
-          أو اطلبي استشارة في اختيار القماش عبر{' '}
+          أو اطلب استشارة في اختيار المواد عبر{' '}
           <a href={siteConfig.whatsappUrl()} target="_blank" rel="noreferrer">
             واتساب <MessageCircle size={13} />
           </a>

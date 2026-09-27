@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Minus, Pencil, Plus, ShieldCheck, ShoppingBag, Trash2, Truck } from 'lucide-react'
 import { Link } from 'wouter'
 import type { CartItem } from '@/types'
-import { formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
+import { formatQuantity, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
 
 interface CartPageProps {
   cart: CartItem[]
@@ -13,16 +13,16 @@ interface CartPageProps {
 const FREE_DELIVERY_AT = 50000
 
 const glassStyles = `
-.glass-scope { --glass-fill: rgba(255, 252, 248, .58); --glass-strong: rgba(255, 251, 247, .88); --glass-line: rgba(255, 255, 255, .72); --glass-shadow: 0 22px 48px rgba(70, 45, 35, .1); }
-.glass-scope .glass { position: relative; background: var(--glass-fill); border: 1px solid var(--glass-line); box-shadow: var(--glass-shadow); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
+.glass-scope { --glass-fill: rgba(255, 252, 248, .58); --glass-strong: rgba(255, 251, 247, .88); --glass-line: rgba(255, 255, 255, .72); --glass-shadow: 0 22px 48px rgba(17, 38, 31, .1); }
+.glass-scope .glass { position: relative; background: var(--glass-fill); border: 1px solid var(--glass-line); box-shadow: var(--glass-shadow); backdrop-filter: none; -webkit-backdrop-filter: none; }
 .glass-scope .glass-card { border-radius: 16px; }
 .glass-scope .glass-strong { background: var(--glass-strong); border-color: rgba(255, 255, 255, .92); }
-.glass-scope .glass-dark { color: #fff8f1; background: rgba(48, 38, 42, .9); border: 1px solid rgba(255, 248, 241, .18); box-shadow: 0 16px 34px rgba(48, 38, 42, .22); }
+.glass-scope .glass-dark { color: #F4F7F4; background: rgba(17, 38, 31, .9); border: 1px solid rgba(244, 247, 244, .18); box-shadow: 0 16px 34px rgba(17, 38, 31, .22); }
 .glass-scope .glass-pill { border-radius: 999px; }
-.glass-scope .glass-divider { height: 1px; margin: 16px 0; background: linear-gradient(90deg, rgba(183, 44, 111, 0), rgba(183, 44, 111, .35), rgba(183, 44, 111, 0)); border: 0; }
+.glass-scope .glass-divider { height: 1px; margin: 16px 0; background: linear-gradient(90deg, rgba(14, 107, 69, 0), rgba(14, 107, 69, .35), rgba(14, 107, 69, 0)); border: 0; }
 .glass-scope .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; color: var(--eva-muted); background: rgba(255, 255, 255, .72); border: 1px solid rgba(255, 255, 255, .9); border-radius: 999px; font-size: 10px; line-height: 1.7; }
 .glass-scope .chip i { width: 11px; height: 11px; border: 1px solid rgba(45, 34, 34, .2); border-radius: 50%; }
-.glass-scope a.chip:hover { color: var(--eva-rose); border-color: rgba(183, 44, 111, .45); }
+.glass-scope a.chip:hover { color: var(--eva-rose); border-color: rgba(14, 107, 69, .45); }
 .glass-scope .cart-items { padding: 4px 20px; border-top: 0; border-radius: 18px; }
 .glass-scope .cart-item:last-child { border-bottom: 0; }
 .glass-scope .cart-item-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
@@ -34,8 +34,8 @@ const glassStyles = `
 .glass-scope .delivery-progress { display: grid; gap: 9px; padding: 13px 14px; background: rgba(255, 255, 255, .66); border: 1px solid rgba(255, 255, 255, .9); border-radius: 14px; }
 .glass-scope .delivery-progress-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--eva-muted); font-size: 10px; }
 .glass-scope .delivery-progress-head b { color: var(--eva-rose); font-size: 10px; }
-.glass-scope .progress-track { height: 7px; overflow: hidden; background: rgba(48, 38, 42, .12); border-radius: 999px; }
-.glass-scope .progress-track i { display: block; height: 100%; background: linear-gradient(90deg, var(--eva-rose), #dd6ba0); border-radius: 999px; transition: width .45s ease; }
+.glass-scope .progress-track { height: 7px; overflow: hidden; background: rgba(17, 38, 31, .12); border-radius: 999px; }
+.glass-scope .progress-track i { display: block; height: 100%; background: linear-gradient(90deg, var(--eva-rose), #2F7D5A); border-radius: 999px; transition: width .45s ease; }
 .glass-scope .delivery-free { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 14px; font-size: 11px; }
 .glass-scope .empty-card { display: grid; justify-items: center; max-width: 470px; padding: 44px 32px; border-radius: 20px; text-align: center; }
 .glass-scope .empty-card p { max-width: 330px; margin-top: 7px; color: var(--eva-muted); font-size: 13px; }
@@ -88,7 +88,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
 
   const handleUpdate = (item: CartItem, nextLength: number) => {
     onUpdate(orderKey(item), nextLength)
-    setAnnouncement(`تم تحديث كمية ${item.product.name} إلى ${formatMeters(nextLength)}`)
+    setAnnouncement(`تم تحديث كمية ${item.product.name} إلى ${formatQuantity(nextLength)}`)
   }
 
   const handleRemove = (item: CartItem) => {
@@ -104,14 +104,14 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         <div className="glass glass-card empty-card" tabIndex={-1} ref={emptyRef}>
           <div className="empty-icon"><ShoppingBag size={26} /></div>
           <h1>السلة هادئة الآن</h1>
-          <p>أضيفي قماشاً يعجبك، وستظهر تفاصيله هنا مع السعر لكل متر وإمكانية تعديل الكمية بنصف متر.</p>
-          <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
+          <p>أضف منتجاً يعجبك، وستظهر تفاصيله هنا مع السعر لكل وحدة وإمكانية تعديل الكمية.</p>
+          <Link href="/catalog" className="button button-primary">تصفح المنتجات <ArrowLeft size={16} /></Link>
         </div>
       </main>
     )
   }
 
-  const meters = cart.reduce((sum, item) => sum + item.length, 0)
+  const meters = cart.reduce((sum, item) => sum + item.quantity, 0)
   const remaining = Math.max(0, FREE_DELIVERY_AT - totals.subtotal)
   const progress = Math.min(100, Math.round((totals.subtotal / FREE_DELIVERY_AT) * 100))
 
@@ -127,7 +127,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         <div>
           <span className="eyebrow">اختياراتك</span>
           <h1>سلة التسوق</h1>
-          <p>{formatMeters(meters)} في السلة</p>
+          <p>{formatQuantity(meters)} في السلة</p>
         </div>
         <Link href="/catalog" className="underlined-link">متابعة التسوق <ArrowLeft size={15} /></Link>
       </div>
@@ -136,8 +136,8 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
           <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
           {cart.map((item) => {
             const key = orderKey(item)
-            const maxMeters = Math.min(item.product.stockMeters, item.color.stockMeters)
-            const lineTotal = item.product.price * item.length
+            const maxMeters = Math.min(item.product.stock, item.color.stock)
+            const lineTotal = item.product.price * item.quantity
             return (
               <article className="cart-item" key={key}>
                 <Link href={`/product/${item.product.slug}`} className="cart-item-image glass-card">
@@ -150,7 +150,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
                       <Link href={`/product/${item.product.slug}`} className="product-name">{item.product.name}</Link>
                       <div className="cart-item-chips">
                         <span className="chip cart-item-color"><i style={{ backgroundColor: item.color.hex }} />{item.color.name}</span>
-                        <span className="chip glass-pill">{formatPrice(item.product.price)} / متر</span>
+                        <span className="chip glass-pill">{formatPrice(item.product.price)} / {item.product.unit}</span>
                       </div>
                     </div>
                     <div className="cart-item-tools">
@@ -160,12 +160,12 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
                   </div>
                   <div className="cart-item-bottom">
                     <div className="quantity-control compact">
-                      <button type="button" onClick={() => handleUpdate(item, item.length - 0.5)} disabled={item.length <= 0.5} aria-label={`إنقاص كمية ${item.product.name}`}><Minus size={15} /></button>
-                      <output aria-label={`كمية ${item.product.name}`}>{formatMeters(item.length)}</output>
-                      <button type="button" onClick={() => handleUpdate(item, item.length + 0.5)} disabled={item.length >= maxMeters} aria-label={`زيادة كمية ${item.product.name}`}><Plus size={15} /></button>
+                      <button type="button" onClick={() => handleUpdate(item, item.quantity - 1)} disabled={item.quantity <= 1} aria-label={`إنقاص كمية ${item.product.name}`}><Minus size={15} /></button>
+                      <output aria-label={`كمية ${item.product.name}`}>{formatQuantity(item.quantity, item.product.unit)}</output>
+                      <button type="button" onClick={() => handleUpdate(item, item.quantity + 1)} disabled={item.quantity >= maxMeters} aria-label={`زيادة كمية ${item.product.name}`}><Plus size={15} /></button>
                     </div>
                     <div className="cart-item-total">
-                      <small>{formatMeters(item.length)} × {formatPrice(item.product.price)}</small>
+                      <small>{formatQuantity(item.quantity, item.product.unit)} × {formatPrice(item.product.price)}</small>
                       <strong>{formatPrice(lineTotal)}</strong>
                     </div>
                   </div>

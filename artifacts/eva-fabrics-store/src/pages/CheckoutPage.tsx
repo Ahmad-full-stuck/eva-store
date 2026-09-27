@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type FormEvent, type HTMLAttributes, type ReactNode } from 'react'
 import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, MessageCircle, Phone, RefreshCw, UserRound } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { CartItem, CheckoutForm, OrderPayload } from '@/types'
-import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/catalog'
+import { formatQuantity, formatPrice, getCartTotals, getOrderNumber } from '@/lib/catalog'
 import { apiUrl, siteConfig } from '@/lib/site'
 import { governorates } from '@/lib/fallback-data'
 
 interface CheckoutPageProps {
   cart: CartItem[]
-  onComplete: (orderNumber: string) => void
+  onComplete: (orderNumber: string, status: 'received' | 'whatsapp-pending') => void
 }
 
 const initialForm: CheckoutForm = { name: '', phone: '', email: '', governorate: '', district: '', address: '', notes: '' }
@@ -20,7 +20,7 @@ type OrderChannel = 'api' | 'whatsapp'
 interface StoredOrderItem {
   productName: string
   colorName: string
-  meters: number
+  quantity: number
   unitPrice: number
   total: number
 }
@@ -37,6 +37,7 @@ interface StoredOrder {
   phone: string
   governorate: string
   address: string
+  whatsappMessage?: string
 }
 
 const ORDERS_KEY = 'eva-orders'
@@ -46,7 +47,13 @@ const stepFields: Record<number, (keyof CheckoutForm)[]> = {
   2: ['governorate', 'district', 'address'],
 }
 
-const validPhone = (value: string): boolean => /^(?:07\d{9}|009647\d{9}|9647\d{9}|\+9647\d{9})$/.test(value.replace(/[\s()-]/g, ''))
+const normalizePhoneDigits = (value: string): string => value
+  .replace(/[\u0660-\u0669]/g, (digit) => String(digit.charCodeAt(0) - 0x0660))
+  .replace(/[\u06F0-\u06F9]/g, (digit) => String(digit.charCodeAt(0) - 0x06f0))
+
+const cleanPhone = (value: string): string => normalizePhoneDigits(value).replace(/[\s().-]/g, '')
+
+const validPhone = (value: string): boolean => /^(?:07\d{9}|009647\d{9}|9647\d{9}|\+9647\d{9})$/.test(cleanPhone(value))
 
 const padNumber = (value: number): string => String(value).padStart(2, '0')
 
@@ -54,18 +61,18 @@ const createLocalOrderNumber = (): string => {
   const now = new Date()
   const stamp = `${String(now.getFullYear()).slice(-2)}${padNumber(now.getMonth() + 1)}${padNumber(now.getDate())}`
   const suffix = Math.floor(1000 + Math.random() * 9000)
-  return `EVA-${stamp}-${suffix}`
+  return `SIFA-${stamp}-${suffix}`
 }
 
 const glassStyles = `
-.glass-scope { --glass-fill: rgba(255, 252, 248, .58); --glass-strong: rgba(255, 251, 247, .88); --glass-line: rgba(255, 255, 255, .72); --glass-shadow: 0 22px 48px rgba(70, 45, 35, .1); }
-.glass-scope .glass { position: relative; background: var(--glass-fill); border: 1px solid var(--glass-line); box-shadow: var(--glass-shadow); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
+.glass-scope { --glass-fill: rgba(255, 252, 248, .58); --glass-strong: rgba(255, 251, 247, .88); --glass-line: rgba(255, 255, 255, .72); --glass-shadow: 0 22px 48px rgba(17, 38, 31, .1); }
+.glass-scope .glass { position: relative; background: var(--glass-fill); border: 1px solid var(--glass-line); box-shadow: var(--glass-shadow); backdrop-filter: none; -webkit-backdrop-filter: none; }
 .glass-scope .glass-card { border-radius: 16px; }
 .glass-scope .glass-strong { background: var(--glass-strong); border-color: rgba(255, 255, 255, .92); }
-.glass-scope .glass-dark { color: #fff8f1; background: rgba(48, 38, 42, .9); border: 1px solid rgba(255, 248, 241, .18); box-shadow: 0 16px 34px rgba(48, 38, 42, .22); }
+.glass-scope .glass-dark { color: #F4F7F4; background: rgba(17, 38, 31, .9); border: 1px solid rgba(244, 247, 244, .18); box-shadow: 0 16px 34px rgba(17, 38, 31, .22); }
 .glass-scope .glass-pill { border-radius: 999px; }
-.glass-scope .glass-input, .glass-scope .field-input, .glass-scope .field textarea { background: rgba(255, 255, 255, .7); border-color: rgba(255, 255, 255, .9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-.glass-scope .glass-divider { height: 1px; margin: 16px 0; background: linear-gradient(90deg, rgba(183, 44, 111, 0), rgba(183, 44, 111, .35), rgba(183, 44, 111, 0)); border: 0; }
+.glass-scope .glass-input, .glass-scope .field-input, .glass-scope .field textarea { background: rgba(255, 255, 255, .7); border-color: rgba(255, 255, 255, .9); backdrop-filter: none; -webkit-backdrop-filter: none; }
+.glass-scope .glass-divider { height: 1px; margin: 16px 0; background: linear-gradient(90deg, rgba(14, 107, 69, 0), rgba(14, 107, 69, .35), rgba(14, 107, 69, 0)); border: 0; }
 .glass-scope .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; color: var(--eva-muted); background: rgba(255, 255, 255, .72); border: 1px solid rgba(255, 255, 255, .9); border-radius: 999px; font-size: 10px; line-height: 1.7; }
 .glass-scope .chip i { width: 11px; height: 11px; border: 1px solid rgba(45, 34, 34, .2); border-radius: 50%; }
 .glass-scope .steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; max-width: 760px; margin: 0 auto 30px; padding: 0; list-style: none; }
@@ -77,7 +84,7 @@ const glassStyles = `
 .glass-scope .step-copy small { overflow: hidden; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
 .glass-scope .step-card.is-done { color: var(--eva-rose); }
 .glass-scope .step-card.is-done .step-index, .glass-scope .step-card.is-current .step-index { color: #fff; background: var(--eva-rose); border-color: var(--eva-rose); }
-.glass-scope .step-card.is-current { border-color: rgba(183, 44, 111, .45); box-shadow: 0 0 0 3px rgba(183, 44, 111, .1), var(--glass-shadow); }
+.glass-scope .step-card.is-current { border-color: rgba(14, 107, 69, .45); box-shadow: 0 0 0 3px rgba(14, 107, 69, .1), var(--glass-shadow); }
 .glass-scope .step-card.is-current .step-copy strong { color: var(--eva-rose); }
 .glass-scope .review-block { background: rgba(255, 255, 255, .62); border-color: rgba(255, 255, 255, .88); }
 .glass-scope .whatsapp-panel { display: grid; gap: 13px; margin-top: 20px; padding: 18px; border-radius: 16px; }
@@ -87,8 +94,8 @@ const glassStyles = `
 .glass-scope .whatsapp-actions { display: grid; gap: 10px; }
 .glass-scope .button-whatsapp { color: #fff; background: var(--eva-green); box-shadow: 0 8px 18px rgba(73, 118, 91, .25); }
 .glass-scope .button-whatsapp:hover { background: #3c6350; box-shadow: 0 11px 24px rgba(73, 118, 91, .32); }
-.glass-scope .server-error { background: rgba(249, 236, 231, .88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-.glass-scope .checkout-secure.glass-dark { margin-top: 18px; padding: 12px 14px; color: #c9ecda; background: rgba(48, 38, 42, .9); border: 1px solid rgba(255, 248, 241, .18); border-radius: 12px; }
+.glass-scope .server-error { background: rgba(249, 236, 231, .88); backdrop-filter: none; -webkit-backdrop-filter: none; }
+.glass-scope .checkout-secure.glass-dark { margin-top: 18px; padding: 12px 14px; color: #c9ecda; background: rgba(17, 38, 31, .9); border: 1px solid rgba(244, 247, 244, .18); border-radius: 12px; }
 .glass-scope .empty-card { display: grid; justify-items: center; max-width: 470px; padding: 44px 32px; border-radius: 20px; text-align: center; }
 .glass-scope .empty-card p { max-width: 330px; margin-top: 7px; color: var(--eva-muted); font-size: 13px; }
 .glass-scope .empty-card .button { margin-top: 24px; }
@@ -129,8 +136,10 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [serverError, setServerError] = useState('')
   const [channel, setChannel] = useState<OrderChannel>('api')
   const [whatsappLink, setWhatsappLink] = useState('')
+  const [whatsappMessage, setWhatsappMessage] = useState('')
   const [whatsappOrderNumber, setWhatsappOrderNumber] = useState('')
   const [liveMessage, setLiveMessage] = useState('')
+  const [focusField, setFocusField] = useState<keyof CheckoutForm | null>(null)
   const totals = getCartTotals(cart)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const whatsappRef = useRef<HTMLHeadingElement>(null)
@@ -146,6 +155,15 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   }, [step])
 
   useEffect(() => {
+    if (!focusField) return undefined
+    const timer = window.setTimeout(() => {
+      document.getElementById(focusField)?.focus()
+      setFocusField(null)
+    }, 60)
+    return () => window.clearTimeout(timer)
+  }, [focusField, step])
+
+  useEffect(() => {
     if (channel !== 'whatsapp') return undefined
     whatsappRef.current?.focus()
     return undefined
@@ -158,7 +176,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         <div className="glass glass-card empty-card">
           <div className="empty-icon"><Check size={25} /></div>
           <h1>لا توجد عناصر لإتمام الطلب</h1>
-          <p>أضيفي قماشاً إلى السلة أولاً، ثم عدي إلى هذه الخطوة.</p>
+          <p>أضف منتجاً إلى السلة أولاً، ثم انتقل إلى هذه الخطوة.</p>
           <Link href="/catalog" className="button button-primary">العودة إلى الكتالوج <ArrowLeft size={16} /></Link>
         </div>
       </main>
@@ -173,14 +191,14 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const applyValidation = (currentStep: number): boolean => {
     const nextErrors: CheckoutErrors = {}
     if (currentStep === 1) {
-      if (form.name.trim().length < 3) nextErrors.name = 'اكتبي الاسم الكامل (3 أحرف على الأقل)'
-      if (!validPhone(form.phone)) nextErrors.phone = 'أدخلي رقم هاتف عراقي صحيحاً يبدأ بـ 07 أو +964'
+      if (form.name.trim().length < 3) nextErrors.name = 'اكتب الاسم الكامل (3 أحرف على الأقل)'
+      if (!validPhone(form.phone)) nextErrors.phone = 'أدخل رقم هاتف عراقي صحيحاً يبدأ بـ 07 أو +964'
       if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) nextErrors.email = 'البريد الإلكتروني غير صحيح'
     }
     if (currentStep === 2) {
-      if (!governorates.includes(form.governorate)) nextErrors.governorate = 'اختاري المحافظة من القائمة'
-      if (form.district.trim().length < 2) nextErrors.district = 'أدخلي المنطقة أو القضاء'
-      if (form.address.trim().length < 5) nextErrors.address = 'أدخلي عنواناً من 5 أحرف على الأقل'
+      if (!governorates.includes(form.governorate)) nextErrors.governorate = 'اختر المحافظة من القائمة'
+      if (form.district.trim().length < 2) nextErrors.district = 'أدخل المنطقة أو القضاء'
+      if (form.address.trim().length < 5) nextErrors.address = 'أدخل عنواناً من 5 أحرف على الأقل'
     }
     setErrors(nextErrors)
     const invalidKeys = Object.keys(nextErrors) as (keyof CheckoutForm)[]
@@ -191,7 +209,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     const details = invalidKeys.map((key) => nextErrors[key]).filter((value): value is string => Boolean(value))
     setLiveMessage(`يرجى تصحيح الحقول: ${details.join('، ')}`)
     const target = (stepFields[currentStep] || []).find((key) => invalidKeys.includes(key))
-    if (target) window.setTimeout(() => document.getElementById(target)?.focus(), 60)
+    if (target) setFocusField(target)
     return false
   }
 
@@ -202,13 +220,13 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
 
   const buildPayload = (): OrderPayload => ({
     customerName: form.name.trim(),
-    phone: form.phone.replace(/[\s()-]/g, ''),
+    phone: cleanPhone(form.phone),
     email: form.email.trim() || undefined,
     governorate: form.governorate,
     district: form.district.trim(),
     address: form.address.trim(),
     notes: form.notes.trim() || undefined,
-    items: cart.map((item) => ({ productId: item.product.id, productSlug: item.product.slug, productName: item.product.name, colorId: item.color.id, color: item.color.hex, colorName: item.color.name, quantity: item.length, unitPrice: item.product.price, totalPrice: item.product.price * item.length })),
+    items: cart.map((item) => ({ productId: item.product.id, productSlug: item.product.slug, productName: item.product.name, colorId: item.color.id, color: item.color.hex, colorName: item.color.name, quantity: item.quantity, unitPrice: item.product.price, totalPrice: item.product.price * item.quantity })),
     subtotal: totals.subtotal,
     deliveryFee: totals.deliveryFee,
     total: totals.total,
@@ -227,7 +245,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     if (payload.notes) lines.push(`ملاحظات: ${payload.notes}`)
     lines.push('تفاصيل الطلب:')
     payload.items.forEach((item, index) => {
-      lines.push(`${(index + 1).toLocaleString('ar-IQ')}. ${item.productName} - ${item.colorName} - ${formatMeters(item.quantity)} × ${formatPrice(item.unitPrice)} = ${formatPrice(item.totalPrice)}`)
+      lines.push(`${(index + 1).toLocaleString('ar-IQ')}. ${item.productName} - ${item.colorName} - ${formatQuantity(item.quantity)} × ${formatPrice(item.unitPrice)} = ${formatPrice(item.totalPrice)}`)
     })
     lines.push(`المجموع الفرعي: ${formatPrice(payload.subtotal)}`)
     lines.push(`التوصيل: ${payload.deliveryFee ? formatPrice(payload.deliveryFee) : 'مجاني'}`)
@@ -236,7 +254,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     return lines.join('\n')
   }
 
-  const saveLocalOrder = (orderNumber: string, status: StoredOrder['status'], payload: OrderPayload): void => {
+  const saveLocalOrder = (orderNumber: string, status: StoredOrder['status'], payload: OrderPayload, message?: string): void => {
     if (typeof window === 'undefined') return
     try {
       const raw = window.localStorage.getItem(ORDERS_KEY)
@@ -247,7 +265,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
       const record: StoredOrder = {
         orderNumber,
         createdAt: new Date().toISOString(),
-        items: payload.items.map((item) => ({ productName: item.productName, colorName: item.colorName, meters: item.quantity, unitPrice: item.unitPrice, total: item.totalPrice })),
+        items: payload.items.map((item) => ({ productName: item.productName, colorName: item.colorName, quantity: item.quantity, unitPrice: item.unitPrice, total: item.totalPrice })),
         subtotal: payload.subtotal,
         deliveryFee: payload.deliveryFee,
         total: payload.total,
@@ -257,6 +275,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         governorate: payload.governorate,
         address: [payload.governorate, payload.district, payload.address].filter(Boolean).join(' - '),
       }
+      if (message) record.whatsappMessage = message
       const next: unknown[] = [record, ...existing.filter((item) => typeof item.orderNumber === 'string' && item.orderNumber !== orderNumber)].slice(0, 200)
       window.localStorage.setItem(ORDERS_KEY, JSON.stringify(next))
     } catch {
@@ -266,8 +285,10 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
 
   const switchToWhatsApp = (payload: OrderPayload, reason: string): void => {
     const orderNumber = createLocalOrderNumber()
+    const message = buildWhatsAppMessage(payload, orderNumber)
     setWhatsappOrderNumber(orderNumber)
-    setWhatsappLink(siteConfig.whatsappUrl(buildWhatsAppMessage(payload, orderNumber)))
+    setWhatsappLink(siteConfig.whatsappUrl(message))
+    setWhatsappMessage(message)
     setChannel('whatsapp')
     setServerError(`تعذر إرسال الطلب تلقائياً: ${reason}. لم يُسجَّل الطلب في المتجر بعد.`)
     setSubmitState('idle')
@@ -304,7 +325,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         return
       }
       saveLocalOrder(orderNumber, 'received', payload)
-      onComplete(orderNumber)
+      onComplete(orderNumber, 'received')
     } catch (error) {
       const reason = error instanceof Error && error.name === 'AbortError'
         ? 'انتهت مهلة الاتصال بالخادم'
@@ -319,8 +340,8 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
 
   const confirmViaWhatsApp = (): void => {
     if (!whatsappOrderNumber) return
-    saveLocalOrder(whatsappOrderNumber, 'whatsapp-pending', buildPayload())
-    onComplete(whatsappOrderNumber)
+    saveLocalOrder(whatsappOrderNumber, 'whatsapp-pending', buildPayload(), whatsappMessage)
+    onComplete(whatsappOrderNumber, 'whatsapp-pending')
   }
 
   return (
@@ -350,7 +371,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
             <div className="whatsapp-panel glass glass-strong" role="group" aria-labelledby="whatsapp-title">
               <h3 id="whatsapp-title" tabIndex={-1} ref={whatsappRef}><MessageCircle size={18} /> لم نتمكن من الإرسال التلقائي</h3>
               <div className="server-error" role="alert"><CircleAlert size={18} /><span>{serverError}</span></div>
-              <p>هذه النسخة منشورة على GitHub Pages وتعمل بدون خادم مخصص للطلبات، لذلك أرسلي التفاصيل عبر واتساب. ستصلك رسالة جاهزة فيها كل بنود الطلب، والتأكيد يتم يدوياً من الفريق بعد مراجعته وموافقتك على موعد التوصيل.</p>
+              <p>هذه النسخة منشورة على GitHub Pages وتعمل بدون خادم مخصص للطلبات، لذلك أرسل التفاصيل عبر واتساب. ستصلك رسالة جاهزة فيها كل بنود الطلب، والتأكيد يتم يدوياً من الفريق بعد مراجعته وموافقتك على موعد التوصيل.</p>
               <div className="whatsapp-actions">
                 <a className="button button-whatsapp" href={whatsappLink} target="_blank" rel="noreferrer" onClick={confirmViaWhatsApp}><MessageCircle size={16} />أكمل الطلب عبر واتساب</a>
                 <button type="button" className="button button-outline" onClick={() => { setChannel('api'); void submitOrder() }}><RefreshCw size={15} />إعادة المحاولة عبر الخادم</button>
@@ -368,7 +389,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
               </button>
             )}
           </div>
-          {step === 3 && <p className="checkout-terms">بإرسال الطلب توافقين على <Link href="/policies#terms">شروط الاستخدام</Link> و<Link href="/policies#privacy">سياسة الخصوصية</Link>.</p>}
+          {step === 3 && <p className="checkout-terms">بإرسال الطلب توافق على <Link href="/policies#terms">شروط الاستخدام</Link> و<Link href="/policies#privacy">سياسة الخصوصية</Link>.</p>}
         </section>
         <aside className="checkout-summary glass glass-strong" aria-label="ملخص طلبك">
           <h2>ملخص طلبك</h2>
@@ -378,9 +399,9 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
                 <img src={item.product.image} alt="" />
                 <div>
                   <strong>{item.product.name}</strong>
-                  <span>{item.color.name} · {formatMeters(item.length)}</span>
+                  <span>{item.color.name} · {formatQuantity(item.quantity, item.product.unit)}</span>
                 </div>
-                <b>{formatPrice(item.product.price * item.length)}</b>
+                <b>{formatPrice(item.product.price * item.quantity)}</b>
               </div>
             ))}
           </div>
@@ -442,7 +463,7 @@ function ContactFields({ form, errors, update }: { form: CheckoutForm; errors: C
   return (
     <div className="form-fields">
       <Field label="الاسم الكامل" id="name" value={form.name} error={errors.name} onChange={(value) => update('name', value)} placeholder="مثال: سارة أحمد" autoComplete="name" icon={<UserRound size={17} />} />
-      <Field label="رقم الهاتف" id="phone" value={form.phone} error={errors.phone} onChange={(value) => update('phone', value)} placeholder="07XXXXXXXXX" type="tel" autoComplete="tel" dir="ltr" icon={<Phone size={17} />} />
+      <Field label="رقم الهاتف" id="phone" value={form.phone} error={errors.phone} onChange={(value) => update('phone', value)} placeholder="07XXXXXXXXX" type="tel" inputMode="tel" autoComplete="tel" dir="ltr" icon={<Phone size={17} />} />
       <Field label="البريد الإلكتروني" id="email" value={form.email} error={errors.email} onChange={(value) => update('email', value)} placeholder="اختياري" type="email" autoComplete="email" dir="ltr" />
     </div>
   )
@@ -456,7 +477,7 @@ function DeliveryFields({ form, errors, update }: { form: CheckoutForm; errors: 
         <div className="field-input glass-input">
           <MapPin size={17} />
           <select id="governorate" value={form.governorate} onChange={(event) => update('governorate', event.target.value)} aria-invalid={Boolean(errors.governorate)} aria-describedby={errors.governorate ? 'governorate-error' : undefined}>
-            <option value="">اختاري المحافظة</option>
+            <option value="">اختر المحافظة</option>
             {governorates.map((item) => <option key={item} value={item}>{item}</option>)}
           </select>
         </div>
@@ -498,7 +519,7 @@ function ReviewStep({ form, cart, totals, edit }: { form: CheckoutForm; cart: Ca
         {cart.map((item) => (
           <div className="review-item" key={`${item.product.slug}-${item.color.id}`}>
             <span>{item.product.name} <span className="chip glass-pill">{item.color.name}</span></span>
-            <b>{formatMeters(item.length)} · {formatPrice(item.product.price * item.length)}</b>
+            <b>{formatQuantity(item.quantity, item.product.unit)} · {formatPrice(item.product.price * item.quantity)}</b>
           </div>
         ))}
       </div>
@@ -514,13 +535,13 @@ function ReviewStep({ form, cart, totals, edit }: { form: CheckoutForm; cart: Ca
   )
 }
 
-function Field({ label, id, value, error, onChange, placeholder, type = 'text', autoComplete, dir, icon }: { label: string; id: string; value: string; error?: string; onChange: (value: string) => void; placeholder: string; type?: string; autoComplete?: string; dir?: 'ltr' | 'rtl'; icon?: ReactNode }) {
+function Field({ label, id, value, error, onChange, placeholder, type = 'text', inputMode, autoComplete, dir, icon }: { label: string; id: string; value: string; error?: string; onChange: (value: string) => void; placeholder: string; type?: string; inputMode?: HTMLAttributes<HTMLInputElement>['inputMode']; autoComplete?: string; dir?: 'ltr' | 'rtl'; icon?: ReactNode }) {
   return (
     <div className="field">
       <label htmlFor={id}>{label}{error && <span className="required-mark">*</span>}</label>
       <div className="field-input glass-input">
         {icon}
-        <input id={id} type={type} dir={dir} value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} autoComplete={autoComplete} aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined} />
+        <input id={id} type={type} inputMode={inputMode} dir={dir} value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} autoComplete={autoComplete} aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined} />
       </div>
       {error && <small className="field-error" id={`${id}-error`} aria-live="polite">{error}</small>}
     </div>

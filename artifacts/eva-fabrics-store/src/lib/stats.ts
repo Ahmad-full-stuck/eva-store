@@ -35,7 +35,7 @@ export interface CategoryPriceRow {
 export interface StockRow {
   id: string
   name: string
-  meters: number
+  quantity: number
   percent: number
 }
 
@@ -54,12 +54,12 @@ export interface StatsSnapshot {
   maxPrice: number
   cheapest: { name: string; price: number } | null
   dearest: { name: string; price: number } | null
-  totalMeters: number
+  totalStock: number
   newCount: number
   availableCount: number
   availabilityPercent: number
   cartItems: number
-  cartMeters: number
+  cartQuantity: number
   wishlistCount: number
   orderCount: number
   orders: LocalOrder[]
@@ -69,9 +69,16 @@ export interface StatsSnapshot {
   bandLabels: { low: string; mid: string; high: string }
 }
 
-export const formatCount = (value: number): string => Math.round(value).toLocaleString('ar-IQ')
+export const formatCount = (value: number): string =>
+  Number.isFinite(value) ? Math.round(value).toLocaleString('ar-IQ') : '—'
 
-export const formatShare = (value: number): string => `${Math.round(value).toLocaleString('ar-IQ')}٪`
+export const formatShare = (value: number): string =>
+  Number.isFinite(value) ? `${Math.round(value).toLocaleString('ar-IQ')}٪` : '—'
+
+const toWesternDigits = (value: string): string =>
+  value
+    .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 0x0660))
+    .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 0x06f0))
 
 const bandLabel = (value: number): string => value.toLocaleString('ar-IQ')
 
@@ -126,7 +133,7 @@ const pickNumber = (record: Record<string, unknown>, keys: string[]): number | n
     const value = record[key]
     if (typeof value === 'number' && Number.isFinite(value)) return value
     if (typeof value === 'string' && value.trim()) {
-      const parsed = Number(value.replace(/[^\d.]/g, ''))
+      const parsed = Number(toWesternDigits(value).replace(/[^\d.]/g, ''))
       if (Number.isFinite(parsed) && parsed > 0) return parsed
     }
   }
@@ -203,17 +210,17 @@ export const readLocalOrders = (): LocalOrder[] => {
 }
 
 const isAvailableProduct = (product: Product): boolean =>
-  product.stockMeters > 0 && product.colors.some((color) => color.stockMeters > 0)
+  product.stock > 0 && product.colors.some((color) => color.stock > 0)
 
-const readCart = (products: Product[]): { items: number; meters: number } => {
+const readCart = (products: Product[]): { items: number; quantity: number } => {
   try {
     const cart = getStoredCart(products)
     return {
       items: cart.length,
-      meters: cart.reduce((sum, item) => sum + item.length, 0),
+      quantity: cart.reduce((sum, item) => sum + item.quantity, 0),
     }
   } catch {
-    return { items: 0, meters: 0 }
+    return { items: 0, quantity: 0 }
   }
 }
 
@@ -247,13 +254,13 @@ const buildPriceRows = (products: Product[], categories: Category[]): CategoryPr
   })
 
 const buildStockRows = (products: Product[]): StockRow[] => {
-  const ranked = [...products].sort((left, right) => right.stockMeters - left.stockMeters).slice(0, TOP_STOCK_ROWS)
-  const highest = ranked[0]?.stockMeters || 0
+  const ranked = [...products].sort((left, right) => right.stock - left.stock).slice(0, TOP_STOCK_ROWS)
+  const highest = ranked[0]?.stock || 0
   return ranked.map((product) => ({
     id: product.id,
     name: product.name,
-    meters: product.stockMeters,
-    percent: highest > 0 ? Math.round((product.stockMeters / highest) * 100) : 0,
+    quantity: product.stock,
+    percent: highest > 0 ? Math.round((product.stock / highest) * 100) : 0,
   }))
 }
 
@@ -279,7 +286,7 @@ export const buildStatsSnapshot = (products: Product[], categories: Category[]):
   const lowest = byPrice[0]
   const highest = byPrice[byPrice.length - 1]
   const totalPrice = products.reduce((sum, product) => sum + (Number.isFinite(product.price) ? product.price : 0), 0)
-  const totalMeters = products.reduce((sum, product) => sum + (Number.isFinite(product.stockMeters) ? product.stockMeters : 0), 0)
+  const totalStock = products.reduce((sum, product) => sum + (Number.isFinite(product.stock) ? product.stock : 0), 0)
   const availableCount = products.filter(isAvailableProduct).length
   const cart = readCart(products)
   const orders = readLocalOrders()
@@ -292,12 +299,12 @@ export const buildStatsSnapshot = (products: Product[], categories: Category[]):
     maxPrice: highest ? highest.price : 0,
     cheapest: lowest ? { name: lowest.name, price: lowest.price } : null,
     dearest: highest ? { name: highest.name, price: highest.price } : null,
-    totalMeters,
+    totalStock,
     newCount: products.filter((product) => product.isNew).length,
     availableCount,
     availabilityPercent: productCount ? (availableCount / productCount) * 100 : 0,
     cartItems: cart.items,
-    cartMeters: cart.meters,
+    cartQuantity: cart.quantity,
     wishlistCount: readWishlistCount(),
     orderCount: orders.length,
     orders,

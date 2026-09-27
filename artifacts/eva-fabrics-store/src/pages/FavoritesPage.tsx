@@ -13,18 +13,18 @@ interface FavoritesPageProps {
 }
 
 const favoriteCountLabel = (count: number): string => {
-  if (count === 1) return 'خامة واحدة بانتظارك'
-  if (count === 2) return 'خامتان بانتظارك'
-  if (count <= 10) return `${count} خامات بانتظارك`
-  return `${count} خامة بانتظارك`
+  if (count === 1) return 'منتج واحد بانتظارك'
+  if (count === 2) return 'منتجان بانتظارك'
+  if (count <= 10) return `${count} منتجات بانتظارك`
+  return `${count} منتجاً بانتظارك`
 }
 
 const fallbackSuggestions = [
-  { id: 'embroidered', label: 'مطرز' },
-  { id: 'plain', label: 'سادة' },
-  { id: 'stretch', label: 'مطاطي' },
-  { id: 'sequined', label: 'ترتر' },
-  { id: 'patterned', label: 'مزخرف' },
+  { id: 'structural', label: 'إنشائي' },
+  { id: 'tiles', label: 'أرضيات' },
+  { id: 'sanitary', label: 'صحي' },
+  { id: 'paints', label: 'أصباغ' },
+  { id: 'tools', label: 'أدوات' },
 ]
 
 export function FavoritesPage({ products, categories, wishlist, onWish, onAdd }: FavoritesPageProps) {
@@ -41,11 +41,11 @@ export function FavoritesPage({ products, categories, wishlist, onWish, onAdd }:
           <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>المفضلة</span></div>
           <section className="glass empty-glass" role="status">
             <div className="empty-icon"><Heart size={25} /></div>
-            <h1>لم تحفظي أقمشة بعد</h1>
-            <p>اضغطي على القلب في أي خامة لتظهر هنا، ثم انقليها إلى السلة بنصف متر أو أكثر بضغطة واحدة.</p>
+            <h1>لم تحفظ منتجات بعد</h1>
+            <p>اضغط على القلب في أي منتج ليظهر هنا، ثم انقله إلى السلة بالكمية المطلوبة بضغطة واحدة.</p>
             <div className="empty-actions">
-              <Link href="/catalog" className="button button-primary">اكتشفي الأقمشة <ArrowLeft size={16} /></Link>
-              <Link href="/fabric-guide" className="button button-outline">دليل اختيار القماش <ArrowLeft size={16} /></Link>
+              <Link href="/catalog" className="button button-primary">تصفح المنتجات <ArrowLeft size={16} /></Link>
+              <Link href="/fabric-guide" className="button button-outline">دليل اختيار المواد <ArrowLeft size={16} /></Link>
             </div>
             <div className="local-orders">
               <span>أقسام مقترحة:</span>
@@ -87,7 +87,7 @@ export function FavoritesPage({ products, categories, wishlist, onWish, onAdd }:
           ))}
         </div>
 
-        <div className="favorites-note"><ShoppingBag size={18} /><span>اضغطي «أضيفي ٠٫٥ م» على أي بطاقة لنقلها إلى السلة مباشرة، أو القلب لإزالتها من هنا.</span></div>
+        <div className="favorites-note"><ShoppingBag size={18} /><span>اضغط «أضف» على أي بطاقة لنقلها إلى السلة مباشرة، أو القلب لإزالتها من هنا.</span></div>
       </main>
     </>
   )

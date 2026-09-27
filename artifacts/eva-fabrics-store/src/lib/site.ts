@@ -1,5 +1,5 @@
 const rawWhatsApp = import.meta.env.VITE_WHATSAPP_NUMBER || '9647727282001'
-const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || 'https://instagram.com'
+const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || 'https://instagram.com/al_sifa.company'
 const apiBase = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '')
 
 const digits = (value: string): string => value.replace(/[^0-9]/g, '')
@@ -20,13 +20,16 @@ const localPhone = (() => {
 const safeInstagram = /^https?:\/\//i.test(rawInstagram) ? rawInstagram : `https://${rawInstagram.replace(/^\/+/, '')}`
 
 export const siteConfig = {
-  name: 'إيفا ستور للأقمشة',
-  shortName: 'إيفا ستور',
+  name: 'شركة اخوان الصفا',
+  fullName: 'شركة اخوان الصفا للمواد الإنشائية والمواد الصحية والأصباغ',
+  shortName: 'اخوان الصفا',
+  latinName: 'AL SIFA COMPANY',
+  tagline: 'مواد إنشائية · مواد صحية · أصباغ',
   phone: localPhone,
   whatsappNumber: internationalWhatsApp,
   instagramUrl: safeInstagram,
-  whatsappUrl: (message = 'مرحباً إيفا ستور، أحتاج مساعدة في اختيار الأقمشة'): string => `https://wa.me/${internationalWhatsApp}?text=${encodeURIComponent(message)}`,
-  instagramText: 'إيفا ستور على إنستغرام',
+  whatsappUrl: (message = 'مرحباً اخوان الصفا، أحتاج استشارة وعرض سعر'): string => `https://wa.me/${internationalWhatsApp}?text=${encodeURIComponent(message)}`,
+  instagramText: 'اخوان الصفا على إنستغرام',
 }
 
 export const apiUrl = (path: string): string => `${apiBase}${path.startsWith('/') ? path : `/${path}`}`

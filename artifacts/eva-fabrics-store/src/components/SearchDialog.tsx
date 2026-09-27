@@ -11,7 +11,7 @@ interface SearchDialogProps {
   products: Product[]
 }
 
-const suggestions = ['قماش مطاطي', 'قماش أسود', 'مطرز', 'ترتر', 'فساتين سهرة', 'غير مطاطي']
+const suggestions = ['اسمنت', 'حديد تسليح', 'طوب أحمر', 'سيراميك', 'مواد صحية', 'دهانات']
 
 export function SearchDialog({ open, onClose, products }: SearchDialogProps) {
   const [query, setQuery] = useState('')
@@ -28,12 +28,12 @@ export function SearchDialog({ open, onClose, products }: SearchDialogProps) {
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="البحث في الأقمشة" variant="top" className="search-panel">
+    <Modal open={open} onClose={onClose} title="البحث في المنتجات" variant="top" className="search-panel">
       <div className="search-panel-inner">
         <form className="search-form" onSubmit={submit} role="search">
           <Search size={20} aria-hidden="true" />
-          <label className="sr-only" htmlFor="global-search">ابحثي عن قماش أو لون أو استخدام</label>
-          <input id="global-search" autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="ابحثي عن قماش، لون أو استخدام" autoComplete="off" />
+          <label className="sr-only" htmlFor="global-search">ابحث عن مادة أو مقاس أو استخدام</label>
+          <input id="global-search" autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="ابحث عن اسمنت، طوب، دهان أو مادة صحية" autoComplete="off" />
           {query && <button type="button" className="clear-search" onClick={() => setQuery('')} aria-label="مسح البحث"><X size={16} /></button>}
           <button type="submit" className="button button-primary button-small">بحث</button>
         </form>
@@ -42,7 +42,7 @@ export function SearchDialog({ open, onClose, products }: SearchDialogProps) {
           <p className="search-results-count">{results.length ? `${results.length} نتائج مناسبة` : 'لا توجد نتائج مطابقة'}</p>
           {results.map((product) => <Link key={product.id} href={`/product/${product.slug}`} className="search-result-item" onClick={onClose}>
             <img src={product.image} alt="" />
-            <span><strong>{product.name}</strong><small>{product.type} · {product.specs.width}</small></span>
+            <span><strong>{product.name}</strong><small>{product.type} · {product.specs.size}</small></span>
             <b>{formatPrice(product.price)}</b>
           </Link>)}
         </div>}

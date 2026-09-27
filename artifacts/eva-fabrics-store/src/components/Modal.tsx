@@ -12,6 +12,7 @@ interface ModalProps {
 export function Modal({ open, onClose, title, children, variant = 'center', className = '' }: ModalProps) {
   const titleId = useId()
   const panelRef = useRef<HTMLDivElement>(null)
+  const layerRef = useRef<HTMLDivElement>(null)
   const onCloseRef = useRef(onClose)
   const restoreRef = useRef<HTMLElement | null>(null)
 
@@ -29,6 +30,37 @@ export function Modal({ open, onClose, title, children, variant = 'center', clas
     document.addEventListener('focusin', handleFocusIn)
     return () => document.removeEventListener('focusin', handleFocusIn)
   }, [])
+
+  useEffect(() => {
+    if (!open) return undefined
+    const layer = layerRef.current
+    const shell = document.querySelector<HTMLElement>('.app-shell')
+    if (!layer || !shell) return undefined
+    const hidden: Array<[HTMLElement, string | null]> = []
+    const hide = (node: HTMLElement) => {
+      hidden.push([node, node.getAttribute('aria-hidden')])
+      node.setAttribute('aria-hidden', 'true')
+      node.setAttribute('inert', '')
+    }
+    const walk = (node: HTMLElement) => {
+      if (node === layer) return
+      if (node.contains(layer)) {
+        Array.from(node.children).forEach((child) => {
+          if (child instanceof HTMLElement) walk(child)
+        })
+        return
+      }
+      hide(node)
+    }
+    walk(shell)
+    return () => {
+      hidden.forEach(([node, value]) => {
+        if (value === null) node.removeAttribute('aria-hidden')
+        else node.setAttribute('aria-hidden', value)
+        node.removeAttribute('inert')
+      })
+    }
+  }, [open])
 
   useEffect(() => {
     if (!open) return undefined
@@ -73,8 +105,8 @@ export function Modal({ open, onClose, title, children, variant = 'center', clas
   if (!open) return null
 
   return (
-    <div className={`modal-layer modal-${variant}`}>
-      <button type="button" className="modal-backdrop" onClick={onClose} aria-label={`إغلاق ${title}`} />
+    <div ref={layerRef} className={`modal-layer modal-${variant}`}>
+      <button type="button" className="modal-backdrop" onClick={onClose} tabIndex={-1} aria-label={`إغلاق ${title}`} />
       <div ref={panelRef} className={`modal-panel ${className}`} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1}>
         <h2 id={titleId} className="sr-only">{title}</h2>
         {children}
