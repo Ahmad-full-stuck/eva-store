@@ -54,7 +54,7 @@ const catalogStyles = `
   place-items: center;
   padding-inline: 7px;
   color: var(--eva-rose);
-  background: rgba(183, 44, 111, .12);
+  background: rgba(122, 30, 60, .12);
   border-radius: 999px;
   font-size: 10px;
   font-weight: 600;

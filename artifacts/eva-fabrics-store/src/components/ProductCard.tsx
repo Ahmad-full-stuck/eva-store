@@ -14,24 +14,24 @@ const glassStyles = `
 .glass-card {
   border: 1px solid rgba(255, 255, 255, .75);
   border-radius: 20px;
-  background: linear-gradient(155deg, rgba(255, 255, 255, .8), rgba(255, 250, 245, .46));
-  box-shadow: 0 14px 34px rgba(70, 45, 35, .1);
+  background: linear-gradient(155deg, rgba(255, 255, 255, .8), rgba(255, 250, 250, .46));
+  box-shadow: 0 14px 34px rgba(74, 24, 43, .1);
   backdrop-filter: blur(16px) saturate(1.15);
   -webkit-backdrop-filter: blur(16px) saturate(1.15);
 }
 .glass-surface {
   border: 1px solid rgba(255, 255, 255, .8);
   border-radius: 22px;
-  background: linear-gradient(150deg, rgba(255, 255, 255, .78), rgba(255, 250, 245, .44));
-  box-shadow: 0 16px 38px rgba(70, 45, 35, .1);
+  background: linear-gradient(150deg, rgba(255, 255, 255, .78), rgba(255, 250, 250, .44));
+  box-shadow: 0 16px 38px rgba(74, 24, 43, .1);
   backdrop-filter: blur(18px) saturate(1.12);
   -webkit-backdrop-filter: blur(18px) saturate(1.12);
 }
 .glass-pill {
   border: 1px solid rgba(255, 255, 255, .85);
   border-radius: 999px;
-  background: linear-gradient(140deg, rgba(255, 255, 255, .85), rgba(255, 250, 245, .55));
-  box-shadow: 0 8px 22px rgba(70, 45, 35, .08);
+  background: linear-gradient(140deg, rgba(255, 255, 255, .85), rgba(255, 250, 250, .55));
+  box-shadow: 0 8px 22px rgba(74, 24, 43, .08);
   backdrop-filter: blur(14px) saturate(1.1);
   -webkit-backdrop-filter: blur(14px) saturate(1.1);
 }
@@ -42,8 +42,8 @@ const glassStyles = `
 }
 .product-card.glass-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(183, 44, 111, .38);
-  box-shadow: 0 26px 48px rgba(183, 44, 111, .18);
+  border-color: rgba(122, 30, 60, .38);
+  box-shadow: 0 26px 48px rgba(122, 30, 60, .18);
 }
 .product-card.glass-card .product-card-media {
   border-radius: 12px;
@@ -57,7 +57,7 @@ const glassStyles = `
   backdrop-filter: blur(9px);
   -webkit-backdrop-filter: blur(9px);
 }
-.product-card.glass-card .badge-accent { background: rgba(183, 44, 111, .85); }
+.product-card.glass-card .badge-accent { background: rgba(122, 30, 60, .85); }
 .product-card.glass-card .badge-warm { background: rgba(217, 121, 67, .88); }
 .product-card.glass-card .badge-muted { background: rgba(255, 252, 249, .88); }
 .product-card.glass-card .product-wish {

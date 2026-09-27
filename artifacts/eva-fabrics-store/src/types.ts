@@ -81,6 +81,7 @@ export interface CheckoutForm {
   governorate: string
   district: string
   address: string
+  landmark: string
   notes: string
 }
 
@@ -103,9 +104,19 @@ export interface OrderPayload {
   governorate: string
   district: string
   address: string
+  landmark?: string
   notes?: string
   items: OrderItemPayload[]
   subtotal: number
   deliveryFee: number
   total: number
+}
+
+export interface CustomerProfile {
+  name: string
+  phone: string
+  governorate: string
+  district: string
+  address: string
+  landmark: string
 }

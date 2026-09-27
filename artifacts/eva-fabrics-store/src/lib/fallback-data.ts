@@ -48,7 +48,7 @@ export const fallbackCategories: Category[] = [
     name: 'ترتر ولمّاع',
     description: 'بريق وحركة للحفلات',
     image: 'fabrics/hero.jpg',
-    accent: '#a13d75',
+    accent: '#8d2b4f',
   },
   {
     id: 'patterned',

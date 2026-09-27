@@ -132,7 +132,7 @@ const normalizeCategory = (value: unknown, index: number): Category | null => {
   if (!isRecord(value)) return null
   const name = textFrom(value.name, '')
   const id = textFrom(value.id ?? value.slug, `category-${index + 1}`)
-  return name ? { id, slug: textFrom(value.slug, id), name, description: textFrom(value.description, 'تشكيلة من الأقمشة المختارة'), image: textFrom(value.image, 'fabrics/hero.jpg'), accent: textFrom(value.accent, '#b44a72') } : null
+  return name ? { id, slug: textFrom(value.slug, id), name, description: textFrom(value.description, 'تشكيلة من الأقمشة المختارة'), image: textFrom(value.image, 'fabrics/hero.jpg'), accent: textFrom(value.accent, '#a34163') } : null
 }
 
 const normalizeRoute = (value: unknown, index: number): SiteRoute | null => {

@@ -13,16 +13,16 @@ interface CartPageProps {
 const FREE_DELIVERY_AT = 50000
 
 const glassStyles = `
-.glass-scope { --glass-fill: rgba(255, 252, 248, .58); --glass-strong: rgba(255, 251, 247, .88); --glass-line: rgba(255, 255, 255, .72); --glass-shadow: 0 22px 48px rgba(70, 45, 35, .1); }
+.glass-scope { --glass-fill: rgba(255, 252, 248, .58); --glass-strong: rgba(255, 251, 247, .88); --glass-line: rgba(255, 255, 255, .72); --glass-shadow: 0 22px 48px rgba(74, 24, 43, .1); }
 .glass-scope .glass { position: relative; background: var(--glass-fill); border: 1px solid var(--glass-line); box-shadow: var(--glass-shadow); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
 .glass-scope .glass-card { border-radius: 16px; }
 .glass-scope .glass-strong { background: var(--glass-strong); border-color: rgba(255, 255, 255, .92); }
-.glass-scope .glass-dark { color: #fff8f1; background: rgba(48, 38, 42, .9); border: 1px solid rgba(255, 248, 241, .18); box-shadow: 0 16px 34px rgba(48, 38, 42, .22); }
+.glass-scope .glass-dark { color: #fff6f8; background: rgba(48, 38, 42, .9); border: 1px solid rgba(255, 248, 241, .18); box-shadow: 0 16px 34px rgba(48, 38, 42, .22); }
 .glass-scope .glass-pill { border-radius: 999px; }
-.glass-scope .glass-divider { height: 1px; margin: 16px 0; background: linear-gradient(90deg, rgba(183, 44, 111, 0), rgba(183, 44, 111, .35), rgba(183, 44, 111, 0)); border: 0; }
+.glass-scope .glass-divider { height: 1px; margin: 16px 0; background: linear-gradient(90deg, rgba(122, 30, 60, 0), rgba(122, 30, 60, .35), rgba(122, 30, 60, 0)); border: 0; }
 .glass-scope .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; color: var(--eva-muted); background: rgba(255, 255, 255, .72); border: 1px solid rgba(255, 255, 255, .9); border-radius: 999px; font-size: 10px; line-height: 1.7; }
-.glass-scope .chip i { width: 11px; height: 11px; border: 1px solid rgba(45, 34, 34, .2); border-radius: 50%; }
-.glass-scope a.chip:hover { color: var(--eva-rose); border-color: rgba(183, 44, 111, .45); }
+.glass-scope .chip i { width: 11px; height: 11px; border: 1px solid rgba(43, 33, 36, .2); border-radius: 50%; }
+.glass-scope a.chip:hover { color: var(--eva-rose); border-color: rgba(122, 30, 60, .45); }
 .glass-scope .cart-items { padding: 4px 20px; border-top: 0; border-radius: 18px; }
 .glass-scope .cart-item:last-child { border-bottom: 0; }
 .glass-scope .cart-item-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
@@ -35,14 +35,21 @@ const glassStyles = `
 .glass-scope .delivery-progress-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--eva-muted); font-size: 10px; }
 .glass-scope .delivery-progress-head b { color: var(--eva-rose); font-size: 10px; }
 .glass-scope .progress-track { height: 7px; overflow: hidden; background: rgba(48, 38, 42, .12); border-radius: 999px; }
-.glass-scope .progress-track i { display: block; height: 100%; background: linear-gradient(90deg, var(--eva-rose), #dd6ba0); border-radius: 999px; transition: width .45s ease; }
+.glass-scope .progress-track i { display: block; height: 100%; background: linear-gradient(90deg, var(--eva-rose), #c98fa8); border-radius: 999px; transition: width .45s ease; }
 .glass-scope .delivery-free { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 14px; font-size: 11px; }
 .glass-scope .empty-card { display: grid; justify-items: center; max-width: 470px; padding: 44px 32px; border-radius: 20px; text-align: center; }
 .glass-scope .empty-card p { max-width: 330px; margin-top: 7px; color: var(--eva-muted); font-size: 13px; }
 .glass-scope .empty-card .button { margin-top: 24px; }
 .glass-scope a:focus-visible, .glass-scope button:focus-visible, .glass-scope input:focus-visible, .glass-scope select:focus-visible, .glass-scope textarea:focus-visible, .glass-scope [tabindex]:focus-visible { outline: 2px solid var(--eva-rose); outline-offset: 3px; }
+.glass-scope .cart-mobile-bar { display: none; }
 @media (max-width: 820px) {
   .glass-scope .cart-items { padding: 4px 15px; }
+  .glass-scope .cart-page { padding-bottom: 168px; }
+  .glass-scope .cart-mobile-bar { position: fixed; right: 10px; bottom: calc(74px + env(safe-area-inset-bottom)); left: 10px; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 16px; background: rgba(255, 251, 250, .93); border: 1px solid rgba(122, 30, 60, .16); border-radius: 20px; box-shadow: 0 18px 38px rgba(74, 24, 43, .2); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
+  .glass-scope .cart-mobile-bar > span { display: grid; gap: 1px; }
+  .glass-scope .cart-mobile-bar small { color: var(--eva-muted); font-size: 11.5px; }
+  .glass-scope .cart-mobile-bar strong { color: var(--eva-rose); font-size: 19px; }
+  .glass-scope .cart-mobile-bar .button { min-height: 48px; padding-inline: 18px; font-size: 14.5px; }
 }
 @media (max-width: 560px) {
   .glass-scope .cart-item-bottom { flex-direction: column; align-items: stretch; gap: 11px; }
@@ -206,6 +213,10 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
           <p className="summary-note">يُحتسب التوصيل حسب المحافظة، ويمكنك مراجعة كل التفاصيل قبل التأكيد النهائي.</p>
           <div className="summary-trust"><ShieldCheck size={16} /><span>السلة محفوظة على هذا الجهاز</span></div>
         </aside>
+      </div>
+      <div className="cart-mobile-bar">
+        <span><small>الإجمالي</small><strong>{formatPrice(totals.total)}</strong></span>
+        <Link href="/checkout" className="button button-primary">إتمام الطلب <ArrowLeft size={15} /></Link>
       </div>
     </main>
   )

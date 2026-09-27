@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, ChevronDown, ChevronLeft, ChevronRight, Heart, Minus, Plus, ShieldCheck, ShoppingBag, ZoomIn } from 'lucide-react'
+import { ArrowLeft, Check, ChevronDown, ChevronLeft, ChevronRight, Heart, Minus, Plus, ShieldCheck, ShoppingBag, Zap, ZoomIn } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { availableMeters, formatMeters, formatPrice } from '@/lib/catalog'
@@ -22,10 +22,12 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const [zoomOpen, setZoomOpen] = useState(false)
   const [openSection, setOpenSection] = useState('specs')
   const [openFaq, setOpenFaq] = useState<number | null>(0)
+  const [justAdded, setJustAdded] = useState(false)
 
   useEffect(() => {
     setActiveImage(0)
     setLength(0.5)
+    setJustAdded(false)
     setSelectedColorId(product?.colors.find((color) => color.available)?.id || product?.colors[0]?.id || '')
   }, [product?.id, product?.colors])
 
@@ -39,7 +41,10 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const gallery = [...new Set([product.image, ...product.images])]
   const increase = () => setLength((current) => Math.min(maxLength, Math.round((current + 0.5) * 10) / 10))
   const decrease = () => setLength((current) => Math.max(0.5, Math.round((current - 0.5) * 10) / 10))
-  const add = () => onAdd(product, selectedColor, length)
+  const add = () => {
+    onAdd(product, selectedColor, length)
+    setJustAdded(true)
+  }
 
   return <main className="container-eva product-page">
     <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><Link href="/catalog">الأقمشة</Link><span>›</span><span>{product.name}</span></div>
@@ -58,12 +63,13 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         <div className="quantity-control"><button type="button" onClick={decrease} disabled={length <= 0.5} aria-label="إنقاص نصف متر"><Minus size={17} /></button><output aria-live="polite">{formatMeters(length)}</output><button type="button" onClick={increase} disabled={length >= maxLength} aria-label="زيادة نصف متر"><Plus size={17} /></button></div>
         <div className="line-total"><span>إجمالي هذا السطر</span><strong>{formatPrice(product.price * length)}</strong></div>
         <button type="button" className="button button-primary detail-add" onClick={add} disabled={maxLength <= 0}><ShoppingBag size={17} />{maxLength <= 0 ? 'غير متوفر حالياً' : 'أضيفي إلى السلة'}<ArrowLeft size={16} /></button>
-        <div className="detail-perks"><div><ShieldCheck size={17} /><span>توصيل آمن للعراق</span></div><div><ShoppingBag size={17} /><span>طلب بنصف متر</span></div></div>
+        {justAdded && maxLength > 0 && <div className="add-confirm" role="status"><span><Check size={16} />أضيف {formatMeters(length)} من {product.name} إلى السلة</span><Link href="/checkout" className="button button-primary">إتمام الطلب الآن <ArrowLeft size={15} /></Link></div>}
+        <div className="detail-perks"><div><ShieldCheck size={17} /><span>توصيل آمن للعراق</span></div><div><Zap size={17} /><span>الطلب بمربع واحد</span></div></div>
         <div className="detail-accordions"><Accordion id="specs" title="مواصفات القماش" open={openSection === 'specs'} onToggle={() => setOpenSection(openSection === 'specs' ? '' : 'specs')}><div className="specs-grid"><Spec label="الخامة" value={product.specs.composition} /><Spec label="العرض" value={product.specs.width} /><Spec label="السماكة" value={product.specs.weight} /><Spec label="التمدد" value={product.specs.stretch} /><Spec label="الشفافية" value={product.specs.opacity} /><Spec label="التشطيب" value={product.specs.finish} /><Spec label="الاستخدام" value={product.specs.use} /><Spec label="العناية" value={product.specs.care} /></div></Accordion><Accordion id="faq" title="أسئلة حول الخامة" open={openSection === 'faq'} onToggle={() => setOpenSection(openSection === 'faq' ? '' : 'faq')}><div className="product-faq-list">{faqItems.map((item, index) => <div key={item.question}><button type="button" onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}>{item.question}<ChevronDown size={15} /></button>{openFaq === index && <p>{item.answer}</p>}</div>)}</div></Accordion><Accordion id="shipping" title="الشحن والإرجاع" open={openSection === 'shipping'} onToggle={() => setOpenSection(openSection === 'shipping' ? '' : 'shipping')}><p className="accordion-text">نجهز الطلبات بعد التأكيد، ونرتب الشحن بحسب المحافظة. بالنسبة إلى أي استفسار عن الإرجاع أو تبديل اللون، تواصلي معنا خلال 48 ساعة من الاستلام.</p></Accordion></div>
       </section>
     </div>
     {related.length > 0 && <section className="related-section"><div className="section-heading"><div><span className="eyebrow">اختيارات قريبة</span><h2>أقمشة ذات صلة</h2></div><Link href={`/catalog?category=${encodeURIComponent(product.categoryId)}`} className="underlined-link">عرض الفئة <ArrowLeft size={15} /></Link></div><div className="product-grid">{related.map((item) => <ProductCard key={item.id} product={item} wished={wishlist.includes(item.slug)} onWish={onWish} onAdd={onAdd} />)}</div></section>}
-    <div className="mobile-sticky-buy"><span><small>السعر / م</small><strong>{formatPrice(product.price)}</strong></span><button type="button" className="button button-primary" onClick={add} disabled={maxLength <= 0}>أضيفي {formatMeters(length)}</button></div>
+    <div className="mobile-sticky-buy"><span><small>السعر / م</small><strong>{formatPrice(product.price)}</strong></span>{justAdded ? <Link href="/checkout" className="button button-primary">إتمام الطلب <ArrowLeft size={15} /></Link> : <button type="button" className="button button-primary" onClick={add} disabled={maxLength <= 0}>أضيفي {formatMeters(length)}</button>}</div>
     <Modal open={zoomOpen} onClose={() => setZoomOpen(false)} title={`صورة ${product.name}`} className="image-modal"><button type="button" className="modal-close" onClick={() => setZoomOpen(false)} aria-label="إغلاق الصورة">×</button><img src={gallery[activeImage]} alt={`${product.name} مكبرة`} /></Modal>
   </main>
 }
