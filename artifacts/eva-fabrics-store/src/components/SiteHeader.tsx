@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { BarChart3, Heart, Home, Instagram, Menu, MessageCircle, Package, Search, ShoppingBag, X } from 'lucide-react'
+import { BarChart3, Heart, Home, Instagram, Menu, MessageCircle, Search, ShoppingBag, Shirt, X } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
-import { formatCount } from '@/lib/stats'
+import { formatMeters } from '@/lib/catalog'
 import { siteConfig } from '@/lib/site'
 import { Logo } from './Logo'
 import { Modal } from './Modal'
@@ -11,7 +11,7 @@ import { SearchDialog } from './SearchDialog'
 interface SiteHeaderProps {
   routes: SiteRoute[]
   products: Product[]
-  cartQuantity: number
+  cartMeters: number
   wishlistCount: number
 }
 
@@ -23,11 +23,11 @@ interface NavItem {
 
 const primaryNav: NavItem[] = [
   { id: 'home', label: 'الرئيسية', path: '/' },
-  { id: 'catalog', label: 'المنتجات', path: '/catalog' },
+  { id: 'catalog', label: 'الأقمشة', path: '/catalog' },
   { id: 'favorites', label: 'المفضلة', path: '/favorites' },
-  { id: 'guide', label: 'دليل المواد', path: '/fabric-guide' },
+  { id: 'guide', label: 'دليل الأقمشة', path: '/fabric-guide' },
   { id: 'about', label: 'من نحن', path: '/about' },
-  { id: 'contact', label: 'تواصل معنا', path: '/contact' },
+  { id: 'contact', label: 'تواصلي', path: '/contact' },
   { id: 'stats', label: 'الإحصائيات', path: '/stats' },
 ]
 
@@ -36,7 +36,7 @@ const drawerNav: NavItem[] = [
   { id: 'policies', label: 'السياسات', path: '/policies' },
 ]
 
-export function SiteHeader({ routes, products, cartQuantity, wishlistCount }: SiteHeaderProps) {
+export function SiteHeader({ routes, products, cartMeters, wishlistCount }: SiteHeaderProps) {
   const [location] = useLocation()
   const [searchOpen, setSearchOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -66,9 +66,9 @@ export function SiteHeader({ routes, products, cartQuantity, wishlistCount }: Si
 
   const bottomItems = [
     { id: 'home', label: 'الرئيسية', path: '/', Icon: Home, badge: '' },
-    { id: 'catalog', label: 'المنتجات', path: '/catalog', Icon: Package, badge: '' },
-    { id: 'favorites', label: 'المفضلة', path: '/favorites', Icon: Heart, badge: wishlistCount > 0 ? formatCount(wishlistCount) : '' },
-    { id: 'cart', label: 'السلة', path: '/cart', Icon: ShoppingBag, badge: cartQuantity > 0 ? formatCount(cartQuantity) : '' },
+    { id: 'catalog', label: 'الأقمشة', path: '/catalog', Icon: Shirt, badge: '' },
+    { id: 'favorites', label: 'المفضلة', path: '/favorites', Icon: Heart, badge: wishlistCount > 0 ? `${wishlistCount}` : '' },
+    { id: 'cart', label: 'السلة', path: '/cart', Icon: ShoppingBag, badge: cartMeters > 0 ? formatMeters(cartMeters) : '' },
     { id: 'stats', label: 'الإحصائيات', path: '/stats', Icon: BarChart3, badge: '' },
   ]
 
@@ -77,15 +77,15 @@ export function SiteHeader({ routes, products, cartQuantity, wishlistCount }: Si
   return (
     <>
       <div className="announcement-bar" role="region" aria-label="إعلان المتجر">
-        <span>توريد إلى جميع محافظات العراق</span>
+        <span>شحن إلى جميع محافظات العراق</span>
         <span className="announcement-dot" />
         <a href={`tel:${siteConfig.phone}`} dir="ltr">{siteConfig.phone}</a>
         <span className="announcement-dot" />
-        <span>توريد للمشاريع والمحال</span>
+        <span>شحن دولي عند التوفر</span>
       </div>
       <header className="site-header glass">
         <div className="container-eva header-inner">
-          <Logo />
+          <Logo glass />
           <nav className="desktop-nav" aria-label="التنقل الرئيسي">
             {navItems.map((route) => {
               const active = isActive(route.path)
@@ -97,17 +97,17 @@ export function SiteHeader({ routes, products, cartQuantity, wishlistCount }: Si
             })}
           </nav>
           <div className="header-actions">
-            <button type="button" className="icon-button" onClick={() => setSearchOpen(true)} aria-label="فتح البحث في المنتجات" aria-haspopup="dialog" aria-expanded={searchOpen}>
+            <button type="button" className="icon-button" onClick={() => setSearchOpen(true)} aria-label="فتح البحث في الأقمشة" aria-haspopup="dialog" aria-expanded={searchOpen}>
               <Search size={19} />
             </button>
-            <Link href="/favorites" className="icon-button favorite-header" onClick={navigate} aria-label={`المفضلة، ${formatCount(wishlistCount)} عناصر`}>
+            <Link href="/favorites" className="icon-button favorite-header" onClick={navigate} aria-label={`المفضلة، ${wishlistCount} عناصر`}>
               <Heart size={19} />
-              {wishlistCount > 0 && <span>{formatCount(wishlistCount)}</span>}
+              {wishlistCount > 0 && <span>{wishlistCount}</span>}
             </Link>
-            <Link href="/cart" className="cart-button" onClick={navigate} aria-label={`السلة، ${formatCount(cartQuantity)} قطعة`}>
+            <Link href="/cart" className="cart-button" onClick={navigate} aria-label={`السلة، ${formatMeters(cartMeters)}`}>
               <ShoppingBag size={17} />
               <span>السلة</span>
-              {cartQuantity > 0 && <b>{formatCount(cartQuantity)}</b>}
+              {cartMeters > 0 && <b>{formatMeters(cartMeters)}</b>}
             </Link>
             <button type="button" className="icon-button menu-toggle" onClick={() => setMenuOpen(true)} aria-label="فتح قائمة التنقل" aria-haspopup="dialog" aria-expanded={menuOpen}>
               <Menu size={20} />
@@ -118,7 +118,7 @@ export function SiteHeader({ routes, products, cartQuantity, wishlistCount }: Si
       <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} products={products} />
       <Modal open={menuOpen} onClose={() => setMenuOpen(false)} title="قائمة التنقل" variant="drawer" className="mobile-drawer glass-strong">
         <div className="drawer-header">
-          <Logo />
+          <Logo glass />
           <button type="button" className="icon-button" onClick={() => setMenuOpen(false)} aria-label="إغلاق القائمة">
             <X size={20} />
           </button>
@@ -137,11 +137,11 @@ export function SiteHeader({ routes, products, cartQuantity, wishlistCount }: Si
         <div className="drawer-contact">
           <a className="chip" href={siteConfig.whatsappUrl()} target="_blank" rel="noreferrer">
             <MessageCircle size={17} />
-            تواصل عبر واتساب
+            تواصلي عبر واتساب
           </a>
           <a className="chip" href={siteConfig.instagramUrl} target="_blank" rel="noreferrer">
             <Instagram size={17} />
-            {siteConfig.instagramText}
+            حساب إيفا على إنستغرام
           </a>
         </div>
       </Modal>

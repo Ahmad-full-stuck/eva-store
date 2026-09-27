@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, ClipboardList, Coins, Heart, Info, Layers, LayoutGrid, Package, Percent, RefreshCw, Receipt, ShoppingBag, Sparkles, Tag, TrendingDown, TrendingUp } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, Product } from '@/types'
-import { formatQuantity, formatPrice } from '@/lib/catalog'
-import { buildStatsSnapshot, formatCount, formatShare, ORDERS_KEY, type StatsSnapshot } from '@/lib/stats'
+import { formatMeters, formatPrice } from '@/lib/catalog'
+import { buildStatsSnapshot, formatCount, formatShare, type StatsSnapshot } from '@/lib/stats'
 
 interface StatsPageProps {
   products: Product[]
@@ -27,12 +27,12 @@ const COUNT_DURATION = 900
 const statsStyles = `
 .stats-page { padding-bottom: 72px; }
 .stats-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
-.stats-page :focus-visible { outline: 3px solid rgba(14, 107, 69, .45); outline-offset: 3px; }
+.stats-page :focus-visible { outline: 3px solid rgba(183, 44, 111, .45); outline-offset: 3px; }
 .stats-refresh.is-spinning svg { animation: stats-spin .65s ease; }
 @keyframes stats-spin { to { transform: rotate(-360deg); } }
 .stats-page .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 6px; }
-.stats-page .glass-card { position: relative; overflow: hidden; border-radius: 22px; background: linear-gradient(155deg, rgba(255, 253, 251, .93), rgba(255, 250, 245, .58)); border: 1px solid rgba(255, 255, 255, .85); box-shadow: 0 18px 40px rgba(17, 38, 31, .1), inset 0 1px 0 rgba(255, 255, 255, .9); -webkit-backdrop-filter: none; backdrop-filter: none; }
-.stats-page .glass-card::before { content: ''; position: absolute; right: auto; left: auto; width: 150px; height: 150px; top: -78px; inset-inline-start: -56px; border-radius: 50%; background: radial-gradient(circle, rgba(14, 107, 69, .17), rgba(14, 107, 69, 0) 70%); pointer-events: none; }
+.stats-page .glass-card { position: relative; overflow: hidden; border-radius: 22px; background: linear-gradient(155deg, rgba(255, 253, 251, .93), rgba(255, 250, 245, .58)); border: 1px solid rgba(255, 255, 255, .85); box-shadow: 0 18px 40px rgba(48, 38, 42, .1), inset 0 1px 0 rgba(255, 255, 255, .9); -webkit-backdrop-filter: blur(16px) saturate(150%); backdrop-filter: blur(16px) saturate(150%); }
+.stats-page .glass-card::before { content: ''; position: absolute; right: auto; left: auto; width: 150px; height: 150px; top: -78px; inset-inline-start: -56px; border-radius: 50%; background: radial-gradient(circle, rgba(183, 44, 111, .17), rgba(183, 44, 111, 0) 70%); pointer-events: none; }
 .stats-page .glass-card > * { position: relative; }
 .stats-page .stat-card { display: flex; flex-direction: column; gap: 7px; min-height: 134px; padding: 17px 16px; }
 .stats-head { display: flex; align-items: center; gap: 8px; }
@@ -46,7 +46,7 @@ const statsStyles = `
 .chart-title { display: grid; gap: 6px; }
 .chart-title h2 { font-size: 16px; line-height: 1.4; }
 .chart-sub { font-size: 11px; line-height: 1.75; color: var(--eva-muted); }
-.chart-tag { flex: 0 0 auto; padding: 4px 11px; border-radius: 999px; font-size: 10px; font-weight: 600; color: var(--eva-rose-dark); background: rgba(14, 107, 69, .1); border: 1px solid rgba(14, 107, 69, .2); }
+.chart-tag { flex: 0 0 auto; padding: 4px 11px; border-radius: 999px; font-size: 10px; font-weight: 600; color: var(--eva-rose-dark); background: rgba(183, 44, 111, .1); border: 1px solid rgba(183, 44, 111, .2); }
 .chart-legend { display: flex; flex-wrap: wrap; gap: 8px 15px; }
 .legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; color: var(--eva-muted); }
 .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
@@ -54,7 +54,7 @@ const statsStyles = `
 .bars-chart { position: relative; display: flex; align-items: flex-end; gap: 10px; min-height: 238px; }
 .bars-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .bars-total { font-size: 11px; font-weight: 600; color: var(--eva-ink); }
-.bars-stack { width: 100%; max-width: 66px; height: 150px; display: flex; flex-direction: column-reverse; overflow: hidden; border-radius: 9px; background: rgba(225, 229, 223, .45); }
+.bars-stack { width: 100%; max-width: 66px; height: 150px; display: flex; flex-direction: column-reverse; overflow: hidden; border-radius: 9px; background: rgba(232, 220, 211, .45); }
 .bar-seg { width: 100%; transition: height .55s ease; }
 .bar-low { background: var(--eva-green); }
 .bar-mid { background: var(--eva-orange); }
@@ -64,7 +64,7 @@ const statsStyles = `
 .donut-area { display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .donut-wrap { position: relative; width: 194px; height: 194px; }
 .donut-wrap svg { width: 100%; height: 100%; display: block; }
-.donut-track { stroke: rgba(225, 229, 223, .9); }
+.donut-track { stroke: rgba(232, 220, 211, .9); }
 .donut-fill { stroke: var(--eva-rose); transition: stroke-dashoffset .7s ease; }
 .donut-center { position: absolute; inset: 0; display: grid; place-content: center; gap: 2px; text-align: center; }
 .donut-center strong { font-size: 30px; line-height: 1.2; color: var(--eva-rose); }
@@ -77,13 +77,13 @@ const statsStyles = `
 .stock-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
 .stock-name { font-size: 12px; color: var(--eva-ink); overflow-wrap: anywhere; }
 .stock-top strong { flex: 0 0 auto; font-size: 12px; color: var(--eva-rose); white-space: nowrap; }
-.stock-track { height: 9px; overflow: hidden; border-radius: 999px; background: rgba(225, 229, 223, .6); }
-.stock-track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--eva-rose), rgba(14, 107, 69, .5)); transition: width .6s ease; }
+.stock-track { height: 9px; overflow: hidden; border-radius: 999px; background: rgba(232, 220, 211, .6); }
+.stock-track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--eva-rose), rgba(183, 44, 111, .5)); transition: width .6s ease; }
 .diversity-body { display: grid; gap: 13px; }
 .diversity-figure { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .diversity-figure strong { font-size: clamp(19px, 2vw, 25px); color: var(--eva-ink); }
 .diversity-figure span { font-size: 11px; color: var(--eva-muted); }
-.progress-track { height: 14px; overflow: hidden; border-radius: 999px; background: rgba(225, 229, 223, .55); }
+.progress-track { height: 14px; overflow: hidden; border-radius: 999px; background: rgba(232, 220, 211, .55); }
 .progress-fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--eva-rose), var(--eva-orange)); transition: width .7s ease; }
 .progress-meta { display: flex; justify-content: space-between; gap: 10px; font-size: 10px; color: var(--eva-muted); }
 .diversity-list { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
@@ -103,9 +103,9 @@ const statsStyles = `
 .stats-status { display: inline-flex; align-items: center; min-height: 24px; padding: 3px 10px; border-radius: 999px; font-size: 10px; font-weight: 600; border: 1px solid transparent; }
 .stats-status.is-done { color: var(--eva-green); background: rgba(73, 118, 91, .12); border-color: rgba(73, 118, 91, .25); }
 .stats-status.is-pending { color: var(--eva-orange); background: rgba(217, 121, 67, .12); border-color: rgba(217, 121, 67, .28); }
-.stats-status.is-new { color: var(--eva-rose-dark); background: rgba(14, 107, 69, .1); border-color: rgba(14, 107, 69, .22); }
+.stats-status.is-new { color: var(--eva-rose-dark); background: rgba(183, 44, 111, .1); border-color: rgba(183, 44, 111, .22); }
 .stats-empty { display: grid; justify-items: center; gap: 8px; padding: 34px 18px; text-align: center; border: 1px dashed var(--eva-line-strong); border-radius: 16px; background: rgba(255, 255, 255, .45); }
-.stats-empty-icon { width: 54px; height: 54px; display: grid; place-items: center; border-radius: 50%; color: var(--eva-rose); background: rgba(14, 107, 69, .1); }
+.stats-empty-icon { width: 54px; height: 54px; display: grid; place-items: center; border-radius: 50%; color: var(--eva-rose); background: rgba(183, 44, 111, .1); }
 .stats-empty strong { font-size: 14px; }
 .stats-empty p { max-width: 400px; font-size: 11px; line-height: 1.8; color: var(--eva-muted); }
 .stats-empty .button { margin-top: 6px; }
@@ -148,8 +148,6 @@ const timeLabel = (): string => {
 }
 
 const priceText = (value: number): string => (value > 0 ? formatPrice(Math.round(value)) : '—')
-
-const STATS_STORAGE_KEYS = [ORDERS_KEY, 'eva-fabrics-cart-v1', 'eva-fabrics-wishlist-v1']
 
 function CountUp({ value, token, format }: { value: number; token: number; format?: (value: number) => string }) {
   const [current, setCurrent] = useState(() => (reducedMotion() ? value : 0))
@@ -196,7 +194,7 @@ function PriceBars({ snapshot, hasProducts }: { snapshot: StatsSnapshot; hasProd
     ? `أعمدة توزيع الأسعار حسب القسم: ${rows
         .map((row) => `${row.name}: ${formatCount(row.counts.low)} ضمن ${snapshot.bandLabels.low}، ${formatCount(row.counts.mid)} ضمن ${snapshot.bandLabels.mid}، ${formatCount(row.counts.high)} ضمن ${snapshot.bandLabels.high}`)
         .join('؛ ')}`
-    : 'أعمدة توزيع الأسعار حسب القسم: لا توجد منتجات لعرضها'
+    : 'أعمدة توزيع الأسعار حسب القسم: لا توجد خامات لعرضها'
 
   return (
     <section className="glass-card chart-card">
@@ -204,9 +202,9 @@ function PriceBars({ snapshot, hasProducts }: { snapshot: StatsSnapshot; hasProd
         <div className="chart-title">
           <span className="eyebrow">توزيع الأسعار</span>
           <h2>الأسعار حسب القسم</h2>
-          <p className="chart-sub">عدد المنتجات داخل كل نطاق سعري داخل كل قسم</p>
+          <p className="chart-sub">عدد الخامات داخل كل نطاق سعري داخل كل قسم</p>
         </div>
-        <span className="chart-tag">للوحدة</span>
+        <span className="chart-tag">للمتر</span>
       </div>
       {hasProducts && rows.length ? (
         <div className="bars-chart" role="img" aria-label={label}>
@@ -226,7 +224,7 @@ function PriceBars({ snapshot, hasProducts }: { snapshot: StatsSnapshot; hasProd
           ))}
         </div>
       ) : (
-        <p className="chart-empty">لا توجد منتجات بعد لعرض توزيع الأسعار داخل الأقسام.</p>
+        <p className="chart-empty">لا توجد خامات بعد لعرض توزيع الأسعار داخل الأقسام.</p>
       )}
       <div className="chart-legend">
         <span className="legend-item"><i className="legend-dot" style={{ background: 'var(--eva-green)' }} />{snapshot.bandLabels.low}</span>
@@ -241,15 +239,15 @@ function AvailabilityDonut({ snapshot, token }: { snapshot: StatsSnapshot; token
   const percent = snapshot.availabilityPercent
   const offset = DONUT_CIRCUMFERENCE * (1 - Math.min(100, Math.max(0, percent)) / 100)
   const missing = Math.max(0, snapshot.productCount - snapshot.availableCount)
-  const label = `نسبة المتوفر: ${formatShare(percent)}، ${formatCount(snapshot.availableCount)} منتج متوفرة من أصل ${formatCount(snapshot.productCount)}، و${formatCount(missing)} منتج نفدت`
+  const label = `نسبة المتوفر: ${formatShare(percent)}، ${formatCount(snapshot.availableCount)} خامة متوفرة من أصل ${formatCount(snapshot.productCount)}، و${formatCount(missing)} خامة نفدت`
 
   return (
     <section className="glass-card chart-card">
       <div className="chart-head">
         <div className="chart-title">
           <span className="eyebrow">التوفّر</span>
-          <h2>نسبة المتوفر من المنتجات</h2>
-          <p className="chart-sub">منتج متوفرة تعني رصيداً فوق صفر في المتجر</p>
+          <h2>نسبة المتوفر من الخامات</h2>
+          <p className="chart-sub">خامة متوفرة تعني رصيداً فوق صفر في المعرض</p>
         </div>
         <span className="chart-tag">{formatShare(percent)}</span>
       </div>
@@ -278,7 +276,7 @@ function AvailabilityDonut({ snapshot, token }: { snapshot: StatsSnapshot; token
         <div className="donut-legend">
           <div>
             <strong>{formatCount(snapshot.availableCount)}</strong>
-            <span>منتج متوفرة</span>
+            <span>خامة متوفرة</span>
           </div>
           <div>
             <strong>{formatCount(missing)}</strong>
@@ -286,7 +284,7 @@ function AvailabilityDonut({ snapshot, token }: { snapshot: StatsSnapshot; token
           </div>
           <div>
             <strong>{formatCount(snapshot.productCount)}</strong>
-            <span>إجمالي المنتجات</span>
+            <span>إجمالي الخامات</span>
           </div>
         </div>
       </div>
@@ -297,18 +295,18 @@ function AvailabilityDonut({ snapshot, token }: { snapshot: StatsSnapshot; token
 function StockLeaders({ snapshot }: { snapshot: StatsSnapshot }) {
   const rows = snapshot.stockRows
   const label = rows.length
-    ? `أكبر خمس منتجات بالمخزون: ${rows.map((row) => `${row.name} ${formatQuantity(row.quantity)}`).join('، ')}`
-    : 'أكبر خمس منتجات بالمخزون: لا توجد بيانات'
+    ? `أكبر خمس خامات بالمخزون: ${rows.map((row) => `${row.name} ${formatMeters(row.meters)}`).join('، ')}`
+    : 'أكبر خمس خامات بالمخزون: لا توجد بيانات'
 
   return (
     <section className="glass-card chart-card">
       <div className="chart-head">
         <div className="chart-title">
           <span className="eyebrow">المخزون</span>
-          <h2>أكبر ٥ منتجات بالمخزون</h2>
-          <p className="chart-sub">ترتيب تنازلي حسب الأمتار المتاحة لكل منتج</p>
+          <h2>أكبر ٥ خامات بالمخزون</h2>
+          <p className="chart-sub">ترتيب تنازلي حسب الأمتار المتاحة لكل خامة</p>
         </div>
-        <span className="chart-tag">بالوحدة</span>
+        <span className="chart-tag">بالمتر</span>
       </div>
       {rows.length ? (
         <ol className="stock-list" role="img" aria-label={label}>
@@ -316,7 +314,7 @@ function StockLeaders({ snapshot }: { snapshot: StatsSnapshot }) {
             <li key={row.id}>
               <div className="stock-top">
                 <span className="stock-name">{row.name}</span>
-                <strong>{formatQuantity(row.quantity)}</strong>
+                <strong>{formatMeters(row.meters)}</strong>
               </div>
               <div className="stock-track" aria-hidden="true">
                 <span style={{ width: `${row.percent}%` }} />
@@ -325,7 +323,7 @@ function StockLeaders({ snapshot }: { snapshot: StatsSnapshot }) {
           ))}
         </ol>
       ) : (
-        <p className="chart-empty">لا توجد منتجات برصيد مسجل لعرضها هنا.</p>
+        <p className="chart-empty">لا توجد خامات برصيد مسجل لعرضها هنا.</p>
       )}
     </section>
   )
@@ -334,7 +332,7 @@ function StockLeaders({ snapshot }: { snapshot: StatsSnapshot }) {
 function DiversityProgress({ snapshot }: { snapshot: StatsSnapshot }) {
   const top = snapshot.topCategory
   const label = top
-    ? `القسم الأكثر تنوعاً: ${top.name} بـ${formatCount(top.count)} منتجات، أي ${formatShare(top.percent)} من إجمالي المتجر`
+    ? `القسم الأكثر تنوعاً: ${top.name} بـ${formatCount(top.count)} خامات، أي ${formatShare(top.percent)} من إجمالي المعرض`
     : 'القسم الأكثر تنوعاً: لا توجد بيانات'
 
   return (
@@ -343,7 +341,7 @@ function DiversityProgress({ snapshot }: { snapshot: StatsSnapshot }) {
         <div className="chart-title">
           <span className="eyebrow">التنوّع</span>
           <h2>القسم الأكثر تنوعاً</h2>
-          <p className="chart-sub">حصة القسم الأعلى من عدد المنتجات المعروضة</p>
+          <p className="chart-sub">حصة القسم الأعلى من عدد الخامات المعروضة</p>
         </div>
         <span className="chart-tag">{top ? top.name : '—'}</span>
       </div>
@@ -351,13 +349,13 @@ function DiversityProgress({ snapshot }: { snapshot: StatsSnapshot }) {
         <div className="diversity-body" role="img" aria-label={label}>
           <div className="diversity-figure">
             <strong>{top.name}</strong>
-            <span>{formatCount(top.count)} منتج · {formatShare(top.percent)}</span>
+            <span>{formatCount(top.count)} خامة · {formatShare(top.percent)}</span>
           </div>
           <div className="progress-track" aria-hidden="true">
             <span className="progress-fill" style={{ width: `${Math.min(100, top.percent)}%` }} />
           </div>
           <div className="progress-meta">
-            <span>حصة القسم من المتجر</span>
+            <span>حصة القسم من المعرض</span>
             <span>{formatShare(top.percent)}</span>
           </div>
           <ul className="diversity-list">
@@ -370,7 +368,7 @@ function DiversityProgress({ snapshot }: { snapshot: StatsSnapshot }) {
           </ul>
         </div>
       ) : (
-        <p className="chart-empty">أضف منتجات إلى الأقسام ليظهر توزيع التنوّع.</p>
+        <p className="chart-empty">أضيفي خامات إلى الأقسام ليظهر توزيع التنوّع.</p>
       )}
     </section>
   )
@@ -391,7 +389,7 @@ function OrdersTable({ orders }: { orders: StatsSnapshot['orders'] }) {
         <strong>لا توجد طلبات محفوظة بعد</strong>
         <p>عند إتمام أول طلب يظهر هنا رقمه وتاريخه وإجماليه وحالته، محفوظاً في متصفحك.</p>
         <Link href="/catalog" className="button button-outline">
-          تصفح المنتجات <ArrowLeft size={16} aria-hidden="true" />
+          تصفحي الأقمشة <ArrowLeft size={16} aria-hidden="true" />
         </Link>
       </div>
     )
@@ -429,38 +427,25 @@ export function StatsPage({ products, categories }: StatsPageProps) {
   const [spinning, setSpinning] = useState(false)
   const [stamp, setStamp] = useState(() => timeLabel())
   const [snapshot, setSnapshot] = useState(() => buildStatsSnapshot(products, categories))
-  const spinTimer = useRef<number | null>(null)
-
-  useEffect(() => () => {
-    if (spinTimer.current !== null) window.clearTimeout(spinTimer.current)
-  }, [])
 
   useEffect(() => {
     setSnapshot(buildStatsSnapshot(products, categories))
   }, [products, categories, token])
 
-  useEffect(() => {
-    const onStorage = (event: StorageEvent) => {
-      if (event.key && STATS_STORAGE_KEYS.includes(event.key)) setSnapshot(buildStatsSnapshot(products, categories))
-    }
-    window.addEventListener('storage', onStorage)
-    return () => window.removeEventListener('storage', onStorage)
-  }, [products, categories])
-
   const kpis = useMemo<KpiItem[]>(() => {
-    const stocked = products.filter((product) => product.stock > 0).length
+    const stocked = products.filter((product) => product.stockMeters > 0).length
     return [
-      { id: 'fabrics', label: 'عدد المنتجات', value: snapshot.productCount, hint: `${formatCount(snapshot.availableCount)} منها متوفرة الآن`, Icon: Layers },
-      { id: 'categories', label: 'عدد الأقسام', value: snapshot.categoryCount, hint: 'أقسام موزعة على المتجر', Icon: LayoutGrid },
-      { id: 'average', label: 'متوسط السعر', value: snapshot.averagePrice, format: (value) => formatPrice(Math.round(value)), hint: 'متوسط سعر الوحدة داخل المتجر', Icon: Coins },
-      { id: 'lowest', label: 'أقل سعر', value: snapshot.minPrice, format: priceText, hint: snapshot.cheapest ? 'أدنى سعر مسجل للمنتج' : 'لا توجد منتجات بعد', Icon: Tag },
-      { id: 'cheapest', label: 'أرخص منتج', value: snapshot.cheapest ? snapshot.cheapest.price : 0, format: priceText, hint: snapshot.cheapest ? snapshot.cheapest.name : 'لا توجد منتجات بعد', Icon: TrendingDown },
-      { id: 'dearest', label: 'أغلى منتج', value: snapshot.dearest ? snapshot.dearest.price : 0, format: priceText, hint: snapshot.dearest ? snapshot.dearest.name : 'لا توجد منتجات بعد', Icon: TrendingUp },
-      { id: 'stock', label: 'إجمالي المخزون بالمتر', value: snapshot.totalStock, format: (value) => formatQuantity(value), hint: `${formatCount(stocked)} منتج عليه رصيد`, Icon: Package },
-      { id: 'new', label: 'المنتجات الجديدة', value: snapshot.newCount, hint: 'منتجات موسومة بوصول حديثاً', Icon: Sparkles },
-      { id: 'available', label: 'نسبة المتوفر', value: snapshot.availabilityPercent, format: (value) => formatShare(value), hint: `${formatCount(snapshot.availableCount)} من ${formatCount(snapshot.productCount)} منتج`, Icon: Percent },
-      { id: 'cart', label: 'عناصر السلة المحفوظة', value: snapshot.cartItems, hint: `${formatQuantity(snapshot.cartQuantity)} محفوظة في المتصفح`, Icon: ShoppingBag },
-      { id: 'wishlist', label: 'المفضلة', value: snapshot.wishlistCount, hint: 'منتجات محفوظة بقلب المفضلة', Icon: Heart },
+      { id: 'fabrics', label: 'عدد الخامات', value: snapshot.productCount, hint: `${formatCount(snapshot.availableCount)} منها متوفرة الآن`, Icon: Layers },
+      { id: 'categories', label: 'عدد الأقسام', value: snapshot.categoryCount, hint: 'أقسام موزعة على المعرض', Icon: LayoutGrid },
+      { id: 'average', label: 'متوسط السعر', value: snapshot.averagePrice, format: (value) => formatPrice(Math.round(value)), hint: 'متوسط سعر المتر داخل المعرض', Icon: Coins },
+      { id: 'lowest', label: 'أقل سعر', value: snapshot.minPrice, format: priceText, hint: snapshot.cheapest ? 'أدنى سعر مسجل للخامة' : 'لا توجد خامات بعد', Icon: Tag },
+      { id: 'cheapest', label: 'أرخص خامة', value: snapshot.cheapest ? snapshot.cheapest.price : 0, format: priceText, hint: snapshot.cheapest ? snapshot.cheapest.name : 'لا توجد خامات بعد', Icon: TrendingDown },
+      { id: 'dearest', label: 'أغلى خامة', value: snapshot.dearest ? snapshot.dearest.price : 0, format: priceText, hint: snapshot.dearest ? snapshot.dearest.name : 'لا توجد خامات بعد', Icon: TrendingUp },
+      { id: 'stock', label: 'إجمالي المخزون بالمتر', value: snapshot.totalMeters, format: (value) => formatMeters(value), hint: `${formatCount(stocked)} خامة عليها رصيد`, Icon: Package },
+      { id: 'new', label: 'الخامات الجديدة', value: snapshot.newCount, hint: 'خامات موسومة بوصول حديثاً', Icon: Sparkles },
+      { id: 'available', label: 'نسبة المتوفر', value: snapshot.availabilityPercent, format: (value) => formatShare(value), hint: `${formatCount(snapshot.availableCount)} من ${formatCount(snapshot.productCount)} خامة`, Icon: Percent },
+      { id: 'cart', label: 'عناصر السلة المحفوظة', value: snapshot.cartItems, hint: `${formatMeters(snapshot.cartMeters)} محفوظة في المتصفح`, Icon: ShoppingBag },
+      { id: 'wishlist', label: 'المفضلة', value: snapshot.wishlistCount, hint: 'خامات محفوظة بقلب المفضلة', Icon: Heart },
       { id: 'orders', label: 'الطلبات المحفوظة', value: snapshot.orderCount, hint: 'من مفتاح eva-orders في المتصفح', Icon: ClipboardList },
     ]
   }, [products, snapshot])
@@ -469,11 +454,7 @@ export function StatsPage({ products, categories }: StatsPageProps) {
     setToken((current) => current + 1)
     setStamp(timeLabel())
     setSpinning(true)
-    if (spinTimer.current !== null) window.clearTimeout(spinTimer.current)
-    spinTimer.current = window.setTimeout(() => {
-      spinTimer.current = null
-      setSpinning(false)
-    }, 700)
+    window.setTimeout(() => setSpinning(false), 700)
   }
 
   return (
@@ -487,8 +468,8 @@ export function StatsPage({ products, categories }: StatsPageProps) {
       <div className="page-title-row">
         <div>
           <span className="eyebrow">لوحة الإحصائيات</span>
-          <h1>أرقام المتجر</h1>
-          <p>ملخص مباشر لتشكيلة اخوان الصفا · آخر تحديث {stamp}</p>
+          <h1>أرقام المعرض</h1>
+          <p>ملخص مباشر لتشكيلة إيفا ستور · آخر تحديث {stamp}</p>
         </div>
         <div className="stats-toolbar">
           <button
@@ -503,13 +484,13 @@ export function StatsPage({ products, categories }: StatsPageProps) {
         </div>
       </div>
 
-      <section className="stats-grid" aria-label="مؤشرات أرقام المتجر">
+      <section className="stats-grid" aria-label="مؤشرات أرقام المعرض">
         {kpis.map((item) => (
           <StatCard key={item.id} item={item} token={token} />
         ))}
       </section>
 
-      <section className="stats-charts" aria-label="رسوم بيانية للمتجر">
+      <section className="stats-charts" aria-label="رسوم بيانية للمعرض">
         <PriceBars snapshot={snapshot} hasProducts={products.length > 0} />
         <AvailabilityDonut snapshot={snapshot} token={token} />
         <StockLeaders snapshot={snapshot} />
@@ -531,9 +512,9 @@ export function StatsPage({ products, categories }: StatsPageProps) {
       <div className="glass-card stats-note" role="note">
         <Info size={18} aria-hidden="true" />
         <div>
-          <strong>البيانات من المتجر المحلي</strong>
+          <strong>البيانات من المعرض المحلي</strong>
           <p>
-            كل رقم في هذه اللوحة يُحسب لحظياً من تشكيلة المتجر ومن ذاكرة المتصفح: السلة والمفضلة محفوظتان في localStorage،
+            كل رقم في هذه اللوحة يُحسب لحظياً من تشكيلة المعرض ومن ذاكرة المتصفح: السلة والمفضلة محفوظتان في localStorage،
             والطلبات تُقرأ من المفتاح eva-orders بمعاينة آمنة. لا يوجد خادم مرتبط بهذه اللوحة، وزر التحديث يعيد قراءة القيم فوراً.
           </p>
         </div>

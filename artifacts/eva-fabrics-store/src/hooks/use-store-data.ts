@@ -46,8 +46,8 @@ const stockFrom = (value: unknown, fallback: number): number => {
   return fallback
 }
 
-const normalizeColor = (value: unknown, index: number, stock: number, primaryColorName: string, productAvailable: boolean): ProductColor => {
-  const available = productAvailable && stock > 0
+const normalizeColor = (value: unknown, index: number, stockMeters: number, primaryColorName: string, productAvailable: boolean): ProductColor => {
+  const available = productAvailable && stockMeters > 0
   if (typeof value === 'string') {
     const isHex = /^#[0-9a-f]{3,8}$/i.test(value)
     return {
@@ -55,31 +55,35 @@ const normalizeColor = (value: unknown, index: number, stock: number, primaryCol
       name: isHex ? (index === 0 && primaryColorName ? primaryColorName : `لون ${index + 1}`) : value,
       hex: isHex ? value : '#8e6e7d',
       available,
-      stock: available ? stock : 0,
+      stockMeters: available ? stockMeters : 0,
     }
   }
-  if (!isRecord(value)) return { id: `color-${index + 1}`, name: `لون ${index + 1}`, hex: '#8e6e7d', available, stock: available ? stock : 0 }
-  const colorStock = stockFrom(value.stockMeters ?? value.stock ?? value.inventory ?? value.stockQuantity, stock)
+  if (!isRecord(value)) return { id: `color-${index + 1}`, name: `لون ${index + 1}`, hex: '#8e6e7d', available, stockMeters: available ? stockMeters : 0 }
+  const colorStock = stockFrom(value.stockMeters ?? value.inventory ?? value.stock, stockMeters)
   return {
     id: textFrom(value.id, `color-${index + 1}`),
     name: textFrom(value.name ?? value.color, index === 0 && primaryColorName ? primaryColorName : `لون ${index + 1}`),
     hex: /^#[0-9a-f]{3,8}$/i.test(String(value.hex)) ? String(value.hex) : '#8e6e7d',
     available: productAvailable && booleanFrom(value.available, colorStock > 0) && colorStock > 0,
-    stock: productAvailable ? colorStock : 0,
+    stockMeters: productAvailable ? colorStock : 0,
   }
 }
 
 const normalizeSpecs = (value: unknown): ProductSpecs => {
   const source = isRecord(value) ? value : {}
+  const stretch = textFrom(source.stretch, 'غير محدد')
+  const hasExplicitStretch = typeof source.isStretch === 'boolean'
+  const isStretch = hasExplicitStretch ? source.isStretch as boolean : !normalizeArabic(stretch).includes('غير مطاطي')
   return {
-    material: textFrom(source.material ?? source.composition, 'غير محدد'),
-    size: textFrom(source.size ?? source.width, 'غير محدد'),
-    weight: textFrom(source.weight, 'غير محدد'),
-    install: textFrom(source.install, 'حسب تعليمات المصنع'),
+    composition: textFrom(source.composition, 'خامة غير محددة'),
+    width: textFrom(source.width, 'غير محددة'),
+    weight: textFrom(source.weight, 'غير محددة'),
+    stretch,
+    isStretch,
+    opacity: textFrom(source.opacity, 'غير محددة'),
     finish: textFrom(source.finish, 'غير محدد'),
-    supply: textFrom(source.supply, 'متوفر بالمخزن'),
-    use: textFrom(source.use, 'استخدامات متنوعة'),
-    care: textFrom(source.care, 'يُحفظ في مكان جاف نظيف'),
+    care: textFrom(source.care, 'اتباع تعليمات العناية على البطاقة'),
+    use: textFrom(source.use, 'حسب تصميم القطعة'),
   }
 }
 
@@ -95,21 +99,21 @@ const normalizeProduct = (value: unknown, index: number): Product | null => {
   const name = textFrom(value.name, '')
   const slug = textFrom(value.slug, textFrom(value.id, `product-${index + 1}`))
   if (!name || !slug) return null
-  const image = textFrom(value.image, 'media/hero.svg')
+  const image = textFrom(value.image, 'fabrics/hero.jpg')
   const imageList = Array.isArray(value.images) ? value.images.filter((item): item is string => typeof item === 'string' && item.length > 0) : []
-  const stock = stockFrom(value.stockMeters ?? value.stockQuantity ?? value.inventory ?? value.stock, 10)
-  const productAvailable = booleanFrom(value.inStock, stock > 0)
+  const stockMeters = stockFrom(value.stockMeters ?? value.stockQuantity ?? value.inventory ?? value.stock, 10)
+  const productAvailable = booleanFrom(value.inStock, stockMeters > 0)
   const primaryColorName = textFrom(value.color, '')
   const colors = Array.isArray(value.colors) && value.colors.length > 0
-    ? value.colors.map((item, colorIndex) => normalizeColor(item, colorIndex, stock, primaryColorName, productAvailable))
-    : [normalizeColor({}, 0, stock, primaryColorName, productAvailable)]
+    ? value.colors.map((item, colorIndex) => normalizeColor(item, colorIndex, stockMeters, primaryColorName, productAvailable))
+    : [normalizeColor({}, 0, stockMeters, primaryColorName, productAvailable)]
   return {
     id: textFrom(value.id, slug),
     slug,
     name,
-    type: textFrom(value.type, 'مادة بناء'),
-    categoryId: textFrom(value.categoryId ?? value.category, 'structural'),
-    description: textFrom(value.description, 'مادة مختارة من تشكيلة اخوان الصفا للمشاريع والمنازل.'),
+    type: textFrom(value.type, 'قماش'),
+    categoryId: textFrom(value.categoryId ?? value.category, 'plain'),
+    description: textFrom(value.description, 'قماش مختار لتوسيع خيارات التفصيل والتصميم.'),
     price: Math.max(0, numberFrom(value.price, 0)),
     compareAtPrice: typeof value.compareAtPrice === 'number' ? value.compareAtPrice : undefined,
     image,
@@ -119,8 +123,7 @@ const normalizeProduct = (value: unknown, index: number): Product | null => {
     faqs: Array.isArray(value.faqs) ? value.faqs.map(normalizeFaq).filter((item): item is ProductFaq => item !== null) : [],
     isNew: booleanFrom(value.isNew, false),
     isFeatured: booleanFrom(value.isFeatured, true),
-    unit: textFrom(value.unit, 'وحدة'),
-    stock,
+    stockMeters,
     createdAt: textFrom(value.createdAt, new Date().toISOString().slice(0, 10)),
   }
 }
@@ -129,7 +132,7 @@ const normalizeCategory = (value: unknown, index: number): Category | null => {
   if (!isRecord(value)) return null
   const name = textFrom(value.name, '')
   const id = textFrom(value.id ?? value.slug, `category-${index + 1}`)
-  return name ? { id, slug: textFrom(value.slug, id), name, description: textFrom(value.description, 'تشكيلة مختارة من مواد اخوان الصفا'), image: textFrom(value.image, 'media/hero.svg'), accent: textFrom(value.accent, '#0E6B45') } : null
+  return name ? { id, slug: textFrom(value.slug, id), name, description: textFrom(value.description, 'تشكيلة من الأقمشة المختارة'), image: textFrom(value.image, 'fabrics/hero.jpg'), accent: textFrom(value.accent, '#b44a72') } : null
 }
 
 const normalizeRoute = (value: unknown, index: number): SiteRoute | null => {

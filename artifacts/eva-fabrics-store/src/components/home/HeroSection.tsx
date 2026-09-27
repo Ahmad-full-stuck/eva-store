@@ -21,9 +21,9 @@ interface HeroStat {
 
 export function HeroSection({ products, categories }: HeroSectionProps) {
   const stats: HeroStat[] = [
-    { key: 'fabrics', icon: <Layers size={16} />, value: products.length, prefix: '+', suffix: '', label: 'منتج متاح', trend: 'تشكيلة تتجدد' },
-    { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '+', suffix: '', label: 'قسم متخصص', trend: 'لكل مشروع' },
-    { key: 'delivery', icon: <Truck size={16} />, value: 24, prefix: '', suffix: '', label: 'ساعة للتجهيز', trend: 'كل محافظات العراق' },
+    { key: 'fabrics', icon: <Layers size={16} />, value: products.length, prefix: '+', suffix: '', label: 'خامة متاحة', trend: 'تشكيلة تتجدد' },
+    { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '+', suffix: '', label: 'أقسام مختارة', trend: 'لكل مشروع' },
+    { key: 'delivery', icon: <Truck size={16} />, value: 24, prefix: '', suffix: '', label: 'ساعة للتوصيل', trend: 'كل محافظات العراق' },
     { key: 'cash', icon: <Wallet size={16} />, value: 100, prefix: '', suffix: '٪', label: 'دفع عند الاستلام', trend: 'مريح وآمن' },
   ]
 
@@ -31,25 +31,25 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
     <>
       <section className="home-hero glass-hero container-eva">
         <div className="hero-copy">
-          <span className="eyebrow"><Sparkles size={14} />مواد إنشائية وصحية وأصباغ</span>
-          <h1>اختر <span>المادة المناسبة</span><br />لمشروعك</h1>
-          <p>تشكيلة منتقاة من المواد الإنشائية والصحية والأصباغ، مع مواصفات واضحة قبل أن تضيفها إلى مشروعك.</p>
+          <span className="eyebrow"><Sparkles size={14} />معرض أقمشة عربي</span>
+          <h1>اختاري <span>القماش المثالي</span><br />لكل إبداع</h1>
+          <p>تشكيلة منتقاة من الأقمشة الفاخرة والمريحة، مع شرح واضح للخامة قبل أن تضيفيها إلى مشروعك.</p>
           <div className="hero-actions">
-            <Link href="/catalog" className="button button-primary">تصفح المنتجات <ArrowLeft size={16} /></Link>
-            <Link href="/catalog?sort=newest" className="button button-outline">اكتشف الجديد <ArrowRight size={16} /></Link>
+            <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
+            <Link href="/catalog?sort=newest" className="button button-outline">اكتشفي الجديد <ArrowRight size={16} /></Link>
           </div>
           <div className="hero-note"><span className="note-dot" />توصيل إلى جميع محافظات العراق <span className="note-divider" /> دفع عند استلام الطلب</div>
         </div>
         <div className="hero-visual">
-          <img src="media/hero.svg" alt="مواد إنشائية وصحية وأصباغ من اخوان الصفا" />
+          <img src="fabrics/hero.jpg" alt="نماذج من أقمشة إيفا ستور" />
           <div className="hero-visual-overlay" />
-          <div className="hero-vertical-label" aria-hidden="true">AL SIFA · MATERIALS</div>
+          <div className="hero-vertical-label" aria-hidden="true">EVA · FABRICS</div>
         </div>
       </section>
 
       <div className="container-eva" style={{ position: 'relative', zIndex: 2, marginTop: 'clamp(-84px, -5vw, -30px)' }}>
         <div className="glass-card">
-          <span className="glass-pill">أرقام المخزون الآن</span>
+          <span className="glass-pill">أرقام المعرض الآن</span>
           <div className="stats-grid">
             {stats.map((stat) => (
               <div className="stat-card" key={stat.key} role="group" aria-label={`${stat.prefix}${stat.value.toLocaleString('ar-IQ')}${stat.suffix} ${stat.label}`}>

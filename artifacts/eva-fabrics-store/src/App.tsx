@@ -18,7 +18,7 @@ import { AboutPage, ContactPage, FabricGuidePage, OrderConfirmationPage, OrderTr
 import NotFound from '@/pages/not-found'
 
 const shellStyles = `
-.skip-link { position: fixed; top: 14px; right: 14px; z-index: 140; display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; color: #F4F7F4; background: var(--eva-rose); border: 1px solid rgba(255, 255, 255, .4); border-radius: 999px; box-shadow: var(--eva-shadow-small); backdrop-filter: none; font-size: 12px; font-weight: 600; transform: translateY(-190%); transition: transform .2s ease; }
+.skip-link { position: fixed; top: 14px; right: 14px; z-index: 140; display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; color: #fff8f1; background: var(--eva-rose); border: 1px solid rgba(255, 255, 255, .4); border-radius: 999px; box-shadow: var(--eva-shadow-small); backdrop-filter: blur(10px); font-size: 12px; font-weight: 600; transform: translateY(-190%); transition: transform .2s ease; }
 .skip-link:focus { transform: translateY(0); }
 .app-shell { overflow: clip; }
 .app-main { scroll-margin-top: 116px; }
@@ -62,7 +62,10 @@ function App() {
   const pathname = location.split('?')[0]
 
   useEffect(() => {
-    setCart((current) => reconcileCart(current, products))
+    setCart((current) => {
+      const next = reconcileCart(current, products)
+      return next.length === current.length ? current : next
+    })
   }, [products])
 
   useEffect(() => {
@@ -86,7 +89,7 @@ function App() {
   const addToCart = (product: Product, color: ProductColor, length: number) => {
     const result = addCartItem(cart, product, color, length)
     if (!result.available) {
-      setNotice('هذا المنتج غير متوفر حالياً')
+      setNotice('هذه الخامة غير متوفرة حالياً')
       return
     }
     setCart(result.cart)
@@ -96,33 +99,31 @@ function App() {
   const toggleWishlist = (slug: string) => {
     setWishlist((current) => {
       const exists = current.includes(slug)
-      setNotice(exists ? 'أزيل المنتج من المفضلة' : 'حُفظ المنتج في المفضلة')
+      setNotice(exists ? 'أزيل القماش من المفضلة' : 'حُفظ القماش في المفضلة')
       return exists ? current.filter((item) => item !== slug) : [...current, slug]
     })
   }
 
   const updateCart = (key: string, length: number) => setCart((current) => updateCartItem(current, key, length))
   const deleteCart = (key: string) => setCart((current) => removeCartItem(current, key))
-  const completeOrder = (orderNumber: string, status: 'received' | 'whatsapp-pending') => {
+  const completeOrder = (orderNumber: string) => {
     setCart([])
     setStoredCart([])
-    setNotice(status === 'whatsapp-pending'
-      ? 'تم إرسال تفاصيل طلبك عبر واتساب، ولم يصل التأكيد من المتجر بعد'
-      : 'تم تسجيل طلبك بنجاح')
+    setNotice('تم تسجيل طلبك بنجاح')
     setLocation(`/order-confirmation/${encodeURIComponent(orderNumber)}`)
   }
   const skipToContent = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
     document.getElementById('main-content')?.focus()
   }
-  const cartQuantity = cart.reduce((sum, item) => sum + item.quantity, 0)
+  const cartMeters = cart.reduce((sum, item) => sum + item.length, 0)
   const pageProps = { products, categories, wishlist, onWish: toggleWishlist, onAdd: addToCart }
 
   return (
     <div className="app-shell" dir="rtl">
       <style>{shellStyles}</style>
       <a className="skip-link" href="#main-content" onClick={skipToContent}>تخطي إلى المحتوى</a>
-      <SiteHeader routes={routes} products={products} cartQuantity={cartQuantity} wishlistCount={wishlist.length} />
+      <SiteHeader routes={routes} products={products} cartMeters={cartMeters} wishlistCount={wishlist.length} />
       <div id="main-content" className="app-main" tabIndex={-1}>
         <Switch>
           <Route path="/" component={() => <HomePage {...pageProps} />} />

@@ -61,7 +61,7 @@ export function PromoBar() {
           <span className="count-unit"><strong>{pad(minutes)}</strong><small>{minuteLabel}</small></span>
           <span className="count-unit"><strong>{pad(seconds)}</strong><small>{secondLabel}</small></span>
         </div>
-        <Link href="/catalog" className="button button-primary button-small">اطلب الآن <ArrowLeft size={14} /></Link>
+        <Link href="/catalog" className="button button-primary button-small">اطلبي الآن <ArrowLeft size={14} /></Link>
       </section>
     </div>
   )

@@ -7,27 +7,33 @@ interface ProductCardProps {
   product: Product
   wished: boolean
   onWish: (slug: string) => void
-  onAdd: (product: Product, color: ProductColor, quantity: number) => void
+  onAdd: (product: Product, color: ProductColor, length: number) => void
 }
 
-const cardStyles = `
+const glassStyles = `
 .glass-card {
-  border: 1px solid #E1E5E0;
-  border-radius: 14px;
-  background: #FFFFFF;
-  box-shadow: 0 1px 2px rgba(17, 38, 31, .05), 0 10px 26px rgba(17, 38, 31, .07);
+  border: 1px solid rgba(255, 255, 255, .75);
+  border-radius: 20px;
+  background: linear-gradient(155deg, rgba(255, 255, 255, .8), rgba(255, 250, 245, .46));
+  box-shadow: 0 14px 34px rgba(70, 45, 35, .1);
+  backdrop-filter: blur(16px) saturate(1.15);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
 }
 .glass-surface {
-  border: 1px solid #E1E5E0;
-  border-radius: 16px;
-  background: #FFFFFF;
-  box-shadow: 0 1px 2px rgba(17, 38, 31, .05), 0 10px 26px rgba(17, 38, 31, .07);
+  border: 1px solid rgba(255, 255, 255, .8);
+  border-radius: 22px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, .78), rgba(255, 250, 245, .44));
+  box-shadow: 0 16px 38px rgba(70, 45, 35, .1);
+  backdrop-filter: blur(18px) saturate(1.12);
+  -webkit-backdrop-filter: blur(18px) saturate(1.12);
 }
 .glass-pill {
-  border: 1px solid #E1E5E0;
+  border: 1px solid rgba(255, 255, 255, .85);
   border-radius: 999px;
-  background: #FFFFFF;
-  box-shadow: none;
+  background: linear-gradient(140deg, rgba(255, 255, 255, .85), rgba(255, 250, 245, .55));
+  box-shadow: 0 8px 22px rgba(70, 45, 35, .08);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
 }
 .product-card.glass-card {
   position: relative;
@@ -36,30 +42,36 @@ const cardStyles = `
 }
 .product-card.glass-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(14, 107, 69, .4);
-  box-shadow: 0 4px 10px rgba(17, 38, 31, .06), 0 24px 46px rgba(17, 38, 31, .13);
+  border-color: rgba(183, 44, 111, .38);
+  box-shadow: 0 26px 48px rgba(183, 44, 111, .18);
 }
 .product-card.glass-card .product-card-media {
   border-radius: 12px;
-  background: #EEF1EC;
+  background: linear-gradient(160deg, rgba(232, 220, 211, .92), rgba(248, 243, 237, .75));
 }
 .product-card.glass-card .product-card-image { transition: transform .5s ease; }
 .product-card.glass-card .product-card-body { padding: 13px 0 3px; }
 .product-card.glass-card .badge {
-  border: 1px solid rgba(255, 255, 255, .6);
-  box-shadow: 0 4px 12px rgba(17, 38, 31, .18);
+  border: 1px solid rgba(255, 255, 255, .5);
+  box-shadow: 0 4px 12px rgba(40, 26, 26, .18);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
 }
-.product-card.glass-card .badge-accent { background: rgba(14, 107, 69, .92); }
-.product-card.glass-card .badge-warm { background: rgba(192, 90, 17, .92); }
-.product-card.glass-card .badge-muted { background: #FFFFFF; }
+.product-card.glass-card .badge-accent { background: rgba(183, 44, 111, .85); }
+.product-card.glass-card .badge-warm { background: rgba(217, 121, 67, .88); }
+.product-card.glass-card .badge-muted { background: rgba(255, 252, 249, .88); }
 .product-card.glass-card .product-wish {
-  background: rgba(17, 38, 31, .58);
+  background: rgba(44, 30, 30, .34);
   transition: background-color .2s ease, color .2s ease, transform .2s ease;
 }
 .product-card.glass-card .product-wish:hover,
 .product-card.glass-card .product-wish.is-active { transform: scale(1.08); }
-.product-card.glass-card .add-button { background: #FFFFFF; }
-.product-card.glass-card .add-button:hover:not(:disabled) { background: #F2F7F3; }
+.product-card.glass-card .add-button {
+  background: rgba(255, 255, 255, .74);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+.product-card.glass-card .add-button:hover:not(:disabled) { background: #fff; }
 .skeleton-shimmer { position: relative; }
 .skeleton-shimmer::after {
   content: '';
@@ -95,14 +107,14 @@ const injectStyles = (id: string, css: string) => {
   document.head.appendChild(node)
 }
 
-injectStyles('sifa-card-styles', cardStyles)
+injectStyles('eva-glass-styles', glassStyles)
 
 export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps) {
-  const availableColor = product.colors.find((color) => color.available && color.stock > 0)
-  const soldOut = product.stock <= 0 || !availableColor
-  const lowStock = !soldOut && product.stock <= 3
+  const availableColor = product.colors.find((color) => color.available && color.stockMeters > 0)
+  const soldOut = product.stockMeters <= 0 || !availableColor
+  const lowStock = !soldOut && product.stockMeters <= 3
   const wishLabel = wished ? `إزالة ${product.name} من المفضلة` : `إضافة ${product.name} إلى المفضلة`
-  const addLabel = `أضف ${product.name} إلى السلة`
+  const addLabel = `أضيفي نصف متر من ${product.name} إلى السلة`
   const detailPath = `/product/${product.slug}`
 
   return (
@@ -121,7 +133,7 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
               const node = event.currentTarget
               if (node.dataset.fallback === '1') return
               node.dataset.fallback = '1'
-              node.src = 'media/hero.svg'
+              node.src = 'fabrics/hero.jpg'
             }}
           />
         </Link>
@@ -147,10 +159,10 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
             <p className="product-type">{product.type}</p>
             <Link href={detailPath} className="product-name">{product.name}</Link>
           </div>
-          <span className="product-price">{formatPrice(product.price)}<small>/{product.unit}</small></span>
+          <span className="product-price">{formatPrice(product.price)}<small>/م</small></span>
         </div>
         <div className="product-card-footer">
-          <div className="swatch-list" role="list" aria-label="ألوان المنتج">
+          <div className="swatch-list" role="list" aria-label="ألوان الخامة">
             {product.colors.slice(0, 5).map((color) => (
               <span
                 key={color.id}
@@ -166,10 +178,10 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
             type="button"
             className="add-button"
             disabled={soldOut}
-            onClick={() => availableColor && onAdd(product, availableColor, 1)}
+            onClick={() => availableColor && onAdd(product, availableColor, 0.5)}
             aria-label={addLabel}
           >
-            {soldOut ? 'نفد المخزون' : <><ShoppingBag size={14} aria-hidden="true" /><span>أضف {product.unit}</span></>}
+            {soldOut ? 'نفد المخزون' : <><ShoppingBag size={14} aria-hidden="true" /><span>أضيفي ٠٫٥ م</span></>}
           </button>
         </div>
       </div>
@@ -179,7 +191,7 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
 
 export function ProductGridSkeleton() {
   return (
-    <div className="product-grid" role="status" aria-busy="true" aria-label="جارٍ تحميل المنتجات">
+    <div className="product-grid" role="status" aria-busy="true" aria-label="جارٍ تحميل الأقمشة">
       {Array.from({ length: 8 }, (_, index) => (
         <div key={index} className="product-skeleton skeleton-shimmer" aria-hidden="true"><div /><span /><span /></div>
       ))}
@@ -187,14 +199,14 @@ export function ProductGridSkeleton() {
   )
 }
 
-export function InlineAddButton({ product, onAdd }: { product: Product; onAdd: (product: Product, color: ProductColor, quantity: number) => void }) {
-  const color = product.colors.find((item) => item.available && item.stock > 0)
+export function InlineAddButton({ product, onAdd }: { product: Product; onAdd: (product: Product, color: ProductColor, length: number) => void }) {
+  const color = product.colors.find((item) => item.available && item.stockMeters > 0)
   return (
     <button
       type="button"
       className="icon-button"
       disabled={!color}
-      onClick={() => color && onAdd(product, color, 1)}
+      onClick={() => color && onAdd(product, color, 0.5)}
       aria-label={`إضافة ${product.name} إلى السلة`}
     >
       <Plus size={18} aria-hidden="true" />

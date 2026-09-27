@@ -5,20 +5,20 @@ import { SectionHeading } from './SectionHeading'
 const orderSteps = [
   {
     index: '٠١',
-    title: 'اختر المواد',
-    text: 'تصفح الأقسام وقارن الصور والمواصفات: المقاس والوزن والاستخدام قبل أن تقرر.',
+    title: 'اختاري القماش',
+    text: 'تصفحي الأقسام وقارني الصور والمواصفات: السماكة والمرونة والشفافية قبل أن تقرري.',
     hint: 'بدون تسجيل',
   },
   {
     index: '٠٢',
-    title: 'حدد اللون والكمية',
-    text: 'أضف الكمية المطلوبة إلى السلة، والكمية المتاحة مكتوبة أمام كل لون من الألوان.',
+    title: 'حددي اللون والكمية',
+    text: 'أضيفي نصف متر فأكثر إلى السلة، والكمية المتاحة مكتوبة أمام كل لون من الألوان.',
     hint: 'مخزون واضح',
   },
   {
     index: '٠٣',
-    title: 'أرسل الطلب وادفع',
-    text: 'أكمل اسمك ومحافظتك وعنوانك، ثم ادفع نقداً عند استلام الطلب في موقعك.',
+    title: 'أرسلي الطلب وادفعي',
+    text: 'أكملي اسمك ومحافظتك وعنوانك، ثم ادفعي نقداً عند استلام الطلب في باب المنزل.',
     hint: 'دفع عند الاستلام',
   },
 ]
@@ -26,7 +26,7 @@ const orderSteps = [
 export function StepsSection() {
   return (
     <section className="container-eva section-soft" aria-label="كيف تطلب؟" style={{ marginBlock: 'clamp(16px, 3vw, 32px)' }}>
-      <SectionHeading eyebrow="ثلاث خطوات فقط" title="كيف تطلب؟" description="من اختيار المادة إلى موقعك" linkLabel="ابدأ التسوق" linkHref="/catalog" />
+      <SectionHeading eyebrow="ثلاث خطوات فقط" title="كيف تطلب؟" description="من اختيار القماش إلى باب المنزل" linkLabel="ابدئي التسوق" linkHref="/catalog" />
       <div className="steps-grid">
         {orderSteps.map((step) => (
           <article className="step-card glass-card" key={step.index}>
@@ -40,7 +40,7 @@ export function StepsSection() {
         ))}
       </div>
       <div className="center-action">
-        <Link href="/catalog" className="button button-primary">تصفح كل المنتجات <ArrowLeft size={16} /></Link>
+        <Link href="/catalog" className="button button-primary">تصفحي كل الأقمشة <ArrowLeft size={16} /></Link>
       </div>
     </section>
   )

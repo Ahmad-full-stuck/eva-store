@@ -2,32 +2,31 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Heart, Instagram, Layers, MapPin, MessageCircle, PackageCheck, Phone, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Star, Truck } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { ProductFaq } from '@/types'
-import { formatQuantity, formatPrice, normalizeArabic } from '@/lib/catalog'
-import { governorates, guideQuestions } from '@/lib/fallback-data'
-import { useStoreData } from '@/hooks/use-store-data'
+import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
+import { guideQuestions } from '@/lib/fallback-data'
 import { apiUrl, siteConfig } from '@/lib/site'
 
 const glassCss = `
 .glass {
-  background: #FFFFFF;
+  background: linear-gradient(150deg, rgba(255, 255, 255, .8), rgba(255, 250, 245, .46));
   border: 1px solid rgba(255, 255, 255, .85);
-  box-shadow: 0 24px 55px rgba(17, 38, 31, .1);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  box-shadow: 0 24px 55px rgba(70, 45, 35, .1);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
 }
 .glass-card { padding: 26px; border-radius: 24px; }
 .glass-dark {
-  color: #F4F7F4;
-  background: #11261F;
+  color: #fff8f1;
+  background: linear-gradient(150deg, rgba(48, 38, 42, .93), rgba(48, 38, 42, .76));
   border: 1px solid rgba(255, 255, 255, .16);
-  box-shadow: 0 24px 55px rgba(17, 38, 31, .28);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  box-shadow: 0 24px 55px rgba(35, 24, 27, .28);
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
 }
-.glass-dark p, .glass-dark small, .glass-dark li { color: #B9C7C0; }
-.glass-dark .eyebrow { color: #8FC4AC; }
-.glass-dark .button-outline { color: #F4F7F4; border-color: rgba(244, 247, 244, .4); }
-.glass-dark .button-outline:hover { color: #fff; border-color: #F4F7F4; background: rgba(244, 247, 244, .14); }
+.glass-dark p, .glass-dark small, .glass-dark li { color: #cdbdba; }
+.glass-dark .eyebrow { color: #f0a98a; }
+.glass-dark .button-outline { color: #fff8f1; border-color: rgba(255, 248, 241, .4); }
+.glass-dark .button-outline:hover { color: #fff; border-color: #fff8f1; background: rgba(255, 248, 241, .14); }
 .glass-pill {
   display: inline-flex;
   align-items: center;
@@ -39,7 +38,7 @@ const glassCss = `
   border-radius: 999px;
   font-size: 11px;
   font-weight: 600;
-  box-shadow: 0 8px 20px rgba(17, 38, 31, .08);
+  box-shadow: 0 8px 20px rgba(70, 45, 35, .08);
 }
 .glass-input {
   width: 100%;
@@ -53,15 +52,15 @@ const glassCss = `
   font-size: 13px;
   transition: border-color .2s ease, box-shadow .2s ease;
 }
-.glass-input::placeholder { color: #8A968F; }
-.glass-input:focus { border-color: rgba(14, 107, 69, .55); box-shadow: 0 0 0 3px rgba(14, 107, 69, .14); }
+.glass-input::placeholder { color: #a9938e; }
+.glass-input:focus { border-color: rgba(183, 44, 111, .55); box-shadow: 0 0 0 3px rgba(183, 44, 111, .14); }
 textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
 .section-soft {
   padding: 46px 40px;
-  background: #F7F9F6;
+  background: linear-gradient(160deg, rgba(255, 255, 255, .74), rgba(241, 232, 224, .88));
   border: 1px solid rgba(255, 255, 255, .85);
   border-radius: 26px;
-  box-shadow: 0 18px 44px rgba(17, 38, 31, .07);
+  box-shadow: 0 18px 44px rgba(70, 45, 35, .07);
 }
 .chip {
   display: inline-flex;
@@ -69,18 +68,18 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
   gap: 6px;
   padding: 6px 12px;
   color: var(--eva-rose);
-  background: rgba(14, 107, 69, .09);
-  border: 1px solid rgba(14, 107, 69, .22);
+  background: rgba(183, 44, 111, .09);
+  border: 1px solid rgba(183, 44, 111, .22);
   border-radius: 999px;
   font-size: 10px;
   font-weight: 600;
   transition: background-color .2s ease, border-color .2s ease, color .2s ease;
 }
-.chip:hover { background: rgba(14, 107, 69, .16); border-color: rgba(14, 107, 69, .5); }
-.chip-neutral { color: var(--eva-muted); background: rgba(255, 255, 255, .62); border-color: rgba(225, 229, 223, .95); }
-.chip-neutral:hover { color: var(--eva-rose); border-color: rgba(14, 107, 69, .4); }
+.chip:hover { background: rgba(183, 44, 111, .16); border-color: rgba(183, 44, 111, .5); }
+.chip-neutral { color: var(--eva-muted); background: rgba(255, 255, 255, .62); border-color: rgba(232, 220, 211, .95); }
+.chip-neutral:hover { color: var(--eva-rose); border-color: rgba(183, 44, 111, .4); }
 .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.stars { display: inline-flex; align-items: center; gap: 3px; color: #C05A11; }
+.stars { display: inline-flex; align-items: center; gap: 3px; color: #e0a13c; }
 .stars svg { width: 14px; height: 14px; fill: currentColor; }
 .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
@@ -95,14 +94,14 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
   width: 128px;
   height: 128px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(14, 107, 69, .2), rgba(14, 107, 69, 0));
+  background: radial-gradient(circle, rgba(183, 44, 111, .2), rgba(183, 44, 111, 0));
 }
 .stat-label { position: relative; display: block; color: var(--eva-muted); font-size: 11px; }
 .stat-value { position: relative; display: block; margin-top: 8px; color: var(--eva-rose); font-size: clamp(30px, 4vw, 40px); line-height: 1.15; letter-spacing: -.02em; }
 .stat-note { position: relative; display: block; margin-top: 6px; color: var(--eva-muted); font-size: 10px; line-height: 1.7; }
 .value-card h3 { margin-top: 14px; font-size: 14px; }
 .value-card p { margin-top: 7px; color: var(--eva-muted); font-size: 12px; line-height: 1.95; }
-.value-icon { width: 42px; height: 42px; display: grid; place-items: center; color: var(--eva-rose); background: rgba(14, 107, 69, .1); border: 1px solid rgba(14, 107, 69, .2); border-radius: 14px; }
+.value-icon { width: 42px; height: 42px; display: grid; place-items: center; color: var(--eva-rose); background: rgba(183, 44, 111, .1); border: 1px solid rgba(183, 44, 111, .2); border-radius: 14px; }
 .timeline { position: relative; display: grid; gap: 14px; margin: 26px 0 0; padding: 0; list-style: none; }
 .timeline:before {
   content: '';
@@ -111,7 +110,7 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
   bottom: 14px;
   right: 14px;
   width: 1px;
-  background: linear-gradient(180deg, rgba(14, 107, 69, .55), rgba(201, 208, 199, .8));
+  background: linear-gradient(180deg, rgba(183, 44, 111, .55), rgba(216, 198, 187, .8));
 }
 .timeline-item { position: relative; display: grid; grid-template-columns: 29px minmax(0, 1fr); gap: 15px; align-items: start; }
 .timeline-dot {
@@ -124,7 +123,7 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
   border-radius: 50%;
   font-size: 10px;
   font-weight: 600;
-  box-shadow: 0 0 0 5px rgba(14, 107, 69, .12);
+  box-shadow: 0 0 0 5px rgba(183, 44, 111, .12);
 }
 .timeline-body { padding: 18px 20px; }
 .timeline-year { display: block; color: var(--eva-rose); font-size: 10px; font-weight: 600; letter-spacing: .04em; }
@@ -132,13 +131,13 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
 .timeline-body p { margin-top: 6px; color: var(--eva-muted); font-size: 12px; line-height: 1.95; }
 .quote-card { display: flex; flex-direction: column; gap: 12px; }
 .quote-text { color: var(--eva-ink); font-size: 13px; line-height: 2; }
-.quote-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid rgba(225, 229, 223, .9); }
+.quote-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid rgba(232, 220, 211, .9); }
 .quote-name { display: grid; gap: 2px; }
 .quote-name strong { font-size: 12px; }
 .quote-name small { color: var(--eva-muted); font-size: 10px; }
 .about-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 22px; margin-top: 55px; padding: 38px 40px; border-radius: 26px; }
 .about-cta h2 { margin-top: 8px; font-size: clamp(22px, 3vw, 30px); }
-.about-cta p { max-width: 470px; margin-top: 9px; color: #B9C7C0; font-size: 13px; line-height: 2; }
+.about-cta p { max-width: 470px; margin-top: 9px; color: #cdbdba; font-size: 13px; line-height: 2; }
 .cta-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .section-head-tight { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
 .section-head-tight h2 { margin-top: 7px; font-size: clamp(22px, 3.2vw, 31px); line-height: 1.4; }
@@ -149,8 +148,8 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
 .tips-table { width: 100%; min-width: 660px; border-collapse: collapse; font-size: 12px; }
 .tips-table caption { padding: 15px 18px 0; color: var(--eva-muted); font-size: 11px; text-align: right; }
 .tips-table th, .tips-table td { padding: 13px 16px; text-align: right; vertical-align: top; }
-.tips-table thead th { color: #F4F7F4; background: rgba(17, 38, 31, .94); font-size: 11px; font-weight: 600; }
-.tips-table tbody tr + tr { border-top: 1px solid rgba(225, 229, 223, .95); }
+.tips-table thead th { color: #fff8f1; background: rgba(48, 38, 42, .94); font-size: 11px; font-weight: 600; }
+.tips-table tbody tr + tr { border-top: 1px solid rgba(232, 220, 211, .95); }
 .tips-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, .5); }
 .tips-table tbody th { color: var(--eva-rose); font-weight: 600; }
 .tips-table td small { display: block; margin-top: 3px; color: var(--eva-muted); font-size: 10px; line-height: 1.7; }
@@ -171,7 +170,7 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
 .guide-checklist svg { flex: 0 0 auto; margin-top: 4px; color: var(--eva-green); }
 .contact-hours { display: grid; gap: 10px; margin-top: 24px; padding: 20px 22px; border-radius: 20px; }
 .hours-title { display: flex; align-items: center; gap: 8px; color: var(--eva-rose); font-size: 12px; font-weight: 600; }
-.hours-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 9px; border-bottom: 1px solid rgba(225, 229, 223, .9); color: var(--eva-muted); font-size: 11px; }
+.hours-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 9px; border-bottom: 1px solid rgba(232, 220, 211, .9); color: var(--eva-muted); font-size: 11px; }
 .hours-row:last-child { padding-bottom: 0; border-bottom: 0; }
 .hours-row strong { color: var(--eva-ink); font-size: 11px; }
 .map-card { position: relative; overflow: hidden; display: grid; gap: 16px; margin-top: 16px; padding: 24px; border-radius: 24px; }
@@ -183,16 +182,16 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
   background-size: 34px 34px;
 }
 .map-copy { position: relative; display: grid; gap: 9px; justify-items: start; }
-.map-pin { width: 40px; height: 40px; display: grid; place-items: center; color: #fff; background: var(--eva-rose); border-radius: 50%; box-shadow: 0 10px 24px rgba(14, 107, 69, .45); }
+.map-pin { width: 40px; height: 40px; display: grid; place-items: center; color: #fff; background: var(--eva-rose); border-radius: 50%; box-shadow: 0 10px 24px rgba(183, 44, 111, .45); }
 .map-copy strong { font-size: 14px; }
-.map-copy p { color: #B9C7C0; font-size: 12px; line-height: 2; }
+.map-copy p { color: #cdbdba; font-size: 12px; line-height: 2; }
 .map-card .button { position: relative; }
 .contact-form { border-radius: 24px; }
 .form-status { display: flex; align-items: flex-start; gap: 9px; margin-top: 16px; padding: 14px 16px; border-radius: 16px; font-size: 12px; line-height: 1.9; }
 .form-status svg { flex: 0 0 auto; margin-top: 4px; }
 .form-status-error { color: #9a463c; background: #f9ece7; border: 1px solid #edcfc6; }
 .form-status-success { color: var(--eva-green); background: #edf4eb; border: 1px solid #d8e7d4; }
-.form-status-info { color: var(--eva-rose); background: rgba(14, 107, 69, .08); border: 1px solid rgba(14, 107, 69, .24); }
+.form-status-info { color: var(--eva-rose); background: rgba(183, 44, 111, .08); border: 1px solid rgba(183, 44, 111, .24); }
 .form-status a { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .form-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
 .policy-accordions { display: grid; gap: 12px; max-width: 880px; }
@@ -203,41 +202,41 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
 .policy-accordion summary strong { font-size: 14px; transition: color .2s ease; }
 .policy-accordion summary:hover strong { color: var(--eva-rose); }
 .policy-accordion summary svg { color: var(--eva-muted); transition: transform .2s ease; }
-.policy-accordion[open] { border-color: rgba(14, 107, 69, .4); box-shadow: 0 24px 55px rgba(14, 107, 69, .12); }
+.policy-accordion[open] { border-color: rgba(183, 44, 111, .4); box-shadow: 0 24px 55px rgba(183, 44, 111, .12); }
 .policy-accordion[open] summary svg { transform: rotate(180deg); }
 .policy-body { padding-bottom: 24px; }
 .policy-body p { color: var(--eva-muted); font-size: 13px; line-height: 2.1; }
 .policy-body ul { display: grid; gap: 8px; margin: 12px 0 0; padding-inline-start: 18px; color: var(--eva-muted); font-size: 12px; line-height: 1.95; }
 .policy-body li::marker { color: var(--eva-rose); }
-.policy-body p.policy-highlight { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 12px 14px; color: var(--eva-rose); background: rgba(14, 107, 69, .08); border: 1px solid rgba(14, 107, 69, .2); border-radius: 14px; font-size: 11px; line-height: 1.8; }
+.policy-body p.policy-highlight { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 12px 14px; color: var(--eva-rose); background: rgba(183, 44, 111, .08); border: 1px solid rgba(183, 44, 111, .2); border-radius: 14px; font-size: 11px; line-height: 1.8; }
 .policy-body p.policy-highlight svg { flex: 0 0 auto; }
 .form-footnote a { color: var(--eva-rose); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-.chip-dark { color: #E4EFE9; background: rgba(244, 247, 244, .12); border-color: rgba(244, 247, 244, .3); }
-.chip-dark:hover { background: rgba(244, 247, 244, .2); border-color: rgba(244, 247, 244, .55); }
-.tracking-form input:focus-visible { outline: 3px solid rgba(14, 107, 69, .35); outline-offset: 3px; border-radius: 6px; }
+.chip-dark { color: #ffe9df; background: rgba(255, 248, 241, .12); border-color: rgba(255, 248, 241, .3); }
+.chip-dark:hover { background: rgba(255, 248, 241, .2); border-color: rgba(255, 248, 241, .55); }
+.tracking-form input:focus-visible { outline: 3px solid rgba(183, 44, 111, .35); outline-offset: 3px; border-radius: 6px; }
 .confirmation-panel { width: min(780px, 100%); padding: 44px 38px; }
 .confirmation-panel h1 { margin-top: 9px; font-size: clamp(28px, 4.4vw, 44px); }
 .confirmation-panel > p { max-width: 470px; margin: 12px auto 0; color: var(--eva-muted); font-size: 13px; line-height: 2; }
 .status-panel { margin-top: 26px; padding: 26px; border-radius: 22px; text-align: right; }
 .status-head { display: grid; gap: 4px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, .14); }
-.status-head span { color: #8FC4AC; font-size: 10px; }
+.status-head span { color: #f0a98a; font-size: 10px; }
 .status-head strong { font-size: 16px; }
-.status-head small { color: #9DB0A7; font-size: 10px; }
+.status-head small { color: #bcaeaa; font-size: 10px; }
 .status-steps { display: grid; gap: 14px; margin: 18px 0 0; padding: 0; list-style: none; }
 .status-steps li { position: relative; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: center; }
 .status-steps li:not(:last-child):after { content: ''; position: absolute; top: 30px; bottom: -14px; right: 14px; width: 1px; background: rgba(255, 255, 255, .16); }
-.status-steps li > span { width: 30px; height: 30px; display: grid; place-items: center; color: #B9C7C0; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .2); border-radius: 50%; font-size: 11px; z-index: 1; }
+.status-steps li > span { width: 30px; height: 30px; display: grid; place-items: center; color: #cdbdba; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .2); border-radius: 50%; font-size: 11px; z-index: 1; }
 .status-steps li.is-done > span { color: #fff; background: var(--eva-green); border-color: var(--eva-green); }
 .status-steps li.is-done:not(:last-child):after { background: rgba(73, 118, 91, .75); }
 .status-steps strong { display: block; font-size: 12px; }
-.status-steps small { display: block; margin-top: 2px; color: #9DB0A7; font-size: 10px; }
+.status-steps small { display: block; margin-top: 2px; color: #bcaeaa; font-size: 10px; }
 .status-items { display: grid; gap: 8px; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, .14); }
-.status-items > span { color: #8FC4AC; font-size: 10px; }
-.status-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #B9C7C0; font-size: 11px; }
-.status-item b { color: #F4F7F4; font-weight: 600; }
+.status-items > span { color: #f0a98a; font-size: 10px; }
+.status-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #cdbdba; font-size: 11px; }
+.status-item b { color: #fff8f1; font-weight: 600; }
 .order-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 .order-empty { width: min(660px, 100%); margin: 40px auto 0; padding: 42px 30px; border-radius: 28px; text-align: center; }
-.order-empty h1, .order-empty h2 { margin-top: 16px; font-size: clamp(24px, 3.6vw, 32px); }
+.order-empty h1 { margin-top: 16px; font-size: clamp(24px, 3.6vw, 32px); }
 .order-empty > p { max-width: 440px; margin: 10px auto 0; color: var(--eva-muted); font-size: 13px; line-height: 2; }
 .order-empty .empty-icon { margin: 0 auto; }
 .empty-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 24px; }
@@ -249,7 +248,7 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
 .tracking-result-glass strong { font-size: 13px; }
 .tracking-result-glass p { color: var(--eva-muted); font-size: 11px; line-height: 1.9; }
 .favorites-grid .favorite-tile { padding: 12px 12px 14px; border-radius: 22px; }
-.favorite-tile-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(225, 229, 223, .9); }
+.favorite-tile-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(232, 220, 211, .9); }
 .favorite-tile-actions .chip { cursor: pointer; }
 .empty-glass { width: min(660px, 100%); margin: 40px auto 0; padding: 42px 30px; border-radius: 28px; text-align: center; }
 .empty-glass .empty-icon { margin: 0 auto; }
@@ -258,11 +257,11 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
 .favorites-note { margin-top: 45px; }
 .not-found-page { min-height: 74vh; display: flex; align-items: center; justify-content: center; padding: 70px 0 90px; }
 .not-found-card { position: relative; overflow: hidden; width: min(720px, 100%); padding: 52px 40px; border-radius: 30px; text-align: center; }
-.not-found-code { display: block; color: rgba(14, 107, 69, .18); font-size: clamp(74px, 16vw, 132px); font-weight: 700; line-height: .95; letter-spacing: -.06em; }
+.not-found-code { display: block; color: rgba(183, 44, 111, .18); font-size: clamp(74px, 16vw, 132px); font-weight: 700; line-height: .95; letter-spacing: -.06em; }
 .not-found-card h1 { margin-top: 6px; font-size: clamp(26px, 4vw, 38px); }
 .not-found-card > p { max-width: 470px; margin: 12px auto 0; color: var(--eva-muted); font-size: 13px; line-height: 2; }
 .not-found-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 26px; }
-.not-found-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 26px; padding-top: 22px; border-top: 1px solid rgba(225, 229, 223, .9); }
+.not-found-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 26px; padding-top: 22px; border-top: 1px solid rgba(232, 220, 211, .9); }
 @media (min-width: 720px) {
   .status-steps { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
   .status-steps li { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 8px; text-align: center; }
@@ -303,35 +302,35 @@ interface AboutStat {
   note: string
 }
 
+const aboutStats: AboutStat[] = [
+  { label: 'خامة في المعرض', value: 139, note: 'تشكيلة تتجدد مع كل موسم' },
+  { label: 'أقسام للتصنيف', value: 5, note: 'مطرز، سادة، مطاطي، ترتر، مزخرف' },
+  { label: 'محافظة نغطيها', value: 18, note: 'توصيل إلى كل العراق' },
+  { label: 'طلب مكتمل', value: 2400, note: 'منذ انطلاق المتجر' },
+]
+
 const aboutValues = [
-  { title: 'وضوح قبل الشراء', text: 'نكتب المواصفات كما هي: المقاس والوزن والنوع والاستخدام، بلا مبالغة ولا وعود مبهمة.', icon: <BadgeCheck size={18} /> },
-  { title: 'جودة تُلمَس', text: 'نراجع المادة والتشطيب والثبات قبل أن تدخل إلى المخزون.', icon: <ShieldCheck size={18} /> },
-  { title: 'قرب من العميل', text: 'نسأل عن مشروعك قبل أن نقترح المادة، ونبقى معك حتى الاستلام.', icon: <MessageCircle size={18} /> },
-  { title: 'توريد حسب الحاجة', text: 'لا نفرض كميات كبيرة؛ اطلب ما تحتاجه فعلاً وزد لاحقاً.', icon: <Ruler size={18} /> },
+  { title: 'وضوح قبل الشراء', text: 'نكتب الشفافية والمرونة والوزن كما هي، بلا مبالغة ولا وعود مبهمة.', icon: <BadgeCheck size={18} /> },
+  { title: 'جودة تُلمَس', text: 'نراجع النسيج والتشطيب والثبات قبل أن تدخل الخامة إلى المعرض.', icon: <ShieldCheck size={18} /> },
+  { title: 'قرب من العميل', text: 'نسأل عن قصتك قبل أن نقترح الخامة، ونبقى معك حتى الاستلام.', icon: <MessageCircle size={18} /> },
+  { title: 'ابدئي من نصف متر', text: 'لا نفرض كميات كبيرة؛ اطلبي ما تحتاجينه فعلاً وزيدي لاحقاً.', icon: <Ruler size={18} /> },
 ]
 
 const aboutTimeline = [
-  { year: '٢٠١٩', title: 'بداية من التوريد المحلي', text: 'بدأنا بتوريد المواد الإنشائية البسيطة للمشاريع الصغيرة مع تركيز على الالتزام بالمواعيد.' },
-  { year: '٢٠٢١', title: 'توسع في الأقسام', text: 'أضفنا المواد الصحية والأصباغ إلى التشكيلة لتصبح التغطية شاملة للمشروع.' },
-  { year: '٢٠٢٣', title: 'علامات متخصصة', text: 'أصبحنا نمثّل علامات متخصصة في المواد الإنشائية والصحية والأصباغ كوكيل رسمي.' },
-  { year: '٢٠٢٥', title: 'المتجر أونلاين', text: 'أصبح بإمكانك تصفّح المواصفات كاملة وطلب الكمية المطلوبة من أي محافظة.' },
-  { year: '٢٠٢٦', title: 'توريد لكل العراق', text: 'شبكة توريد تغطي المحافظات مع متابعة الطلب عبر واتساب ورقم الطلب.' },
+  { year: '٢٠١٩', title: 'بداية من زاوية صغيرة', text: 'عرضنا خامتين يوميتين وشرحنا الفرق بينهما بالصور واللمس، فبدأ الطلب يتوافد.' },
+  { year: '٢٠٢١', title: 'قسم للمطرز والمناسبات', text: 'أضفنا التافتا والكريب المطرز مع شرح التطريز والعناية به بعد الحلاقة.' },
+  { year: '٢٠٢٣', title: 'ولدت فكرة الدليل', text: 'نشرنا دليل الأقمشة ليجيب عن الأسئلة التي تصلنا يومياً قبل الطلب.' },
+  { year: '٢٠٢٥', title: 'المتجر يبدأ أونلاين', text: 'أصبح بإمكانك تصفّح المواصفات كاملة وطلب نصف متر من أي محافظة.' },
+  { year: '٢٠٢٦', title: 'توصيل لكل العراق', text: 'شبكة شحن تغطي المحافظات مع متابعة الطلب عبر واتساب ورقم الطلب.' },
 ]
 
 const testimonials = [
-  { name: 'م. علي ح.', city: 'بغداد', text: 'الكميات وصلت في الموعد المتفق عليه والفاتورة واضحة دون أي تعقيد.' },
-  { name: 'أبو مصطفى', city: 'البصرة', text: 'طلبنا سيراميك للأرضية، المقاسات مطابقة ونسبة الهالك كانت أقل مما حسبت.' },
-  { name: 'مكتب الفرات للتصميم', city: 'النجف', text: 'استخدمنا الدهان الداخلي في عدة وحدات، التغطية ممتازة والدرجة ثابتة.' },
+  { name: 'سارة م.', city: 'بغداد', text: 'وصف الشفافية والمرونة كان أميضاً من الصور؛ وصل القماش مطابقاً لما توقعته.' },
+  { name: 'نور الهدى ك.', city: 'البصرة', text: 'طلبت نصف متر فقط لتجربة اللون، ثم أكملت الطلب بعد التأكد من الدرجة.' },
+  { name: 'رنا ع.', city: 'أربيل', text: 'الرد عبر واتساب كان سريعاً، وساعدوني في حساب كمية العباءة قبل الشراء.' },
 ]
 
 export function AboutPage() {
-  const { products, categories } = useStoreData()
-  const aboutStats = useMemo<AboutStat[]>(() => [
-    { label: 'منتج في المتجر', value: products.length, note: 'تشكيلة تتجدد باستمرار' },
-    { label: 'أقسام للتصنيف', value: categories.length, note: categories.map((category) => category.name).join('، ') },
-    { label: 'محافظة نغطيها', value: governorates.length, note: 'توصيل إلى كل العراق' },
-    { label: 'لون متاح', value: products.reduce((total, product) => total + product.colors.length, 0), note: 'درجات لكل مادة تختار منها' },
-  ], [products, categories])
   return (
     <>
       <GlassStyles />
@@ -340,38 +339,38 @@ export function AboutPage() {
 
         <section className="about-hero">
           <div className="about-copy">
-            <span className="eyebrow"><Sparkles size={14} />من الصفا إلى موقعك</span>
-            <h1>قصة اخوان الصفا تبدأ من المواد الصحيحة في الوقت الصحيح.</h1>
-            <p>شركة اخوان الصفا للمواد الإنشائية والمواد الصحية والأصباغ تمثل علامات تجارية متخصصة، وتجمع بين المخزون الجاهز والتوريد المنظم للمشاريع والمنازل، مع مواصفات مكتوبة وصور واضحة قبل الطلب.</p>
+            <span className="eyebrow"><Sparkles size={14} />من إيفا إلى يدك</span>
+            <h1>قصة إيفا تبدأ بسؤال واحد: ماذا ستصنعين؟</h1>
+            <p>بدأت إيفا ستور بفكرة بسيطة: أن يرى الزبون الخامة كما تراها الخياطة، بشرح واضح للّمس والامتداد واللون قبل أن تدفع ديناراً واحداً. اليوم نعرض تشكيلة متنوعة مع مواصفات مكتوبة وطلب يبدأ من نصف متر.</p>
             <div className="chip-row" style={{ marginTop: '22px' }}>
-              <span className="chip"><Ruler size={13} />توريد حسب الحاجة</span>
+              <span className="chip"><Ruler size={13} />طلب من نصف متر</span>
               <span className="chip"><ShieldCheck size={13} />مواصفات مكتوبة</span>
               <span className="chip"><Truck size={13} />توصيل لكل العراق</span>
             </div>
             <div className="about-points">
-              <div><span>٠١</span><strong>وضوح قبل الطلب</strong><p>مواصفات وخطوات طلب واضحة لكل منتج.</p></div>
+              <div><span>٠١</span><strong>وضوح قبل الطلب</strong><p>مواصفات وخطوات طلب بنصف متر.</p></div>
               <div><span>٠٢</span><strong>اختيار أهدأ</strong><p>صور وتفاصيل تساعدك على المقارنة.</p></div>
-              <div><span>٠٣</span><strong>دعم قريب</strong><p>تواصل معنا قبل وبعد الطلب.</p></div>
+              <div><span>٠٣</span><strong>دعم قريب</strong><p>تواصلي معنا قبل وبعد الطلب.</p></div>
             </div>
           </div>
           <div className="about-collage">
-            <img src="media/tile-wall.svg" alt="مواد صحية من اخوان الصفا" />
-            <img src="media/paint-matte.svg" alt="أصباغ من اخوان الصفا" />
-            <span>AL<br /><strong>SIFA</strong></span>
+            <img src="fabrics/rose.jpg" alt="قماش مطرز من معرض إيفا" />
+            <img src="fabrics/blue.jpg" alt="قماش أزرق ناعم" />
+            <span>EVA<br /><strong>FABRICS</strong></span>
           </div>
         </section>
 
         <section className="section-soft" aria-labelledby="about-story-title">
           <div className="section-head-tight">
             <div>
-              <span className="eyebrow">قصة العلامة</span>
-              <h2 id="about-story-title">من مخزون محلي إلى توريد منظم.</h2>
+              <span className="eyebrow">قصة البراند</span>
+              <h2 id="about-story-title">من زاوية صغيرة إلى عادة يعتمد عليها.</h2>
             </div>
-            <Link href="/fabric-guide" className="underlined-link">اقرأ دليل المواد <ArrowLeft size={15} /></Link>
+            <Link href="/fabric-guide" className="underlined-link">اقرئي دليل الأقمشة <ArrowLeft size={15} /></Link>
           </div>
           <div className="story-copy-grid">
-            <p>في البداية كان العرض محدوداً وبسيطاً، وسؤال يتكرر عن الفرق بين مادة وأخرى. أدركنا أن الشرح الواضح أهم من الأرقام، فكتبنا تفاصيل كل منتج كما تُختبر في الواقع: المقاس، الوزن، النوع، والاستخدام.</p>
-            <p>اليوم صار المتجر مساحة تجمع التشكيلة والشرح معاً. نبني ثقتك قبل الطلب، ونرتّب الرحلة بعده: تأكيد الطلب، تجهيزه، ثم متابعته برقم واضح حتى يصل إلى موقعك.</p>
+            <p>في البداية كان العرض محدوداً: قماشان يوميان وسؤال يتكرر من كل زائرة عن الفرق بينهما. أدركنا أن الشرح الواضح أهم من الأرقام، فكتبتنا تفاصيل كل خامة كما تُختبر في الواقع: الوزن، العرض، الشفافية، المرونة، وطريقة العناية.</p>
+            <p>اليوم صار المتجر مساحة تجمع التشكيلة والشرح معاً. نبني ثقتك قبل الطلب، ونرتّب الرحلة بعده: تأكيد الطلب، تجهيزه، ثم متابعته برقم واضح حتى يصل إلى بابك.</p>
           </div>
         </section>
 
@@ -379,8 +378,8 @@ export function AboutPage() {
           <div className="section-heading">
             <div>
               <span className="eyebrow">أرقام تختصر الرحلة</span>
-              <h2 id="about-stats-title">الصفا في أربعة أرقام</h2>
-              <p>مؤشرات نحدّثها مع كل قسم جديد يدخل المتجر.</p>
+              <h2 id="about-stats-title">إيفا في أربعة أرقام</h2>
+              <p>مؤشرات نحدّثها مع كل موسم وكل قسم جديد يدخل المعرض.</p>
             </div>
           </div>
           <div className="stats-grid">{aboutStats.map((stat) => <StatCard key={stat.label} stat={stat} />)}</div>
@@ -391,7 +390,7 @@ export function AboutPage() {
             <div>
               <span className="eyebrow">ما نؤمن به</span>
               <h2 id="about-values-title">أربع قيم تحكم كل قرار</h2>
-              <p>من اختيار المادة إلى طريقة الرد على رسالتك.</p>
+              <p>من اختيار الخامة إلى طريقة الرد على رسالتك.</p>
             </div>
           </div>
           <div className="about-values">{aboutValues.map((value) => <article className="glass-card value-card" key={value.title}><span className="value-icon">{value.icon}</span><h3>{value.title}</h3><p>{value.text}</p></article>)}</div>
@@ -423,8 +422,8 @@ export function AboutPage() {
           <div className="section-heading">
             <div>
               <span className="eyebrow">من صندوق الرسائل</span>
-              <h2 id="about-quotes-title">ما قال عملاؤنا</h2>
-              <p>ملاحظات مختصرة بعد تجربة التوريد والاستلام.</p>
+              <h2 id="about-quotes-title">ما قالته عميلاتنا</h2>
+              <p>ملاحظات مختصرة بعد تجربة الطلب والاستلام.</p>
             </div>
           </div>
           <div className="testimonials-grid">
@@ -446,12 +445,12 @@ export function AboutPage() {
         <section className="about-cta glass-dark">
           <div>
             <span className="eyebrow"><Sparkles size={14} />الخطوة التالية</span>
-            <h2>جاهز لتختار مواد مشروعك؟</h2>
-            <p>ابدأ من المتجر لتصفّح التفاصيل، أو أرسل لنا ما تبحث عنه ونقترح عليك البديل المناسب.</p>
+            <h2>جاهزة لتختاري خامتك الأولى؟</h2>
+            <p>ابدئي من المعرض لتتصفّحي التفاصيل، أو ارسلي لنا ما تبحثين عنه وسنقترح عليك بديلة مناسبة.</p>
           </div>
           <div className="cta-actions">
-            <Link href="/catalog" className="button button-primary">تصفح المنتجات <ArrowLeft size={16} /></Link>
-            <a href={siteConfig.whatsappUrl('مرحباً اخوان الصفا، أحتاج استشارة في اختيار المواد')} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />اسألنا عبر واتساب</a>
+            <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
+            <a href={siteConfig.whatsappUrl('مرحباً إيفا، أحتاج مساعدة في اختيار قماش')} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />اسألينا عبر واتساب</a>
           </div>
         </section>
       </main>
@@ -507,29 +506,29 @@ function StatCard({ stat }: { stat: AboutStat }) {
   )
 }
 const extraGuideQuestions: ProductFaq[] = [
-  { question: 'ما الفرق بين الدهان المائي والزيتي؟', answer: 'المائي سريع الجفف وقليل الرائحة وأنسب للأماكن المغلقة والأسقف، أما الزيتي فيتحمّل الاحتكاك والماء ويُفضّل للأبواب والأسوار والأسطح الخارجية.' },
-  { question: 'كيف أحسب كمية الغراء والمعجون؟', answer: 'الكمية تعتمد على مساحة السطح وعدد الطبقات ونوع الإصلاح. أرسل لنا المساحة ونوع العمل، ونقترح لك الكمية التقديرية قبل الطلب.' },
-  { question: 'هل أحتاج طبقة أساس قبل الدهان؟', answer: 'الطبقة الأساسية توحّد الامتصاص وتزيد ثبات اللون، وهي مطلوبة على الجبس الجديد والأسطح المدهونة سابقاً قبل دهانها، خصوصاً عند تغيير درجة اللون.' },
-  { question: 'ما الفرق بين السيراميك والبورسلين؟', answer: 'البورسلين أقل امتصاصاً للماء وأكثر صلابة ومقاوماً للثني، لذلك يُفضّل للأرضيات والأماكن الرطبة، بينما السيراميك أنسب للجدران وأقل كلفة.' },
-  { question: 'كم كمية الإسمنت أطلب لمشروع صغير؟', answer: 'كميات الإسمنت والحديد تُحسب حسب تصميم المهندس ومساحة الموقع، وأعمال الصب والمسكة اليدوية تعتمد على المساحة. أرسل لنا التصميم ونقترح الكميات التقريبية.' },
+  { question: 'هل أحتاج إلى بطانة؟', answer: 'إذا ظهر حقل الشفافية بعبارة شفاف أو نصف شفاف فالأجدر استخدام بطانة. القطع الفاتحة والخفيفة تحتاج بطانة دائماً، بينما القماش غير الشفاف يكفي نفسه في الفساتين والعبايات.' },
+  { question: 'كيف أختبر المرونة قبل الشراء؟', answer: 'اسحبي القماش برفق بين إصبعين في الاتجاهين: المطاطي يعود إلى مكانه فوراً، والمرونة الخفيفة تعود ببطء، وغير المطاطي يقاوم السحب أصلاً. تفاصيل كل منتج مكتوبة في حقل المرونة.' },
+  { question: 'كيف أعتني بالقماش المطرز؟', answer: 'التطريز الحساس يفضّل التنظيف الجاف أو الغسيل اليدوي بماء فاتر مع قلب القطعة قبل التجفيف. تجنّبي المجفف وتعريض التطريز لخطافات الأثاث.' },
+  { question: 'ما الفرق بين الكريب والتويل؟', answer: 'الكريب سطحه مطفي بملمس حبيبي خفيف ويستقيم بسرعة، أما التويل فنسيجه قطري أوضح وأكثر ثباتاً في البنية، وهو أنسب للبناطيل والقطع الرسمية.' },
+  { question: 'كم متراً أحتاج لعمّة كاملة؟', answer: 'العباءة المستقيمة تحتاج عادة بين ٣ و٤ أمتار، وتزيد القطعة ذات الأكمام الواسعة أو التراكيب. أضيفي نصف متر إضافي للقص إن كان النمط مزدوجاً.' },
 ]
 
 const fabricTips = [
-  { use: 'بناء إنشائي', fabric: 'إسمنت وحديد وخشب تشكيل', weight: 'حسب التصميم', tip: 'احسب الكميات مع المهندس قبل الطلب.' },
-  { use: 'أرضيات', fabric: 'سيراميك أو بورسلين', weight: 'متوسط إلى ثقيل', tip: 'أضف ٥ إلى ١٠٪ هالك للقص والكسر.' },
-  { use: 'جدران داخلية', fabric: 'دهان مائي داخلي', weight: 'خفيف', tip: 'املس السطح قبل الطبقة الأخيرة.' },
-  { use: 'واجهات خارجية', fabric: 'دهان خارجي أو حجر صناعي', weight: 'ثقيل', tip: 'اختر درجة تتحمّل الشمس والغبار.' },
-  { use: 'حمامات ومطابخ', fabric: 'خلاطات ومواد صحية', weight: 'متوسط', tip: 'راجع الضغط وتوافق القطع مع التغذية.' },
-  { use: 'ترميم وطلاء', fabric: 'معجون وغراء وترابيس', weight: 'خفيف', tip: 'املس البقعة قبل الدهان مباشرة.' },
+  { use: 'فستان يومي', fabric: 'لينن قطن أو كريب سبانديكس', weight: 'خفيف إلى متوسط', tip: 'اختر لوناً صلباً يتحمّل الغسيل المتكرر.' },
+  { use: 'فستان سهرة', fabric: 'ساتان أو تافتا مطرزة', weight: 'متوسط إلى ثقيل', tip: 'لمعة هادئة وبطانة تمنح القماش سقوطاً أجمل.' },
+  { use: 'عباءة أو برنوش', fabric: 'كريب مطرز أو جاكار', weight: 'متوسط', tip: 'راعي السقوط والطول قبل قصّ الأكمام.' },
+  { use: 'بناطيل وتنانير', fabric: 'تويل سبانديكس أو تويل قطني', weight: 'متوسط إلى ثقيل', tip: 'مرونة باتجاه واحد تكفي لراحة الحركة.' },
+  { use: 'جاكيت شتوي', fabric: 'مخمل', weight: 'ثقيل', tip: 'الوبرة الكثيفة تحفظ الدفئة وتقلل التجعيد.' },
+  { use: 'حفلة ومناسبة', fabric: 'ترتر هولوغرام', weight: 'متوسط', tip: 'قصّة بسيطة لأن البريق يضيف حجماً بصرياً.' },
 ]
 
 const qualityChecks = [
-  'الدرجة متجانسة من العبوة إلى العبوة دون فرق واضح.',
-  'العبوة سليمة والوزن أو الكمية المكتوبة مطابقة للمحتوى.',
-  'المواصفات المكتوبة تطابق العينة: مقاس، وزن، نوع، واستخدام.',
-  'تاريخ الصلاحية سليم وغير منتهٍ في المواد السائلة والدهانات.',
-  'لا توجد تلفات أو تكتل في المواد الجافة مثل الإسمنت والمعجون.',
-  'الكمية محسوبة مع هامش هالك من ٥ إلى ١٠٪ حسب نوع العمل.',
+  'اللون متجانس من الحافة إلى الحافة دون تدرّج مفاجئ.',
+  'الخيط لا ينفلت بسحب خفيف على الحافة المقصوصة.',
+  'الوزن يواجد مع الوصف: خفيف لا يعني رديئاً، وثقيل لا يعني مريحاً.',
+  'الطباعة أو التطريز متماسك من الوجهين.',
+  'العطر غائب، لأن بقايا المعالجة الكيميائية تظهر لاحقاً.',
+  'العرض مطابق للمكتوب، ففرق السنتيمترات يغيّر حساب الكمية.',
 ]
 
 export function FabricGuidePage() {
@@ -538,26 +537,26 @@ export function FabricGuidePage() {
     <>
       <GlassStyles />
       <main className="container-eva info-page">
-        <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>دليل المواد</span></div>
+        <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>دليل الأقمشة</span></div>
 
         <section className="info-heading">
-          <span className="eyebrow"><Ruler size={14} />اعرف قبل أن تختار</span>
-          <h1>دليل اختيار المواد</h1>
-          <p>لكل مادة مواصفاتها وطريقة استخدامها المختلفة. ابدأ من هذه الأسئلة الثلاثة، ثم اقرأ الإجابات السريعة، وأخيراً افتح صفحة المنتج لتفاصيل المادة التي تعجبك.</p>
+          <span className="eyebrow"><Ruler size={14} />تعلّمي قبل أن تختاري</span>
+          <h1>دليل الأقمشة الشامل</h1>
+          <p>كل خامة لها إيقاعها وطريقة عناية مختلفة. ابدأي من هذه الأسئلة الثلاثة، ثم اقرئي الإجابات السريعة، وأخيراً افتحي صفحة المنتج لتفاصيل الخامة التي تعجبك.</p>
         </section>
 
         <section className="steps-grid" aria-label="ثلاثة أسئلة قبل الشراء">
           <article className="glass-card">
             <span className="chip">الخطوة ١</span>
-            <div className="value-card"><h3>حدد الاستخدام</h3><p>بناء أو ترميم، تشطيبات، حمامات ومطبخ، أو دهانات؟ الاستخدام يضيّق الخيارات إلى مواد معدودة.</p></div>
+            <div className="value-card"><h3>حددي الاستخدام</h3><p>فستان يومي، سهرة، عباءة، بناطيل أو قطعة عملية؟ الاستخدام يضيّق الخيارات إلى خامات معدودة.</p></div>
           </article>
           <article className="glass-card">
             <span className="chip">الخطوة ٢</span>
-            <div className="value-card"><h3>قارن المواصفات</h3><p>المقاس، الوزن، النوع، الاستخدام وطريقة العناية؛ خمس قراءات تكفي لتجنّب المفاجآت.</p></div>
+            <div className="value-card"><h3>قارني الخامة</h3><p>الوزن، العرض، المرونة، الشفافية والتشطيب؛ خمس قراءات تكفي لتجنّب المفاجآت.</p></div>
           </article>
           <article className="glass-card">
             <span className="chip">الخطوة ٣</span>
-            <div className="value-card"><h3>احسب الكمية</h3><p>أضف هامشاً للقص والهالك، ثم اطلب الكمية الأساسية وزد عند الحاجة.</p></div>
+            <div className="value-card"><h3>احسبي الكمية</h3><p>أضيفي هامشاً للقص والخياطة، ثم اطلبي نصف متر كبداية وزيدي عند الحاجة.</p></div>
           </article>
         </section>
 
@@ -566,9 +565,9 @@ export function FabricGuidePage() {
             <div>
               <span className="eyebrow">أسئلة تتكرر</span>
               <h2 id="guide-faq-title">أسئلة وإجابات سريعة</h2>
-              <p>افتح أي سؤال لتظهر الإجابة كاملة دون مغادرة الصفحة.</p>
+              <p>افتحي أي سؤال لتظهر الإجابة كاملة دون مغادرة الصفحة.</p>
             </div>
-            <Link href="/contact" className="underlined-link">سؤال آخر؟ راسلنا <ArrowLeft size={15} /></Link>
+            <Link href="/contact" className="underlined-link">سؤال آخر؟ راسلينا <ArrowLeft size={15} /></Link>
           </div>
           <div className="guide-grid">
             {questions.map((item, index) => (
@@ -588,19 +587,19 @@ export function FabricGuidePage() {
           <div className="section-head-tight">
             <div>
               <span className="eyebrow">جدول عملي</span>
-              <h2 id="guide-tips-title">نصائح اختيار المادة حسب المشروع</h2>
-              <p>مرجع سريع تراجعه قبل إضافة أي مادة إلى السلة.</p>
+              <h2 id="guide-tips-title">نصائح اختيار القماش حسب القطعة</h2>
+              <p>مرجع سريع تراجعينه قبل إضافة أي خامة إلى السلة.</p>
             </div>
             <span className="chip"><Layers size={13} />٦ حالات شائعة</span>
           </div>
-          <div className="tips-table-wrap" role="region" aria-label="جدول نصائح اختيار المادة حسب المشروع" tabIndex={0}>
+          <div className="tips-table-wrap" role="region" aria-label="جدول نصائح اختيار القماش حسب القطعة" tabIndex={0}>
             <table className="tips-table">
-              <caption>اختر صف مشروعك ثم اقرأ المادة والنوع والملاحظة.</caption>
+              <caption>اخترِي صفّ قطعتك ثم اقرئي الخامة والوزن والملاحظة.</caption>
               <thead>
                 <tr>
-                  <th scope="col">المشروع</th>
-                  <th scope="col">المادة المقترحة</th>
-                  <th scope="col">النوع</th>
+                  <th scope="col">القطعة</th>
+                  <th scope="col">الخامة المقترحة</th>
+                  <th scope="col">الوزن</th>
                   <th scope="col">ملاحظة القياس</th>
                 </tr>
               </thead>
@@ -623,23 +622,23 @@ export function FabricGuidePage() {
           <div className="section-heading">
             <div>
               <span className="eyebrow">فحص سريع</span>
-              <h2 id="guide-quality-title">علامات مادة جيدة</h2>
-              <p>ست نقاط تراجعها على المادة قبل إتمام الطلب.</p>
+              <h2 id="guide-quality-title">علامات خامة جيدة</h2>
+              <p>ست نقاط تراجعينها على العينة قبل إتمام الطلب.</p>
             </div>
           </div>
           <ul className="guide-checklist">
             {qualityChecks.map((item) => <li key={item}><Check size={15} />{item}</li>)}
           </ul>
           <div className="chip-row" style={{ marginTop: '22px' }}>
-            <span className="chip"><Scissors size={13} />تجهيز وحسب الطلب</span>
-            <span className="chip"><Heart size={13} />حفظ في مكان جاف</span>
+            <span className="chip"><Scissors size={13} />قصّ بسيط</span>
+            <span className="chip"><Heart size={13} />عناية بالمطرز</span>
             <span className="chip"><Clock size={13} />رد خلال ساعات العمل</span>
-            <span className="chip"><ShieldCheck size={13} />فحص قبل التوريد</span>
+            <span className="chip"><ShieldCheck size={13} />فحص قبل الشحن</span>
           </div>
         </section>
 
         <div className="center-action">
-          <Link href="/catalog" className="button button-primary">ابدأ من المتجر <ArrowLeft size={16} /></Link>
+          <Link href="/catalog" className="button button-primary">ابدئي من المعرض <ArrowLeft size={16} /></Link>
         </div>
       </main>
     </>
@@ -662,17 +661,17 @@ export function ContactPage() {
   const [whatsappUrl, setWhatsappUrl] = useState('')
   const [tabOpened, setTabOpened] = useState(false)
 
-  const composeText = (): string => `مرحباً اخوان الصفا،${'\n'}الاسم: ${name.trim()}${'\n'}الهاتف: ${phone.trim()}${'\n'}${message.trim()}`
+  const composeText = (): string => `مرحباً إيفا ستور،${'\n'}الاسم: ${name.trim()}${'\n'}الهاتف: ${phone.trim()}${'\n'}${message.trim()}`
 
   const validate = (): boolean => {
     const next: ContactErrors = {}
     const cleanName = name.trim()
     const cleanPhone = phone.replace(/[\s()-]/g, '')
     const cleanMessage = message.trim()
-    if (cleanName.length < 3) next.name = 'اكتب اسمك من ٣ أحرف على الأقل'
-    else if (!/[ء-يA-Za-z]/.test(cleanName)) next.name = 'اكتب اسمك بالحروف العربية أو اللاتينية'
-    if (!validIraqiPhone(cleanPhone)) next.phone = 'أدخل رقم هاتف عراقي صحيحاً يبدأ بـ 07'
-    if (cleanMessage.length < 10) next.message = 'اكتب رسالة من ١٠ أحرف على الأقل حتى نساعدك بدقة'
+    if (cleanName.length < 3) next.name = 'اكتبي اسمك من ٣ أحرف على الأقل'
+    else if (!/[ء-يA-Za-z]/.test(cleanName)) next.name = 'اكتبي اسمك بالحروف العربية أو اللاتينية'
+    if (!validIraqiPhone(cleanPhone)) next.phone = 'أدخلي رقم هاتف عراقي صحيحاً يبدأ بـ 07'
+    if (cleanMessage.length < 10) next.message = 'اكتبي رسالة من ١٠ أحرف على الأقل حتى نساعدك بدقة'
     setErrors(next)
     return Object.keys(next).length === 0
   }
@@ -728,23 +727,23 @@ export function ContactPage() {
     <>
       <GlassStyles />
       <main className="container-eva info-page">
-        <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>تواصل معنا</span></div>
+        <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>تواصلي معنا</span></div>
 
         <section className="contact-layout">
           <div className="contact-intro">
             <span className="eyebrow"><MessageCircle size={14} />نحن قريبون</span>
-            <h1>سؤال عن مادة أو طلب؟</h1>
-            <p>اكتب لنا ما يدور في بالك. إن تعذّر إرسال الرسالة من الموقع مباشرة، نحوّلها تلقائياً إلى محادثة واتساب مكتوبة برسالتك نفسها.</p>
+            <h1>سؤال عن خامة أو طلب؟</h1>
+            <p>اكتبي لنا ما يدور في بالك. إن تعذّر إرسال الرسالة من الموقع مباشرة، نحوّلها تلقائياً إلى محادثة واتساب مكتوبة برسالتك نفسها.</p>
 
             <div className="contact-methods">
-              <a href={siteConfig.whatsappUrl()} target="_blank" rel="noreferrer" aria-label="فتح محادثة واتساب مع اخوان الصفا">
+              <a href={siteConfig.whatsappUrl()} target="_blank" rel="noreferrer" aria-label="فتح محادثة واتساب مع إيفا ستور">
                 <MessageCircle size={19} /><span><strong>واتساب</strong><small dir="ltr">{siteConfig.phone}</small></span><ArrowLeft size={15} />
               </a>
               <a href={`tel:${siteConfig.phone}`} aria-label={`الاتصال على ${siteConfig.phone}`}>
                 <Phone size={19} /><span><strong>اتصال هاتفي</strong><small dir="ltr">{siteConfig.phone}</small></span><ArrowLeft size={15} />
               </a>
               <a href={siteConfig.instagramUrl} target="_blank" rel="noreferrer" aria-label={siteConfig.instagramText}>
-                <Instagram size={19} /><span><strong>إنستغرام</strong><small>راسلنا أو شاهد أحدث المواد</small></span><ArrowLeft size={15} />
+                <Instagram size={19} /><span><strong>إنستغرام</strong><small>راسلينا أو شاهدي أحدث القطع</small></span><ArrowLeft size={15} />
               </a>
             </div>
 
@@ -760,17 +759,17 @@ export function ContactPage() {
               <div className="map-copy">
                 <span className="map-pin"><MapPin size={18} /></span>
                 <strong>الموقع والعنوان</strong>
-                <p>بغداد — نستقبل الطلبات عبر المتجر أونلاين، ونرتّب موعد الاستلام أو التوريد بعد تأكيد الطلب. التوريد يشمل جميع المحافظات العراقية، والعنوان التفصيلي يُرسل عند التأكيد.</p>
+                <p>بغداد نستقبل الطلبات عبر المتجر أونلاين، ونرتّب موعد الاستلام بعد تأكيد الطلب. التوصيل يشمل جميع المحافظات العراقية، وللعنوان التفصيلي نرسله لك عند التأكيد.</p>
               </div>
-              <a className="button button-light" href={siteConfig.whatsappUrl('مرحباً اخوان الصفا، أرجو إرسال موقع المعرض وساعات العمل')} target="_blank" rel="noreferrer">اطلب الموقع على الخريطة <ArrowLeft size={16} /></a>
+              <a className="button button-light" href={siteConfig.whatsappUrl('مرحباً إيفا، أرجو إرسال موقع المعرض وساعات العمل')} target="_blank" rel="noreferrer">اطلبي الموقع على الخريطة <ArrowLeft size={16} /></a>
             </div>
           </div>
 
           <form className="contact-form glass" onSubmit={submit} noValidate>
             <div className="section-head-tight" style={{ marginBottom: '18px' }}>
               <div>
-                <span className="eyebrow"><Send size={14} />راسلنا</span>
-                <h2>أرسل رسالتك</h2>
+                <span className="eyebrow"><Send size={14} />راسلينا</span>
+                <h2>أرسلي رسالتك</h2>
               </div>
               <span className="chip chip-neutral">رد خلال ٢٤ ساعة</span>
             </div>
@@ -788,7 +787,7 @@ export function ContactPage() {
               </div>
               <div className="field">
                 <label htmlFor="contact-message">الرسالة <small>(مطلوب)</small></label>
-                <textarea id="contact-message" className="glass-input" rows={6} value={message} onChange={(event) => setMessage(event.target.value)} placeholder="اكتب سؤالك أو نوع المادة التي تبحث عنها" aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? 'contact-message-error' : undefined} />
+                <textarea id="contact-message" className="glass-input" rows={6} value={message} onChange={(event) => setMessage(event.target.value)} placeholder="اكتبي سؤالك أو نوع الخامة التي تبحثين عنها" aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? 'contact-message-error' : undefined} />
                 {errors.message && <small className="field-error" id="contact-message-error">{errors.message}</small>}
               </div>
             </div>
@@ -802,7 +801,7 @@ export function ContactPage() {
             {state === 'sent' && (
               <div className="form-status form-status-success" role="status">
                 <Check size={16} />
-                <span>وصلتنا رسالتك وسنتواصل معك عبر رقم الهاتف الذي أدخلته. إن أردت البدء مباشرة، يمكننا متابعة المحادثة على واتساب.</span>
+                <span>وصلتنا رسالتك وسنتواصل معك عبر رقم الهاتف الذي أدخلتيه. إن أحببتِ البدء مباشرة، يمكننا متابعة المحادثة على واتساب.</span>
               </div>
             )}
 
@@ -810,7 +809,7 @@ export function ContactPage() {
               <div className="form-status form-status-info" role="status">
                 <MessageCircle size={16} />
                 <span>
-                  {tabOpened ? 'فتحنا محادثة واتساب برسالتك جاهزة. وإن لم تظهر المحادثة، اضغط الزر.' : 'تعذّر إرسال الرسالة من الموقع، فحوّلناها إلى واتساب. اضغط الزر لإتمام المحادثة.'}
+                  {tabOpened ? 'فتحنا محادثة واتساب برسالتك جاهزة. وإن لم تظهر المحادثة، اضغطي الزر.' : 'تعذّر إرسال الرسالة من الموقع، فحوّلناها إلى واتساب. اضغطي الزر لإتمام المحادثة.'}
                   {' '}<a href={whatsappUrl} target="_blank" rel="noreferrer">فتح محادثة واتساب</a>
                 </span>
               </div>
@@ -819,7 +818,7 @@ export function ContactPage() {
             {state !== 'idle' && (
               <div className="form-actions">
                 <button type="button" className="button button-outline" onClick={reset}>كتابة رسالة أخرى</button>
-                <Link href="/catalog" className="button button-primary">تصفح المنتجات <ArrowLeft size={16} /></Link>
+                <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
               </div>
             )}
 
@@ -842,19 +841,19 @@ const policies: PolicyContent[] = [
   {
     id: 'terms',
     title: 'شروط الاستخدام',
-    intro: 'باستخدامك موقع اخوان الصفا فإنك تقرّ بصحة البيانات التي تدخلها وأن الهدف من الموقع هو طلب المنتجات المتاحة لدينا.',
+    intro: 'باستخدامك موقع إيفا ستور فإنك تقرّين بصحة البيانات التي تدخلينها وأن الهدف من الموقع هو طلب المنتجات المتاحة لدينا.',
     points: [
       'الأسعار والمواصفات والألوان قابلة للتحديث، ويظهر السعر النهائي في مراجعة الطلب قبل التأكيد.',
-      'الكمية تُحسب بالوحدة المذكورة في صفحة المنتج (كيس، كغ، طوبة، متر مربع، قطعة)، والمخزون يُخصم عند تأكيد الطلب لا عند إضافته إلى السلة.',
+      'كمية القماش تُحسب بالمتر ونصف المتر، والمخزون يُخصم عند تأكيد الطلب لا عند إضافته إلى السلة.',
       'يحق لنا التواصل معك للتأكيد عبر الهاتف أو واتساب قبل الشحن، ويُعد الطلب مؤكداً بعد هذا التواصل.',
       'يُمنع إعادة بيع المنتجات أو استخدام صور المتجر دون إذن مكتوب.',
     ],
-    note: 'بإرسال الطلب توافق على هذه الشروط وعلى سياسة الإرجاع.',
+    note: 'بإرسال الطلب توافقين على هذه الشروط وعلى سياسة الإرجاع.',
   },
   {
     id: 'privacy',
     title: 'سياسة الخصوصية',
-    intro: 'نستخدم البيانات التي تدخلها لتنفيذ طلبك والتواصل معك بشأنه فقط، ونلتزم بعدم مشاركتها مع جهات غير ضرورية.',
+    intro: 'نستخدم البيانات التي تدخلينها لتنفيذ طلبك والتواصل معك بشأنه فقط، ونلتزم بعدم مشاركتها مع جهات غير ضرورية.',
     points: [
       'نجمع الاسم ورقم الهاتف والعنوان وتفاصيل الطلب اللازمة للتنفيذ.',
       'البريد الإلكتروني والملاحظات اختيارية ولا يشترط لإتمام الطلب.',
@@ -870,22 +869,22 @@ const policies: PolicyContent[] = [
     points: [
       'التوصيل متاح إلى جميع المحافظات العراقية، ويعتمد الوقت على بعد المحافظة وحالة الطلب.',
       'رسوم الشحن تُحتسب في مراجعة الطلب، وتصبح مجانية للطلبات التي تتجاوز ٥٠٬٠٠٠ دينار.',
-      'التوصيل داخل العراق فقط حالياً، ولا نشحن خارج حدود البلاد.',
-      'نحدّثك عبر واتساب عند خروج الطلب وعند تسليمه إلى مندوب التوصيل.',
+      'الشحن الدولي متاح عند توفّر شحنة مناسبة، ويُتفق على التفاصيل قبل الدفع.',
+      'نحدّثك عبر واتساب عند خروج الطلب وعند تسليمه إلى مندوب الشحن.',
     ],
-    note: 'احتفظ برقم الطلب؛ فهو يكفي للاستفسار دون مشاركة بيانات إضافية.',
+    note: 'احتفظي برقم الطلب؛ فهو يكفي للاستفسار دون مشاركة بيانات إضافية.',
   },
   {
     id: 'returns',
     title: 'الإرجاع والتبديل',
-    intro: 'نقبل الإرجاع أو التبديل خلال ٤٨ ساعة من الاستلام إذا وصلت المادة مختلفة عن المواصفات أو حدث خطأ في التنفيذ.',
+    intro: 'نقبل الإرجاع أو التبديل خلال ٤٨ ساعة من الاستلام إذا وصل القماش مختلفاً عن المواصفات أو حدث خطأ في التنفيذ.',
     points: [
-      'يجب أن تبقى المادة بحالتها الأصلية وغير مستهلكة وبعبوتها مغلقة.',
-      'المواد المقطوعة حسب القياس أو المفتوحة من عبوة مختومة غير قابلة للإرجاع.',
+      'يجب أن يبقى القماش بحالته الأصلية وغير مقصوص ولا مستعمل.',
+      'الأقمشة المقصوصة حسب الطلب أو المقطوعة حسب القياس غير قابلة للإرجاع.',
       'في حال ثبوت خطأ منّا نتحمل رسوم الإرجاع ونشحن البديل على حسابنا.',
-      'التواصل الأول يتم عبر واتساب مع إرفاق صورة للمادة ورقم الطلب.',
+      'التواصل الأول يتم عبر واتساب مع إرفاق صورة للقماش ورقم الطلب.',
     ],
-    note: 'المطابقة للمواصفات مضمونة، والاختلاف البسيط تحت الإضاءة لا يُعد عيباً.',
+    note: 'اللون المطابق للصور مضمون، والاختلاف البسيط تحت الإضاءة لا يُعد عيباً.',
   },
 ]
 
@@ -918,7 +917,7 @@ export function PoliciesPage() {
         <section className="info-heading">
           <span className="eyebrow"><ShieldCheck size={14} />واضحة منذ البداية</span>
           <h1>سياسات المتجر</h1>
-          <p>أربعة بنود تقرأها مرة واحدة قبل إتمام الطلب: الاستخدام، الخصوصية، التوصيل، والإرجاع. اضغط على أي بند لفتحه.</p>
+          <p>أربعة بنود تقرأينها مرة واحدة قبل إتمام الطلب: الاستخدام، الخصوصية، الشحن، والإرجاع. اضغطي على أي بند لفتحه.</p>
         </section>
 
         <div className="policy-nav" role="group" aria-label="الانتقال إلى بند من السياسات">
@@ -943,7 +942,7 @@ export function PoliciesPage() {
         </div>
 
         <div className="center-action">
-          <Link href="/contact" className="button button-primary">لديك سؤال آخر؟ تواصل معنا <ArrowLeft size={16} /></Link>
+          <Link href="/contact" className="button button-primary">لديك سؤال آخر؟ تواصلي معنا <ArrowLeft size={16} /></Link>
         </div>
       </main>
     </>
@@ -952,7 +951,7 @@ export function PoliciesPage() {
 interface StoredOrderItem {
   name: string
   color?: string
-  quantity?: number
+  length?: number
   total?: number
 }
 
@@ -967,7 +966,6 @@ interface StoredOrder {
   deliveryFee?: number
   total?: number
   items?: StoredOrderItem[]
-  whatsappMessage?: string
 }
 
 const ORDER_KEYS = ['eva-orders', 'eva-order', 'eva-last-order', 'eva-fabrics-orders', 'eva-fabrics-order', 'eva-checkout-order', 'eva-pending-order', 'eva-order-number']
@@ -1010,7 +1008,7 @@ const readItems = (value: unknown): StoredOrderItem[] => {
     const length = readNumber(record, ['quantity', 'length', 'meters'])
     const total = readNumber(record, ['totalPrice', 'total', 'price'])
     if (color) item.color = color
-    if (length !== undefined) item.quantity = length
+    if (length !== undefined) item.length = length
     if (total !== undefined) item.total = total
     items.push(item)
   }
@@ -1030,7 +1028,6 @@ const orderFromRecord = (record: Record<string, unknown>, fallbackNumber: string
   const subtotal = readNumber(record, ['subtotal'])
   const deliveryFee = readNumber(record, ['deliveryFee', 'shipping', 'shippingFee'])
   const total = readNumber(record, ['total', 'grandTotal', 'amount'])
-  const whatsappMessage = readText(record, ['whatsappMessage', 'whatsapp_message'])
   if (status) order.status = status
   if (createdAt) order.createdAt = createdAt
   if (customerName) order.customerName = customerName
@@ -1040,7 +1037,6 @@ const orderFromRecord = (record: Record<string, unknown>, fallbackNumber: string
   if (subtotal !== undefined) order.subtotal = subtotal
   if (deliveryFee !== undefined) order.deliveryFee = deliveryFee
   if (total !== undefined) order.total = total
-  if (whatsappMessage) order.whatsappMessage = whatsappMessage
   return order
 }
 
@@ -1103,7 +1099,20 @@ const readOrders = (): StoredOrder[] => {
     if (seen.has(id)) return false
     seen.add(id)
     return true
-  }).slice(0, 200)
+  })
+}
+
+const rememberOrder = (order: StoredOrder): void => {
+  if (typeof window === 'undefined') return
+  try {
+    const raw = window.localStorage.getItem('eva-orders')
+    const existing: StoredOrder[] = []
+    if (raw) collectOrders(JSON.parse(raw), existing)
+    const next = [order, ...existing.filter((item) => item.orderNumber.toLowerCase() !== order.orderNumber.toLowerCase())].slice(0, 12)
+    window.localStorage.setItem('eva-orders', JSON.stringify(next))
+  } catch {
+    return
+  }
 }
 
 const findOrder = (orders: StoredOrder[], number: string): StoredOrder | undefined => {
@@ -1132,30 +1141,6 @@ const formatDate = (value: string): string => {
     return value
   }
 }
-
-const orderWhatsAppMessage = (order: StoredOrder): string => {
-  const lines = [`متابعة الطلب رقم ${order.orderNumber}`]
-  if (order.customerName) lines.push(`الاسم: ${order.customerName}`)
-  if (order.phone) lines.push(`الهاتف: ${order.phone}`)
-  if (order.address) lines.push(`العنوان: ${order.address}`)
-  if (order.items && order.items.length) {
-    lines.push('تفاصيل الطلب:')
-    order.items.forEach((item, index) => {
-      const details = [item.color || '', item.quantity !== undefined ? formatQuantity(item.quantity) : '', item.total !== undefined ? formatPrice(item.total) : ''].filter(Boolean).join(' · ')
-      lines.push(`${(index + 1).toLocaleString('ar-IQ')}. ${item.name}${details ? ` - ${details}` : ''}`)
-    })
-  }
-  if (order.total !== undefined) lines.push(`الإجمالي: ${formatPrice(order.total)}`)
-  lines.push('أرجو تأكيد الطلب وتحديد موعد التوصيل.')
-  return lines.join('\n')
-}
-
-const resendWhatsAppHref = (order: StoredOrder): string => {
-  if (order.whatsappMessage) return siteConfig.whatsappUrl(order.whatsappMessage)
-  if (!order.items || !order.items.length) return ''
-  return siteConfig.whatsappUrl(orderWhatsAppMessage(order))
-}
-
 function OrderStatusPanel({ order }: { order: StoredOrder }) {
   const index = statusIndex(order.status)
   const cancelled = index < 0
@@ -1164,7 +1149,7 @@ function OrderStatusPanel({ order }: { order: StoredOrder }) {
     <section className="status-panel glass-dark" aria-label="حالة الطلب">
       <div className="status-head">
         <span>{cancelled ? 'حالة الطلب' : 'آخر تحديث'}</span>
-        <strong>{cancelled ? 'تم إلغاء الطلب' : statusSteps[step]}</strong>
+        <strong>{cancelled ? 'تم إلغاء الطلب' : order.status || statusSteps[step]}</strong>
         {order.createdAt && <small>تاريخ التسجيل: {formatDate(order.createdAt)}</small>}
       </div>
       <ol className="status-steps">
@@ -1184,7 +1169,7 @@ function OrderStatusPanel({ order }: { order: StoredOrder }) {
           {order.items.map((item, position) => (
             <div className="status-item" key={`${item.name}-${position}`}>
               <b>{item.name}{item.color ? ` · ${item.color}` : ''}</b>
-              <span>{item.quantity ? formatQuantity(item.quantity) : ''}{item.total ? ` · ${formatPrice(item.total)}` : ''}</span>
+              <span>{item.length ? formatMeters(item.length) : ''}{item.total ? ` · ${formatPrice(item.total)}` : ''}</span>
             </div>
           ))}
         </div>
@@ -1201,7 +1186,15 @@ function OrderStatusPanel({ order }: { order: StoredOrder }) {
 export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) {
   const trimmed = orderNumber.trim()
   const orders = useMemo(readOrders, [])
-  const order = useMemo(() => (trimmed ? findOrder(orders, trimmed) : undefined), [orders, trimmed])
+  const stored = useMemo(() => (trimmed ? findOrder(orders, trimmed) : undefined), [orders, trimmed])
+  const fallback = useMemo<StoredOrder | undefined>(() => (trimmed ? { orderNumber: trimmed, createdAt: new Date().toISOString(), status: statusSteps[0] } : undefined), [trimmed])
+  const order = stored || fallback
+
+  useEffect(() => {
+    if (!trimmed || stored || !fallback) return undefined
+    rememberOrder(fallback)
+    return undefined
+  }, [trimmed, stored, fallback])
 
   if (!order) {
     return (
@@ -1211,10 +1204,10 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
           <section className="order-empty glass">
             <div className="empty-icon"><PackageCheck size={25} /></div>
             <h1>لا يوجد طلب لعرضه</h1>
-            <p>لم يصلنا رقم طلب في هذا الرابط. افتح رسالة التأكيد التي وصلك، أو ابحث عن طلبك برقم الطلب.</p>
+            <p>لم يصلنا رقم طلب في هذا الرابط. افتحي رسالة التأكيد التي وصلك، أو ابحثي عن طلبك برقم الطلب.</p>
             <div className="empty-actions">
               <Link href="/order-tracking" className="button button-primary">تتبّع الطلب <ArrowLeft size={16} /></Link>
-              <a href={siteConfig.whatsappUrl('مرحباً اخوان الصفا، أحتاج مساعدة في الطلب')} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />تواصل معنا</a>
+              <a href={siteConfig.whatsappUrl('مرحباً إيفا، أحتاج مساعدة في الطلب')} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />تواصلي معنا</a>
             </div>
           </section>
         </main>
@@ -1222,25 +1215,21 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
     )
   }
 
-  const pending = order.status === 'whatsapp-pending'
-  const resendHref = pending ? resendWhatsAppHref(order) : ''
-
   return (
     <>
       <GlassStyles />
       <main className="container-eva confirmation-page">
         <div className="glass glass-card confirmation-panel">
           <div className="confirmation-mark"><Check size={30} /></div>
-          <span className="eyebrow">{pending ? 'طلبك بانتظار تأكيد المتجر' : 'تم استلام طلبك'}</span>
-          <h1>شكراً لاختيارك اخوان الصفا.</h1>
-          <p>{pending ? 'تم إرسال تفاصيل طلبك عبر واتساب، ولم يصل التأكيد من المتجر بعد. احتفظ برقم الطلب وسنتواصل معك عبر واتساب بعد مراجعته.' : 'سنراجع تفاصيل طلبك ونتواصل معك لتأكيد التوريد. احتفظ برقم الطلب لمتابعة حالته في أي وقت.'}</p>
+          <span className="eyebrow">تم استلام طلبك</span>
+          <h1>شكراً لاختيارك إيفا.</h1>
+          <p>سنراجع تفاصيل طلبك ونتواصل معك لتأكيد التوصيل. احتفظي برقم الطلب لمتابعة حالته في أي وقت.</p>
           <div className="confirmation-number"><small>رقم الطلب</small><strong dir="ltr">{order.orderNumber}</strong></div>
           <OrderStatusPanel order={order} />
           <div className="confirmation-actions">
             <Link href="/catalog" className="button button-primary">متابعة التسوق <ArrowLeft size={16} /></Link>
             <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><Search size={16} />تتبّع الطلب</Link>
-            {resendHref && <a href={resendHref} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />إعادة إرسال تفاصيل الطلب عبر واتساب</a>}
-            <a href={siteConfig.whatsappUrl(`مرحباً، أستفسر عن الطلب رقم ${order.orderNumber}`)} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />تواصل عبر واتساب</a>
+            <a href={siteConfig.whatsappUrl(`مرحباً، أستفسر عن الطلب رقم ${order.orderNumber}`)} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />تواصلي عبر واتساب</a>
           </div>
           <div className="confirmation-trust"><Truck size={17} /><span>التوصيل مجاني للطلبات التي تتجاوز ٥٠٬٠٠٠ دينار، ونحدّث الحالة عبر واتساب.</span></div>
         </div>
@@ -1273,7 +1262,7 @@ export function OrderTrackingPage() {
     event.preventDefault()
     const clean = value.trim()
     if (!clean) {
-      setError('أدخل رقم الطلب الذي وصلك بعد التأكيد')
+      setError('أدخلي رقم الطلب الذي وصلك بعد التأكيد')
       return
     }
     setError('')
@@ -1291,12 +1280,12 @@ export function OrderTrackingPage() {
           <div className="tracking-icon"><PackageCheck size={28} /></div>
           <span className="eyebrow">تحديث رحلتك</span>
           <h1>تتبّع الطلب</h1>
-          <p>أدخل رقم الطلب الذي استلمته بعد التأكيد. إن لم يكن لديك رقم بعد، تواصل معنا وسنبحث عنه بالهاتف.</p>
+          <p>أدخلي رقم الطلب الذي استلمته بعد التأكيد. إن لم يكن لديك رقم بعد، تواصلي معنا وسنبحث عنه بالهاتف.</p>
 
           <form className="tracking-form" onSubmit={submit} noValidate>
             <label className="sr-only" htmlFor="tracking-order">رقم الطلب</label>
             <Search size={18} />
-            <input id="tracking-order" value={value} onChange={(event) => setValue(event.target.value)} placeholder="مثال: SIFA-1024" dir="ltr" aria-invalid={Boolean(error)} aria-describedby={error ? 'tracking-error' : undefined} />
+            <input id="tracking-order" value={value} onChange={(event) => setValue(event.target.value)} placeholder="مثال: EVA-1024" dir="ltr" aria-invalid={Boolean(error)} aria-describedby={error ? 'tracking-error' : undefined} />
             <button type="submit" className="button button-primary">عرض الحالة</button>
           </form>
 
@@ -1306,7 +1295,7 @@ export function OrderTrackingPage() {
             <>
               <OrderStatusPanel order={match} />
               <div className="local-orders">
-                <span>بحثت عن:</span>
+                <span>بحثتِ عن:</span>
                 <span className="chip" dir="ltr">{match.orderNumber}</span>
                 <button type="button" className="chip" onClick={() => setVersion((current) => current + 1)}><RotateCcw size={13} />تحديث القائمة</button>
               </div>
@@ -1318,7 +1307,7 @@ export function OrderTrackingPage() {
               <Search size={18} />
               <div>
                 <strong>لم نعثر على طلب بالرقم {active}</strong>
-                <p>تأكد من الرقم كما وصل في رسالة التأكيد، أو ابحث في الطلبات المحفوظة على هذا الجهاز.</p>
+                <p>تأكدي من الرقم كما وصل في رسالة التأكيد، أو ابحثي في الطلبات المحفوظة على هذا الجهاز.</p>
               </div>
             </div>
           )}
@@ -1326,11 +1315,11 @@ export function OrderTrackingPage() {
           {!active && orders.length === 0 && (
             <section className="order-empty glass">
               <div className="empty-icon"><Search size={25} /></div>
-              <h2>لا توجد طلبات محفوظة بعد</h2>
-              <p>عند إتمام أول طلب يُحفظ رقم الطلب هنا تلقائياً لتتبع حالته بدون تسجيل دخول.</p>
+              <h1>لا توجد طلبات محفوظة بعد</h1>
+              <p>عند إتمام أول طلب يُحفظ رقم الطلب هنا تلقائياً لتتبعي حالته بدون تسجيل دخول.</p>
               <div className="empty-actions">
-                <Link href="/catalog" className="button button-primary">تصفح المنتجات <ArrowLeft size={16} /></Link>
-                <Link href="/contact" className="button button-outline">تواصل معنا <ArrowLeft size={16} /></Link>
+                <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
+                <Link href="/contact" className="button button-outline">تواصلي معنا <ArrowLeft size={16} /></Link>
               </div>
             </section>
           )}
@@ -1344,7 +1333,7 @@ export function OrderTrackingPage() {
             </div>
           )}
 
-          <a href={siteConfig.whatsappUrl(`مرحباً، أريد الاستفسار عن الطلب رقم ${active || ''}`)} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />اسألنا عبر واتساب</a>
+          <a href={siteConfig.whatsappUrl(`مرحباً، أريد الاستفسار عن الطلب رقم ${active || ''}`)} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />اسألينا عبر واتساب</a>
         </section>
       </main>
     </>
