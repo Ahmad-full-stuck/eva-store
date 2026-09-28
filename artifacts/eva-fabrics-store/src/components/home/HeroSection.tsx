@@ -38,7 +38,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
             <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
             <Link href="/catalog?sort=newest" className="button button-outline">اكتشفي الجديد <ArrowRight size={16} /></Link>
           </div>
-          <div className="hero-note"><span className="note-dot" />توصيل إلى جميع محافظات العراق <span className="note-divider" /> دفع عند استلام الطلب</div>
+          <div className="hero-note"><span className="note-dot" />توصيل إلى جميع محافظات العراق <span className="note-divider" /><span className="note-alt">دفع عند استلام الطلب</span></div>
         </div>
         <div className="hero-visual">
           <img src="fabrics/hero.jpg" alt="نماذج من أقمشة إيفا ستور" />

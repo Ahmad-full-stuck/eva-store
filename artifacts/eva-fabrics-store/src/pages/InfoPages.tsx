@@ -484,15 +484,28 @@ function StatCard({ stat }: { stat: AboutStat }) {
       run()
       return () => cancelAnimationFrame(frame)
     }
-    const observer = new IntersectionObserver((entries) => {
-      if (!startedRef.current && entries.some((entry) => entry.isIntersecting)) {
+    const rect = node.getBoundingClientRect()
+    if (rect.top < (window.innerHeight || 0) * 0.85) {
+      run()
+      return () => cancelAnimationFrame(frame)
+    }
+    const guard = window.setTimeout(() => {
+      if (!startedRef.current) {
         startedRef.current = true
         run()
       }
-    }, { threshold: 0.3 })
+    }, 1000)
+    const observer = new IntersectionObserver((entries) => {
+      if (!startedRef.current && entries.some((entry) => entry.isIntersecting)) {
+        startedRef.current = true
+        window.clearTimeout(guard)
+        run()
+      }
+    }, { threshold: 0.2 })
     observer.observe(node)
     return () => {
       observer.disconnect()
+      window.clearTimeout(guard)
       cancelAnimationFrame(frame)
     }
   }, [stat.value])

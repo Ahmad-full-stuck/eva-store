@@ -3,6 +3,7 @@ import { Router } from 'wouter'
 import { useHashLocation } from 'wouter/use-hash-location'
 import App from './App'
 import { ErrorBoundary } from '@/components/error-boundary'
+import './fonts.css'
 import './index.css'
 
 const root = document.getElementById('root')
