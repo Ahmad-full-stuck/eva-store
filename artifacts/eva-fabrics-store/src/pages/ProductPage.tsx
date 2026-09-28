@@ -5,6 +5,7 @@ import type { Product, ProductColor } from '@/types'
 import { availableMeters, formatMeters, formatPrice } from '@/lib/catalog'
 import { ProductCard } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
+import { SmartImage } from '@/components/ui/SmartImage'
 
 interface ProductPageProps {
   slug: string
@@ -50,8 +51,8 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><Link href="/catalog">الأقمشة</Link><span>›</span><span>{product.name}</span></div>
     <div className="product-detail-layout">
       <section className="product-gallery" aria-label={`معرض صور ${product.name}`}>
-        <div className="gallery-main"><img src={gallery[activeImage]} alt={`${product.name} - صورة ${activeImage + 1}`} /><div className="gallery-shade" /><button type="button" className="gallery-zoom" onClick={() => setZoomOpen(true)} aria-label="تكبير الصورة"><ZoomIn size={19} /></button><button type="button" className="gallery-arrow gallery-next" onClick={() => setActiveImage((activeImage + 1) % gallery.length)} aria-label="الصورة التالية"><ChevronLeft size={20} /></button><button type="button" className="gallery-arrow gallery-prev" onClick={() => setActiveImage((activeImage - 1 + gallery.length) % gallery.length)} aria-label="الصورة السابقة"><ChevronRight size={20} /></button></div>
-        <div className="gallery-thumbs">{gallery.map((image, index) => <button type="button" key={`${image}-${index}`} className={index === activeImage ? 'is-active' : ''} onClick={() => setActiveImage(index)} aria-label={`عرض الصورة ${index + 1}`}><img src={image} alt="" /></button>)}</div>
+        <div className="gallery-main"><SmartImage src={gallery[activeImage]} alt={`${product.name} - صورة ${activeImage + 1}`} sizes="(max-width: 900px) 92vw, 46vw" priority /><div className="gallery-shade" /><button type="button" className="gallery-zoom" onClick={() => setZoomOpen(true)} aria-label="تكبير الصورة"><ZoomIn size={19} /></button><button type="button" className="gallery-arrow gallery-next" onClick={() => setActiveImage((activeImage + 1) % gallery.length)} aria-label="الصورة التالية"><ChevronLeft size={20} /></button><button type="button" className="gallery-arrow gallery-prev" onClick={() => setActiveImage((activeImage - 1 + gallery.length) % gallery.length)} aria-label="الصورة السابقة"><ChevronRight size={20} /></button></div>
+        <div className="gallery-thumbs">{gallery.map((image, index) => <button type="button" key={`${image}-${index}`} className={index === activeImage ? 'is-active' : ''} onClick={() => setActiveImage(index)} aria-label={`عرض الصورة ${index + 1}`}><SmartImage src={image} alt="" sizes="72px" intrinsicWidth={320} /></button>)}</div>
       </section>
       <section className="product-purchase">
         <div className="product-purchase-top"><div><span className="eyebrow">{product.type}</span><h1>{product.name}</h1><p className="product-description">{product.description}</p></div><button type="button" className={`detail-wish ${wishlist.includes(product.slug) ? 'is-active' : ''}`} onClick={() => onWish(product.slug)} aria-label={wishlist.includes(product.slug) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'} aria-pressed={wishlist.includes(product.slug)}><Heart size={20} fill={wishlist.includes(product.slug) ? 'currentColor' : 'none'} /></button></div>
@@ -70,7 +71,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     </div>
     {related.length > 0 && <section className="related-section"><div className="section-heading"><div><span className="eyebrow">اختيارات قريبة</span><h2>أقمشة ذات صلة</h2></div><Link href={`/catalog?category=${encodeURIComponent(product.categoryId)}`} className="underlined-link">عرض الفئة <ArrowLeft size={15} /></Link></div><div className="product-grid">{related.map((item) => <ProductCard key={item.id} product={item} wished={wishlist.includes(item.slug)} onWish={onWish} onAdd={onAdd} />)}</div></section>}
     <div className="mobile-sticky-buy"><span><small>السعر / م</small><strong>{formatPrice(product.price)}</strong></span>{justAdded ? <Link href="/checkout" className="button button-primary">إتمام الطلب <ArrowLeft size={15} /></Link> : <button type="button" className="button button-primary" onClick={add} disabled={maxLength <= 0}>أضيفي {formatMeters(length)}</button>}</div>
-    <Modal open={zoomOpen} onClose={() => setZoomOpen(false)} title={`صورة ${product.name}`} className="image-modal"><button type="button" className="modal-close" onClick={() => setZoomOpen(false)} aria-label="إغلاق الصورة">×</button><img src={gallery[activeImage]} alt={`${product.name} مكبرة`} /></Modal>
+    <Modal open={zoomOpen} onClose={() => setZoomOpen(false)} title={`صورة ${product.name}`} className="image-modal"><button type="button" className="modal-close" onClick={() => setZoomOpen(false)} aria-label="إغلاق الصورة">×</button><SmartImage src={gallery[activeImage]} alt={`${product.name} مكبرة`} sizes="92vw" priority /></Modal>
   </main>
 }
 

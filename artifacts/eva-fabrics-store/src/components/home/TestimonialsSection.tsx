@@ -69,8 +69,8 @@ export function TestimonialsSection() {
             <p>{testimonial.text}</p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
               <div>
-                <strong style={{ display: 'block', fontSize: 13 }}>{testimonial.name}</strong>
-                <span style={{ color: 'var(--eva-muted)', fontSize: 11 }}>{testimonial.city}</span>
+                <strong style={{ display: 'block', fontSize: 13.5 }}>{testimonial.name}</strong>
+                <span style={{ color: 'var(--eva-muted)', fontSize: 11.5 }}>{testimonial.city}</span>
               </div>
               <span className="chip" style={{ display: 'inline-flex' }}>{testimonial.context}</span>
             </div>

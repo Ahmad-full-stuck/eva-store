@@ -4,6 +4,7 @@ import { Link, useLocation } from 'wouter'
 import type { Product } from '@/types'
 import { matchesProductSearch, formatPrice } from '@/lib/catalog'
 import { Modal } from './Modal'
+import { SmartImage } from '@/components/ui/SmartImage'
 
 interface SearchDialogProps {
   open: boolean
@@ -41,7 +42,7 @@ export function SearchDialog({ open, onClose, products }: SearchDialogProps) {
         {query && <div className="search-results" aria-live="polite">
           <p className="search-results-count">{results.length ? `${results.length} نتائج مناسبة` : 'لا توجد نتائج مطابقة'}</p>
           {results.map((product) => <Link key={product.id} href={`/product/${product.slug}`} className="search-result-item" onClick={onClose}>
-            <img src={product.image} alt="" />
+            <SmartImage src={product.image} alt="" sizes="64px" />
             <span><strong>{product.name}</strong><small>{product.type} · {product.specs.width}</small></span>
             <b>{formatPrice(product.price)}</b>
           </Link>)}

@@ -5,6 +5,7 @@ import type { CartItem, CheckoutForm, CustomerProfile, OrderPayload } from '@/ty
 import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/catalog'
 import { apiUrl, siteConfig } from '@/lib/site'
 import { governorates } from '@/lib/fallback-data'
+import { SmartImage } from '@/components/ui/SmartImage'
 
 interface CheckoutPageProps {
   cart: CartItem[]
@@ -105,7 +106,21 @@ const glassStyles = `
 .glass-scope .order-total-strip strong { color: var(--eva-rose); font-size: 24px; line-height: 1.3; }
 .glass-scope .order-submit { width: 100%; min-height: 56px; margin-top: 14px; font-size: 16px; border-radius: 16px; box-shadow: 0 14px 30px rgba(122, 30, 60, .3); }
 .glass-scope .order-submit:disabled { box-shadow: none; }
-.glass-scope .order-terms { margin-top: 14px; color: var(--eva-muted); font-size: 12.5px; line-height: 1.9; text-align: center; }
+.glass-scope .consent-row {
+  display: grid; grid-template-columns: 22px 1fr auto; align-items: start; gap: 9px;
+  margin-top: 12px; padding: 11px 12px; background: rgba(255, 255, 255, .5);
+  border: 1px solid rgba(255, 255, 255, .78); border-radius: 14px; cursor: pointer;
+}
+.glass-scope .consent-row:has(.consent-box:checked) { background: rgba(122, 30, 60, .06); border-color: rgba(122, 30, 60, .28); }
+.glass-scope .consent-box {
+  width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--eva-rose); cursor: pointer;
+}
+.glass-scope .consent-box:focus-visible { outline: 2px solid var(--eva-rose); outline-offset: 2px; }
+.glass-scope .consent-title { display: block; color: var(--eva-ink); font-size: 12.5px; font-weight: 600; line-height: 1.6; }
+.glass-scope .consent-row small { display: block; margin-top: 2px; color: var(--eva-muted); font-size: 11.5px; line-height: 1.65; }
+.glass-scope .consent-links { display: flex; flex-direction: column; gap: 2px; }
+.glass-scope .consent-links a { color: var(--eva-rose); font-size: 11.5px; font-weight: 600; text-decoration: underline; }
+.glass-scope .consent-row .field-error { grid-column: 1 / -1; }
 .glass-scope .order-terms a { color: var(--eva-rose); font-weight: 600; }
 .glass-scope .checkout-item, .glass-scope .checkout-item div { min-width: 0; }
 .glass-scope .checkout-item strong, .glass-scope .checkout-item b { overflow-wrap: anywhere; }
@@ -148,6 +163,8 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [location] = useLocation()
   const [form, setForm] = useState<CheckoutForm>(initialForm)
   const [errors, setErrors] = useState<CheckoutErrors>({})
+  const [consent, setConsent] = useState(false)
+  const [consentError, setConsentError] = useState('')
   const [submitState, setSubmitState] = useState<'idle' | 'loading'>('idle')
   const [serverError, setServerError] = useState('')
   const [channel, setChannel] = useState<OrderChannel>('api')
@@ -215,6 +232,14 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     if (form.landmark.trim().length < 3) nextErrors.landmark = 'أدخلي أقرب نقطة دالة تساعدنا في الوصول'
     if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) nextErrors.email = 'البريد الإلكتروني غير صحيح'
     setErrors(nextErrors)
+    if (!consent) {
+      setConsentError('شدّي الموافقة على شروط الاستخدام وسياسة الخصوصية لتأكيد الطلب')
+      const box = document.getElementById('consent')
+      box?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      window.setTimeout(() => box?.focus(), 260)
+      return false
+    }
+    setConsentError('')
     const invalidKeys = Object.keys(nextErrors) as (keyof CheckoutForm)[]
     if (invalidKeys.length === 0) {
       setLiveMessage('')
@@ -458,17 +483,42 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
             <span>الإجمالي شامل التوصيل<small>{cart.length.toLocaleString('ar-IQ')} {cart.length === 1 ? 'قطعة' : 'قطع'} · {totals.deliveryFee ? `توصيل ${formatPrice(totals.deliveryFee)}` : 'توصيل مجاني'}</small></span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
+          <div className="consent-row">
+            <input
+              id="consent"
+              type="checkbox"
+              className="consent-box"
+              checked={consent}
+              onChange={(event) => {
+                setConsent(event.target.checked)
+                if (event.target.checked) {
+                  setConsentError('')
+                  setLiveMessage('')
+                }
+              }}
+              aria-invalid={Boolean(consentError)}
+              aria-describedby={consentError ? 'consent-error' : 'consent-help'}
+            />
+            <label htmlFor="consent">
+              <span className="consent-title">أوافق على شروط الاستخدام وسياسة الخصوصية</span>
+              <small id="consent-help">نستخدم بياناتك لتجهيز الطلب والتواصل معك فقط، ولا نشاركها مع أي جهة أخرى.</small>
+            </label>
+            <span className="consent-links">
+              <Link href="/policies#terms">الشروط</Link>
+              <Link href="/policies#privacy">الخصوصية</Link>
+            </span>
+          </div>
+          {consentError && <small className="field-error" id="consent-error" role="alert">{consentError}</small>}
           <button type="submit" className="button button-primary order-submit" disabled={submitState === 'loading'}>
             {submitState === 'loading' ? <><LoaderCircle className="spin" size={18} />جارٍ إرسال الطلب</> : <>تأكيد الطلب <ArrowLeft size={17} /></>}
           </button>
-          <p className="order-terms">بتأكيدك للطلب توافقين على <Link href="/policies#terms">شروط الاستخدام</Link> و<Link href="/policies#privacy">سياسة الخصوصية</Link>.</p>
         </div>
         <aside className="checkout-summary glass glass-strong" aria-label="ملخص طلبك">
           <h2>ملخص طلبك</h2>
           <div className="checkout-items">
             {cart.map((item) => (
               <div className="checkout-item" key={`${item.product.slug}-${item.color.id}`}>
-                <img src={item.product.image} alt="" />
+                <SmartImage src={item.product.image} alt="" sizes="64px" />
                 <div>
                   <strong>{item.product.name}</strong>
                   <span>{item.color.name} · {formatMeters(item.length)}</span>

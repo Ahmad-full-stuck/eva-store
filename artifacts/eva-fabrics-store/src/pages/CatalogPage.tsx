@@ -56,12 +56,12 @@ const catalogStyles = `
   color: var(--eva-rose);
   background: rgba(122, 30, 60, .12);
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 11.5px;
   font-weight: 600;
   line-height: 1;
 }
 .chip.chip-active .chip-count, .chip[aria-pressed="true"] .chip-count { color: #fff; background: rgba(255, 255, 255, .24); }
-.stats-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 18px; margin-top: 18px; color: var(--eva-muted); font-size: 11px; }
+.stats-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 18px; margin-top: 18px; color: var(--eva-muted); font-size: 11.5px; }
 .stats-bar.glass-card { padding: 14px 20px; }
 .stats-bar.glass-card:hover { transform: none; box-shadow: var(--glass-shadow); }
 .stat-item { display: inline-flex; align-items: center; gap: 7px; }
@@ -77,10 +77,10 @@ const catalogStyles = `
 .catalog-search input[type="search"]::-webkit-search-cancel-button { display: none; }
 @media (max-width: 560px) {
   .chip-row { gap: 7px; margin-bottom: 10px; }
-  .chip-row .chip { padding: 9px 15px; font-size: 11px; }
+  .chip-row .chip { padding: 9px 15px; font-size: 11.5px; }
   .stats-bar { justify-content: flex-start; gap: 6px 14px; }
   .stats-bar.glass-card { padding: 12px 14px; }
-  .stat-item { font-size: 10px; }
+  .stat-item { font-size: 11.5px; }
   .stat-divider { display: none; }
   .empty-state.glass-card { padding: 48px 16px; }
 }

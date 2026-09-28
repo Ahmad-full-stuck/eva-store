@@ -55,7 +55,7 @@ export function NewsletterSection() {
             اشتركي بالنشرة <ArrowLeft size={15} />
           </button>
         </form>
-        <div id="newsletter-status" role="status" aria-live="polite" style={{ minHeight: 18, fontSize: 11 }}>
+        <div id="newsletter-status" role="status" aria-live="polite" style={{ minHeight: 18, fontSize: 11.5 }}>
           {status === 'error' && 'يرجى إدخال بريد إلكتروني صحيح.'}
           {status === 'sent' && 'فتحنا لك واتساب لإتمام الاشتراك.'}
         </div>

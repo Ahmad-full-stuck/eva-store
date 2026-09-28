@@ -3,6 +3,7 @@ import { ArrowLeft, Minus, Pencil, Plus, ShieldCheck, ShoppingBag, Trash2, Truck
 import { Link } from 'wouter'
 import type { CartItem } from '@/types'
 import { formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
+import { SmartImage } from '@/components/ui/SmartImage'
 
 interface CartPageProps {
   cart: CartItem[]
@@ -20,7 +21,7 @@ const glassStyles = `
 .glass-scope .glass-dark { color: #fff6f8; background: rgba(48, 38, 42, .9); border: 1px solid rgba(255, 248, 241, .18); box-shadow: 0 16px 34px rgba(48, 38, 42, .22); }
 .glass-scope .glass-pill { border-radius: 999px; }
 .glass-scope .glass-divider { height: 1px; margin: 16px 0; background: linear-gradient(90deg, rgba(122, 30, 60, 0), rgba(122, 30, 60, .35), rgba(122, 30, 60, 0)); border: 0; }
-.glass-scope .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; color: var(--eva-muted); background: rgba(255, 255, 255, .72); border: 1px solid rgba(255, 255, 255, .9); border-radius: 999px; font-size: 10px; line-height: 1.7; }
+.glass-scope .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; color: var(--eva-muted); background: rgba(255, 255, 255, .72); border: 1px solid rgba(255, 255, 255, .9); border-radius: 999px; font-size: 11.5px; line-height: 1.7; }
 .glass-scope .chip i { width: 11px; height: 11px; border: 1px solid rgba(43, 33, 36, .2); border-radius: 50%; }
 .glass-scope a.chip:hover { color: var(--eva-rose); border-color: rgba(122, 30, 60, .45); }
 .glass-scope .cart-items { padding: 4px 20px; border-top: 0; border-radius: 18px; }
@@ -28,15 +29,15 @@ const glassStyles = `
 .glass-scope .cart-item-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .glass-scope .cart-item-tools { display: flex; align-items: center; gap: 8px; }
 .glass-scope .cart-item-total { display: grid; gap: 2px; text-align: end; }
-.glass-scope .cart-item-total small { color: var(--eva-muted); font-size: 9px; }
+.glass-scope .cart-item-total small { color: var(--eva-muted); font-size: 11.5px; }
 .glass-scope .cart-item-total strong { color: var(--eva-ink); font-size: 14px; }
 .glass-scope .order-summary, .glass-scope .checkout-summary { border-radius: 18px; }
 .glass-scope .delivery-progress { display: grid; gap: 9px; padding: 13px 14px; background: rgba(255, 255, 255, .66); border: 1px solid rgba(255, 255, 255, .9); border-radius: 14px; }
-.glass-scope .delivery-progress-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--eva-muted); font-size: 10px; }
-.glass-scope .delivery-progress-head b { color: var(--eva-rose); font-size: 10px; }
+.glass-scope .delivery-progress-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--eva-muted); font-size: 11.5px; }
+.glass-scope .delivery-progress-head b { color: var(--eva-rose); font-size: 11.5px; }
 .glass-scope .progress-track { height: 7px; overflow: hidden; background: rgba(48, 38, 42, .12); border-radius: 999px; }
 .glass-scope .progress-track i { display: block; height: 100%; background: linear-gradient(90deg, var(--eva-rose), #c98fa8); border-radius: 999px; transition: width .45s ease; }
-.glass-scope .delivery-free { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 14px; font-size: 11px; }
+.glass-scope .delivery-free { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 14px; font-size: 11.5px; }
 .glass-scope .empty-card { display: grid; justify-items: center; max-width: 470px; padding: 44px 32px; border-radius: 20px; text-align: center; }
 .glass-scope .empty-card p { max-width: 330px; margin-top: 7px; color: var(--eva-muted); font-size: 13px; }
 .glass-scope .empty-card .button { margin-top: 24px; }
@@ -55,7 +56,7 @@ const glassStyles = `
   .glass-scope .cart-item-bottom { flex-direction: column; align-items: stretch; gap: 11px; }
   .glass-scope .cart-item-total { text-align: start; }
   .glass-scope .quantity-control { width: 100%; justify-content: space-between; }
-  .glass-scope .cart-item-chips .chip { font-size: 9px; }
+  .glass-scope .cart-item-chips .chip { font-size: 11.5px; }
   .glass-scope .empty-card { padding: 34px 18px; }
   .glass-scope .cart-item-top { flex-wrap: wrap; }
   .glass-scope .cart-item-tools { flex-wrap: wrap; justify-content: flex-end; }
@@ -148,7 +149,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
             return (
               <article className="cart-item" key={key}>
                 <Link href={`/product/${item.product.slug}`} className="cart-item-image glass-card">
-                  <img src={item.product.image} alt={item.product.name} />
+                  <SmartImage src={item.product.image} alt={item.product.name} sizes="76px" />
                 </Link>
                 <div className="cart-item-info">
                   <div className="cart-item-top">

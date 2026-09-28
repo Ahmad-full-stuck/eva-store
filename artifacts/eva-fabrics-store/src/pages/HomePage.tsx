@@ -10,6 +10,7 @@ import { PromoBar } from '@/components/home/PromoBar'
 import { SectionHeading } from '@/components/home/SectionHeading'
 import { StepsSection } from '@/components/home/StepsSection'
 import { TestimonialsSection } from '@/components/home/TestimonialsSection'
+import { SmartImage } from '@/components/ui/SmartImage'
 
 interface HomePageProps {
   products: Product[]
@@ -63,7 +64,7 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
         <SectionHeading eyebrow="اختاري من البداية" title="مساحات القماش" linkLabel="عرض كل الأقمشة" linkHref="/catalog" />
         <div className="category-grid">
           {categories.map((category) => <Link key={category.id} href={`/catalog?category=${encodeURIComponent(category.id)}`} className="category-card">
-            <img src={category.image} alt="" loading="lazy" />
+            <SmartImage src={category.image} alt="" sizes="(max-width: 640px) 46vw, 23vw" />
             <span className="category-shade" />
             <span className="category-copy"><small>{category.description}</small><strong>{category.name}</strong><b>اكتشفي <ArrowLeft size={14} /></b></span>
           </Link>)}
@@ -96,7 +97,7 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
       </section>
 
       <section className="container-eva section-block story-section" aria-label="قصة العلامة">
-        <div className="story-visual"><img src="fabrics/blue.jpg" alt="تفاصيل نسيج أزرق من معرض إيفا" loading="lazy" /><span>Since<br /><strong>Eva</strong></span></div>
+        <div className="story-visual"><SmartImage src="fabrics/blue.jpg" alt="تفاصيل نسيج أزرق من معرض إيفا" sizes="(max-width: 820px) 92vw, 45vw" /><span>Since<br /><strong>Eva</strong></span></div>
         <div className="story-copy"><span className="eyebrow">قصة العلامة</span><h2>{homeStory.title}</h2><p>{homeStory.text}</p><p>نصمم تجربتنا لتكون قريبة منك: صور واضحة، مواصفات مفهومة، وخدمة تساعدك قبل الطلب وبعده.</p><Link href="/about" className="button button-outline">اعرفي أكثر عن إيفا <ArrowLeft size={16} /></Link></div>
       </section>
 

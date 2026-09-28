@@ -2,6 +2,7 @@ import { Heart, Plus, ShoppingBag } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { formatPrice } from '@/lib/catalog'
+import { SmartImage } from '@/components/ui/SmartImage'
 
 interface ProductCardProps {
   product: Product
@@ -121,14 +122,13 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
     <article className="product-card glass-card">
       <div className="product-card-media">
         <Link href={detailPath} className="product-card-image-link" aria-label={`عرض تفاصيل ${product.name}`}>
-          <img
+          <SmartImage
             src={product.image}
             alt={product.name}
             className="product-card-image"
-            width={640}
-            height={762}
-            loading="lazy"
-            decoding="async"
+            sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 22vw"
+            intrinsicWidth={1024}
+            intrinsicHeight={1024}
             onError={(event) => {
               const node = event.currentTarget
               if (node.dataset.fallback === '1') return

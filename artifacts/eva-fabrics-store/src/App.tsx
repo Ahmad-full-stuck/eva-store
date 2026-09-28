@@ -32,12 +32,12 @@ const shellStyles = `
 .bottom-nav .bottom-nav-label { white-space: nowrap; }
 @media (max-width: 1100px) {
   .desktop-nav { gap: 14px; }
-  .desktop-nav a { font-size: 11px; }
+  .desktop-nav a { font-size: 11.5px; }
 }
 @media (max-width: 980px) {
   .header-inner { gap: 14px; }
   .desktop-nav { gap: 11px; }
-  .desktop-nav a { font-size: 10.5px; }
+  .desktop-nav a { font-size: 11.5px; }
 }
 @media (max-width: 820px) {
   .announcement-bar span:nth-of-type(2) { display: none; }
