@@ -8,7 +8,11 @@ const readArray = (key: string): unknown[] => {
   if (typeof window === 'undefined') return []
   try {
     const parsed: unknown = JSON.parse(window.localStorage.getItem(key) || '[]')
-    return Array.isArray(parsed) ? parsed : []
+    if (!Array.isArray(parsed)) return []
+    // A corrupted build once wrote duplicated cart entries back on every load,
+    // so the stored list can be huge. Only the head of it still describes the
+    // real cart; keep that and let the reader de-duplicate the rest.
+    return parsed.length > 500 ? parsed.slice(0, 500) : parsed
   } catch {
     return []
   }
@@ -44,7 +48,8 @@ const merge = (cart: CartItem[], item: CartItem): CartItem[] => {
 }
 
 export const getStoredCart = (products: Product[]): CartItem[] => {
-  const result: CartItem[] = []
+  let result: CartItem[] = []
+  const seen = new Set<string>()
   for (const entry of readStoredCart()) {
     if (!entry || typeof entry !== 'object') continue
     const record = entry as Record<string, unknown>
@@ -64,10 +69,13 @@ export const getStoredCart = (products: Product[]): CartItem[] => {
         ? record.color
         : ''
     const color = findColor(product, colorId)
+    const signature = `${slug}:${color.id}`
+    if (seen.has(signature)) continue
     const lengthValue = typeof record.length === 'number' ? record.length : typeof record.quantity === 'number' ? record.quantity : 0
     const length = normalizeHalfMeters(lengthValue)
     if (!length) continue
-    result.push(...merge(result, { product, color, length }))
+    seen.add(signature)
+    result = merge(result, { product, color, length })
   }
   return result
 }
@@ -99,13 +107,18 @@ export const updateCartItem = (cart: CartItem[], key: string, requestedLength: n
 export const removeCartItem = (cart: CartItem[], key: string): CartItem[] => cart.filter((item) => orderKey(item) !== key)
 
 export const reconcileCart = (cart: CartItem[], products: Product[]): CartItem[] => {
-  const result: CartItem[] = []
+  let result: CartItem[] = []
+  const seen = new Set<string>()
   for (const item of cart) {
     const product = findProduct(products, item.product.slug)
     if (!product) continue
     const color = findColor(product, item.color.id)
+    const signature = `${product.slug}:${color.id}`
+    if (seen.has(signature)) continue
     const length = Math.min(item.length, availableMeters(product, color))
-    if (length > 0) result.push(...merge(result, { product, color, length }))
+    if (length <= 0) continue
+    seen.add(signature)
+    result = merge(result, { product, color, length })
   }
   return result
 }

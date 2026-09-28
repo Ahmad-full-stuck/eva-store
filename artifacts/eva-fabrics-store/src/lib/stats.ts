@@ -106,10 +106,15 @@ const flattenEntries = (raw: unknown): unknown[] => {
   }
   const flattened: unknown[] = []
   for (const entry of source) {
-    if (Array.isArray(entry)) flattened.push(...entry)
-    else flattened.push(entry)
+    // Append in a loop: spreading an unexpectedly large array straight into
+    // push() can exhaust the call stack.
+    if (Array.isArray(entry)) {
+      for (const item of entry) flattened.push(item)
+    } else {
+      flattened.push(entry)
+    }
   }
-  return flattened
+  return flattened.slice(0, 500)
 }
 
 const pickString = (record: Record<string, unknown>, keys: string[]): string => {
