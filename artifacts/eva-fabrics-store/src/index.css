@@ -635,7 +635,7 @@ legend { padding: 0; }
 .count-unit strong, .count-unit b, .count-unit span { color: var(--eva-charcoal); font-size: 20px; font-weight: 600; line-height: 1.15; font-variant-numeric: tabular-nums; }
 .count-unit small, .count-unit i { color: var(--eva-muted); font-size: 11.5px; font-style: normal; }
 
-.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 16px; margin-top: 26px; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 26px; }
 .testimonial-card { position: relative; overflow: hidden; display: grid; gap: 13px; padding: 27px 25px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--glass-radius); box-shadow: var(--glass-shadow); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); transition: transform .35s ease, box-shadow .35s ease, background-color .35s ease; animation: fadeInUp .6s ease both; }
 .testimonial-card:before { content: ''; position: absolute; top: 0; right: 0; left: 0; height: 34%; background: linear-gradient(180deg, rgba(255, 255, 255, .3), rgba(255, 255, 255, 0)); pointer-events: none; }
 .testimonial-card > * { position: relative; }

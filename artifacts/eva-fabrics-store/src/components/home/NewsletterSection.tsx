@@ -42,7 +42,7 @@ export function NewsletterSection() {
             type="email"
             inputMode="email"
             autoComplete="email"
-            placeholder="name@example.com"
+            placeholder="بريدك الإلكتروني"
             value={email}
             onChange={(event) => {
               setEmail(event.target.value)
