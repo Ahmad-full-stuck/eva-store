@@ -39,7 +39,9 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
 
   if (!product || !selectedColor) return <ProductMissing />
 
-  const gallery = [...new Set([product.image, ...product.images])]
+  const gallery = [...new Set([product.image, ...product.images, ...(product.video ? [product.video] : [])])]
+  const activeSrc = gallery[activeImage]
+  const activeIsVideo = activeSrc === product.video
   const increase = () => setLength((current) => Math.min(maxLength, Math.round((current + 0.5) * 10) / 10))
   const decrease = () => setLength((current) => Math.max(0.5, Math.round((current - 0.5) * 10) / 10))
   const add = () => {
@@ -51,8 +53,18 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><Link href="/catalog">الأقمشة</Link><span>›</span><span>{product.name}</span></div>
     <div className="product-detail-layout">
       <section className="product-gallery" aria-label={`معرض صور ${product.name}`}>
-        <div className="gallery-main"><SmartImage src={gallery[activeImage]} alt={`${product.name} - صورة ${activeImage + 1}`} sizes="(max-width: 900px) 92vw, 46vw" priority /><div className="gallery-shade" /><button type="button" className="gallery-zoom" onClick={() => setZoomOpen(true)} aria-label="تكبير الصورة"><ZoomIn size={19} /></button><button type="button" className="gallery-arrow gallery-next" onClick={() => setActiveImage((activeImage + 1) % gallery.length)} aria-label="الصورة التالية"><ChevronLeft size={20} /></button><button type="button" className="gallery-arrow gallery-prev" onClick={() => setActiveImage((activeImage - 1 + gallery.length) % gallery.length)} aria-label="الصورة السابقة"><ChevronRight size={20} /></button></div>
-        <div className="gallery-thumbs">{gallery.map((image, index) => <button type="button" key={`${image}-${index}`} className={index === activeImage ? 'is-active' : ''} onClick={() => setActiveImage(index)} aria-label={`عرض الصورة ${index + 1}`}><SmartImage src={image} alt="" sizes="72px" intrinsicWidth={320} /></button>)}</div>
+        <div className="gallery-main">{activeIsVideo
+          ? <video className="gallery-video" src={activeSrc} poster={product.image} controls autoPlay muted loop playsInline aria-label={`${product.name} — فيديو`} />
+          : <><SmartImage src={activeSrc} alt={`${product.name} - صورة ${activeImage + 1}`} sizes="(max-width: 900px) 92vw, 46vw" priority /><div className="gallery-shade" /><button type="button" className="gallery-zoom" onClick={() => setZoomOpen(true)} aria-label="تكبير الصورة"><ZoomIn size={19} /></button></>}
+          <button type="button" className="gallery-arrow gallery-next" onClick={() => setActiveImage((activeImage + 1) % gallery.length)} aria-label={activeIsVideo ? 'التالي' : 'الصورة التالية'}><ChevronLeft size={20} /></button>
+          <button type="button" className="gallery-arrow gallery-prev" onClick={() => setActiveImage((activeImage - 1 + gallery.length) % gallery.length)} aria-label={activeIsVideo ? 'السابق' : 'الصورة السابقة'}><ChevronRight size={20} /></button>
+        </div>
+        <div className="gallery-thumbs">{gallery.map((image, index) => {
+          const thumbIsVideo = image === product.video
+          return <button type="button" key={`${image}-${index}`} className={index === activeImage ? 'is-active' : ''} onClick={() => setActiveImage(index)} aria-label={thumbIsVideo ? 'عرض الفيديو' : `عرض الصورة ${index + 1}`}>
+            {thumbIsVideo ? <><SmartImage src={product.image} alt="" sizes="72px" intrinsicWidth={320} /><span className="thumb-play" aria-hidden="true">▶</span></> : <SmartImage src={image} alt="" sizes="72px" intrinsicWidth={320} />}
+          </button>
+        })}</div>
       </section>
       <section className="product-purchase">
         <div className="product-purchase-top"><div><span className="eyebrow">{product.type}</span><h1>{product.name}</h1><p className="product-description">{product.description}</p></div><button type="button" className={`detail-wish ${wishlist.includes(product.slug) ? 'is-active' : ''}`} onClick={() => onWish(product.slug)} aria-label={wishlist.includes(product.slug) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'} aria-pressed={wishlist.includes(product.slug)}><Heart size={20} fill={wishlist.includes(product.slug) ? 'currentColor' : 'none'} /></button></div>

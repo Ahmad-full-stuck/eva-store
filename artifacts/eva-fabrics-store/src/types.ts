@@ -34,6 +34,7 @@ export interface Product {
   compareAtPrice?: number
   image: string
   images: string[]
+  video?: string
   colors: ProductColor[]
   specs: ProductSpecs
   faqs: ProductFaq[]
