@@ -28,7 +28,7 @@ const shellStyles = `
 .footer-col { display: flex; flex-direction: column; align-items: flex-start; }
 .mobile-nav a.is-active { color: var(--eva-rose); font-weight: 600; }
 .bottom-nav .bottom-nav-icon { position: relative; display: inline-flex; align-items: center; justify-content: center; }
-.bottom-nav .bottom-nav-badge { position: absolute; top: -7px; left: -10px; min-width: 15px; height: 15px; display: inline-grid; place-items: center; padding-inline: 3px; color: #fff; background: var(--eva-rose); border: 1.5px solid var(--eva-bg); border-radius: 999px; font-size: 8px; line-height: 1; font-weight: 600; }
+.bottom-nav .bottom-nav-badge { position: absolute; top: -5px; left: -4px; min-width: 15px; height: 15px; display: inline-grid; place-items: center; padding-inline: 3px; color: #fff; background: var(--eva-rose); border: 1.5px solid var(--eva-bg); border-radius: 999px; font-size: 8px; line-height: 1; font-weight: 600; }
 .bottom-nav .bottom-nav-label { white-space: nowrap; }
 @media (max-width: 1100px) {
   .desktop-nav { gap: 14px; }

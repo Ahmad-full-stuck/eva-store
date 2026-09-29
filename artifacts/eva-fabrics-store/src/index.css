@@ -15,25 +15,26 @@
   --eva-charcoal: #2e1821;
   --eva-green: #4e7a5e;
   --eva-lilac: #9b86b8;
-  --eva-shadow: 0 18px 50px rgba(74, 24, 43, .10);
-  --eva-shadow-small: 0 8px 24px rgba(74, 24, 43, .10);
-  --eva-radius: 22px;
+  --eva-shadow: 0 14px 36px -16px rgba(74, 24, 43, .22), 0 4px 12px -6px rgba(74, 24, 43, .10);
+  --eva-shadow-small: 0 7px 20px -10px rgba(74, 24, 43, .18), 0 2px 6px -3px rgba(74, 24, 43, .08);
+  --eva-radius: 18px;
   --eva-font: 'Readex Pro', Tahoma, sans-serif;
   --eva-font-display: 'Readex Pro', Tahoma, sans-serif;
-  --glass-bg: rgba(255, 250, 250, .64);
-  --glass-bg-strong: rgba(255, 250, 250, .86);
-  --glass-bg-soft: rgba(255, 250, 250, .44);
-  --glass-surface: rgba(255, 255, 255, .68);
-  --glass-border: rgba(255, 255, 255, .72);
-  --glass-border-soft: rgba(255, 255, 255, .46);
-  --glass-blur: blur(18px) saturate(140%);
-  --glass-blur-strong: blur(26px) saturate(165%);
-  --glass-shadow: 0 18px 40px rgba(74, 24, 43, .10), 0 2px 8px rgba(74, 24, 43, .05), inset 0 1px 0 rgba(255, 255, 255, .55);
-  --glass-shadow-hover: 0 26px 56px rgba(74, 24, 43, .14), 0 4px 12px rgba(74, 24, 43, .07), inset 0 1px 0 rgba(255, 255, 255, .65);
-  --glass-dark-bg: rgba(46, 24, 33, .86);
+  --glass-fill: linear-gradient(150deg, rgba(255, 255, 255, .82), rgba(255, 250, 250, .52));
+  --glass-bg: rgba(255, 251, 250, .7);
+  --glass-bg-strong: rgba(255, 253, 252, .9);
+  --glass-bg-soft: rgba(255, 251, 250, .46);
+  --glass-surface: rgba(255, 255, 255, .74);
+  --glass-border: rgba(255, 255, 255, .88);
+  --glass-border-soft: rgba(255, 255, 255, .55);
+  --glass-blur: blur(13px) saturate(150%);
+  --glass-blur-strong: blur(19px) saturate(170%);
+  --glass-shadow: 0 16px 38px -18px rgba(74, 24, 43, .26), 0 4px 12px -6px rgba(74, 24, 43, .10), inset 0 1px 0 rgba(255, 255, 255, .9), inset 0 0 0 1px rgba(255, 255, 255, .3);
+  --glass-shadow-hover: 0 24px 52px -20px rgba(74, 24, 43, .32), 0 6px 16px -8px rgba(74, 24, 43, .12), inset 0 1px 0 rgba(255, 255, 255, .95), inset 0 0 0 1px rgba(255, 255, 255, .34);
+  --glass-dark-bg: rgba(46, 24, 33, .88);
   --glass-dark-border: rgba(255, 255, 255, .16);
-  --glass-radius: 24px;
-  --glass-radius-lg: 28px;
+  --glass-radius: 18px;
+  --glass-radius-lg: 22px;
   --tap: 44px;
 }
 
@@ -47,17 +48,20 @@ body::before, body::after {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(36% 32% at 13% 18%, rgba(122, 30, 60, .17), rgba(122, 30, 60, 0) 70%),
-    radial-gradient(34% 30% at 85% 82%, rgba(122, 30, 60, .13), rgba(122, 30, 60, 0) 72%),
-    radial-gradient(42% 38% at 50% 50%, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 75%);
-  animation: meshDrift 40s ease-in-out infinite alternate;
+    radial-gradient(34% 30% at 12% 16%, rgba(122, 30, 60, .17), rgba(122, 30, 60, 0) 70%),
+    radial-gradient(32% 28% at 87% 12%, rgba(176, 118, 60, .13), rgba(176, 118, 60, 0) 72%),
+    radial-gradient(36% 32% at 80% 86%, rgba(232, 176, 193, .16), rgba(232, 176, 193, 0) 70%),
+    radial-gradient(30% 28% at 16% 88%, rgba(90, 17, 41, .11), rgba(90, 17, 41, 0) 70%),
+    radial-gradient(42% 38% at 50% 50%, rgba(255, 255, 255, .42), rgba(255, 255, 255, 0) 75%);
+  animation: meshDrift 44s ease-in-out infinite alternate;
 }
 body::after {
-  inset: -18% -12%;
+  inset: 0;
   background:
-    radial-gradient(30% 28% at 72% 26%, rgba(176, 118, 60, .1), rgba(176, 118, 60, 0) 70%),
-    radial-gradient(28% 26% at 26% 66%, rgba(122, 30, 60, .1), rgba(122, 30, 60, 0) 72%);
-  animation: meshDrift 56s ease-in-out infinite alternate-reverse;
+    radial-gradient(120% 92% at 50% 38%, rgba(255, 255, 255, 0) 52%, rgba(74, 24, 43, .09) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-blend-mode: normal, multiply;
+  opacity: .05;
 }
 body, button, input, select, textarea { font-family: var(--eva-font); }
 button, input, select, textarea { font-size: inherit; }
@@ -179,7 +183,7 @@ legend { padding: 0; }
 .note-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--eva-orange); }
 .note-divider { width: 1px; height: 12px; margin-inline: 3px; background: rgba(48, 38, 42, .16); }
 .hero-visual { position: relative; min-height: 520px; overflow: hidden; background: var(--eva-charcoal); border: 1px solid rgba(255, 255, 255, .7); border-radius: var(--glass-radius-lg); box-shadow: var(--glass-shadow); }
-.hero-visual > img { width: 100%; height: 100%; object-fit: cover; }
+.hero-visual img { width: 100%; height: 100%; object-fit: cover; }
 .hero-visual-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(41, 23, 30, .04), rgba(41, 23, 30, .53)); }
 .hero-floating-card { position: absolute; right: 25px; bottom: 25px; min-width: 125px; padding: 14px 16px; background: rgba(255, 250, 250, .82); border: 1px solid rgba(255, 255, 255, .8); border-radius: 18px; color: var(--eva-ink); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); box-shadow: var(--glass-shadow); }
 .hero-floating-card span, .hero-floating-card small { display: block; color: var(--eva-muted); font-size: 11.5px; }
@@ -327,7 +331,7 @@ legend { padding: 0; }
 .product-detail-layout { display: grid; grid-template-columns: 1.04fr .96fr; gap: 80px; align-items: start; padding-top: 38px; }
 .product-gallery { position: sticky; top: 120px; }
 .gallery-main { position: relative; aspect-ratio: .95; overflow: hidden; background: rgba(216, 198, 187, .55); border: 1px solid rgba(255, 255, 255, .7); border-radius: var(--glass-radius-lg); box-shadow: var(--glass-shadow); }
-.gallery-main > img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-main img { width: 100%; height: 100%; object-fit: cover; }
 .gallery-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(30, 17, 20, .02), rgba(30, 17, 20, .08)); }
 .gallery-zoom, .gallery-arrow { position: absolute; display: grid; place-items: center; color: #fff; background: rgba(48, 38, 42, .42); border: 1px solid rgba(255,255,255,.6); backdrop-filter: blur(14px) saturate(150%); -webkit-backdrop-filter: blur(14px) saturate(150%); transition: background .2s ease, transform .2s ease; }
 .gallery-zoom { left: 16px; bottom: 16px; width: 42px; height: 42px; border-radius: 50%; }
@@ -401,7 +405,7 @@ legend { padding: 0; }
 .related-section { padding-top: 80px; }
 .mobile-sticky-buy { display: none; }
 .image-modal { width: min(850px, 100%) !important; padding: 45px; background: var(--glass-bg-strong); backdrop-filter: var(--glass-blur-strong); -webkit-backdrop-filter: var(--glass-blur-strong); }
-.image-modal > img { width: 100%; max-height: 78vh; object-fit: contain; }
+.image-modal img { width: 100%; height: auto; max-height: 78vh; object-fit: contain; }
 .modal-close { position: absolute; top: 10px; left: 12px; z-index: 1; width: 36px; height: 36px; display: grid; place-items: center; color: var(--eva-ink); background: rgba(255, 255, 255, .82); border: 1px solid var(--glass-border); border-radius: 50%; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-size: 22px; line-height: 1; transition: color .2s ease, background .2s ease; }
 .modal-close:hover { color: #fff; background: var(--eva-rose); }
 .cart-page { padding-bottom: 100px; }
@@ -1197,3 +1201,187 @@ picture { display: contents; }
   .hero-dots { bottom: 9px; }
   .hero-vertical-label { display: none; }
 }
+
+/* ==========================================================================
+   EVA v2 — villa-home inspired pass:
+   unified glass recipe (gradient fill), trimmed desktop scale, calmer blur
+   budget, edge-safe controls, cleaner product imagery.
+   ========================================================================== */
+
+/* -- 1. Unified glass fill: one recipe for every light glass surface ------ */
+.soft-card, .glass, .glass-strong, .glass-card, .glass-pill, .glass-hero,
+.product-card, .product-skeleton, .stat-card, .step-card, .testimonial-card,
+.hero-copy, .discovery-card, .filter-panel, .order-summary, .checkout-summary,
+.checkout-form-card, .contact-form, .tracking-card, .confirmation-number,
+.newsletter-card, .guide-card, .guide-steps > div, .section-soft,
+.favorites-note, .add-confirm, .search-form, .catalog-search {
+  background: var(--glass-fill);
+}
+
+/* -- 2. Blur budget: only floating chrome keeps backdrop-filter ---------- */
+* { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.site-header, .modal-backdrop, .modal-panel, .toast,
+.bottom-nav, .mobile-sticky-buy {
+  backdrop-filter: blur(14px) saturate(155%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(155%) !important;
+}
+.site-header {
+  background: linear-gradient(180deg, rgba(255, 251, 250, .9), rgba(255, 251, 250, .76));
+  border-bottom-color: rgba(255, 255, 255, .8);
+  box-shadow: 0 10px 28px -18px rgba(74, 24, 43, .3), 0 1px 0 rgba(255, 255, 255, .7);
+}
+.bottom-nav { background: rgba(255, 252, 251, .9); }
+.toast { background: rgba(48, 38, 42, .92); }
+
+/* -- 3. Product imagery: uniform box, warm placeholder, gentle lift ------ */
+.product-card-media {
+  aspect-ratio: .86;
+  background: linear-gradient(160deg, rgba(233, 221, 213, .95), rgba(248, 243, 237, .82));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .55);
+}
+.product-card-media, .gallery-main, .cart-item-image, .search-result-item img {
+  background: linear-gradient(160deg, rgba(233, 221, 213, .95), rgba(248, 243, 237, .82));
+}
+.product-card-image, .gallery-main img, .category-card img,
+.cart-item-image img, .search-result-item img {
+  filter: brightness(1.04) saturate(1.03);
+}
+.gallery-main { aspect-ratio: 1; }
+.gallery-arrow, .gallery-zoom { background: rgba(48, 38, 42, .5); }
+
+/* -- 4. Edge-safe controls: nothing hugs an edge or a card corner -------- */
+.hero-arrow { width: 34px; height: 34px; background: rgba(41, 23, 30, .46); border-color: rgba(255, 255, 255, .55); }
+.hero-next { right: 16px; }
+.hero-prev { left: 16px; }
+.hero-dots { bottom: 11px; padding-inline: 18px; }
+.gallery-arrow { width: 36px; height: 36px; }
+.gallery-next { left: 14px; }
+.gallery-prev { right: 14px; }
+.gallery-zoom { left: 14px; bottom: 14px; width: 38px; height: 38px; }
+.promo-bar { padding: 13px 26px; gap: 13px; }
+.category-copy { right: 14px; bottom: 14px; left: 14px; }
+.hero-floating-card { right: 16px; bottom: 16px; padding: 11px 13px; min-width: 108px; }
+.hero-vertical-label { top: 16px; left: 16px; }
+.product-wish { left: 11px; top: 11px; }
+.product-card-badges { top: 11px; right: 11px; }
+.stat-card { padding: 13px 15px; }
+.count-unit { min-width: 54px; padding: 7px 8px; border-radius: 13px; }
+.count-unit strong, .count-unit b, .count-unit span { font-size: 17px; }
+.bottom-nav-badge { top: -5px !important; left: -4px !important; }
+
+/* -- 5. Desktop scale: trim the oversized rhythm ------------------------- */
+@media (min-width: 821px) {
+  .container-eva { width: min(1160px, calc(100% - 60px)); }
+  .header-inner { min-height: 66px; gap: 22px; }
+  .desktop-nav { gap: 20px; }
+  .section-block { padding: 46px 0; }
+  .section-heading { margin-bottom: 18px; }
+  .section-heading h2 { font-size: clamp(19px, 2.2vw, 25px); }
+  .page-title-row, .catalog-heading, .checkout-top { padding: 34px 0 24px; }
+  .page-title-row h1, .catalog-heading h1, .checkout-top h1 { font-size: clamp(21px, 2.4vw, 30px); }
+  .home-hero { min-height: 470px; padding-top: 28px; gap: 16px; }
+  .hero-copy { padding: 26px 30px 26px 22px; }
+  .hero-copy h1 { font-size: clamp(25px, 2.8vw, 36px); line-height: 1.32; }
+  .hero-copy p { max-width: 420px; margin-top: 14px; font-size: 14px; line-height: 1.9; }
+  .hero-actions { margin-top: 20px; }
+  .hero-note { margin-top: 20px; }
+  .hero-visual { min-height: 440px; }
+  .hero-floating-card strong { font-size: 21px; }
+  .category-section { padding-top: 50px; }
+  .category-card { min-height: 215px; border-radius: var(--glass-radius); }
+  .category-copy strong { font-size: 15px; }
+  .category-copy b { margin-top: 7px; }
+  .discovery-section { gap: 46px; padding-top: 38px; padding-bottom: 56px; }
+  .discovery-intro h2 { font-size: clamp(21px, 2.4vw, 30px); }
+  .discovery-intro p { margin-top: 10px; }
+  .discovery-card { padding: 20px 22px; }
+  .discovery-card h3 { margin-top: 22px; font-size: 17px; }
+  .discovery-options { gap: 8px; margin-top: 14px; }
+  .discovery-options button { min-height: 40px; padding: 8px 13px; }
+  .discovery-card > .text-button, .discovery-result { margin-top: 14px; }
+  .guide-preview-grid { gap: 46px; padding-top: 50px; padding-bottom: 50px; }
+  .guide-preview-copy h2 { font-size: clamp(21px, 2.4vw, 30px); }
+  .guide-preview-copy p { margin-top: 13px; }
+  .guide-preview-copy .button { margin-top: 20px; }
+  .guide-faq button { min-height: 54px; }
+  .guide-faq p { padding-bottom: 15px; }
+  .story-section { gap: 50px; }
+  .story-visual { min-height: 350px; }
+  .story-visual img { height: 330px; }
+  .story-visual > span { top: 24px; }
+  .story-visual > span strong { font-size: 22px; }
+  .story-copy h2 { font-size: clamp(21px, 2.4vw, 30px); }
+  .story-copy p { margin-top: 13px; }
+  .story-copy .button { margin-top: 20px; }
+  .trust-grid { padding-top: 20px; padding-bottom: 20px; }
+  .trust-item { padding: 4px 18px; }
+  .stats-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 16px; }
+  .stat-card { gap: 4px; padding: 13px 15px; border-radius: 14px; }
+  .stat-icon { width: 27px; height: 27px; border-radius: 9px; }
+  .stat-value { font-size: clamp(19px, 2vw, 23px); }
+  .steps-grid { gap: 12px; margin-top: 16px; }
+  .step-card { padding: 18px 16px 16px; }
+  .step-index { width: 38px; height: 38px; margin-bottom: 11px; border-radius: 12px; font-size: 13px; }
+  .step-card p { margin-top: 5px; }
+  .promo-bar { padding: 13px 24px; }
+  .promo-bar strong { font-size: clamp(14px, 1.8vw, 17px); }
+  .testimonials-grid { gap: 12px; margin-top: 16px; }
+  .testimonial-card { gap: 10px; padding: 19px 18px; }
+  .newsletter-card { gap: 13px; padding: clamp(20px, 3vw, 30px); }
+  .newsletter-card h2 { font-size: clamp(19px, 2.4vw, 25px); }
+  .product-grid { gap: 18px 13px; }
+  .product-card { padding: 9px 9px 13px; border-radius: var(--glass-radius); }
+  .product-card-media { border-radius: 13px; }
+  .product-detail-layout { gap: 46px; padding-top: 30px; }
+  .product-purchase h1 { font-size: clamp(23px, 2.8vw, 33px); }
+  .price-block { margin-top: 20px; }
+  .price-block strong { font-size: 23px; }
+  .detail-divider { margin: 20px 0; }
+  .detail-accordion > button { min-height: 48px; }
+  .detail-accordions { margin-top: 22px; }
+  .related-section { padding-top: 56px; }
+  .cart-layout, .checkout-layout { gap: 44px; }
+  .checkout-form-card, .contact-form { padding: 22px; }
+  .order-summary, .checkout-summary { padding: 20px; }
+  .footer-grid { gap: 34px; padding-top: 42px; padding-bottom: 36px; }
+  .info-heading { padding: 48px 0 30px; }
+  .info-heading h1 { font-size: clamp(26px, 3.4vw, 37px); }
+  .about-hero { gap: 48px; padding: 20px 0 56px; }
+  .about-copy h1 { font-size: clamp(26px, 3.4vw, 40px); }
+  .about-collage { min-height: 400px; }
+  .about-collage img:first-child { height: 340px; }
+  .about-collage img:nth-child(2) { height: 210px; }
+  .story-band { padding: 38px; }
+  .story-band h2 { font-size: clamp(20px, 2.6vw, 29px); }
+  .guide-steps { margin-top: 34px; }
+  .guide-steps > div { padding: 18px; }
+  .contact-layout { gap: 48px; padding: 36px 0 56px; }
+  .contact-intro h1 { font-size: clamp(24px, 3vw, 35px); }
+  .contact-methods { margin-top: 22px; }
+  .tracking-card { margin: 48px auto 64px; padding: 30px; }
+  .tracking-card h1 { font-size: 28px; }
+  .confirmation-page { min-height: 560px; padding: 54px 20px; }
+  .confirmation-page h1 { font-size: clamp(24px, 3.4vw, 35px); }
+  .glass-card { padding: 16px; }
+  .glass-hero { padding: clamp(22px, 3vw, 34px); }
+  .section-soft { padding: clamp(24px, 4vw, 40px) clamp(16px, 3vw, 30px); }
+  .empty-state { min-height: 340px; padding: 48px 20px; }
+  .search-panel-inner { padding: 20px; }
+  .drawer-header { padding: 20px; }
+  .modal-drawer .modal-panel { border-radius: 22px 0 0 22px; }
+}
+
+/* -- 6. Visual comfort: calmer rhythm on every screen --------------------- */
+.hero-copy p, .section-heading p, .product-description,
+.discovery-intro p, .story-copy p, .guide-preview-copy p { line-height: 1.9; }
+.section-heading h2, .hero-copy h1, .page-title-row h1, .catalog-heading h1 { text-wrap: balance; }
+.eyebrow { letter-spacing: .01em; }
+
+@media (max-width: 820px) {
+  .container-eva { width: min(100% - 36px, 650px); }
+  .promo-bar { padding: 14px 16px; gap: 10px; }
+  .stat-card { padding: 11px 12px; }
+  .product-card-media { border-radius: 13px; }
+  .section-block { padding: 38px 0; }
+}
+
