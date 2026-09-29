@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BarChart3, Heart, Home, Instagram, Menu, MessageCircle, Search, ShoppingBag, Shirt, X } from 'lucide-react'
+import { Heart, Home, Instagram, Menu, MessageCircle, Search, ShoppingBag, Shirt, X } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
 import { formatMeters } from '@/lib/catalog'
@@ -28,7 +28,6 @@ const primaryNav: NavItem[] = [
   { id: 'guide', label: 'دليل الأقمشة', path: '/fabric-guide' },
   { id: 'about', label: 'من نحن', path: '/about' },
   { id: 'contact', label: 'تواصلي', path: '/contact' },
-  { id: 'stats', label: 'الإحصائيات', path: '/stats' },
 ]
 
 const drawerNav: NavItem[] = [
@@ -69,7 +68,6 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
     { id: 'catalog', label: 'الأقمشة', path: '/catalog', Icon: Shirt, badge: '' },
     { id: 'favorites', label: 'المفضلة', path: '/favorites', Icon: Heart, badge: wishlistCount > 0 ? `${wishlistCount}` : '' },
     { id: 'cart', label: 'السلة', path: '/cart', Icon: ShoppingBag, badge: cartMeters > 0 ? formatMeters(cartMeters) : '' },
-    { id: 'stats', label: 'الإحصائيات', path: '/stats', Icon: BarChart3, badge: '' },
   ]
 
   const drawerItems = [...navItems, ...drawerNav]
@@ -85,7 +83,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
       </div>
       <header className="site-header glass">
         <div className="container-eva header-inner">
-          <Logo glass />
+          <Logo />
           <nav className="desktop-nav" aria-label="التنقل الرئيسي">
             {navItems.map((route) => {
               const active = isActive(route.path)
@@ -118,7 +116,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
       <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} products={products} />
       <Modal open={menuOpen} onClose={() => setMenuOpen(false)} title="قائمة التنقل" variant="drawer" className="mobile-drawer glass-strong">
         <div className="drawer-header">
-          <Logo glass />
+          <Logo />
           <button type="button" className="icon-button" onClick={() => setMenuOpen(false)} aria-label="إغلاق القائمة">
             <X size={20} />
           </button>

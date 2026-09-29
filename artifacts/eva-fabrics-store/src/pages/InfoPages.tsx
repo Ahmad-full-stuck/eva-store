@@ -3,7 +3,7 @@ import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Heart, Instagram, Lay
 import { Link, useLocation } from 'wouter'
 import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
-import { guideQuestions } from '@/lib/fallback-data'
+import { guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
 import { apiUrl, siteConfig } from '@/lib/site'
 import { SmartImage } from '@/components/ui/SmartImage'
 
@@ -547,6 +547,8 @@ const qualityChecks = [
 
 export function FabricGuidePage() {
   const questions = [...guideQuestions, ...extraGuideQuestions]
+  const [openQuick, setOpenQuick] = useState<number | null>(0)
+  const [openGuide, setOpenGuide] = useState<number | null>(0)
   return (
     <>
       <GlassStyles />
@@ -557,6 +559,32 @@ export function FabricGuidePage() {
           <span className="eyebrow"><Ruler size={14} />تعلّمي قبل أن تختاري</span>
           <h1>دليل الأقمشة الشامل</h1>
           <p>كل خامة لها إيقاعها وطريقة عناية مختلفة. ابدأي من هذه الأسئلة الثلاثة، ثم اقرئي الإجابات السريعة، وأخيراً افتحي صفحة المنتج لتفاصيل الخامة التي تعجبك.</p>
+        </section>
+
+        <section className="quick-answers" aria-labelledby="quick-answers-title">
+          <div className="section-head-tight">
+            <div>
+              <span className="eyebrow"><MessageCircle size={14} />ابدئي من هنا</span>
+              <h2 id="quick-answers-title">إجابات سريعة على أشهر الأسئلة</h2>
+              <p>لكل سؤال أكثر من إجابة مختصرة — اضغطي السؤال لتظهر كل الإجابات، أو اقرئي الدليل كاملاً.</p>
+            </div>
+            <a href="#guide-faq-title" className="underlined-link">أو اقرئي الدليل الكامل <ArrowLeft size={15} /></a>
+          </div>
+          <div className="quick-answers-grid">
+            {quickGuideAnswers.map((entry, index) => (
+              <article className={`quick-answer ${openQuick === index ? 'is-open' : ''}`} key={entry.question}>
+                <button type="button" onClick={() => setOpenQuick(openQuick === index ? null : index)} aria-expanded={openQuick === index}>
+                  <strong>{entry.question}</strong>
+                  <ChevronDown size={16} />
+                </button>
+                {openQuick === index && (
+                  <ul>
+                    {entry.answers.map((answer) => <li key={answer}>{answer}</li>)}
+                  </ul>
+                )}
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="steps-grid" aria-label="ثلاثة أسئلة قبل الشراء">
@@ -585,8 +613,11 @@ export function FabricGuidePage() {
           </div>
           <div className="guide-grid">
             {questions.map((item, index) => (
-              <details className="guide-card" key={item.question} open={index === 0}>
-                <summary>
+              <details className="guide-card" key={item.question} open={openGuide === index}>
+                <summary
+                  onClick={(event) => { event.preventDefault(); setOpenGuide(openGuide === index ? null : index) }}
+                  aria-expanded={openGuide === index}
+                >
                   <span>{index + 1 < 10 ? `٠${index + 1}` : index + 1}</span>
                   <strong>{item.question}</strong>
                   <ChevronDown size={18} />

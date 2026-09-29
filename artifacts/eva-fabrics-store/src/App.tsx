@@ -13,7 +13,6 @@ import { ProductPage } from '@/pages/ProductPage'
 import { CartPage } from '@/pages/CartPage'
 import { CheckoutPage } from '@/pages/CheckoutPage'
 import { FavoritesPage } from '@/pages/FavoritesPage'
-import { StatsPage } from '@/pages/StatsPage'
 import { AboutPage, ContactPage, FabricGuidePage, OrderConfirmationPage, OrderTrackingPage, PoliciesPage } from '@/pages/InfoPages'
 import NotFound from '@/pages/not-found'
 
@@ -132,7 +131,6 @@ function App() {
           <Route path="/cart" component={() => <CartPage cart={cart} onUpdate={updateCart} onRemove={deleteCart} />} />
           <Route path="/checkout" component={() => <CheckoutPage cart={cart} onComplete={completeOrder} />} />
           <Route path="/favorites" component={() => <FavoritesPage {...pageProps} />} />
-          <Route path="/stats" component={() => <StatsPage products={products} categories={categories} />} />
           <Route path="/about" component={AboutPage} />
           <Route path="/fabric-guide" component={FabricGuidePage} />
           <Route path="/contact" component={ContactPage} />

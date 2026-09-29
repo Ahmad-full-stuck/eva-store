@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Check, ChevronDown, ChevronLeft, ChevronRight, Heart, Minus, Plus, ShieldCheck, ShoppingBag, Zap, ZoomIn } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { availableMeters, formatMeters, formatPrice } from '@/lib/catalog'
+import { mapColorsToImages } from '@/lib/image-colors'
 import { ProductCard } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -24,6 +25,8 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const [openSection, setOpenSection] = useState('specs')
   const [openFaq, setOpenFaq] = useState<number | null>(0)
   const [justAdded, setJustAdded] = useState(false)
+  const [colorImageMap, setColorImageMap] = useState<Record<string, number>>({})
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
 
   useEffect(() => {
     setActiveImage(0)
@@ -31,6 +34,19 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     setJustAdded(false)
     setSelectedColorId(product?.colors.find((color) => color.available)?.id || product?.colors[0]?.id || '')
   }, [product?.id, product?.colors])
+
+  useEffect(() => {
+    let cancelled = false
+    const sources = product ? [...new Set([product.image, ...product.images])] : []
+    if (!sources.length || !product?.colors.length) {
+      setColorImageMap({})
+      return undefined
+    }
+    mapColorsToImages(sources, product.colors)
+      .then((map) => { if (!cancelled) setColorImageMap(map) })
+      .catch(() => { if (!cancelled) setColorImageMap({}) })
+    return () => { cancelled = true }
+  }, [product?.id, product?.image, product?.images, product?.colors])
 
   const selectedColor = product?.colors.find((color) => color.id === selectedColorId) || product?.colors[0]
   const maxLength = product && selectedColor ? availableMeters(product, selectedColor) : 0
@@ -42,6 +58,29 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const gallery = [...new Set([product.image, ...product.images, ...(product.video ? [product.video] : [])])]
   const activeSrc = gallery[activeImage]
   const activeIsVideo = activeSrc === product.video
+  const pickColor = (color: ProductColor) => {
+    if (!color.available) return
+    setSelectedColorId(color.id)
+    const index = colorImageMap[color.id]
+    if (typeof index === 'number' && index < gallery.length) setActiveImage(index)
+  }
+  const startSwipe = (x: number, y: number) => { touchStart.current = { x, y } }
+  const endSwipe = (x: number, y: number) => {
+    const start = touchStart.current
+    touchStart.current = null
+    if (!start) return
+    const dx = x - start.x
+    const dy = y - start.y
+    if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return
+    const step = dx < 0 ? 1 : -1
+    setActiveImage((current) => (current + step + gallery.length) % gallery.length)
+  }
+  const onGalleryKey = (event: React.KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') setActiveImage((current) => (current + 1) % gallery.length)
+    else if (event.key === 'ArrowRight') setActiveImage((current) => (current - 1 + gallery.length) % gallery.length)
+    else return
+    event.preventDefault()
+  }
   const increase = () => setLength((current) => Math.min(maxLength, Math.round((current + 0.5) * 10) / 10))
   const decrease = () => setLength((current) => Math.max(0.5, Math.round((current - 0.5) * 10) / 10))
   const add = () => {
@@ -53,9 +92,15 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><Link href="/catalog">الأقمشة</Link><span>›</span><span>{product.name}</span></div>
     <div className="product-detail-layout">
       <section className="product-gallery" aria-label={`معرض صور ${product.name}`}>
-        <div className="gallery-main">{activeIsVideo
+        <div
+          className="gallery-main"
+          tabIndex={0}
+          onTouchStart={(event) => startSwipe(event.touches[0].clientX, event.touches[0].clientY)}
+          onTouchEnd={(event) => endSwipe(event.changedTouches[0].clientX, event.changedTouches[0].clientY)}
+          onKeyDown={onGalleryKey}
+        >{activeIsVideo
           ? <video className="gallery-video" src={activeSrc} poster={product.image} controls autoPlay muted loop playsInline aria-label={`${product.name} — فيديو`} />
-          : <><SmartImage src={activeSrc} alt={`${product.name} - صورة ${activeImage + 1}`} sizes="(max-width: 900px) 92vw, 46vw" priority /><div className="gallery-shade" /><button type="button" className="gallery-zoom" onClick={() => setZoomOpen(true)} aria-label="تكبير الصورة"><ZoomIn size={19} /></button></>}
+          : <><SmartImage key={activeSrc} className="gallery-img" src={activeSrc} alt={`${product.name} - صورة ${activeImage + 1}`} sizes="(max-width: 900px) 92vw, 46vw" priority /><div className="gallery-shade" /><button type="button" className="gallery-zoom" onClick={() => setZoomOpen(true)} aria-label="تكبير الصورة"><ZoomIn size={19} /></button></>}
           <button type="button" className="gallery-arrow gallery-next" onClick={() => setActiveImage((activeImage + 1) % gallery.length)} aria-label={activeIsVideo ? 'التالي' : 'الصورة التالية'}><ChevronLeft size={20} /></button>
           <button type="button" className="gallery-arrow gallery-prev" onClick={() => setActiveImage((activeImage - 1 + gallery.length) % gallery.length)} aria-label={activeIsVideo ? 'السابق' : 'الصورة السابقة'}><ChevronRight size={20} /></button>
         </div>
@@ -70,13 +115,13 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         <div className="product-purchase-top"><div><span className="eyebrow">{product.type}</span><h1>{product.name}</h1><p className="product-description">{product.description}</p></div><button type="button" className={`detail-wish ${wishlist.includes(product.slug) ? 'is-active' : ''}`} onClick={() => onWish(product.slug)} aria-label={wishlist.includes(product.slug) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'} aria-pressed={wishlist.includes(product.slug)}><Heart size={20} fill={wishlist.includes(product.slug) ? 'currentColor' : 'none'} /></button></div>
         <div className="price-block"><span>السعر للمتر الواحد</span><strong>{formatPrice(product.price)}</strong>{product.compareAtPrice && <del>{formatPrice(product.compareAtPrice)}</del>}</div>
         <div className="detail-divider" />
-        <fieldset className="color-fieldset"><legend>اللون <span>{selectedColor.name}</span></legend><div className="color-options">{product.colors.map((color) => <button type="button" key={color.id} className={`color-option ${selectedColor.id === color.id ? 'is-selected' : ''} ${!color.available ? 'is-unavailable' : ''}`} style={{ backgroundColor: color.hex }} onClick={() => color.available && setSelectedColorId(color.id)} disabled={!color.available} aria-label={`${color.name}${color.available ? '' : '، غير متوفر'}`} aria-pressed={selectedColor.id === color.id} title={color.name} />)}</div></fieldset>
+        <fieldset className="color-fieldset"><legend>اللون <span>{selectedColor.name}</span></legend><div className="color-options">{product.colors.map((color) => <button type="button" key={color.id} className={`color-option ${selectedColor.id === color.id ? 'is-selected' : ''} ${!color.available ? 'is-unavailable' : ''}`} style={{ backgroundColor: color.hex }} onClick={() => pickColor(color)} disabled={!color.available} aria-label={`${color.name}${color.available ? '' : '، غير متوفر'}`} aria-pressed={selectedColor.id === color.id} title={color.name} />)}</div><small className="color-hint">اضغطي اللون لعرض صورته في المعرض</small></fieldset>
         <div className="detail-divider" />
         <div className="quantity-heading"><div><strong>الكمية المطلوبة</strong><small>يمكن الطلب بنصف متر كحد أدنى</small></div><span>{formatMeters(product.stockMeters)} متاح</span></div>
         <div className="quantity-control"><button type="button" onClick={decrease} disabled={length <= 0.5} aria-label="إنقاص نصف متر"><Minus size={17} /></button><output aria-live="polite">{formatMeters(length)}</output><button type="button" onClick={increase} disabled={length >= maxLength} aria-label="زيادة نصف متر"><Plus size={17} /></button></div>
         <div className="line-total"><span>إجمالي هذا السطر</span><strong>{formatPrice(product.price * length)}</strong></div>
         <button type="button" className="button button-primary detail-add" onClick={add} disabled={maxLength <= 0}><ShoppingBag size={17} />{maxLength <= 0 ? 'غير متوفر حالياً' : 'أضيفي إلى السلة'}<ArrowLeft size={16} /></button>
-        {justAdded && maxLength > 0 && <div className="add-confirm" role="status"><span><Check size={16} />أضيف {formatMeters(length)} من {product.name} إلى السلة</span><Link href="/checkout" className="button button-primary">إتمام الطلب الآن <ArrowLeft size={15} /></Link></div>}
+        {justAdded && maxLength > 0 && <div className="add-confirm" role="status"><span><Check size={16} />أضيف {formatMeters(length)} من {product.name} إلى السلة</span><span className="add-confirm-actions"><Link href="/cart" className="button button-outline">عرض السلة</Link><Link href="/checkout" className="button button-primary">إتمام الطلب الآن <ArrowLeft size={15} /></Link></span></div>}
         <div className="detail-perks"><div><ShieldCheck size={17} /><span>توصيل آمن للعراق</span></div><div><Zap size={17} /><span>الطلب بمربع واحد</span></div></div>
         <div className="detail-accordions"><Accordion id="specs" title="مواصفات القماش" open={openSection === 'specs'} onToggle={() => setOpenSection(openSection === 'specs' ? '' : 'specs')}><div className="specs-grid"><Spec label="الخامة" value={product.specs.composition} /><Spec label="العرض" value={product.specs.width} /><Spec label="السماكة" value={product.specs.weight} /><Spec label="التمدد" value={product.specs.stretch} /><Spec label="الشفافية" value={product.specs.opacity} /><Spec label="التشطيب" value={product.specs.finish} /><Spec label="الاستخدام" value={product.specs.use} /><Spec label="العناية" value={product.specs.care} /></div></Accordion><Accordion id="faq" title="أسئلة حول الخامة" open={openSection === 'faq'} onToggle={() => setOpenSection(openSection === 'faq' ? '' : 'faq')}><div className="product-faq-list">{faqItems.map((item, index) => <div key={item.question}><button type="button" onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}>{item.question}<ChevronDown size={15} /></button>{openFaq === index && <p>{item.answer}</p>}</div>)}</div></Accordion><Accordion id="shipping" title="الشحن والإرجاع" open={openSection === 'shipping'} onToggle={() => setOpenSection(openSection === 'shipping' ? '' : 'shipping')}><p className="accordion-text">نجهز الطلبات بعد التأكيد، ونرتب الشحن بحسب المحافظة. بالنسبة إلى أي استفسار عن الإرجاع أو تبديل اللون، تواصلي معنا خلال 48 ساعة من الاستلام.</p></Accordion></div>
       </section>

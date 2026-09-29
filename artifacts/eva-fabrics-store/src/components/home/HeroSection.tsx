@@ -99,15 +99,17 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
         </div>
       </section>
 
-      <div className="container-eva" style={{ position: 'relative', zIndex: 2, marginTop: 'clamp(-84px, -5vw, -30px)' }}>
-        <div className="glass-card">
+      <div className="container-eva hero-stats-band">
+        <div className="glass-card hero-stats-card">
           <span className="glass-pill">أرقام المعرض الآن</span>
           <div className="stats-grid">
             {stats.map((stat) => (
               <div className="stat-card" key={stat.key} role="group" aria-label={`${stat.prefix}${stat.value.toLocaleString('ar-IQ')}${stat.suffix} ${stat.label}`}>
                 <span className="stat-icon" aria-hidden="true">{stat.icon}</span>
-                <strong className="stat-value"><CountUp value={stat.value} prefix={stat.prefix} suffix={stat.suffix} /></strong>
-                <span className="stat-label">{stat.label}</span>
+                <div className="stat-copy">
+                  <strong className="stat-value"><CountUp value={stat.value} prefix={stat.prefix} suffix={stat.suffix} /></strong>
+                  <span className="stat-label">{stat.label}</span>
+                </div>
                 <span className="stat-trend">{stat.trend}</span>
               </div>
             ))}
