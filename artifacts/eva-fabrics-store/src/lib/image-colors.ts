@@ -166,3 +166,20 @@ export async function mapColorsToImages(
   })
   return { colorToImage, imageToColor }
 }
+
+const mapsCache = new Map<string, Promise<ColorImageMaps>>()
+
+/** Memoised wrapper so cards and the product page analyse each product once per session. */
+export function cachedColorMaps(
+  images: string[],
+  colors: { id: string; hex: string }[],
+  slug: string,
+): Promise<ColorImageMaps> {
+  const key = `${slug}|${[...new Set(images.filter(Boolean))].join(',')}`
+  let maps = mapsCache.get(key)
+  if (!maps) {
+    maps = mapColorsToImages(images, colors, slug)
+    mapsCache.set(key, maps)
+  }
+  return maps
+}

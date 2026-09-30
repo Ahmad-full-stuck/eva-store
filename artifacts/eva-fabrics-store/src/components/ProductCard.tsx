@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react'
 import { Heart, Plus, ShoppingBag } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { formatPrice } from '@/lib/catalog'
+import { cachedColorMaps, type ColorImageMaps } from '@/lib/image-colors'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 interface ProductCardProps {
@@ -117,13 +119,33 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
   const wishLabel = wished ? `إزالة ${product.name} من المفضلة` : `إضافة ${product.name} إلى المفضلة`
   const addLabel = `أضيفي نصف متر من ${product.name} إلى السلة`
   const detailPath = `/product/${product.slug}`
+  const gallery = [...new Set([product.image, ...product.images])]
+  const [cardMaps, setCardMaps] = useState<ColorImageMaps>({ colorToImage: {}, imageToColor: {} })
+  const [activeImage, setActiveImage] = useState(0)
+  const [activeColorId, setActiveColorId] = useState(availableColor?.id || product.colors[0]?.id || '')
+
+  useEffect(() => {
+    let cancelled = false
+    cachedColorMaps(gallery, product.colors, product.slug)
+      .then((maps) => { if (!cancelled) setCardMaps(maps) })
+      .catch(() => { if (!cancelled) setCardMaps({ colorToImage: {}, imageToColor: {} }) })
+    return () => { cancelled = true }
+  }, [product.slug, product.colors, gallery.join(',')])
+
+  const pickSwatch = (color: ProductColor) => {
+    if (!color.available) return
+    setActiveColorId(color.id)
+    const index = cardMaps.colorToImage[color.id]
+    if (typeof index === 'number' && index < gallery.length) setActiveImage(index)
+  }
+  const shownImage = gallery[Math.min(activeImage, gallery.length - 1)] || product.image
 
   return (
     <article className="product-card glass-card">
       <div className="product-card-media">
         <Link href={detailPath} className="product-card-image-link" aria-label={`عرض تفاصيل ${product.name}`}>
           <SmartImage
-            src={product.image}
+            src={shownImage}
             alt={product.name}
             className="product-card-image"
             sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 22vw"
@@ -162,16 +184,20 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
           <span className="product-price">{formatPrice(product.price)}<small>/م</small></span>
         </div>
         <div className="product-card-footer">
-          <div className="swatch-list" role="list" aria-label="ألوان الخامة">
+          <div className="swatch-list" aria-label={`ألوان ${product.name} — اضغطي لعرض الصورة`}>
             {product.colors.slice(0, 5).map((color) => (
-              <span
+              <button
                 key={color.id}
-                role="listitem"
-                className={`mini-swatch ${color.available ? '' : 'is-muted'}`}
-                style={{ backgroundColor: color.hex }}
-                title={color.available ? `${color.name} متاح` : `${color.name} غير متاح`}
-                aria-label={color.name}
-              />
+                type="button"
+                className={`mini-swatch ${color.available ? '' : 'is-muted'} ${activeColorId === color.id ? 'is-active' : ''}`}
+                onClick={() => pickSwatch(color)}
+                disabled={!color.available}
+                aria-label={`${color.name}${color.available ? ' — عرض الصورة' : '، غير متاح'}`}
+                aria-pressed={activeColorId === color.id}
+                title={color.available ? `عرض ${color.name}` : `${color.name} غير متاح`}
+              >
+                <span className="mini-swatch-dot" style={{ backgroundColor: color.hex }} aria-hidden="true" />
+              </button>
             ))}
           </div>
           <button
