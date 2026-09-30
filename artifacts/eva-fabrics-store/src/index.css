@@ -1385,10 +1385,7 @@ picture { display: contents; }
   .section-block { padding: 38px 0; }
 }
 
-/* ===== V2.1 — inset announcement strip, compact logo, stats band separated from the hero, readable promo ===== */
-.announcement-bar { width: min(1160px, calc(100% - 60px)); min-height: 27px; margin: 10px auto 0; padding: 3px 16px; gap: 10px; border: 1px solid rgba(255, 255, 255, .12); border-radius: 999px; background: linear-gradient(180deg, rgba(46, 24, 33, .94), rgba(46, 24, 33, .88)); font-size: 11px; }
-.announcement-bar, .announcement-bar * { font-size: 11px; }
-
+/* ===== V2.1 — compact logo, stats band separated from the hero, readable promo ===== */
 .logo { gap: 8px; }
 .logo-symbol { width: 27px; height: 30px; }
 .logo-symbol:before { width: 8px; height: 17px; top: 5px; right: 9px; }
@@ -1424,8 +1421,6 @@ picture { display: contents; }
 .promo-bar .button-primary:hover { color: var(--eva-rose-dark); background: #ffe6c7; }
 
 @media (max-width: 820px) {
-  .announcement-bar { width: calc(100% - 36px); min-height: 30px; margin-top: 8px; padding-inline: 12px; gap: 8px; font-size: 10.5px; flex-wrap: nowrap; white-space: nowrap; }
-  .announcement-bar, .announcement-bar * { font-size: 10.5px; }
   .promo-bar { grid-template-columns: 1fr; justify-items: center; gap: 9px; padding: 13px 14px; text-align: center; }
   .promo-bar p { font-size: 12.5px; line-height: 1.7; }
   .promo-bar .count-unit { min-width: 48px; padding: 6px; }
@@ -1434,10 +1429,6 @@ picture { display: contents; }
   .hero-stats-card { flex-direction: column; align-items: stretch; gap: 11px; }
   .hero-stats-card .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .hero-stats-card .stat-card { padding: 7px 9px; border: 1px solid rgba(48, 38, 42, .1); border-radius: 13px; }
-}
-
-@media (max-width: 480px) {
-  .announcement-bar span:nth-of-type(3), .announcement-bar span:nth-of-type(4) { display: none; }
 }
 
 /* ===== V2.2 — gallery feedback, colour swatches that drive the gallery, guide quick answers ===== */

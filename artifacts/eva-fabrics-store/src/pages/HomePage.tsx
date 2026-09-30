@@ -60,8 +60,6 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
 
       <StepsSection />
 
-      <section className="trust-section" aria-label="ضمانات المتجر"><div className="container-eva trust-grid">{trustItems.map((item) => <div className="trust-item" key={item.title}>{item.icon === 'truck' ? <Truck /> : item.icon === 'globe' ? <Globe2 /> : item.icon === 'message' ? <MessageCircle /> : <BadgeCheck />}<strong>{item.title}</strong><span>{item.description}</span></div>)}</div></section>
-
       <section className="container-eva section-block category-section" aria-label="أقسام المعرض">
         <SectionHeading eyebrow="اختاري من البداية" title="مساحات القماش" linkLabel="عرض كل الأقمشة" linkHref="/catalog" />
         <div className="category-grid">
@@ -102,6 +100,8 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
         <div className="story-visual"><SmartImage src="fabrics/blue.jpg" alt="تفاصيل نسيج أزرق من معرض إيفا" sizes="(max-width: 820px) 92vw, 45vw" /><span>Since<br /><strong>Eva</strong></span></div>
         <div className="story-copy"><span className="eyebrow">قصة العلامة</span><h2>{homeStory.title}</h2><p>{homeStory.text}</p><p>نصمم تجربتنا لتكون قريبة منك: صور واضحة، مواصفات مفهومة، وخدمة تساعدك قبل الطلب وبعده.</p><Link href="/about" className="button button-outline">اعرفي أكثر عن إيفا <ArrowLeft size={16} /></Link></div>
       </section>
+
+      <section className="trust-section" aria-label="ضمانات المتجر"><div className="container-eva trust-grid">{trustItems.map((item) => <div className="trust-item" key={item.title}>{item.icon === 'truck' ? <Truck /> : item.icon === 'globe' ? <Globe2 /> : item.icon === 'message' ? <MessageCircle /> : <BadgeCheck />}<strong>{item.title}</strong><span>{item.description}</span></div>)}</div></section>
 
       <TestimonialsSection />
 
