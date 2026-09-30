@@ -3,7 +3,7 @@ import { ArrowLeft, Check, ChevronDown, ChevronLeft, ChevronRight, Heart, Minus,
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { availableMeters, formatMeters, formatPrice } from '@/lib/catalog'
-import { mapColorsToImages } from '@/lib/image-colors'
+import { mapColorsToImages, type ColorImageMaps } from '@/lib/image-colors'
 import { ProductCard } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -25,7 +25,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const [openSection, setOpenSection] = useState('specs')
   const [openFaq, setOpenFaq] = useState<number | null>(0)
   const [justAdded, setJustAdded] = useState(false)
-  const [colorImageMap, setColorImageMap] = useState<Record<string, number>>({})
+  const [colorMaps, setColorMaps] = useState<ColorImageMaps>({ colorToImage: {}, imageToColor: {} })
   const touchStart = useRef<{ x: number; y: number } | null>(null)
 
   useEffect(() => {
@@ -39,14 +39,31 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     let cancelled = false
     const sources = product ? [...new Set([product.image, ...product.images])] : []
     if (!sources.length || !product?.colors.length) {
-      setColorImageMap({})
+      setColorMaps({ colorToImage: {}, imageToColor: {} })
       return undefined
     }
-    mapColorsToImages(sources, product.colors)
-      .then((map) => { if (!cancelled) setColorImageMap(map) })
-      .catch(() => { if (!cancelled) setColorImageMap({}) })
+    mapColorsToImages(sources, product.colors, product.slug)
+      .then((maps) => { if (!cancelled) setColorMaps(maps) })
+      .catch(() => { if (!cancelled) setColorMaps({ colorToImage: {}, imageToColor: {} }) })
     return () => { cancelled = true }
-  }, [product?.id, product?.image, product?.images, product?.colors])
+  }, [product?.id, product?.slug, product?.image, product?.images, product?.colors])
+
+  const imageNavRef = useRef<{ productId?: string; image: number }>({ productId: product?.id, image: 0 })
+
+  useEffect(() => {
+    const productChanged = imageNavRef.current.productId !== product?.id
+    const imageChanged = imageNavRef.current.image !== activeImage
+    if (productChanged) {
+      imageNavRef.current = { productId: product?.id, image: 0 }
+      return
+    }
+    imageNavRef.current = { productId: product?.id, image: activeImage }
+    if (!imageChanged) return
+    const colorId = colorMaps.imageToColor[String(activeImage)]
+    if (!colorId || colorId === selectedColorId) return
+    const color = product?.colors.find((item) => item.id === colorId)
+    if (color?.available) setSelectedColorId(color.id)
+  }, [activeImage, colorMaps, product, selectedColorId])
 
   const selectedColor = product?.colors.find((color) => color.id === selectedColorId) || product?.colors[0]
   const maxLength = product && selectedColor ? availableMeters(product, selectedColor) : 0
@@ -61,7 +78,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const pickColor = (color: ProductColor) => {
     if (!color.available) return
     setSelectedColorId(color.id)
-    const index = colorImageMap[color.id]
+    const index = colorMaps.colorToImage[color.id]
     if (typeof index === 'number' && index < gallery.length) setActiveImage(index)
   }
   const startSwipe = (x: number, y: number) => { touchStart.current = { x, y } }
