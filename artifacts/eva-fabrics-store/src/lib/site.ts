@@ -1,3 +1,14 @@
+const adminContent = (): Record<string, string> => {
+  try {
+    const raw = window.localStorage.getItem('eva-admin-content')
+    if (!raw) return {}
+    const parsed: unknown = JSON.parse(raw)
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Record<string, string>) : {}
+  } catch {
+    return {}
+  }
+}
+
 const rawWhatsApp = import.meta.env.VITE_WHATSAPP_NUMBER || '9647727282001'
 const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || 'https://instagram.com'
 const apiBase = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '')
@@ -20,12 +31,12 @@ const localPhone = (() => {
 const safeInstagram = /^https?:\/\//i.test(rawInstagram) ? rawInstagram : `https://${rawInstagram.replace(/^\/+/, '')}`
 
 export const siteConfig = {
-  name: 'إيفا ستور للأقمشة',
+  get name() { return adminContent().shopName || 'إيفا ستور للأقمشة' },
   shortName: 'إيفا ستور',
-  phone: localPhone,
-  whatsappNumber: internationalWhatsApp,
-  instagramUrl: safeInstagram,
-  whatsappUrl: (message = 'مرحباً إيفا ستور، أحتاج مساعدة في اختيار الأقمشة'): string => `https://wa.me/${internationalWhatsApp}?text=${encodeURIComponent(message)}`,
+  get phone() { return adminContent().phone || localPhone },
+  get whatsappNumber() { return adminContent().whatsapp || internationalWhatsApp },
+  get instagramUrl() { return adminContent().instagram || safeInstagram },
+  whatsappUrl: (message = 'مرحباً إيفا ستور، أحتاج مساعدة في اختيار الأقمشة'): string => `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(message)}`,
   instagramText: 'إيفا ستور على إنستغرام',
 }
 

@@ -149,11 +149,11 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
         </div>
         <nav className="mobile-quick-nav" aria-label="تنقل سريع">
           <div className="mobile-quick-nav-track">
-            {quickItems.map((item) => {
+            {quickItems.filter((i) => ["home","catalog","favorites"].includes(i.id)).map((item) => {
               const Icon = item.Icon
               const active = isActive(item.path)
               return (
-                <Link key={item.id} href={item.path} className={active ? 'is-active' : ''} aria-current={active ? 'page' : undefined} onClick={navigate}>
+                <Link key={item.id} href={item.path} className={active ? "is-active" : ""} aria-current={active ? "page" : undefined} onClick={navigate}>
                   <Icon size={14} aria-hidden="true" />
                   <span>{item.label}</span>
                 </Link>
@@ -224,3 +224,4 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
     </>
   )
 }
+

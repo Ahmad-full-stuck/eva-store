@@ -1269,7 +1269,7 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
           <span className="eyebrow">تم استلام طلبك</span>
           <h1>شكراً لاختيارك إيفا.</h1>
           <p>سنراجع تفاصيل طلبك ونتواصل معك لتأكيد التوصيل. احتفظي برقم الطلب لمتابعة حالته في أي وقت.</p>
-          <div className="confirmation-number"><small>رقم الطلب</small><strong dir="ltr">{order.orderNumber}</strong></div>
+          <div className="confirmation-number"><small>رقم الطلب</small><div style={{ display: "flex", alignItems: "center", gap: "8px" }}><strong dir="ltr">{order.orderNumber}</strong><button type="button" className="chip" onClick={() => { try { navigator.clipboard.writeText(order.orderNumber); alert("تم النسخ"); } catch (e) { const ta=document.createElement("textarea"); ta.value=order.orderNumber; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); alert("تم النسخ"); } }} style={{ fontSize:"11px", padding:"4px 8px" }}>نسخ</button></div></div>
           <OrderStatusPanel order={order} />
           <div className="confirmation-actions">
             <Link href="/catalog" className="button button-primary">متابعة التسوق <ArrowLeft size={16} /></Link>

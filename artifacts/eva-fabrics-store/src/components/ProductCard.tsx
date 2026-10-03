@@ -123,6 +123,7 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
   const [cardMaps, setCardMaps] = useState<ColorImageMaps>({ colorToImage: {}, imageToColor: {} })
   const [activeImage, setActiveImage] = useState(0)
   const [activeColorId, setActiveColorId] = useState(availableColor?.id || product.colors[0]?.id || '')
+  const selectedColor = product.colors.find((color) => color.id === activeColorId) || availableColor || product.colors[0]
 
   useEffect(() => {
     let cancelled = false
@@ -204,7 +205,7 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
             type="button"
             className="add-button"
             disabled={soldOut}
-            onClick={() => availableColor && onAdd(product, availableColor, 0.5)}
+            onClick={() => selectedColor && onAdd(product, selectedColor, 0.5)}
             aria-label={addLabel}
           >
             {soldOut ? 'نفد المخزون' : <><ShoppingBag size={14} aria-hidden="true" /><span>أضيفي ٠٫٥ م</span></>}

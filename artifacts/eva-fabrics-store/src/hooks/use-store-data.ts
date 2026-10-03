@@ -3,6 +3,7 @@ import type { Category, DataSource, Product, ProductColor, ProductFaq, ProductSp
 import { fallbackCategories, fallbackProducts, fallbackRoutes } from '@/lib/fallback-data'
 import { normalizeArabic } from '@/lib/catalog'
 import { apiUrl } from '@/lib/site'
+import { mergeAdminCategories, mergeAdminProducts } from '@/components/AdminSecret'
 
 type ApiStatus = 'loading' | 'ready' | 'fallback'
 
@@ -150,7 +151,7 @@ const fetchList = async (path: string, signal: AbortSignal, key: string): Promis
 }
 
 export const useStoreData = (): StorefrontData & { status: ApiStatus } => {
-  const [data, setData] = useState<StorefrontData>({ products: fallbackProducts, categories: fallbackCategories, routes: fallbackRoutes, source: 'fallback' })
+  const [data, setData] = useState<StorefrontData>(() => ({ products: mergeAdminProducts(fallbackProducts), categories: mergeAdminCategories(fallbackCategories), routes: fallbackRoutes, source: 'fallback' }))
   const [status, setStatus] = useState<ApiStatus>('loading')
 
   useEffect(() => {
@@ -168,17 +169,22 @@ export const useStoreData = (): StorefrontData & { status: ApiStatus } => {
       const successful = Number(products.length > 0) + Number(categories.length > 0) + Number(routes.length > 0)
       const source: DataSource = successful === 0 ? 'fallback' : successful === 3 ? 'api' : 'mixed'
       setData({
-        products: products.length ? products : fallbackProducts,
-        categories: categories.length ? categories : fallbackCategories,
+        products: mergeAdminProducts(products.length ? products : fallbackProducts),
+        categories: mergeAdminCategories(categories.length ? categories : fallbackCategories),
         routes: routes.length ? routes : fallbackRoutes,
         source,
       })
       setStatus(successful === 0 ? 'fallback' : 'ready')
     }
     void load()
+    const syncAdmin = () => {
+      setData((current) => ({ ...current, products: mergeAdminProducts(current.products), categories: mergeAdminCategories(current.categories) }))
+    }
+    window.addEventListener('eva-admin-changed', syncAdmin)
     return () => {
       window.clearTimeout(timeout)
       controller.abort()
+      window.removeEventListener('eva-admin-changed', syncAdmin)
     }
   }, [])
 

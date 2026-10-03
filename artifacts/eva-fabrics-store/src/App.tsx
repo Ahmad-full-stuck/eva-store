@@ -7,6 +7,7 @@ import { useStoreData } from '@/hooks/use-store-data'
 import { addCartItem, getStoredCart, getStoredWishlist, reconcileCart, removeCartItem, setStoredCart, setStoredWishlist, updateCartItem } from '@/lib/storage'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { AdminSecret } from '@/components/AdminSecret'
 import { HomePage } from '@/pages/HomePage'
 import { CatalogPage } from '@/pages/CatalogPage'
 import { ProductPage } from '@/pages/ProductPage'
@@ -44,10 +45,19 @@ const shellStyles = `
   .toast { bottom: calc(88px + env(safe-area-inset-bottom)); }
 }
 @media (max-width: 560px) {
-  .header-inner { gap: 12px; }
-  .header-actions .favorite-header, .header-actions .cart-button { display: none; }
+  .header-inner { gap: 8px; }
+  .header-actions { gap: 0; }
+  .header-actions .favorite-header, .header-actions .cart-button { display: inline-flex; }
 }
-@media (prefers-reduced-motion: reduce) {
+@media (max-width: 400px) {
+  .header-inner { gap: 6px; }
+  .logo-copy strong { font-size: 13px; }
+  .logo-copy small { font-size: 9px; }
+  .header-actions .icon-button { width: 40px; height: 40px; }
+  .cart-button { padding: 7px 10px; }
+  .cart-button span { display: none; }
+}
+  @media (prefers-reduced-motion: reduce) {
   .skip-link, .site-header, .site-header *, .bottom-nav, .bottom-nav *, .site-footer, .site-footer *, .modal-layer, .modal-layer *, .toast, .toast * { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
 `
@@ -141,6 +151,7 @@ function App() {
         </Switch>
       </div>
       <SiteFooter routes={routes} categories={categories} />
+      <AdminSecret products={products} categories={categories} />
       <div className="toast-container">
         {notice && (
           <div className="toast" role="status" aria-live="polite">
