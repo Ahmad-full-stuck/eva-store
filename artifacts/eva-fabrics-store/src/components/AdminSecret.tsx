@@ -6,35 +6,63 @@ import { fallbackCategories, fallbackProducts } from '@/lib/fallback-data'
 const PRODUCTS_KEY = 'eva-admin-products'
 const REMOVED_KEY = 'eva-admin-removed'
 const CATEGORIES_KEY = 'eva-admin-categories'
-const CONTENT_KEY = 'eva-admin-content'
 const PIN_KEY = 'eva-admin-pin'
 const SESSION_KEY = 'eva-admin-session'
 
-export interface AdminContent {
-  shopName: string
-  phone: string
-  whatsapp: string
-  instagram: string
-  announcementRight: string
-  announcementLeft: string
-  aboutTitle: string
-  aboutText: string
-  contactTitle: string
-  contactText: string
+export type { SiteContent as AdminContent } from '@/lib/site-content'
+export { readSiteContent as readAdminContent, CONTENT_KEY } from '@/lib/site-content'
+import { CONTENT_KEY, defaultSiteContent, readSiteContent, type SiteContent } from '@/lib/site-content'
+
+interface TextField {
+  key: keyof SiteContent
+  label: string
+  area?: boolean
+  hint?: string
 }
 
-const defaultContent: AdminContent = {
-  shopName: 'إيفا ستور للأقمشة',
-  phone: '07727282001',
-  whatsapp: '9647727282001',
-  instagram: 'https://instagram.com',
-  announcementRight: 'شحن مجاني لكل الطلبات فوق 100 ألف دينار',
-  announcementLeft: 'توصيل لجميع المحافظات العراقية',
-  aboutTitle: 'من نحن',
-  aboutText: 'إيفا ستور للأقمشة - جودة وثقة منذ سنوات.',
-  contactTitle: 'تواصل معنا',
-  contactText: 'نسعد بخدمتك في أي وقت.',
-}
+const groupFields: { title: string; fields: TextField[] }[] = [
+  {
+    title: 'الغلاف الرئيسي',
+    fields: [
+      { key: 'heroEyebrow', label: 'النص الصغير فوق العنوان' },
+      { key: 'heroTitle', label: 'عنوان الغلاف', area: true, hint: 'افصلي السطور بـ | وأحيطي الكلمة المميزة بـ *' },
+      { key: 'heroText', label: 'النص تحت العنوان', area: true },
+      { key: 'heroNote', label: 'ملاحظة الغلاف الأولى' },
+      { key: 'heroNoteAlt', label: 'ملاحظة الغلاف الثانية' },
+      { key: 'statsTitle', label: 'عنوان شريط الأرقام' },
+    ],
+  },
+  {
+    title: 'أقسام الصفحة الرئيسية',
+    fields: [
+      { key: 'categoriesEyebrow', label: 'عنوان صغير - الأقسام' },
+      { key: 'categoriesTitle', label: 'عنوان قسم الأقسام' },
+      { key: 'newEyebrow', label: 'عنوان صغير - وصل حديثاً' },
+      { key: 'newTitle', label: 'عنوان قسم وصل حديثاً' },
+      { key: 'newDesc', label: 'وصف قسم وصل حديثاً', area: true },
+      { key: 'promoPill', label: 'شارة شريط العرض' },
+      { key: 'promoLead', label: 'الجزء المميز من شريط العرض' },
+      { key: 'promoText', label: 'نص شريط العرض', hint: 'استخدمي {price} لوضع السعر' },
+    ],
+  },
+  {
+    title: 'قسم دليل الأقمشة في الرئيسية',
+    fields: [
+      { key: 'guideEyebrow', label: 'العنوان الصغير' },
+      { key: 'guideTitle', label: 'عنوان القسم', area: true, hint: 'افصلي السطور بـ |' },
+      { key: 'guideText', label: 'نص القسم', area: true },
+      { key: 'guideCta', label: 'نص الزر' },
+    ],
+  },
+  {
+    title: 'النشرة البريدية',
+    fields: [
+      { key: 'newsletterEyebrow', label: 'العنوان الصغير' },
+      { key: 'newsletterTitle', label: 'عنوان النشرة', area: true },
+      { key: 'newsletterText', label: 'نص النشرة', area: true },
+    ],
+  },
+]
 
 const readJson = <T,>(key: string, fallback: T): T => {
   try {
@@ -65,8 +93,6 @@ export const readAdminProducts = (): Product[] => readJson<Product[]>(PRODUCTS_K
 export const readRemovedSlugs = (): string[] => readJson<string[]>(REMOVED_KEY, [])
 
 export const readAdminCategories = (): Category[] => readJson<Category[]>(CATEGORIES_KEY, [])
-
-export const readAdminContent = (): AdminContent => ({ ...defaultContent, ...readJson<Partial<AdminContent>>(CONTENT_KEY, {}) })
 
 export const mergeAdminProducts = (source: Product[]): Product[] => {
   const removed = new Set(readRemovedSlugs())
@@ -170,8 +196,15 @@ const adminStyles = `
 .admin-login p { margin: 0; font-size: 12.5px; color: var(--eva-muted); max-width: 330px; line-height: 1.8; }
 .admin-pin { display: flex; gap: 8px; }
 .admin-pin input { width: 150px; padding: 10px 12px; text-align: center; letter-spacing: 6px; font-size: 17px; border: 1px solid var(--eva-line-strong); border-radius: 10px; font-family: inherit; }
-.admin-color-row { display: flex; gap: 8px; align-items: center; }
+.admin-color-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .admin-color-row input[type=color] { width: 44px; height: 38px; padding: 2px; border: 1px solid var(--eva-line-strong); border-radius: 8px; background: #fff; cursor: pointer; }
+.admin-color-img { display: flex; gap: 6px; align-items: center; width: 100%; padding-inline-start: 52px; }
+.admin-color-img .cc-preview { position: relative; width: 44px; height: 44px; border-radius: 8px; overflow: hidden; border: 1px solid var(--eva-line); background: var(--eva-rose-soft); display: grid; place-items: center; color: var(--eva-muted); flex: 0 0 auto; }
+.admin-color-img .cc-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.admin-color-img .cc-preview button { position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgba(46,24,33,.82); color: #fff; cursor: pointer; padding: 0; }
+.admin-color-img .cc-pick { display: inline-flex; align-items: center; gap: 5px; padding: 7px 10px; border: 1px dashed var(--eva-line-strong); border-radius: 9px; background: #fff; color: var(--eva-ink); font-size: 11.5px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.admin-color-img .cc-pick:hover { border-color: var(--eva-rose); color: var(--eva-rose); }
+.admin-color-img input[type=text] { flex: 1; min-width: 120px; padding: 7px 9px; border: 1px solid var(--eva-line-strong); border-radius: 9px; font-family: inherit; font-size: 12px; }
 .admin-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border: 1px solid var(--eva-line); border-radius: 999px; background: #fff; font-size: 11.5px; color: var(--eva-ink); }
 .admin-chip button { border: 0; background: none; padding: 0; cursor: pointer; color: #a3193f; display: inline-flex; }
 .admin-thumb-row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -217,7 +250,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [toast, setToast] = useState('')
   const [overrides, setOverrides] = useState<Product[]>(() => readAdminProducts())
   const [removed, setRemoved] = useState<string[]>(() => readRemovedSlugs())
-  const [content, setContent] = useState<AdminContent>(() => readAdminContent())
+  const [content, setContent] = useState<SiteContent>(() => readSiteContent())
   const [customCategories, setCustomCategories] = useState<Category[]>(() => readAdminCategories())
   const [newCat, setNewCat] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
@@ -371,7 +404,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     if (!file) return
     try {
       const text = await file.text()
-      const parsed = JSON.parse(text) as { products?: Product[]; removed?: string[]; categories?: Category[]; content?: Partial<AdminContent> }
+      const parsed = JSON.parse(text) as { products?: Product[]; removed?: string[]; categories?: Category[]; content?: Partial<SiteContent> }
       if (Array.isArray(parsed.products)) persistProducts(parsed.products)
       if (Array.isArray(parsed.removed)) persistRemoved(parsed.removed)
       if (Array.isArray(parsed.categories)) {
@@ -578,37 +611,95 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                         <label>الألوان</label>
                         <div style={{ display: 'grid', gap: 8 }}>
                           {editing.colors.map((color, index) => (
-                            <div className="admin-color-row" key={color.id}>
-                              <input
-                                type="color"
-                                value={/^#[0-9a-fA-F]{6}$/.test(color.hex) ? color.hex : '#8e6e7d'}
-                                onChange={(event) => {
-                                  const next = [...editing.colors]
-                                  next[index] = { ...color, hex: event.target.value }
-                                  setField('colors', next)
-                                }}
-                                aria-label={`لون ${index + 1}`}
-                              />
-                              <input
-                                value={color.name}
-                                onChange={(event) => {
-                                  const next = [...editing.colors]
-                                  next[index] = { ...color, name: event.target.value }
-                                  setField('colors', next)
-                                }}
-                                placeholder="اسم اللون"
-                                style={{ flex: 1, padding: '8px 10px', border: '1px solid var(--eva-line-strong)', borderRadius: 9, fontFamily: 'inherit', fontSize: 13 }}
-                              />
-                              <button
-                                type="button"
-                                className="admin-btn ghost"
-                                style={{ padding: '7px 9px' }}
-                                disabled={editing.colors.length <= 1}
-                                onClick={() => setField('colors', editing.colors.filter((_, i) => i !== index))}
-                                aria-label="حذف اللون"
-                              >
-                                <Trash2 size={14} />
-                              </button>
+                            <div key={color.id} style={{ border: '1px solid var(--eva-line)', borderRadius: 12, padding: 8, display: 'grid', gap: 8 }}>
+                              <div className="admin-color-row">
+                                <input
+                                  type="color"
+                                  value={/^#[0-9a-fA-F]{6}$/.test(color.hex) ? color.hex : '#8e6e7d'}
+                                  onChange={(event) => {
+                                    const next = [...editing.colors]
+                                    next[index] = { ...color, hex: event.target.value }
+                                    setField('colors', next)
+                                  }}
+                                  aria-label={`لون ${index + 1}`}
+                                />
+                                <input
+                                  value={color.name}
+                                  onChange={(event) => {
+                                    const next = [...editing.colors]
+                                    next[index] = { ...color, name: event.target.value }
+                                    setField('colors', next)
+                                  }}
+                                  placeholder="اسم اللون"
+                                  style={{ flex: 1, padding: '8px 10px', border: '1px solid var(--eva-line-strong)', borderRadius: 9, fontFamily: 'inherit', fontSize: 13 }}
+                                />
+                                <label className="admin-field" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+                                  <input
+                                    type="checkbox"
+                                    checked={color.available}
+                                    onChange={(event) => {
+                                      const next = [...editing.colors]
+                                      next[index] = { ...color, available: event.target.checked }
+                                      setField('colors', next)
+                                    }}
+                                    style={{ width: 15, height: 15 }}
+                                  />
+                                  متوفر
+                                </label>
+                                <button
+                                  type="button"
+                                  className="admin-btn ghost"
+                                  style={{ padding: '7px 9px' }}
+                                  disabled={editing.colors.length <= 1}
+                                  onClick={() => setField('colors', editing.colors.filter((_, i) => i !== index))}
+                                  aria-label="حذف اللون"
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                              <div className="admin-color-img">
+                                <span className="cc-preview" title="صورة هذا اللون">
+                                  {color.image ? <img src={color.image} alt={color.name} /> : <ImageIcon size={16} />}
+                                  {color.image && (
+                                    <button type="button" aria-label="حذف صورة اللون" onClick={() => {
+                                      const next = [...editing.colors]
+                                      next[index] = { ...color, image: '' }
+                                      setField('colors', next)
+                                    }}><X size={10} /></button>
+                                  )}
+                                </span>
+                                <label className="cc-pick">
+                                  <Upload size={13} />
+                                  {color.image ? 'تغيير صورة اللون' : 'صورة للون'}
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    onChange={async (event) => {
+                                      const file = event.target.files?.[0]
+                                      event.target.value = ''
+                                      if (!file) return
+                                      try {
+                                        const dataUrl = await toFileDataUrl(file)
+                                        const next = [...editing.colors]
+                                        next[index] = { ...color, image: dataUrl }
+                                        setField('colors', next)
+                                      } catch { /* ignore */ }
+                                    }}
+                                  />
+                                </label>
+                                <input
+                                  type="text"
+                                  dir="ltr"
+                                  value={color.image?.startsWith('data:') ? '' : color.image || ''}
+                                  placeholder="أو رابط صورة (https://...)"
+                                  onChange={(event) => {
+                                    const next = [...editing.colors]
+                                    next[index] = { ...color, image: event.target.value }
+                                    setField('colors', next)
+                                  }}
+                                />
+                              </div>
                             </div>
                           ))}
                           <button
@@ -697,7 +788,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                         </div>
                       </div>
                       <div className="admin-field">
-                        <label>عنوان صفحة من نحن</label>
+                        <label>عنوان صفحة من نحن (رئيسي)</label>
                         <input value={content.aboutTitle} onChange={(event) => setContent({ ...content, aboutTitle: event.target.value })} />
                       </div>
                       <div className="admin-field">
@@ -712,6 +803,22 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                         <label>نص صفحة تواصل معنا</label>
                         <textarea value={content.contactText} onChange={(event) => setContent({ ...content, contactText: event.target.value })} />
                       </div>
+
+                      {groupFields.map((group) => (
+                        <div key={group.title} style={{ marginTop: 16 }}>
+                          <div className="admin-note" style={{ marginBottom: 8, fontWeight: 700, color: 'var(--eva-ink, #30262a)' }}>{group.title}</div>
+                          {group.fields.map((field) => (
+                            <div className="admin-field" key={field.key}>
+                              <label>{field.label}</label>
+                              {field.area
+                                ? <textarea value={content[field.key]} onChange={(event) => setContent({ ...content, [field.key]: event.target.value })} />
+                                : <input value={content[field.key]} onChange={(event) => setContent({ ...content, [field.key]: event.target.value })} />}
+                              {field.hint && <small style={{ display: 'block', marginTop: 4, color: 'var(--eva-muted)', fontSize: 11 }}>{field.hint}</small>}
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+
 
                       <div className="admin-field">
                         <label>التصنيفات</label>
@@ -738,6 +845,9 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                       <div className="admin-actions">
                         <button type="button" className="admin-btn success" onClick={saveContent}>
                           <Save size={15} /> حفظ المحتوى
+                        </button>
+                        <button type="button" className="admin-btn" onClick={() => { setContent({ ...defaultSiteContent }); setToast('تمت استعادة النصوص الافتراضية، اضغطي حفظ') }}>
+                          <RotateCcw size={15} /> استعادة النصوص الافتراضية
                         </button>
                       </div>
                     </div>

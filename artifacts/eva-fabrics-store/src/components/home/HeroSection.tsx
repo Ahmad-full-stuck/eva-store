@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Layers, LayoutGrid, Sparkles, Truck, Wallet } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, Product } from '@/types'
 import { CountUp } from './CountUp'
 import { SmartImage } from '@/components/ui/SmartImage'
+import { contentLines, contentParts, useSiteContent } from '@/lib/site-content'
 
 interface HeroSectionProps {
   products: Product[]
@@ -21,6 +22,7 @@ interface HeroStat {
 }
 
 export function HeroSection({ products, categories }: HeroSectionProps) {
+  const content = useSiteContent()
   const stats: HeroStat[] = [
     { key: 'fabrics', icon: <Layers size={16} />, value: products.length, prefix: '+', suffix: '', label: 'خامة متاحة', trend: 'تشكيلة تتجدد' },
     { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '+', suffix: '', label: 'أقسام مختارة', trend: 'لكل مشروع' },
@@ -68,14 +70,21 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
     <>
       <section className="home-hero glass-hero container-eva">
         <div className="hero-copy">
-          <span className="eyebrow"><Sparkles size={14} />معرض أقمشة عربي</span>
-          <h1>اختاري <span>القماش المثالي</span><br />لكل إبداع</h1>
-          <p>تشكيلة منتقاة من الأقمشة الفاخرة والمريحة، مع شرح واضح للخامة قبل أن تضيفيها إلى مشروعك.</p>
+          <span className="eyebrow"><Sparkles size={14} />{content.heroEyebrow}</span>
+          <h1>
+            {contentLines(content.heroTitle).map((line, lineIndex) => (
+              <Fragment key={`${lineIndex}-${line}`}>
+                {lineIndex > 0 && <br />}
+                {contentParts(line).map((part, partIndex) => (partIndex % 2 ? <span key={`${lineIndex}-${partIndex}`}>{part}</span> : part))}
+              </Fragment>
+            ))}
+          </h1>
+          <p>{content.heroText}</p>
           <div className="hero-actions">
             <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
             <Link href="/catalog?sort=newest" className="button button-outline">اكتشفي الجديد <ArrowRight size={16} /></Link>
           </div>
-          <div className="hero-note"><span className="note-dot" />توصيل إلى جميع محافظات العراق <span className="note-divider" /><span className="note-alt">دفع عند استلام الطلب</span></div>
+          <div className="hero-note"><span className="note-dot" />{content.heroNote} <span className="note-divider" /><span className="note-alt">{content.heroNoteAlt}</span></div>
         </div>
         <div className="hero-visual">
           <div className="hero-slides" aria-live="off">
@@ -101,7 +110,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
 
       <div className="container-eva hero-stats-band">
         <div className="glass-card hero-stats-card">
-          <span className="glass-pill">أرقام المعرض الآن</span>
+          <span className="glass-pill">{content.statsTitle}</span>
           <div className="stats-grid">
             {stats.map((stat) => (
               <div className="stat-card" key={stat.key} role="group" aria-label={`${stat.prefix}${stat.value.toLocaleString('ar-IQ')}${stat.suffix} ${stat.label}`}>

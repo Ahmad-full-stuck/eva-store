@@ -119,7 +119,7 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
   const wishLabel = wished ? `إزالة ${product.name} من المفضلة` : `إضافة ${product.name} إلى المفضلة`
   const addLabel = `أضيفي نصف متر من ${product.name} إلى السلة`
   const detailPath = `/product/${product.slug}`
-  const gallery = [...new Set([product.image, ...product.images])]
+  const gallery = [...new Set([product.image, ...product.images, ...product.colors.map((color) => color.image || '').filter(Boolean)])]
   const [cardMaps, setCardMaps] = useState<ColorImageMaps>({ colorToImage: {}, imageToColor: {} })
   const [activeImage, setActiveImage] = useState(0)
   const [activeColorId, setActiveColorId] = useState(availableColor?.id || product.colors[0]?.id || '')
@@ -136,6 +136,10 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
   const pickSwatch = (color: ProductColor) => {
     if (!color.available) return
     setActiveColorId(color.id)
+    if (color.image) {
+      const own = gallery.indexOf(color.image)
+      if (own >= 0) { setActiveImage(own); return }
+    }
     const index = cardMaps.colorToImage[color.id]
     if (typeof index === 'number' && index < gallery.length) setActiveImage(index)
   }

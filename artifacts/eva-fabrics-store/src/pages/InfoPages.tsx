@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Heart, Instagram, Layers, MapPin, MessageCircle, PackageCheck, Phone, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Star, Truck } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Instagram, Layers, MapPin, MessageCircle, PackageCheck, Phone, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Star, Truck } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
 import { guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
 import { apiUrl, siteConfig } from '@/lib/site'
+import { useSiteContent } from '@/lib/site-content'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 const glassCss = `
@@ -332,6 +333,7 @@ const testimonials = [
 ]
 
 export function AboutPage() {
+  const content = useSiteContent()
   return (
     <>
       <GlassStyles />
@@ -341,8 +343,8 @@ export function AboutPage() {
         <section className="about-hero">
           <div className="about-copy">
             <span className="eyebrow"><Sparkles size={14} />من إيفا إلى يدك</span>
-            <h1>قصة إيفا تبدأ بسؤال واحد: ماذا ستصنعين؟</h1>
-            <p>بدأت إيفا ستور بفكرة بسيطة: أن يرى الزبون الخامة كما تراها الخياطة، بشرح واضح للّمس والامتداد واللون قبل أن تدفع ديناراً واحداً. اليوم نعرض تشكيلة متنوعة مع مواصفات مكتوبة وطلب يبدأ من نصف متر.</p>
+            <h1>{content.aboutTitle}</h1>
+            <p>{content.aboutText}</p>
             <div className="chip-row" style={{ marginTop: '22px' }}>
               <span className="chip"><Ruler size={13} />طلب من نصف متر</span>
               <span className="chip"><ShieldCheck size={13} />مواصفات مكتوبة</span>
@@ -705,6 +707,7 @@ export function ContactPage() {
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'whatsapp'>('idle')
   const [whatsappUrl, setWhatsappUrl] = useState('')
   const [tabOpened, setTabOpened] = useState(false)
+  const content = useSiteContent()
 
   const composeText = (): string => `مرحباً إيفا ستور،${'\n'}الاسم: ${name.trim()}${'\n'}الهاتف: ${phone.trim()}${'\n'}${message.trim()}`
 
@@ -777,8 +780,8 @@ export function ContactPage() {
         <section className="contact-layout">
           <div className="contact-intro">
             <span className="eyebrow"><MessageCircle size={14} />نحن قريبون</span>
-            <h1>سؤال عن خامة أو طلب؟</h1>
-            <p>اكتبي لنا ما يدور في بالك. إن تعذّر إرسال الرسالة من الموقع مباشرة، نحوّلها تلقائياً إلى محادثة واتساب مكتوبة برسالتك نفسها.</p>
+            <h1>{content.contactTitle}</h1>
+            <p>{content.contactText}</p>
 
             <div className="contact-methods">
               <a href={siteConfig.whatsappUrl()} target="_blank" rel="noreferrer" aria-label="فتح محادثة واتساب مع إيفا ستور">
@@ -1230,6 +1233,7 @@ function OrderStatusPanel({ order }: { order: StoredOrder }) {
 
 export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) {
   const trimmed = orderNumber.trim()
+  const [copied, setCopied] = useState(false)
   const orders = useMemo(readOrders, [])
   const stored = useMemo(() => (trimmed ? findOrder(orders, trimmed) : undefined), [orders, trimmed])
   const fallback = useMemo<StoredOrder | undefined>(() => (trimmed ? { orderNumber: trimmed, createdAt: new Date().toISOString(), status: statusSteps[0] } : undefined), [trimmed])
@@ -1269,7 +1273,43 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
           <span className="eyebrow">تم استلام طلبك</span>
           <h1>شكراً لاختيارك إيفا.</h1>
           <p>سنراجع تفاصيل طلبك ونتواصل معك لتأكيد التوصيل. احتفظي برقم الطلب لمتابعة حالته في أي وقت.</p>
-          <div className="confirmation-number"><small>رقم الطلب</small><div style={{ display: "flex", alignItems: "center", gap: "8px" }}><strong dir="ltr">{order.orderNumber}</strong><button type="button" className="chip" onClick={() => { try { navigator.clipboard.writeText(order.orderNumber); alert("تم النسخ"); } catch (e) { const ta=document.createElement("textarea"); ta.value=order.orderNumber; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); alert("تم النسخ"); } }} style={{ fontSize:"11px", padding:"4px 8px" }}>نسخ</button></div></div>
+          <div className="confirmation-number">
+            <small>رقم الطلب</small>
+            <div className="order-number-row">
+              <strong dir="ltr">{order.orderNumber}</strong>
+              <button
+                type="button"
+                className={`copy-number${copied ? ' is-copied' : ''}`}
+                onClick={async () => {
+                  const text = order.orderNumber
+                  let ok = false
+                  try {
+                    if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(text); ok = true }
+                  } catch { ok = false }
+                  if (!ok) {
+                    const ta = document.createElement('textarea')
+                    ta.value = text
+                    ta.setAttribute('readonly', '')
+                    ta.style.position = 'fixed'
+                    ta.style.opacity = '0'
+                    document.body.appendChild(ta)
+                    ta.select()
+                    try { ok = document.execCommand('copy') } catch { ok = false }
+                    document.body.removeChild(ta)
+                  }
+                  if (ok) {
+                    setCopied(true)
+                    window.setTimeout(() => setCopied(false), 2200)
+                  }
+                }}
+                aria-label="نسخ رقم الطلب"
+              >
+                {copied
+                  ? <><Check size={15} strokeWidth={2.6} /> تم النسخ</>
+                  : <><CopyIcon size={15} strokeWidth={2.4} /> نسخ رقم الطلب</>}
+              </button>
+            </div>
+          </div>
           <OrderStatusPanel order={order} />
           <div className="confirmation-actions">
             <Link href="/catalog" className="button button-primary">متابعة التسوق <ArrowLeft size={16} /></Link>

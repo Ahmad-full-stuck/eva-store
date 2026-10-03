@@ -560,6 +560,12 @@ legend { padding: 0; }
 .confirmation-number { min-width: 230px; margin-top: 28px; padding: 14px 22px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 18px; backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); box-shadow: var(--glass-shadow); }
 .confirmation-number small { display: block; color: var(--eva-muted); font-size: 11.5px; }
 .confirmation-number strong { display: block; margin-top: 3px; color: var(--eva-rose); font-size: 20px; letter-spacing: .08em; }
+.order-number-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 3px; }
+.order-number-row strong { margin-top: 0; }
+.copy-number { display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border: 1px solid rgba(122, 30, 60, .35); border-radius: 999px; background: rgba(122, 30, 60, .07); color: var(--eva-rose); font-family: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease; }
+.copy-number:hover { background: var(--eva-rose); border-color: var(--eva-rose); color: #fff; transform: translateY(-1px); }
+.copy-number:focus-visible { outline: 2px solid var(--eva-rose); outline-offset: 2px; }
+.copy-number.is-copied { background: var(--eva-green, #2f7d55); border-color: var(--eva-green, #2f7d55); color: #fff; }
 .confirmation-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; margin-top: 25px; }
 .confirmation-trust { display: flex; align-items: center; gap: 7px; margin-top: 25px; color: var(--eva-muted); font-size: 11.5px; }
 .confirmation-trust svg { color: var(--eva-green); }

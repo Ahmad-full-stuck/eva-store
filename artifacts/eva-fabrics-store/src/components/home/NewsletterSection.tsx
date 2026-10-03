@@ -2,12 +2,14 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { ArrowLeft, Mail, MessageCircle } from 'lucide-react'
 import { siteConfig } from '@/lib/site'
+import { useSiteContent } from '@/lib/site-content'
 
 const isValidEmail = (value: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)
 
 export function NewsletterSection() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'error' | 'sent'>('idle')
+  const content = useSiteContent()
 
   const subscribeUrl = siteConfig.whatsappUrl(
     email.trim()
@@ -30,9 +32,9 @@ export function NewsletterSection() {
     <section className="container-eva section-block" aria-label="النشرة البريدية">
       <div className="newsletter-card">
         <div>
-          <span className="eyebrow"><Mail size={14} />نشرة إيفا</span>
-          <h2>جديد الأقمشة يصل إلى بريدك أولاً</h2>
-          <p>خامة جديدة، لون متجدد، أو عرض لفترة محدودة، نرسله لك عند حدوثه فقط.</p>
+          <span className="eyebrow"><Mail size={14} />{content.newsletterEyebrow}</span>
+          <h2>{content.newsletterTitle}</h2>
+          <p>{content.newsletterText}</p>
         </div>
         <form className="newsletter-form" onSubmit={handleSubmit}>
           <label htmlFor="newsletter-email" className="sr-only">البريد الإلكتروني</label>

@@ -3,6 +3,7 @@ import { ArrowLeft, BadgeCheck, ChevronDown, Globe2, MessageCircle, Sparkles, Tr
 import { Link } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
 import { guideQuestions, homeStory, trustItems } from '@/lib/fallback-data'
+import { contentLines, useSiteContent } from '@/lib/site-content'
 import { ProductCard } from '@/components/ProductCard'
 import { HeroSection } from '@/components/home/HeroSection'
 import { NewsletterSection } from '@/components/home/NewsletterSection'
@@ -27,6 +28,7 @@ const discoveryQuestions = [
 ]
 
 export function HomePage({ products, categories, wishlist, onWish, onAdd }: HomePageProps) {
+  const content = useSiteContent()
   const [discoveryStep, setDiscoveryStep] = useState(0)
   const [answers, setAnswers] = useState<string[]>([])
   const [openFaq, setOpenFaq] = useState<number | null>(0)
@@ -61,7 +63,7 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
       <StepsSection />
 
       <section className="container-eva section-block category-section" aria-label="أقسام المعرض">
-        <SectionHeading eyebrow="اختاري من البداية" title="مساحات القماش" linkLabel="عرض كل الأقمشة" linkHref="/catalog" />
+        <SectionHeading eyebrow={content.categoriesEyebrow} title={content.categoriesTitle} linkLabel="عرض كل الأقمشة" linkHref="/catalog" />
         <div className="category-grid">
           {categories.map((category) => <Link key={category.id} href={`/catalog?category=${encodeURIComponent(category.id)}`} className="category-card">
             <SmartImage src={category.image} alt="" sizes="(max-width: 640px) 46vw, 23vw" />
@@ -72,7 +74,7 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
       </section>
 
       <section className="container-eva section-block new-section" aria-label="وصل حديثاً">
-        <SectionHeading eyebrow="نماذج مختارة" title="وصل حديثاً" description="أحدث الخامات التي أضفناها إلى المعرض" linkLabel="كل العينات" linkHref="/catalog?sort=newest" />
+        <SectionHeading eyebrow={content.newEyebrow} title={content.newTitle} description={content.newDesc} linkLabel="كل العينات" linkHref="/catalog?sort=newest" />
         <div className="glass" style={{ padding: 'clamp(14px, 2.5vw, 28px)' }}>
           <div className="product-grid">{recentProducts.map((product) => <ProductCard key={product.id} product={product} wished={wishlist.includes(product.slug)} onWish={onWish} onAdd={onAdd} />)}</div>
         </div>
@@ -91,7 +93,19 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
 
       <section className="guide-preview-section">
         <div className="container-eva guide-preview-grid">
-          <div className="guide-preview-copy"><span className="eyebrow"><BadgeCheck size={14} />قبل أن تختاري</span><h2>القماش قرار بصري<br />ولمسي في آن واحد.</h2><p>العينة الجيدة لا تخفي التفاصيل. قارني السماكة والمرونة واللمعة وطريقة سقوط القماش قبل أن تحددي الاستخدام.</p><Link href="/fabric-guide" className="button button-light">ابدئي دليل الأقمشة <ArrowLeft size={16} /></Link></div>
+          <div className="guide-preview-copy">
+            <span className="eyebrow"><BadgeCheck size={14} />{content.guideEyebrow}</span>
+            <h2>
+              {contentLines(content.guideTitle).map((line, index) => (
+                <span key={`${index}-${line}`}>
+                  {index > 0 && <br />}
+                  {line}
+                </span>
+              ))}
+            </h2>
+            <p>{content.guideText}</p>
+            <Link href="/fabric-guide" className="button button-light">{content.guideCta} <ArrowLeft size={16} /></Link>
+          </div>
           <div className="guide-faq-list glass-dark">{guideQuestions.slice(0, 4).map((item, index) => <div className={`guide-faq ${openFaq === index ? 'is-open' : ''}`} key={item.question}><button type="button" onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}><span>سؤال {index + 1}</span><strong>{item.question}</strong><ChevronDown size={17} /></button>{openFaq === index && <p>{item.answer}</p>}</div>)}</div>
         </div>
       </section>

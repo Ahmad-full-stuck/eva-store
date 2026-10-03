@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ArrowLeft, Sparkles } from 'lucide-react'
 import { Link } from 'wouter'
 import { formatPrice } from '@/lib/catalog'
+import { useSiteContent } from '@/lib/site-content'
 
 const arabicDigits = (value: string): string => value.replace(/[0-9]/g, (digit) => '٠١٢٣٤٥٦٧٨٩'[Number(digit)])
 
@@ -25,6 +26,7 @@ const getDeadline = (): number => {
 export function PromoBar() {
   const [deadline, setDeadline] = useState<number>(getDeadline)
   const [remaining, setRemaining] = useState<number>(() => Math.max(0, deadline - Date.now()))
+  const content = useSiteContent()
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -53,8 +55,8 @@ export function PromoBar() {
   return (
     <div className="container-eva" style={{ marginBlock: 'clamp(14px, 3vw, 30px)' }}>
       <section className="promo-bar" aria-label="عرض لفترة محدودة">
-        <span className="glass-pill"><Sparkles size={13} />عرض نهاية الأسبوع</span>
-        <p><strong>توصيل مجاني</strong> للطلبات فوق {formatPrice(50000)} حتى نهاية الأسبوع</p>
+        <span className="glass-pill"><Sparkles size={13} />{content.promoPill}</span>
+        <p><strong>{content.promoLead}</strong> {content.promoText.replace('{price}', formatPrice(50000))}</p>
         <div className="countdown" role="timer" aria-label={`ينتهي العرض خلال ${days} ${dayLabel} و${hours} ${hourLabel} و${minutes} ${minuteLabel}`}>
           <span className="count-unit"><strong>{pad(days)}</strong><small>{dayLabel}</small></span>
           <span className="count-unit"><strong>{pad(hours)}</strong><small>{hourLabel}</small></span>

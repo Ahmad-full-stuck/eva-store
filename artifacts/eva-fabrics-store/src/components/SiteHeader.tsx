@@ -4,6 +4,7 @@ import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
 import { formatMeters } from '@/lib/catalog'
 import { siteConfig } from '@/lib/site'
+import { useSiteContent } from '@/lib/site-content'
 import { Logo } from './Logo'
 import { Modal } from './Modal'
 import { SearchDialog } from './SearchDialog'
@@ -71,6 +72,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
   const [location] = useLocation()
   const [searchOpen, setSearchOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const content = useSiteContent()
   const pathname = location.split('?')[0]
 
   const withRoutes = <T extends NavItem>(items: T[]): T[] =>
@@ -110,11 +112,11 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
   return (
     <>
       <div className="announcement-bar" role="region" aria-label="إعلان المتجر">
-        <span>شحن إلى جميع محافظات العراق</span>
+        <span>{content.announcementRight}</span>
         <span className="announcement-dot" />
         <a href={`tel:${siteConfig.phone}`} dir="ltr">{siteConfig.phone}</a>
         <span className="announcement-dot" />
-        <span>شحن دولي عند التوفر</span>
+        <span>{content.announcementLeft}</span>
       </div>
       <header className="site-header glass">
         <div className="container-eva header-inner">

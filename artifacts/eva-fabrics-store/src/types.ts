@@ -4,6 +4,7 @@ export interface ProductColor {
   hex: string
   available: boolean
   stockMeters: number
+  image?: string
 }
 
 export interface ProductSpecs {

@@ -85,12 +85,16 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
 
   if (!product || !selectedColor) return <ProductMissing />
 
-  const gallery = [...new Set([product.image, ...product.images, ...(product.video ? [product.video] : [])])]
+  const gallery = [...new Set([product.image, ...product.images, ...product.colors.map((color) => color.image || '').filter(Boolean), ...(product.video ? [product.video] : [])])]
   const activeSrc = gallery[activeImage]
   const activeIsVideo = activeSrc === product.video
   const pickColor = (color: ProductColor) => {
     if (!color.available) return
     setSelectedColorId(color.id)
+    if (color.image) {
+      const own = gallery.indexOf(color.image)
+      if (own >= 0) { setActiveImage(own); return }
+    }
     const index = colorMaps.colorToImage[color.id]
     if (typeof index === 'number' && index < gallery.length) setActiveImage(index)
   }
