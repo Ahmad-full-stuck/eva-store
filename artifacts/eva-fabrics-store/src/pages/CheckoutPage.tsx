@@ -544,9 +544,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
               </h3>
               {serverError && <div className="server-error" role="alert"><CircleAlert size={18} /><span>{serverError}</span></div>}
               {!serverError && notice && <div className="order-notice" role="status"><Check size={16} /><span>{notice}</span></div>}
-              <p>{serverError
-                ? 'هذه النسخة منشورة على GitHub Pages وتعمل بدون خادم خاص للطلبات، لذلك أرسلي التفاصيل عبر واتساب. ستصلك رسالة جاهزة فيها كل بنود الطلب، والتأكيد يتم يدوياً من الفريق بعد مراجعته.'
-                : 'لتأكيد الطلب فوراً أرسلي الرسالة الجاهزة عبر واتساب — تحتوي على كل بنود الطلب ورقم الطلب نفسه، وسنؤكد لك بعد المراجعة.'}</p>
+              {serverError && !notice && <p>هذه النسخة منشورة على GitHub Pages وتعمل بدون خادم خاص للطلبات، لذلك أرسلي التفاصيل عبر واتساب. ستصلك رسالة جاهزة فيها كل بنود الطلب، والتأكيد يتم يدوياً من الفريق بعد مراجعته.</p>}
               <div className="whatsapp-actions">
                 <a className="button button-whatsapp" href={whatsappLink} target="_blank" rel="noreferrer" onClick={confirmViaWhatsApp}><MessageCircle size={16} />أكمل الطلب عبر واتساب</a>
                 {serverError && (
