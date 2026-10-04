@@ -894,7 +894,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                               dir="ltr"
                               inputMode="email"
                               type="email"
-                              placeholder="immeh255@gmail.com"
+                              placeholder="wealiahmad.ali@gmail.com"
                             />
                           </div>
                           <div className="admin-field">
@@ -933,7 +933,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                               dir="ltr"
                             />
                             <small style={{ display: 'block', marginTop: 4, color: 'var(--eva-muted)', fontSize: 11 }}>
-                              اتركه كما هو: https://formsubmit.co/immeh255@gmail.com — أو استبدل immeh255@gmail.com ببريدك.
+                              اتركه كما هو: https://formsubmit.co/wealiahmad.ali@gmail.com — أو استبدل wealiahmad.ali@gmail.com ببريدك.
                             </small>
                           </div>
                         )}

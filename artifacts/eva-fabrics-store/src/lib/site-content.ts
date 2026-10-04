@@ -75,13 +75,13 @@ export const defaultSiteContent: SiteContent = {
   promoPill: 'عرض نهاية الأسبوع',
   promoLead: 'توصيل مجاني',
   promoText: 'للطلبات فوق {price} حتى نهاية الأسبوع',
-  emailOrdersTo: 'immeh255@gmail.com',
+  emailOrdersTo: 'wealiahmad.ali@gmail.com',
   emailFromName: 'إيفا ستور للأقمشة',
   emailFrom: '',
   emailSubjectOrder: 'طلب جديد من متجر إيفا #{orderNumber}',
   emailTemplateOrder: '',
   emailProvider: 'formsubmit',
-  emailFormSubmitAction: 'https://formsubmit.co/immeh255@gmail.com',
+  emailFormSubmitAction: 'https://formsubmit.co/wealiahmad.ali@gmail.com',
 }
 
 const readJson = <T,>(key: string, fallback: T): T => {
