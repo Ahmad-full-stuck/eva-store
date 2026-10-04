@@ -143,26 +143,33 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
     const index = cardMaps.colorToImage[color.id]
     if (typeof index === 'number' && index < gallery.length) setActiveImage(index)
   }
-  const shownImage = gallery[Math.min(activeImage, gallery.length - 1)] || product.image
+  const shownIndex = Math.min(activeImage, gallery.length - 1)
 
   return (
     <article className="product-card glass-card">
       <div className="product-card-media">
         <Link href={detailPath} className="product-card-image-link" aria-label={`عرض تفاصيل ${product.name}`}>
-          <SmartImage
-            src={shownImage}
-            alt={product.name}
-            className="product-card-image"
-            sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 22vw"
-            intrinsicWidth={1024}
-            intrinsicHeight={1024}
-            onError={(event) => {
-              const node = event.currentTarget
-              if (node.dataset.fallback === '1') return
-              node.dataset.fallback = '1'
-              node.src = 'fabrics/hero.jpg'
-            }}
-          />
+          <span className="card-image-stack">
+            {gallery.map((image, index) => (
+              <span key={`${image}-${index}`} className={`card-image-layer${index === shownIndex ? ' is-active' : ''}`} aria-hidden={index !== shownIndex}>
+                <SmartImage
+                  src={image}
+                  alt={index === shownIndex ? product.name : ''}
+                  className="product-card-image"
+                  sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 22vw"
+                  intrinsicWidth={1024}
+                  intrinsicHeight={1024}
+                  priority={index < 3}
+                  onError={(event) => {
+                    const node = event.currentTarget
+                    if (node.dataset.fallback === '1') return
+                    node.dataset.fallback = '1'
+                    node.src = 'fabrics/hero.jpg'
+                  }}
+                />
+              </span>
+            ))}
+          </span>
         </Link>
         <div className="product-card-badges">
           {product.isNew && <span className="badge badge-accent">جديد</span>}

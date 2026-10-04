@@ -20,6 +20,32 @@ const subscribeToHashUpdates = (callback: () => void) => {
 const hashPrefix = /^#?\/?/
 const currentHashLocation = () => '/' + location.hash.replace(hashPrefix, '')
 
+// Pasted / shared links such as `#/catalog?sort=newest` keep the query inside the
+// hash, which the router would treat as part of the path and answer with a 404.
+// Move that query into the real search string (where navigate() puts it) before
+// anything reads the location.
+const normalizeHashQuery = (): void => {
+  if (typeof window === 'undefined') return
+  const hash = window.location.hash
+  const index = hash.indexOf('?')
+  if (index < 0) return
+  try {
+    const url = new URL(window.location.href)
+    const inline = hash.slice(index + 1)
+    url.hash = hash.slice(0, index) || '#/'
+    url.search = inline
+    window.history.replaceState(window.history.state, '', url.href)
+    onHashChange()
+  } catch {
+    /* malformed URL — leave it to the 404 page */
+  }
+}
+
+if (typeof window !== 'undefined') {
+  normalizeHashQuery()
+  window.addEventListener('hashchange', normalizeHashQuery)
+}
+
 export const navigate = (to: string, options: NavigateOptions = {}) => {
   const { state = null, replace = false } = options
   const oldURL = location.href

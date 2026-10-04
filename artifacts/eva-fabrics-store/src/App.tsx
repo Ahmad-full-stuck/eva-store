@@ -62,6 +62,14 @@ const shellStyles = `
 }
 `
 
+const safeDecode = (value: string): string => {
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return value
+  }
+}
+
 function App() {
   const { products, categories, routes, status } = useStoreData()
   const [location, setLocation] = useLocation()
@@ -71,15 +79,14 @@ function App() {
   const pathname = location.split('?')[0]
 
   useEffect(() => {
-    setCart((current) => {
-      const next = reconcileCart(current, products)
-      return next.length === current.length ? current : next
-    })
-  }, [products])
+    if (status === 'loading') return
+    setCart((current) => reconcileCart(current, products))
+  }, [products, status])
 
   useEffect(() => {
+    if (status === 'loading') return
     setStoredCart(cart)
-  }, [cart])
+  }, [cart, status])
 
   useEffect(() => {
     setStoredWishlist(wishlist)
@@ -146,7 +153,7 @@ function App() {
           <Route path="/contact" component={ContactPage} />
           <Route path="/policies" component={PoliciesPage} />
           <Route path="/order-tracking" component={OrderTrackingPage} />
-          <Route path="/order-confirmation/:orderNumber">{(params) => <OrderConfirmationPage orderNumber={decodeURIComponent(params.orderNumber)} />}</Route>
+          <Route path="/order-confirmation/:orderNumber">{(params) => <OrderConfirmationPage orderNumber={safeDecode(params.orderNumber)} />}</Route>
           <Route component={NotFound} />
         </Switch>
       </div>

@@ -18,6 +18,7 @@ const glassStyles = `
 .glass-scope .glass { position: relative; background: var(--glass-fill); border: 1px solid var(--glass-line); box-shadow: var(--glass-shadow); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
 .glass-scope .glass-card { border-radius: 16px; }
 .glass-scope .glass-strong { background: var(--glass-strong); border-color: rgba(255, 255, 255, .92); }
+.glass-scope .glass.checkout-summary, .glass-scope .glass.order-summary { position: sticky; top: 120px; }
 .glass-scope .glass-dark { color: #fff6f8; background: rgba(48, 38, 42, .9); border: 1px solid rgba(255, 248, 241, .18); box-shadow: 0 16px 34px rgba(48, 38, 42, .22); }
 .glass-scope .glass-pill { border-radius: 999px; }
 .glass-scope .glass-divider { height: 1px; margin: 16px 0; background: linear-gradient(90deg, rgba(122, 30, 60, 0), rgba(122, 30, 60, .35), rgba(122, 30, 60, 0)); border: 0; }
@@ -44,6 +45,7 @@ const glassStyles = `
 .glass-scope a:focus-visible, .glass-scope button:focus-visible, .glass-scope input:focus-visible, .glass-scope select:focus-visible, .glass-scope textarea:focus-visible, .glass-scope [tabindex]:focus-visible { outline: 2px solid var(--eva-rose); outline-offset: 3px; }
 .glass-scope .cart-mobile-bar { display: none; }
 @media (max-width: 820px) {
+  .glass-scope .glass.checkout-summary, .glass-scope .glass.order-summary { position: static; top: auto; }
   .glass-scope .cart-items { padding: 4px 15px; }
   .glass-scope .cart-page { padding-bottom: 168px; }
   .glass-scope .cart-mobile-bar { position: fixed; right: 10px; bottom: calc(74px + env(safe-area-inset-bottom)); left: 10px; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 16px; background: rgba(255, 251, 250, .93); border: 1px solid rgba(122, 30, 60, .16); border-radius: 20px; box-shadow: 0 18px 38px rgba(74, 24, 43, .2); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }

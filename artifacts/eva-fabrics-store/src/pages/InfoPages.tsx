@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Instagram, Layers, MapPin, MessageCircle, PackageCheck, Phone, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Star, Truck } from 'lucide-react'
-import { Link, useLocation } from 'wouter'
+import { Link, useLocation, useSearch } from 'wouter'
 import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
 import { guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
@@ -1324,8 +1324,9 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
 }
 
 export function OrderTrackingPage() {
-  const [location, navigate] = useLocation()
-  const query = new URLSearchParams(location.includes('?') ? location.slice(location.indexOf('?') + 1) : '')
+  const [, navigate] = useLocation()
+  const browserSearch = useSearch()
+  const query = new URLSearchParams(browserSearch)
   const currentOrder = query.get('order') || ''
   const [value, setValue] = useState(currentOrder)
   const [submitted, setSubmitted] = useState(currentOrder)

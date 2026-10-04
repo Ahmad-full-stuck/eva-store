@@ -90,9 +90,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
           <div className="hero-slides" aria-live="off">
             {slides.map((slide, index) => (
               <div className={`hero-slide ${index === activeSlide ? 'is-active' : ''}`} key={slide.src} aria-hidden={index !== activeSlide}>
-                {index === activeSlide || index === (activeSlide + 1) % slides.length
-                  ? <SmartImage src={slide.src} alt={slide.alt} sizes="(max-width: 820px) 92vw, 52vw" priority={index === 0} />
-                  : null}
+                <SmartImage src={slide.src} alt={slide.alt} sizes="(max-width: 820px) 92vw, 52vw" priority={index < 2} />
               </div>
             ))}
           </div>

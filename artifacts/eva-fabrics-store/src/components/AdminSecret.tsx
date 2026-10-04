@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Check, Image as ImageIcon, Lock, LogOut, Plus, Save, ShieldCheck, Trash2, Upload, X, Pencil, Download, RotateCcw } from 'lucide-react'
 import type { Category, Product, ProductColor } from '@/types'
 import { fallbackCategories, fallbackProducts } from '@/lib/fallback-data'
+import { sanitizeCategory, sanitizeProduct, sanitizeCategories, sanitizeProducts } from '@/lib/sanitize'
 
 const PRODUCTS_KEY = 'eva-admin-products'
 const REMOVED_KEY = 'eva-admin-removed'
@@ -88,32 +89,54 @@ const writeJson = (key: string, value: unknown): void => {
   }
 }
 
-export const readAdminProducts = (): Product[] => readJson<Product[]>(PRODUCTS_KEY, [])
+export const readAdminProducts = (): Product[] => sanitizeProducts(readJson<unknown>(PRODUCTS_KEY, []))
 
-export const readRemovedSlugs = (): string[] => readJson<string[]>(REMOVED_KEY, [])
+const readSlugList = (value: unknown): string[] =>
+  Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string' && item.length > 0) : []
 
-export const readAdminCategories = (): Category[] => readJson<Category[]>(CATEGORIES_KEY, [])
+export const readRemovedSlugs = (): string[] => readSlugList(readJson<unknown>(REMOVED_KEY, []))
+
+export const readAdminCategories = (): Category[] => sanitizeCategories(readJson<unknown>(CATEGORIES_KEY, []))
+
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  !!value && typeof value === 'object' && !Array.isArray(value)
+
+// The stored overrides may be partial (a backup that only changed the price, for
+// example), so the raw objects are merged onto the base product first and only
+// then rebuilt through the sanitizer — otherwise missing fields would overwrite
+// the real ones with defaults.
+const readRawProductOverrides = (): Record<string, unknown>[] => {
+  const raw = readJson<unknown>(PRODUCTS_KEY, [])
+  if (!Array.isArray(raw)) return []
+  return raw.filter((item): item is Record<string, unknown> => isPlainObject(item) && typeof item.slug === 'string' && item.slug.length > 0)
+}
 
 export const mergeAdminProducts = (source: Product[]): Product[] => {
   const removed = new Set(readRemovedSlugs())
-  const overrides = readAdminProducts()
+  const overrides = readRawProductOverrides()
   const base = source.filter((item) => !removed.has(item.slug))
   const bySlug = new Map<string, Product>()
   for (const item of base) bySlug.set(item.slug, item)
   for (const item of overrides) {
-    const existing = bySlug.get(item.slug)
-    bySlug.set(item.slug, existing ? { ...existing, ...item, colors: item.colors.length ? item.colors : existing.colors } : item)
+    const slug = item.slug as string
+    const existing = bySlug.get(slug)
+    const merged = existing ? sanitizeProduct({ ...existing, ...item }) : sanitizeProduct(item)
+    if (merged) bySlug.set(slug, merged)
   }
-  const custom = overrides.filter((item) => !source.some((entry) => entry.slug === item.slug))
-  return [...bySlug.values(), ...custom.filter((item) => !bySlug.has(item.slug))]
+  return [...bySlug.values()]
 }
 
 export const mergeAdminCategories = (source: Category[]): Category[] => {
-  const overrides = readAdminCategories()
-  if (!overrides.length) return source
+  const raw = readJson<unknown>(CATEGORIES_KEY, [])
+  if (!Array.isArray(raw) || !raw.length) return source
   const map = new Map<string, Category>()
   for (const item of source) map.set(item.slug, item)
-  for (const item of overrides) map.set(item.slug, item)
+  raw.forEach((entry, index) => {
+    if (!isPlainObject(entry)) return
+    const existing = typeof entry.slug === 'string' ? map.get(entry.slug) : undefined
+    const merged = sanitizeCategory(existing ? { ...existing, ...entry } : entry, index)
+    if (merged) map.set(merged.slug, merged)
+  })
   return [...map.values()]
 }
 
@@ -245,6 +268,8 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   })
   const [pin, setPin] = useState('')
   const [pinError, setPinError] = useState('')
+  const [pinAttempts, setPinAttempts] = useState(0)
+  const [pinLockUntil, setPinLockUntil] = useState(0)
   const [tab, setTab] = useState<Tab>('products')
   const [editing, setEditing] = useState<Product | null>(null)
   const [toast, setToast] = useState('')
@@ -301,6 +326,10 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   }
 
   const submitPin = () => {
+    if (pinLockUntil > Date.now()) {
+      setPinError('عدد كبير من المحاولات، حاولي بعد دقيقة')
+      return
+    }
     const stored = (() => {
       try {
         return window.localStorage.getItem(PIN_KEY) || '2468'
@@ -312,15 +341,36 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       setAuthed(true)
       setPin('')
       setPinError('')
+      setPinAttempts(0)
       try {
         window.sessionStorage.setItem(SESSION_KEY, '1')
       } catch {
         /* ignore */
       }
     } else {
-      setPinError('الرمز غير صحيح')
+      const nextAttempts = pinAttempts + 1
+      if (nextAttempts >= 5) {
+        setPinAttempts(0)
+        setPinLockUntil(Date.now() + 60_000)
+        setPinError('تم إيقاف المحاولات لمدة دقيقة')
+      } else {
+        setPinAttempts(nextAttempts)
+        setPinError(`الرمز غير صحيح (${5 - nextAttempts} محاولات متبقية)`)
+      }
+      setPin('')
     }
   }
+
+  useEffect(() => {
+    if (pinLockUntil <= 0) return undefined
+    const wait = pinLockUntil - Date.now()
+    if (wait <= 0) {
+      setPinLockUntil(0)
+      return undefined
+    }
+    const timer = window.setTimeout(() => setPinLockUntil(0), wait)
+    return () => window.clearTimeout(timer)
+  }, [pinLockUntil])
 
   const logout = () => {
     setAuthed(false)
@@ -362,12 +412,10 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   }
 
   const deleteProduct = (product: Product) => {
-    const isCustom = overrides.some((item) => item.slug === product.slug)
-    if (isCustom) {
+    if (overrides.some((item) => item.slug === product.slug)) {
       persistProducts(overrides.filter((item) => item.slug !== product.slug))
-    } else if (!removed.includes(product.slug)) {
-      persistRemoved([...removed, product.slug])
     }
+    if (!removed.includes(product.slug)) persistRemoved([...removed, product.slug])
     setToast('تم حذف المنتج')
   }
 
@@ -404,15 +452,23 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     if (!file) return
     try {
       const text = await file.text()
-      const parsed = JSON.parse(text) as { products?: Product[]; removed?: string[]; categories?: Category[]; content?: Partial<SiteContent> }
-      if (Array.isArray(parsed.products)) persistProducts(parsed.products)
-      if (Array.isArray(parsed.removed)) persistRemoved(parsed.removed)
-      if (Array.isArray(parsed.categories)) {
-        setCustomCategories(parsed.categories)
-        writeJson(CATEGORIES_KEY, parsed.categories)
+      const parsed = JSON.parse(text) as Record<string, unknown>
+      if (!parsed || typeof parsed !== 'object') throw new Error('bad')
+      if (parsed.products) persistProducts(sanitizeProducts(parsed.products))
+      if (parsed.removed) persistRemoved(readSlugList(parsed.removed))
+      if (parsed.categories) {
+        const next = sanitizeCategories(parsed.categories)
+        setCustomCategories(next)
+        writeJson(CATEGORIES_KEY, next)
       }
-      if (parsed.content) {
-        const next = { ...content, ...parsed.content }
+      if (parsed.content && typeof parsed.content === 'object' && parsed.content !== null) {
+        const raw = parsed.content as Record<string, unknown>
+        const clean: Partial<SiteContent> = {}
+        for (const key of Object.keys(defaultSiteContent) as (keyof SiteContent)[]) {
+          const value = raw[key]
+          if (typeof value === 'string') clean[key] = value.slice(0, 6000)
+        }
+        const next = { ...content, ...clean }
         setContent(next)
         writeJson(CONTENT_KEY, next)
       }
@@ -488,7 +544,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
               <div className="admin-login">
                 <span className="lock"><Lock size={22} /></span>
                 <h3>تسجيل صغير</h3>
-                <p>أدخل رمز الدخول للوصول إلى لوحة إدارة المنتجات والمحتوى. الرمز الافتراضي: 2468</p>
+                <p>أدخل رمز الدخول للوصول إلى لوحة إدارة المنتجات والمحتوى.</p>
                 <div className="admin-pin">
                   <input
                     type="password"
@@ -501,7 +557,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                     autoFocus
                     aria-label="رمز الدخول"
                   />
-                  <button type="button" className="admin-btn" onClick={submitPin}>
+                  <button type="button" className="admin-btn" onClick={submitPin} disabled={pinLockUntil > Date.now()}>
                     <Lock size={15} /> دخول
                   </button>
                 </div>

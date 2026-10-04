@@ -61,6 +61,7 @@ const glassStyles = `
 .glass-scope .glass { position: relative; background: var(--glass-fill); border: 1px solid var(--glass-line); box-shadow: var(--glass-shadow); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
 .glass-scope .glass-card { border-radius: 16px; }
 .glass-scope .glass-strong { background: var(--glass-strong); border-color: rgba(255, 255, 255, .92); }
+.glass-scope .glass.checkout-summary, .glass-scope .glass.order-summary { position: sticky; top: 120px; }
 .glass-scope .glass-dark { color: #fff6f8; background: rgba(46, 24, 33, .92); border: 1px solid rgba(255, 246, 248, .18); box-shadow: 0 16px 34px rgba(46, 24, 33, .24); }
 .glass-scope .glass-pill { border-radius: 999px; }
 .glass-scope .glass-input, .glass-scope .field-input, .glass-scope .field textarea { background: rgba(255, 255, 255, .74); border-color: rgba(255, 255, 255, .92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
@@ -134,6 +135,7 @@ const glassStyles = `
 .glass-scope .summary-total strong { color: var(--eva-rose); font-size: 22px; }
 
 @media (max-width: 820px) {
+  .glass-scope .glass.checkout-summary, .glass-scope .glass.order-summary { position: static; top: auto; }
   .glass-scope .order-box { padding: 22px 18px; }
   .glass-scope .order-box .form-fields { grid-template-columns: 1fr; gap: 15px; }
   .glass-scope .order-box-head h2 { font-size: 19px; }
@@ -540,7 +542,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
             <span>الإجمالي</span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
-          <div className="checkout-secure glass-dark"><Check size={15} />لن يُرسل الطلب إلا بعد الضغط على تأكيد</div>
+          <div className="checkout-secure"><Check size={15} />لن يُرسل الطلب إلا بعد الضغط على تأكيد</div>
         </aside>
       </form>
     </main>

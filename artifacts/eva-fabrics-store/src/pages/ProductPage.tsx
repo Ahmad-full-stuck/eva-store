@@ -80,6 +80,11 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
 
   const selectedColor = product?.colors.find((color) => color.id === selectedColorId) || product?.colors[0]
   const maxLength = product && selectedColor ? availableMeters(product, selectedColor) : 0
+
+  useEffect(() => {
+    if (maxLength <= 0) return
+    setLength((current) => (current > maxLength ? Math.max(0.5, Math.floor(maxLength * 2) / 2) : current))
+  }, [maxLength])
   const related = useMemo(() => product ? products.filter((item) => item.slug !== product.slug && item.categoryId === product.categoryId).slice(0, 6) : [], [product, products])
   const faqItems = product?.faqs.length ? product.faqs : [{ question: 'هل يمكن طلب أكثر من نصف متر؟', answer: 'يمكن طلب الأقمشة بنصف متر كحد أدنى.' }]
 
@@ -141,7 +146,17 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
           onKeyDown={onGalleryKey}
         >{activeIsVideo
           ? <video className="gallery-video" src={activeSrc} poster={product.image} controls autoPlay muted loop playsInline aria-label={`${product.name} — فيديو`} />
-          : <><SmartImage key={activeSrc} className="gallery-img" src={activeSrc} alt={`${product.name} - صورة ${activeImage + 1}`} sizes="(max-width: 900px) 92vw, 46vw" priority /><div className="gallery-shade" /><button type="button" className="gallery-zoom" onClick={() => setZoomOpen(true)} aria-label="تكبير الصورة"><ZoomIn size={19} /></button></>}
+          : <>
+              <div className="gallery-stack">
+                {gallery.map((image, index) => image === product.video ? null : (
+                  <div key={`${image}-${index}`} className={`gallery-layer${index === activeImage ? ' is-active' : ''}`} aria-hidden={index !== activeImage}>
+                    <SmartImage className="gallery-img" src={image} alt={`${product.name} - صورة ${index + 1}`} sizes="(max-width: 900px) 92vw, 46vw" priority />
+                  </div>
+                ))}
+              </div>
+              <div className="gallery-shade" />
+              <button type="button" className="gallery-zoom" onClick={() => setZoomOpen(true)} aria-label="تكبير الصورة"><ZoomIn size={19} /></button>
+            </>}
           <button type="button" className="gallery-arrow gallery-next" onClick={() => setActiveImage((activeImage + 1) % gallery.length)} aria-label={activeIsVideo ? 'التالي' : 'الصورة التالية'}><ChevronLeft size={20} /></button>
           <button type="button" className="gallery-arrow gallery-prev" onClick={() => setActiveImage((activeImage - 1 + gallery.length) % gallery.length)} aria-label={activeIsVideo ? 'السابق' : 'الصورة السابقة'}><ChevronRight size={20} /></button>
         </div>

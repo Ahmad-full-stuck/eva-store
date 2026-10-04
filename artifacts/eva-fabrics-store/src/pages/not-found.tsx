@@ -10,7 +10,8 @@ import {
 } from '@/pages/InfoPages'
 
 export default function NotFound() {
-  const [location] = useLocation()
+  const [rawLocation] = useLocation()
+  const location = rawLocation.split('?')[0]
   const fragmentIndex = location.indexOf('#')
 
   if (fragmentIndex > 0) {
