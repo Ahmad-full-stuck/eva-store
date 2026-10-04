@@ -1193,11 +1193,15 @@ function OrderStatusPanel({ order }: { order: StoredOrder }) {
   const index = statusIndex(order.status)
   const cancelled = index < 0
   const step = cancelled ? 0 : index
+  const rawStatus = order.status || ''
+  const statusLabel = !cancelled
+    ? (/^[\x20-\x7E]+$/.test(rawStatus) ? statusSteps[step] : (rawStatus || statusSteps[step]))
+    : ''
   return (
     <section className="status-panel glass-dark" aria-label="حالة الطلب">
       <div className="status-head">
         <span>{cancelled ? 'حالة الطلب' : 'آخر تحديث'}</span>
-        <strong>{cancelled ? 'تم إلغاء الطلب' : order.status || statusSteps[step]}</strong>
+        <strong>{cancelled ? 'تم إلغاء الطلب' : statusLabel}</strong>
         {order.createdAt && <small>تاريخ التسجيل: {formatDate(order.createdAt)}</small>}
       </div>
       <ol className="status-steps">

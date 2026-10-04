@@ -399,18 +399,14 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   }
 
   // النسخة المنشورة بدون خادم خاص (GitHub Pages): لا يوجد /api/orders أصلاً،
-  // لذلك يُسجَّل الطلب محلياً ويُرسل بالبريد إلى المتجر مباشرةً بلا رسائل خطأ.
+  // لذلك يُسجَّل الطلب محلياً ويُرسل بالبريد إلى المتجر ثم تُفتح شاشة التأكيد ✓.
   const completeStaticOrder = (payload: OrderPayload): void => {
     const orderNumber = createLocalOrderNumber()
     saveLocalOrder(orderNumber, 'received', payload)
     notifyByEmail(payload, orderNumber)
-    setWhatsappOrderNumber(orderNumber)
-    setWhatsappLink(siteConfig.whatsappUrl(buildWhatsAppMessage(payload, orderNumber)))
-    setChannel('whatsapp')
-    setServerError('')
-    setNotice('تم تسجيل طلبك وإرسال تفاصيله إلى فريق المتجر. للتأكيد الفوري أكملي عبر واتساب — الرسالة جاهزة بكل بنود الطلب، وسنؤكد لك بعد المراجعة.')
     setSubmitState('idle')
-    setLiveMessage('تم استلام طلبك بنجاح. يمكنك تأكيده عبر واتساب الآن.')
+    setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${orderNumber}`)
+    onComplete(orderNumber)
   }
 
   const submitOrder = async (event?: FormEvent): Promise<void> => {
