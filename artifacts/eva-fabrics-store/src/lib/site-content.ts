@@ -34,6 +34,13 @@ export interface SiteContent {
   promoPill: string
   promoLead: string
   promoText: string
+  emailOrdersTo: string
+  emailFromName: string
+  emailFrom: string
+  emailSubjectOrder: string
+  emailTemplateOrder: string
+  emailProvider: 'mailto' | 'formsubmit'
+  emailFormSubmitAction: string
 }
 
 export const defaultSiteContent: SiteContent = {
@@ -68,6 +75,13 @@ export const defaultSiteContent: SiteContent = {
   promoPill: 'عرض نهاية الأسبوع',
   promoLead: 'توصيل مجاني',
   promoText: 'للطلبات فوق {price} حتى نهاية الأسبوع',
+  emailOrdersTo: 'immeh255@gmail.com',
+  emailFromName: 'إيفا ستور للأقمشة',
+  emailFrom: '',
+  emailSubjectOrder: 'طلب جديد من متجر إيفا #{orderNumber}',
+  emailTemplateOrder: '',
+  emailProvider: 'formsubmit',
+  emailFormSubmitAction: 'https://formsubmit.co/immeh255@gmail.com',
 }
 
 const readJson = <T,>(key: string, fallback: T): T => {

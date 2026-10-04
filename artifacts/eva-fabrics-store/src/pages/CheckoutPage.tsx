@@ -5,6 +5,8 @@ import type { CartItem, CheckoutForm, CustomerProfile, OrderPayload } from '@/ty
 import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/catalog'
 import { apiUrl, siteConfig } from '@/lib/site'
 import { governorates } from '@/lib/fallback-data'
+import { useSiteContent } from '@/lib/site-content'
+import { sendOrderEmail } from '@/lib/email'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 interface CheckoutPageProps {
@@ -174,6 +176,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [whatsappOrderNumber, setWhatsappOrderNumber] = useState('')
   const [liveMessage, setLiveMessage] = useState('')
   const totals = getCartTotals(cart)
+  const siteContent = useSiteContent()
   const whatsappRef = useRef<HTMLHeadingElement>(null)
   const boxRef = useRef<HTMLDivElement>(null)
   const restored = useRef(false)
@@ -341,8 +344,48 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     }
   }
 
+  const notifyByEmail = (payload: OrderPayload, orderNumber: string): void => {
+    const to = siteContent.emailOrdersTo.trim()
+    if (!to) return
+    const subject = (siteContent.emailSubjectOrder || 'طلب جديد #{orderNumber}').replace('#{orderNumber}', `#${orderNumber}`).replace('{orderNumber}', orderNumber)
+    void sendOrderEmail(
+      {
+        orderNumber,
+        customerName: payload.customerName,
+        phone: payload.phone,
+        email: payload.email,
+        governorate: payload.governorate,
+        district: payload.district,
+        address: payload.address,
+        landmark: payload.landmark || undefined,
+        notes: payload.notes,
+        items: payload.items.map((item) => ({
+          productName: item.productName,
+          colorName: item.colorName,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          totalPrice: item.totalPrice,
+        })),
+        subtotal: payload.subtotal,
+        deliveryFee: payload.deliveryFee,
+        total: payload.total,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        to,
+        fromName: siteContent.emailFromName.trim() || undefined,
+        from: siteContent.emailFrom.trim() || undefined,
+        subject,
+        template: siteContent.emailTemplateOrder.trim() || undefined,
+        provider: siteContent.emailProvider,
+        formSubmitAction: siteContent.emailFormSubmitAction.trim() || `https://formsubmit.co/${encodeURIComponent(to)}`,
+      },
+    ).catch(() => undefined)
+  }
+
   const switchToWhatsApp = (payload: OrderPayload, reason: string): void => {
     const orderNumber = createLocalOrderNumber()
+    notifyByEmail(payload, orderNumber)
     setWhatsappOrderNumber(orderNumber)
     setWhatsappLink(siteConfig.whatsappUrl(buildWhatsAppMessage(payload, orderNumber)))
     setChannel('whatsapp')
@@ -378,6 +421,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         return
       }
       saveLocalOrder(orderNumber, 'received', payload)
+      notifyByEmail(payload, orderNumber)
       onComplete(orderNumber)
     } catch (error) {
       const reason = error instanceof Error && error.name === 'AbortError'

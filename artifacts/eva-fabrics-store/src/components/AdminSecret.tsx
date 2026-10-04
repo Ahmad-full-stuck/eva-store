@@ -466,6 +466,10 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
         const clean: Partial<SiteContent> = {}
         for (const key of Object.keys(defaultSiteContent) as (keyof SiteContent)[]) {
           const value = raw[key]
+          if (key === 'emailProvider') {
+            if (value === 'mailto' || value === 'formsubmit') clean.emailProvider = value
+            continue
+          }
           if (typeof value === 'string') clean[key] = value.slice(0, 6000)
         }
         const next = { ...content, ...clean }
@@ -875,6 +879,83 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                         </div>
                       ))}
 
+
+<div style={{ marginTop: 20, padding: 14, border: '1px solid var(--eva-line-strong)', borderRadius: 12 }}>
+                        <div className="admin-note" style={{ marginBottom: 10, fontWeight: 700, color: 'var(--eva-ink, #30262a)' }}>استقبال الطلبات بالبريد الإلكتروني</div>
+                        <div className="admin-note" style={{ marginBottom: 12 }}>
+                          كل طلب يُرسل تلقائياً إلى هذا البريد عند تأكيد الزبون. الوضع الافتراضي (FormSubmit) يرسل الرسالة مباشرة إلى بريدك دون أي تسجيل مسبق.
+                        </div>
+                        <div className="admin-row">
+                          <div className="admin-field">
+                            <label>بريد استقبال الطلبات</label>
+                            <input
+                              value={content.emailOrdersTo}
+                              onChange={(event) => setContent({ ...content, emailOrdersTo: event.target.value })}
+                              dir="ltr"
+                              inputMode="email"
+                              type="email"
+                              placeholder="immeh255@gmail.com"
+                            />
+                          </div>
+                          <div className="admin-field">
+                            <label>اسم المرسل</label>
+                            <input value={content.emailFromName} onChange={(event) => setContent({ ...content, emailFromName: event.target.value })} />
+                          </div>
+                        </div>
+                        <div className="admin-row">
+                          <div className="admin-field">
+                            <label>طريقة الإرسال</label>
+                            <select
+                              value={content.emailProvider}
+                              onChange={(event) => setContent({ ...content, emailProvider: event.target.value as SiteContent['emailProvider'] })}
+                            >
+                              <option value="formsubmit">FormSubmit — إرسال مباشر (موصى به)</option>
+                              <option value="mailto">برامج البريد — يفتح تطبيق البريد</option>
+                            </select>
+                          </div>
+                          <div className="admin-field">
+                            <label>بريد الرد على الزبون (اختياري)</label>
+                            <input
+                              value={content.emailFrom}
+                              onChange={(event) => setContent({ ...content, emailFrom: event.target.value })}
+                              dir="ltr"
+                              type="email"
+                              placeholder="name@example.com"
+                            />
+                          </div>
+                        </div>
+                        {content.emailProvider === 'formsubmit' && (
+                          <div className="admin-field">
+                            <label>رابط خدمة الإرسال</label>
+                            <input
+                              value={content.emailFormSubmitAction}
+                              onChange={(event) => setContent({ ...content, emailFormSubmitAction: event.target.value })}
+                              dir="ltr"
+                            />
+                            <small style={{ display: 'block', marginTop: 4, color: 'var(--eva-muted)', fontSize: 11 }}>
+                              اتركه كما هو: https://formsubmit.co/immeh255@gmail.com — أو استبدل immeh255@gmail.com ببريدك.
+                            </small>
+                          </div>
+                        )}
+                        <div className="admin-field">
+                          <label>موضوع الإيميل</label>
+                          <input value={content.emailSubjectOrder} onChange={(event) => setContent({ ...content, emailSubjectOrder: event.target.value })} dir="ltr" />
+                          <small style={{ display: 'block', marginTop: 4, color: 'var(--eva-muted)', fontSize: 11 }}>استخدم {'{orderNumber}'} لرقم الطلب.</small>
+                        </div>
+                        <div className="admin-field">
+                          <label>قالب نص الإيميل (اختياري)</label>
+                          <textarea
+                            rows={6}
+                            value={content.emailTemplateOrder}
+                            onChange={(event) => setContent({ ...content, emailTemplateOrder: event.target.value })}
+                            placeholder="اتركه فارغاً لاستخدام القالب الافتراضي المفصّل"
+                            style={{ width: '100%', minHeight: 110, padding: '9px 11px', border: '1px solid var(--eva-line-strong)', borderRadius: 10, fontFamily: 'inherit', fontSize: 13.5, resize: 'vertical' }}
+                          />
+                          <small style={{ display: 'block', marginTop: 4, color: 'var(--eva-muted)', fontSize: 11 }}>
+                            المتغيرات: {'{orderNumber} {name} {phone} {email} {governorate} {district} {address} {landmark} {notes} {items} {subtotal} {delivery} {total} {date} {shop}'}
+                          </small>
+                        </div>
+                      </div>
 
                       <div className="admin-field">
                         <label>التصنيفات</label>
