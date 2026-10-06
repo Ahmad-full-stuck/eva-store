@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react'
 import { Heart, Plus, ShoppingBag } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { formatPrice } from '@/lib/catalog'
-import { cachedColorMaps, type ColorImageMaps } from '@/lib/image-colors'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 interface ProductCardProps {
@@ -113,65 +111,39 @@ const injectStyles = (id: string, css: string) => {
 injectStyles('eva-glass-styles', glassStyles)
 
 export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps) {
-  const availableColor = product.colors.find((color) => color.available && color.stockMeters > 0)
-  const soldOut = product.stockMeters <= 0 || !availableColor
+  const addColor = product.colors.find((color) => color.available && color.stockMeters > 0) || product.colors[0]
+  const soldOut = product.stockMeters <= 0 || !addColor
   const lowStock = !soldOut && product.stockMeters <= 3
   const wishLabel = wished ? `إزالة ${product.name} من المفضلة` : `إضافة ${product.name} إلى المفضلة`
   const addLabel = `أضيفي نصف متر من ${product.name} إلى السلة`
   const detailPath = `/product/${product.slug}`
-  const gallery = [...new Set([product.image, ...product.images, ...product.colors.map((color) => color.image || '').filter(Boolean)])]
-  const [cardMaps, setCardMaps] = useState<ColorImageMaps>({ colorToImage: {}, imageToColor: {} })
-  const [activeImage, setActiveImage] = useState(0)
-  const [activeColorId, setActiveColorId] = useState(availableColor?.id || product.colors[0]?.id || '')
-  const selectedColor = product.colors.find((color) => color.id === activeColorId) || availableColor || product.colors[0]
-
-  useEffect(() => {
-    let cancelled = false
-    cachedColorMaps(gallery, product.colors, product.slug)
-      .then((maps) => { if (!cancelled) setCardMaps(maps) })
-      .catch(() => { if (!cancelled) setCardMaps({ colorToImage: {}, imageToColor: {} }) })
-    return () => { cancelled = true }
-  }, [product.slug, product.colors, gallery.join(',')])
-
-  const pickSwatch = (color: ProductColor) => {
-    if (!color.available) return
-    setActiveColorId(color.id)
-    if (color.image) {
-      const own = gallery.indexOf(color.image)
-      if (own >= 0) { setActiveImage(own); return }
-    }
-    const index = cardMaps.colorToImage[color.id]
-    if (typeof index === 'number' && index < gallery.length) setActiveImage(index)
-  }
-  const shownIndex = Math.min(activeImage, gallery.length - 1)
 
   return (
     <article className="product-card glass-card">
       <div className="product-card-media">
         <Link href={detailPath} className="product-card-image-link" aria-label={`عرض تفاصيل ${product.name}`}>
           <span className="card-image-stack">
-            {gallery.map((image, index) => (
-              <span key={`${image}-${index}`} className={`card-image-layer${index === shownIndex ? ' is-active' : ''}`} aria-hidden={index !== shownIndex}>
-                <SmartImage
-                  src={image}
-                  alt={index === shownIndex ? product.name : ''}
-                  className="product-card-image"
-                  sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 22vw"
-                  intrinsicWidth={1024}
-                  intrinsicHeight={1024}
-                  priority={index < 3}
-                  onError={(event) => {
-                    const node = event.currentTarget
-                    if (node.dataset.fallback === '1') return
-                    node.dataset.fallback = '1'
-                    node.src = 'fabrics/hero.jpg'
-                  }}
-                />
-              </span>
-            ))}
+            <span className="card-image-layer is-active">
+              <SmartImage
+                src={product.image}
+                alt={product.name}
+                className="product-card-image"
+                sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 22vw"
+                intrinsicWidth={1024}
+                intrinsicHeight={1024}
+                priority
+                onError={(event) => {
+                  const node = event.currentTarget
+                  if (node.dataset.fallback === '1') return
+                  node.dataset.fallback = '1'
+                  node.src = 'fabrics/hero.jpg'
+                }}
+              />
+            </span>
           </span>
         </Link>
         <div className="product-card-badges">
+          {product.categoryId === 'style' && <span className="badge badge-muted">ستايل</span>}
           {product.isNew && <span className="badge badge-accent">جديد</span>}
           {lowStock && <span className="badge badge-warm">كمية محدودة</span>}
           {soldOut && <span className="badge badge-muted">غير متوفر</span>}
@@ -196,27 +168,11 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
           <span className="product-price">{formatPrice(product.price)}<small>/م</small></span>
         </div>
         <div className="product-card-footer">
-          <div className={`swatch-list${product.colorsEnabled === false ? ' is-hidden' : ''}`} aria-label={`ألوان ${product.name} — اضغطي لعرض الصورة`}>
-            {(product.colorsEnabled === false ? [] : product.colors.slice(0, 5)).map((color) => (
-              <button
-                key={color.id}
-                type="button"
-                className={`mini-swatch ${color.available ? '' : 'is-muted'} ${activeColorId === color.id ? 'is-active' : ''}`}
-                onClick={() => pickSwatch(color)}
-                disabled={!color.available}
-                aria-label={`${color.name}${color.available ? ' — عرض الصورة' : '، غير متاح'}`}
-                aria-pressed={activeColorId === color.id}
-                title={color.available ? `عرض ${color.name}` : `${color.name} غير متاح`}
-              >
-                <span className="mini-swatch-dot" style={{ backgroundColor: color.hex }} aria-hidden="true" />
-              </button>
-            ))}
-          </div>
           <button
             type="button"
             className="add-button"
             disabled={soldOut}
-            onClick={() => selectedColor && onAdd(product, selectedColor, 0.5)}
+            onClick={() => addColor && onAdd(product, addColor, 0.5)}
             aria-label={addLabel}
           >
             {soldOut ? 'نفد المخزون' : <><ShoppingBag size={14} aria-hidden="true" /><span>أضيفي نصف متر</span></>}

@@ -104,7 +104,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
 
   const handleRemove = (item: CartItem) => {
     onRemove(orderKey(item))
-    setAnnouncement(`تم حذف ${item.product.name} باللون ${item.color.name} من السلة`)
+    setAnnouncement(`تم حذف ${item.product.name} من السلة`)
   }
 
   if (cart.length === 0) {
@@ -147,7 +147,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
           <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
           {cart.map((item) => {
             const key = orderKey(item)
-            const maxMeters = Math.min(item.product.stockMeters, item.color.stockMeters)
+            const maxMeters = item.product.stockMeters
             const lineTotal = item.product.price * item.length
             return (
               <article className="cart-item" key={key}>
@@ -160,13 +160,12 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
                       <span className="product-type">{item.product.type}</span>
                       <Link href={`/product/${item.product.slug}`} className="product-name">{item.product.name}</Link>
                       <div className="cart-item-chips">
-                        <span className="chip cart-item-color"><i style={{ backgroundColor: item.color.hex }} />{item.color.name}</span>
                         <span className="chip glass-pill">{formatPrice(item.product.price)} / متر</span>
                       </div>
                     </div>
                     <div className="cart-item-tools">
                       <Link href={`/product/${item.product.slug}`} className="chip"><Pencil size={12} />تعديل</Link>
-                      <button type="button" className="remove-button" onClick={() => handleRemove(item)} aria-label={`حذف ${item.product.name} باللون ${item.color.name}`}><Trash2 size={16} /></button>
+                      <button type="button" className="remove-button" onClick={() => handleRemove(item)} aria-label={`حذف ${item.product.name} من السلة`}><Trash2 size={16} /></button>
                     </div>
                   </div>
                   <div className="cart-item-bottom">

@@ -38,6 +38,7 @@ export interface ProductRow {
   sort_order: number
   created_at: string
   updated_at: string
+  video: string | null
 }
 
 export interface StoreProduct {
@@ -61,6 +62,7 @@ export interface StoreProduct {
   stockMeters: number
   sourceUrl?: string
   createdAt: string
+  video?: string
 }
 
 const parseJson = <T>(raw: string, fallback: T): T => {
@@ -92,4 +94,5 @@ export const toProduct = (row: ProductRow): StoreProduct => ({
   stockMeters: row.stock_meters,
   sourceUrl: row.source_url,
   createdAt: row.created_at,
+  video: row.video || undefined,
 })

@@ -2,8 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Check, ChevronDown, ChevronLeft, ChevronRight, Heart, Minus, Plus, ShieldCheck, ShoppingBag, Zap, ZoomIn } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
-import { availableMeters, formatMeters, formatPrice, metersLabel } from '@/lib/catalog'
-import { cachedColorMaps, type ColorImageMaps } from '@/lib/image-colors'
+import { formatMeters, formatPrice, metersLabel } from '@/lib/catalog'
 import { ProductCard } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -19,13 +18,11 @@ interface ProductPageProps {
 export function ProductPage({ slug, products, wishlist, onWish, onAdd }: ProductPageProps) {
   const product = products.find((item) => item.slug === slug)
   const [activeImage, setActiveImage] = useState(0)
-  const [selectedColorId, setSelectedColorId] = useState('')
   const [length, setLength] = useState(0.5)
   const [zoomOpen, setZoomOpen] = useState(false)
   const [openSection, setOpenSection] = useState('specs')
   const [openFaq, setOpenFaq] = useState<number | null>(0)
   const [justAdded, setJustAdded] = useState(false)
-  const [colorMaps, setColorMaps] = useState<ColorImageMaps>({ colorToImage: {}, imageToColor: {} })
   const touchStart = useRef<{ x: number; y: number } | null>(null)
   const addBtnRef = useRef<HTMLButtonElement>(null)
   const relatedTrackRef = useRef<HTMLDivElement>(null)
@@ -35,38 +32,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     setActiveImage(0)
     setLength(0.5)
     setJustAdded(false)
-    setSelectedColorId(product?.colors.find((color) => color.available)?.id || product?.colors[0]?.id || '')
-  }, [product?.id, product?.colors])
-
-  useEffect(() => {
-    let cancelled = false
-    const sources = product ? [...new Set([product.image, ...product.images])] : []
-    if (!sources.length || !product?.colors.length) {
-      setColorMaps({ colorToImage: {}, imageToColor: {} })
-      return undefined
-    }
-    cachedColorMaps(sources, product.colors, product.slug)
-      .then((maps) => { if (!cancelled) setColorMaps(maps) })
-      .catch(() => { if (!cancelled) setColorMaps({ colorToImage: {}, imageToColor: {} }) })
-    return () => { cancelled = true }
-  }, [product?.id, product?.slug, product?.image, product?.images, product?.colors])
-
-  const imageNavRef = useRef<{ productId?: string; image: number }>({ productId: product?.id, image: 0 })
-
-  useEffect(() => {
-    const productChanged = imageNavRef.current.productId !== product?.id
-    const imageChanged = imageNavRef.current.image !== activeImage
-    if (productChanged) {
-      imageNavRef.current = { productId: product?.id, image: 0 }
-      return
-    }
-    imageNavRef.current = { productId: product?.id, image: activeImage }
-    if (!imageChanged) return
-    const colorId = colorMaps.imageToColor[String(activeImage)]
-    if (!colorId || colorId === selectedColorId) return
-    const color = product?.colors.find((item) => item.id === colorId)
-    if (color?.available) setSelectedColorId(color.id)
-  }, [activeImage, colorMaps, product, selectedColorId])
+  }, [product?.id])
 
   useEffect(() => {
     const button = addBtnRef.current
@@ -78,8 +44,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     return () => observer.disconnect()
   }, [product?.id])
 
-  const selectedColor = product?.colors.find((color) => color.id === selectedColorId) || product?.colors[0]
-  const maxLength = product && selectedColor ? availableMeters(product, selectedColor) : 0
+  const maxLength = product ? Math.max(0, product.stockMeters) : 0
 
   useEffect(() => {
     if (maxLength <= 0) return
@@ -88,21 +53,11 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const related = useMemo(() => product ? products.filter((item) => item.slug !== product.slug && item.categoryId === product.categoryId).slice(0, 6) : [], [product, products])
   const faqItems = product?.faqs.length ? product.faqs : [{ question: 'هل يمكن طلب أكثر من نصف متر؟', answer: 'يمكن طلب الأقمشة بنصف متر كحد أدنى.' }]
 
-  if (!product || !selectedColor) return <ProductMissing />
+  if (!product || !product.colors.length) return <ProductMissing />
 
-  const gallery = [...new Set([product.image, ...product.images, ...product.colors.map((color) => color.image || '').filter(Boolean), ...(product.video ? [product.video] : [])])]
+  const gallery = [...new Set([product.image, ...(product.video ? [product.video] : []), ...product.images])]
   const activeSrc = gallery[activeImage]
   const activeIsVideo = activeSrc === product.video
-  const pickColor = (color: ProductColor) => {
-    if (!color.available) return
-    setSelectedColorId(color.id)
-    if (color.image) {
-      const own = gallery.indexOf(color.image)
-      if (own >= 0) { setActiveImage(own); return }
-    }
-    const index = colorMaps.colorToImage[color.id]
-    if (typeof index === 'number' && index < gallery.length) setActiveImage(index)
-  }
   const startSwipe = (x: number, y: number) => { touchStart.current = { x, y } }
   const endSwipe = (x: number, y: number) => {
     const start = touchStart.current
@@ -123,7 +78,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const increase = () => setLength((current) => Math.min(maxLength, Math.round((current + 0.5) * 10) / 10))
   const decrease = () => setLength((current) => Math.max(0.5, Math.round((current - 0.5) * 10) / 10))
   const add = () => {
-    onAdd(product, selectedColor, length)
+    onAdd(product, product.colors[0], length)
     setJustAdded(true)
   }
   const scrollRelated = (direction: 'next' | 'prev') => {
@@ -170,10 +125,6 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
       <section className="product-purchase">
         <div className="product-purchase-top"><div><span className="eyebrow">{product.type}</span><h1>{product.name}</h1><p className="product-description">{product.description}</p></div><button type="button" className={`detail-wish ${wishlist.includes(product.slug) ? 'is-active' : ''}`} onClick={() => onWish(product.slug)} aria-label={wishlist.includes(product.slug) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'} aria-pressed={wishlist.includes(product.slug)}><Heart size={20} fill={wishlist.includes(product.slug) ? 'currentColor' : 'none'} /></button></div>
         <div className="price-block"><span>السعر للمتر الواحد</span><strong>{formatPrice(product.price)}</strong>{product.compareAtPrice && <del>{formatPrice(product.compareAtPrice)}</del>}</div>
-        {product.colorsEnabled !== false && <>
-          <div className="detail-divider" />
-          <fieldset className="color-fieldset"><legend>اللون <span>{selectedColor.name}</span></legend><div className="color-options">{product.colors.map((color) => <button type="button" key={color.id} className={`color-option ${selectedColor.id === color.id ? 'is-selected' : ''} ${!color.available ? 'is-unavailable' : ''}`} style={{ backgroundColor: color.hex }} onClick={() => pickColor(color)} disabled={!color.available} aria-label={`${color.name}${color.available ? '' : '، غير متوفر'}`} aria-pressed={selectedColor.id === color.id} title={color.name} />)}</div><small className="color-hint">اضغطي اللون لعرض صورته في المعرض</small></fieldset>
-        </>}
         <div className="detail-divider" />
         <div className="quantity-heading"><div><strong>الكمية المطلوبة</strong><small>يمكن الطلب بنصف متر كحد أدنى</small></div><span>التوفّر يُؤكَّد عند الطلب</span></div>
         <div className="quantity-control"><button type="button" onClick={decrease} disabled={length <= 0.5} aria-label="إنقاص نصف متر"><Minus size={17} /></button><output aria-live="polite">{metersLabel(length)}</output><button type="button" onClick={increase} disabled={length >= maxLength} aria-label="زيادة نصف متر"><Plus size={17} /></button></div>
@@ -229,7 +180,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         </section>
       )
     })()}
-    <div className={`mobile-sticky-buy ${showStickyBuy ? 'is-visible' : ''}`}><span><small>{selectedColor.name} · {formatMeters(length)}</small><strong>{formatPrice(product.price * length)}</strong></span>{justAdded ? <Link href="/checkout" className="button button-primary">إتمام الطلب <ArrowLeft size={15} /></Link> : <button type="button" className="button button-primary" onClick={add} disabled={maxLength <= 0}>أضيفي {formatMeters(length)}</button>}</div>
+    <div className={`mobile-sticky-buy ${showStickyBuy ? 'is-visible' : ''}`}><span><small>{formatMeters(length)}</small><strong>{formatPrice(product.price * length)}</strong></span>{justAdded ? <Link href="/checkout" className="button button-primary">إتمام الطلب <ArrowLeft size={15} /></Link> : <button type="button" className="button button-primary" onClick={add} disabled={maxLength <= 0}>أضيفي {formatMeters(length)}</button>}</div>
     <Modal open={zoomOpen} onClose={() => setZoomOpen(false)} title={`صورة ${product.name}`} className="image-modal"><button type="button" className="modal-close" onClick={() => setZoomOpen(false)} aria-label="إغلاق الصورة">×</button><SmartImage src={gallery[activeImage]} alt={`${product.name} مكبرة`} sizes="92vw" priority /></Modal>
   </main>
 }

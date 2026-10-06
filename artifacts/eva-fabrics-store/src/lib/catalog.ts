@@ -70,8 +70,8 @@ export const normalizeHalfMeters = (value: number): number => {
   return Math.max(0.5, Math.ceil(value * 2) / 2)
 }
 
-export const availableMeters = (product: Product, color: ProductColor): number =>
-  color.available === false ? 0 : Math.max(0, Math.min(product.stockMeters, color.stockMeters))
+export const availableMeters = (product: Product, color?: ProductColor): number =>
+  color?.available === false ? 0 : Math.max(0, product.stockMeters)
 
 export const orderKey = (item: Pick<CartItem, 'product' | 'color'>): string => `${item.product.slug}:${item.color.id}`
 

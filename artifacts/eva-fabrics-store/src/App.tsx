@@ -8,7 +8,6 @@ import { addCartItem, getStoredCart, getStoredWishlist, reconcileCart, removeCar
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { AdminSecret } from '@/components/AdminSecret'
-import { WhatsAppFab } from '@/components/WhatsAppFab'
 import { HomePage } from '@/pages/HomePage'
 import { CatalogPage } from '@/pages/CatalogPage'
 import { ProductPage } from '@/pages/ProductPage'
@@ -187,7 +186,6 @@ function App() {
       </div>
       <SiteFooter routes={routes} categories={categories} />
       <AdminSecret products={products} categories={categories} />
-      <WhatsAppFab />
       <div className="toast-container">
         {notice && (
           <div className="toast" role="status" aria-live="polite">
