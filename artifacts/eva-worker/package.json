@@ -1,0 +1,20 @@
+{
+  "name": "@workspace/eva-worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:create": "wrangler d1 create eva-store",
+    "db:migrate:local": "wrangler d1 migrations apply eva-store --local",
+    "db:migrate:remote": "wrangler d1 migrations apply eva-store --remote",
+    "seed": "node --experimental-strip-types src/seed.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20261004.1",
+    "typescript": "~5.9.3",
+    "wrangler": "4.147.0"
+  }
+}

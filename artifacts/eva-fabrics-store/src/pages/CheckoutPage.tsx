@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
-import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, MessageCircle, Navigation, Phone, RefreshCw, ShieldCheck, UserRound } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, Navigation, Phone, RefreshCw, ShieldCheck, UserRound } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { CartItem, CheckoutForm, CustomerProfile, OrderPayload } from '@/types'
 import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/catalog'
-import { apiUrl, siteConfig } from '@/lib/site'
+import { apiUrl } from '@/lib/site'
 import { governorates } from '@/lib/fallback-data'
 import { useSiteContent } from '@/lib/site-content'
 import { sendOrderEmail } from '@/lib/email'
+import { queuePendingOrder } from '@/lib/api'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 interface CheckoutPageProps {
@@ -18,7 +19,6 @@ const initialForm: CheckoutForm = { name: '', phone: '', email: '', governorate:
 
 type CheckoutErrors = Partial<Record<keyof CheckoutForm, string>>
 
-type OrderChannel = 'api' | 'whatsapp'
 
 interface StoredOrderItem {
   productName: string
@@ -35,7 +35,7 @@ interface StoredOrder {
   subtotal: number
   deliveryFee: number
   total: number
-  status: 'received' | 'whatsapp-pending'
+  status: 'received' | 'pending-sync'
   customerName: string
   phone: string
   governorate: string
@@ -76,6 +76,10 @@ const glassStyles = `
 .glass-scope .whatsapp-panel p { color: var(--eva-muted); font-size: 12.5px; line-height: 1.9; }
 .glass-scope .whatsapp-panel p strong { color: var(--eva-rose); }
 .glass-scope .whatsapp-actions { display: grid; gap: 10px; }
+
+.glass-scope .server-error h3 { display: flex; align-items: center; gap: 8px; font-size: 15.5px; color: var(--eva-rose-dark); }
+.glass-scope .server-error p { color: var(--eva-muted); font-size: 12.5px; line-height: 1.9; margin: 0; }
+.glass-scope .server-error p strong { color: var(--eva-rose); }
 .glass-scope .button-whatsapp { color: #fff; background: var(--eva-green); box-shadow: 0 8px 18px rgba(73, 118, 91, .25); }
 .glass-scope .button-whatsapp:hover { background: #3c6350; box-shadow: 0 11px 24px rgba(73, 118, 91, .32); }
 .glass-scope .server-error { background: rgba(249, 236, 231, .88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
@@ -174,13 +178,10 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [submitState, setSubmitState] = useState<'idle' | 'loading'>('idle')
   const [serverError, setServerError] = useState('')
   const [notice, setNotice] = useState('')
-  const [channel, setChannel] = useState<OrderChannel>('api')
-  const [whatsappLink, setWhatsappLink] = useState('')
-  const [whatsappOrderNumber, setWhatsappOrderNumber] = useState('')
+  const [pendingOrderNumber, setPendingOrderNumber] = useState('')
   const [liveMessage, setLiveMessage] = useState('')
   const totals = getCartTotals(cart)
   const siteContent = useSiteContent()
-  const whatsappRef = useRef<HTMLHeadingElement>(null)
   const boxRef = useRef<HTMLDivElement>(null)
   const restored = useRef(false)
 
@@ -204,12 +205,6 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
       return
     }
   }, [])
-
-  useEffect(() => {
-    if (channel !== 'whatsapp') return undefined
-    whatsappRef.current?.focus()
-    return undefined
-  }, [channel])
 
   if (cart.length === 0) {
     return (
@@ -278,29 +273,6 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     deliveryFee: totals.deliveryFee,
     total: totals.total,
   })
-
-  const buildWhatsAppMessage = (payload: OrderPayload, orderNumber: string): string => {
-    const lines = [
-      `طلب جديد من ${siteConfig.name}`,
-      `رقم الطلب: ${orderNumber}`,
-      `الاسم: ${payload.customerName}`,
-      `الهاتف: ${payload.phone}`,
-      `المحافظة: ${payload.governorate} - ${payload.district}`,
-      `العنوان: ${payload.address}`,
-    ]
-    if (payload.landmark) lines.push(`أقرب نقطة دالة: ${payload.landmark}`)
-    if (payload.email) lines.push(`البريد الإلكتروني: ${payload.email}`)
-    if (payload.notes) lines.push(`ملاحظات: ${payload.notes}`)
-    lines.push('تفاصيل الطلب:')
-    payload.items.forEach((item, index) => {
-      lines.push(`${(index + 1).toLocaleString('ar-IQ')}. ${item.productName} - ${item.colorName} - ${formatMeters(item.quantity)} × ${formatPrice(item.unitPrice)} = ${formatPrice(item.totalPrice)}`)
-    })
-    lines.push(`المجموع الفرعي: ${formatPrice(payload.subtotal)}`)
-    lines.push(`التوصيل: ${payload.deliveryFee ? formatPrice(payload.deliveryFee) : 'مجاني'}`)
-    lines.push(`الإجمالي: ${formatPrice(payload.total)}`)
-    lines.push('أرجو تأكيد الطلب وتحديد موعد التوصيل.')
-    return lines.join('\n')
-  }
 
   const saveProfile = (): void => {
     if (typeof window === 'undefined') return
@@ -386,20 +358,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     ).catch(() => undefined)
   }
 
-  const switchToWhatsApp = (payload: OrderPayload, reason: string): void => {
-    const orderNumber = createLocalOrderNumber()
-    notifyByEmail(payload, orderNumber)
-    setWhatsappOrderNumber(orderNumber)
-    setWhatsappLink(siteConfig.whatsappUrl(buildWhatsAppMessage(payload, orderNumber)))
-    setChannel('whatsapp')
-    setServerError(`تعذر إرسال الطلب تلقائياً: ${reason}. لم يُسجَّل الطلب في المتجر بعد.`)
-    setNotice('')
-    setSubmitState('idle')
-    setLiveMessage('تعذر إرسال الطلب تلقائياً. يمكنك إتمام الطلب عبر واتساب وسيؤكد الفريق الطلب يدوياً.')
-  }
-
-  // النسخة المنشورة بدون خادم خاص (GitHub Pages): لا يوجد /api/orders أصلاً،
-  // لذلك يُسجَّل الطلب محلياً ويُرسل بالبريد إلى المتجر ثم تُفتح شاشة التأكيد ✓.
+  // لا يوجد /api/orders إطلاقاً: يُسجَّل الطلب محلياً ويصل بالبريد.
   const completeStaticOrder = (payload: OrderPayload): void => {
     const orderNumber = createLocalOrderNumber()
     saveLocalOrder(orderNumber, 'received', payload)
@@ -408,6 +367,24 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${orderNumber}`)
     onComplete(orderNumber)
   }
+
+  const holdOrder = (payload: OrderPayload, orderNumber: string, reason: string): void => {
+    saveLocalOrder(orderNumber, 'pending-sync', payload)
+    queuePendingOrder({
+      orderNumber,
+      ...payload,
+      shippingAddress: { governorate: payload.governorate, district: payload.district, address: payload.address, landmark: payload.landmark },
+      pendingReason: reason,
+    })
+    notifyByEmail(payload, orderNumber)
+    setPendingOrderNumber(orderNumber)
+    setServerError('تأكدي من الاتصال فقط')
+    setNotice('')
+    setSubmitState('idle')
+    setLiveMessage('تأكدي من الاتصال فقط. طلبك محفوظ لدينا وسيُرسل تلقائياً عند عودة الاتصال.')
+  }
+
+  const sleep = (ms: number): Promise<void> => new Promise((resolve) => window.setTimeout(resolve, ms))
 
   const submitOrder = async (event?: FormEvent): Promise<void> => {
     if (event) event.preventDefault()
@@ -420,45 +397,61 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     setSubmitState('loading')
     setServerError('')
     setNotice('')
-    setChannel('api')
     setLiveMessage('جارٍ إرسال الطلب إلى المتجر...')
-    const controller = new AbortController()
-    const timer = window.setTimeout(() => controller.abort(), 9000)
-    try {
-      const response = await fetch(apiUrl('/api/orders'), { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ ...payload, shippingAddress: { governorate: payload.governorate, district: payload.district, address: payload.address, landmark: payload.landmark } }), signal: controller.signal })
-      const body: unknown = await response.json().catch(() => null)
-      if (!response.ok) {
+    const orderNumber = pendingOrderNumber || createLocalOrderNumber()
+    const request = {
+      orderNumber,
+      ...payload,
+      shippingAddress: { governorate: payload.governorate, district: payload.district, address: payload.address, landmark: payload.landmark },
+    }
+    let lastReason = ''
+
+    for (let attempt = 1; attempt <= 3; attempt += 1) {
+      const controller = new AbortController()
+      const timer = window.setTimeout(() => controller.abort(), 8000)
+      try {
+        const response = await fetch(apiUrl('/api/orders'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(request),
+          signal: controller.signal,
+        })
+        window.clearTimeout(timer)
+        const body: unknown = await response.json().catch(() => null)
         if (response.status === 404 || response.status === 405 || response.status === 501) {
           completeStaticOrder(payload)
-        } else {
-          switchToWhatsApp(payload, errorMessage(body, `الخادم أعاد الرد رقم ${response.status}`))
+          return
         }
+        if (!response.ok) {
+          lastReason = errorMessage(body, `الخادم أعاد الرد رقم ${response.status}`)
+          if (response.status < 500) {
+            setServerError(lastReason)
+            setSubmitState('idle')
+            setLiveMessage(lastReason)
+            return
+          }
+          throw new Error(lastReason)
+        }
+        const serverNumber = getOrderNumber(body) || orderNumber
+        saveLocalOrder(serverNumber, 'received', payload)
+        notifyByEmail(payload, serverNumber)
+        setPendingOrderNumber('')
+        setSubmitState('idle')
+        setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${serverNumber}`)
+        onComplete(serverNumber)
         return
+      } catch (error) {
+        window.clearTimeout(timer)
+        lastReason = error instanceof Error && error.name === 'AbortError'
+          ? 'انتهت مهلة الاتصال'
+          : error instanceof Error
+            ? error.message
+            : 'تعذر الاتصال'
       }
-      const orderNumber = getOrderNumber(body)
-      if (!orderNumber) {
-        switchToWhatsApp(payload, 'استجابة الخادم ليست بيانات طلب صالحة، ربما صفحة HTML')
-        return
-      }
-      saveLocalOrder(orderNumber, 'received', payload)
-      notifyByEmail(payload, orderNumber)
-      onComplete(orderNumber)
-    } catch (error) {
-      const reason = error instanceof Error && error.name === 'AbortError'
-        ? 'انتهت مهلة الاتصال بالخادم'
-        : error instanceof Error
-          ? error.message
-          : 'تعذر الاتصال بالخادم'
-      switchToWhatsApp(payload, reason)
-    } finally {
-      window.clearTimeout(timer)
+      if (attempt < 3) await sleep(350 * attempt)
     }
-  }
 
-  const confirmViaWhatsApp = (): void => {
-    if (!whatsappOrderNumber) return
-    saveLocalOrder(whatsappOrderNumber, 'whatsapp-pending', buildPayload())
-    onComplete(whatsappOrderNumber)
+    holdOrder(payload, orderNumber, lastReason)
   }
 
   return (
@@ -479,7 +472,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
       <ul className="order-trust">
         <li><Check size={15} />بدون تسجيل أو كلمة مرور</li>
         <li><ShieldCheck size={15} />الدفع عند الاستلام</li>
-        <li><MessageCircle size={15} />تأكيد الطلب عبر واتساب</li>
+        <li><ShieldCheck size={15} />الطلب يُسجَّل فوراً في المتجر</li>
       </ul>
       <div className="sr-only" role="status" aria-live="polite">{liveMessage}</div>
       <form className="checkout-layout" onSubmit={submitOrder} noValidate>
@@ -533,21 +526,14 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
               {errors.email && <small className="field-error" id="email-error" aria-live="polite">{errors.email}</small>}
             </div>
           </div>
-          {channel === 'whatsapp' && (
-            <div className="whatsapp-panel glass glass-strong" role="group" aria-labelledby="whatsapp-title">
-              <h3 id="whatsapp-title" tabIndex={-1} ref={whatsappRef}>
-                {serverError ? <><MessageCircle size={18} /> لم نتمكن من الإرسال التلقائي</> : <><Check size={18} /> تم استلام طلبك</>}
-              </h3>
-              {serverError && <div className="server-error" role="alert"><CircleAlert size={18} /><span>{serverError}</span></div>}
-              {!serverError && notice && <div className="order-notice" role="status"><Check size={16} /><span>{notice}</span></div>}
-              {serverError && !notice && <p>هذه النسخة منشورة على GitHub Pages وتعمل بدون خادم خاص للطلبات، لذلك أرسلي التفاصيل عبر واتساب. ستصلك رسالة جاهزة فيها كل بنود الطلب، والتأكيد يتم يدوياً من الفريق بعد مراجعته.</p>}
+                    {serverError && (
+            <div className="server-error glass glass-strong" role="alert" aria-live="assertive">
+              <h3><CircleAlert size={18} />{serverError}</h3>
+              <p>طلبك محفوظ عندنا وسيُسجَّل تلقائياً بمجرد عودة الاتصال، ولا داعي لإعادة كتابة أي شيء.</p>
+              {pendingOrderNumber && <p>رقم طلبك المحفوظ: <strong dir="ltr">{pendingOrderNumber}</strong></p>}
               <div className="whatsapp-actions">
-                <a className="button button-whatsapp" href={whatsappLink} target="_blank" rel="noreferrer" onClick={confirmViaWhatsApp}><MessageCircle size={16} />أكمل الطلب عبر واتساب</a>
-                {serverError && (
-                  <button type="button" className="button button-outline" onClick={() => { setChannel('api'); void submitOrder() }}><RefreshCw size={15} />إعادة المحاولة عبر الخادم</button>
-                )}
+                <button type="button" className="button button-primary" onClick={() => { setServerError(''); void submitOrder() }}><RefreshCw size={15} />إعادة المحاولة الآن</button>
               </div>
-              <p>رقم طلبك المحفوظ: <strong dir="ltr">{whatsappOrderNumber}</strong></p>
             </div>
           )}
           <div className="order-total-strip">

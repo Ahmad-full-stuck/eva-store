@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Check, Image as ImageIcon, Lock, LogOut, Plus, Save, ShieldCheck, Trash2, Upload, X, Pencil, Download, RotateCcw } from 'lucide-react'
+import { Check, Eye, EyeOff, Image as ImageIcon, Lock, LogOut, Plus, Save, ShieldCheck, Trash2, Upload, X, Pencil, Download, RotateCcw } from 'lucide-react'
 import type { Category, Product, ProductColor } from '@/types'
 import { fallbackCategories, fallbackProducts } from '@/lib/fallback-data'
 import { sanitizeCategory, sanitizeProduct, sanitizeCategories, sanitizeProducts } from '@/lib/sanitize'
+import { formatPrice } from '@/lib/catalog'
+import { adminFetch, adminLogin, adminLogout, AdminRequestError, loadServerConfig, pushServerContent, pushServerSettings } from '@/lib/api'
 
 const PRODUCTS_KEY = 'eva-admin-products'
 const REMOVED_KEY = 'eva-admin-removed'
@@ -12,7 +14,7 @@ const SESSION_KEY = 'eva-admin-session'
 
 export type { SiteContent as AdminContent } from '@/lib/site-content'
 export { readSiteContent as readAdminContent, CONTENT_KEY } from '@/lib/site-content'
-import { CONTENT_KEY, defaultSiteContent, readSiteContent, type SiteContent } from '@/lib/site-content'
+import { CONTENT_KEY, defaultSiteContent, readSiteContent, readStoreSettings, type SiteContent, type StoreSettings } from '@/lib/site-content'
 
 interface TextField {
   key: keyof SiteContent
@@ -31,6 +33,7 @@ const groupFields: { title: string; fields: TextField[] }[] = [
       { key: 'heroNote', label: 'ملاحظة الغلاف الأولى' },
       { key: 'heroNoteAlt', label: 'ملاحظة الغلاف الثانية' },
       { key: 'statsTitle', label: 'عنوان شريط الأرقام' },
+      { key: 'heroSlideMs', label: 'سرعة تبديل صور الغلاف (مللي ثانية)', hint: '2600 = 2.6 ثانية، وكلما قلّت زادت السرعة' },
     ],
   },
   {
@@ -253,7 +256,30 @@ interface AdminSecretProps {
   categories: Category[]
 }
 
-type Tab = 'products' | 'content' | 'backup'
+type Tab = 'products' | 'orders' | 'content' | 'settings' | 'backup'
+
+interface AdminOrder {
+  order_number?: string
+  orderNumber?: string
+  status?: string
+  created_at?: string
+  customer?: string | Record<string, unknown>
+  totals?: string | Record<string, number>
+  items?: string | unknown[]
+}
+
+const parseJsonField = <T,>(value: unknown, fallback: T): T => {
+  if (value === null || value === undefined) return fallback
+  if (typeof value === 'object') return value as T
+  if (typeof value === 'string') {
+    try {
+      return JSON.parse(value) as T
+    } catch {
+      return fallback
+    }
+  }
+  return fallback
+}
 
 export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [presses, setPresses] = useState(0)
@@ -278,6 +304,11 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [content, setContent] = useState<SiteContent>(() => readSiteContent())
   const [customCategories, setCustomCategories] = useState<Category[]>(() => readAdminCategories())
   const [newCat, setNewCat] = useState('')
+  const [settings, setSettings] = useState<StoreSettings>(() => readStoreSettings())
+  const [orders, setOrders] = useState<AdminOrder[]>([])
+  const [ordersLoading, setOrdersLoading] = useState(false)
+  const [ordersError, setOrdersError] = useState('')
+  const [online, setOnline] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const pressTimer = useRef<number | null>(null)
 
@@ -325,11 +356,53 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     pressTimer.current = window.setTimeout(() => setPresses(0), 1600)
   }
 
-  const submitPin = () => {
+  const enterAdmin = () => {
+    setAuthed(true)
+    setPin('')
+    setPinError('')
+    setPinAttempts(0)
+    try {
+      window.sessionStorage.setItem(SESSION_KEY, '1')
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const pullFromServer = async () => {
+    await loadServerConfig()
+    setContent(readSiteContent())
+    setSettings(readStoreSettings())
+  }
+
+  const submitPin = async () => {
     if (pinLockUntil > Date.now()) {
       setPinError('عدد كبير من المحاولات، حاولي بعد دقيقة')
       return
     }
+
+    // 1) محاولة الدخول إلى الخادم أولاً
+    try {
+      await adminLogin(pin)
+      setOnline(true)
+      enterAdmin()
+      try {
+        await pullFromServer()
+      } catch {
+        /* المحتوى المحلي يبقى كنسخة احتياطية */
+      }
+      setToast('تم تسجيل الدخول إلى الخادم')
+      return
+    } catch (error) {
+      if (error instanceof AdminRequestError) {
+        // الخادم يردّ لكن الرمز غير صحيح
+        setPinError('الرمز غير صحيح')
+        setPin('')
+        return
+      }
+      setOnline(false)
+    }
+
+    // 2) وضع محلي (بدون خادم)
     const stored = (() => {
       try {
         return window.localStorage.getItem(PIN_KEY) || '2468'
@@ -338,15 +411,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       }
     })()
     if (pin === stored) {
-      setAuthed(true)
-      setPin('')
-      setPinError('')
-      setPinAttempts(0)
-      try {
-        window.sessionStorage.setItem(SESSION_KEY, '1')
-      } catch {
-        /* ignore */
-      }
+      enterAdmin()
     } else {
       const nextAttempts = pinAttempts + 1
       if (nextAttempts >= 5) {
@@ -374,12 +439,55 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
 
   const logout = () => {
     setAuthed(false)
+    void adminLogout()
+    setOnline(false)
     try {
       window.sessionStorage.removeItem(SESSION_KEY)
     } catch {
       /* ignore */
     }
     setOpen(false)
+  }
+
+  const loadOrders = async () => {
+    if (ordersLoading) return
+    setOrdersLoading(true)
+    setOrdersError('')
+    try {
+      const rows = await adminFetch<AdminOrder[]>('/api/admin/orders')
+      setOrders(Array.isArray(rows) ? rows : [])
+      setOnline(true)
+    } catch (error) {
+      setOrdersError(error instanceof AdminRequestError ? error.message : 'تعذر الوصول إلى الخادم')
+    } finally {
+      setOrdersLoading(false)
+    }
+  }
+
+  const setOrderStatus = async (number: string, status: string) => {
+    setOrders((current) => current.map((row) => ((row.order_number || row.orderNumber) === number ? { ...row, status } : row)))
+    try {
+      await adminFetch(`/api/admin/orders/${encodeURIComponent(number)}`, { method: 'PATCH', body: JSON.stringify({ status }) })
+      setToast('تم تحديث حالة الطلب')
+    } catch {
+      setToast('تم التحديث محلياً فقط')
+    }
+  }
+
+  const pushProductToServer = (product: Product) => {
+    const payload = { ...product, images: product.images.filter((src) => !src.startsWith('data:')), image: product.image.startsWith('data:') ? (product.images.find((src) => !src.startsWith('data:')) || 'fabrics/hero.jpg') : product.image }
+    void adminFetch('/api/admin/products', { method: 'POST', body: JSON.stringify(payload) })
+      .then(() => setToast('تم حفظ المنتج في الخادم'))
+      .catch((error) => setToast(error instanceof AdminRequestError ? error.message : 'حُفظ محلياً — تعذر الوصول للخادم'))
+  }
+
+  const saveSettings = async () => {
+    try {
+      await pushServerSettings(settings as unknown as Record<string, unknown>)
+      setToast('تم حفظ الإعدادات في الخادم')
+    } catch {
+      setToast('حُفظت محلياً — تعذر الوصول للخادم')
+    }
   }
 
   const persistProducts = (next: Product[]) => {
@@ -408,7 +516,8 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     persistProducts(exists ? overrides.map((item) => (item.slug === slug ? clean : item)) : [clean, ...overrides])
     if (removed.includes(slug)) persistRemoved(removed.filter((item) => item !== slug))
     setEditing(null)
-    setToast(exists ? 'تم تحديث المنتج' : 'تمت إضافة المنتج')
+    pushProductToServer(clean)
+    if (!exists) setToast('تمت إضافة المنتج')
   }
 
   const deleteProduct = (product: Product) => {
@@ -416,16 +525,32 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       persistProducts(overrides.filter((item) => item.slug !== product.slug))
     }
     if (!removed.includes(product.slug)) persistRemoved([...removed, product.slug])
+    void adminFetch(`/api/admin/products/${encodeURIComponent(product.slug)}`, { method: 'DELETE' })
+      .catch(() => undefined)
     setToast('تم حذف المنتج')
   }
 
   const uploadImages = async (files: FileList | null) => {
     if (!files || !files.length || !editing) return
     const list = await Promise.all(Array.from(files).slice(0, 6).map(toFileDataUrl))
-    const valid = list.filter((item) => item.length > 2000)
+    const valid = list.filter((item) => item.length > 200)
     if (!valid.length) return
-    const next = { ...editing, images: [...editing.images, ...valid].slice(0, 8) }
-    if (!next.image || next.image === 'fabrics/hero.jpg') next.image = valid[0]
+    setToast('جارٍ رفع الصور...')
+    const uploaded = await Promise.all(
+      valid.map(async (dataUrl) => {
+        try {
+          const result = await adminFetch<{ url?: string }>('/api/admin/upload', {
+            method: 'POST',
+            body: JSON.stringify({ dataUrl, product: editing.slug }),
+          })
+          return result?.url || dataUrl
+        } catch {
+          return dataUrl
+        }
+      }),
+    )
+    const next = { ...editing, images: [...editing.images, ...uploaded].slice(0, 8) }
+    if (!next.image || next.image === 'fabrics/hero.jpg') next.image = uploaded[0]
     setEditing(next)
     setToast('تم رفع الصور')
   }
@@ -482,9 +607,14 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     }
   }
 
-  const saveContent = () => {
+  const saveContent = async () => {
     writeJson(CONTENT_KEY, content)
-    setToast('تم حفظ المحتوى')
+    try {
+      await pushServerContent(content as unknown as Record<string, unknown>)
+      setToast('تم حفظ المحتوى في الخادم')
+    } catch {
+      setToast('حُفظ محلياً — تعذر الوصول للخادم')
+    }
   }
 
   const addCategory = () => {
@@ -573,8 +703,14 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                   <button type="button" className={`admin-tab${tab === 'products' ? ' is-active' : ''}`} onClick={() => setTab('products')} role="tab">
                     المنتجات
                   </button>
+                  <button type="button" className={`admin-tab${tab === 'orders' ? ' is-active' : ''}`} onClick={() => { setTab('orders'); void loadOrders() }} role="tab">
+                    الطلبات
+                  </button>
                   <button type="button" className={`admin-tab${tab === 'content' ? ' is-active' : ''}`} onClick={() => setTab('content')} role="tab">
                     المحتوى
+                  </button>
+                  <button type="button" className={`admin-tab${tab === 'settings' ? ' is-active' : ''}`} onClick={() => setTab('settings')} role="tab">
+                    الإعدادات
                   </button>
                   <button type="button" className={`admin-tab${tab === 'backup' ? ' is-active' : ''}`} onClick={() => setTab('backup')} role="tab">
                     النسخ الاحتياطي
@@ -664,6 +800,19 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                             <input type="checkbox" checked={editing.isFeatured} onChange={(event) => setField('isFeatured', event.target.checked)} style={{ width: 16, height: 16 }} />
                             مميز
                           </label>
+                        </div>
+                      </div>
+
+                      <div className="admin-row">
+                        <div className="admin-field">
+                          <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                            <input type="checkbox" checked={editing.colorsEnabled !== false} onChange={(event) => setField('colorsEnabled', event.target.checked)} style={{ width: 16, height: 16 }} />
+                            إظهار خيارات الألوان لهذا المنتج
+                          </label>
+                        </div>
+                        <div className="admin-field">
+                          <label>مصدر الصور</label>
+                          <input value={editing.sourceUrl || ''} onChange={(event) => setField('sourceUrl', event.target.value)} dir="ltr" placeholder="رابط منشور إنستغرام (اختياري)" />
                         </div>
                       </div>
 
@@ -798,10 +947,25 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                             <img src={product.image} alt="" loading="lazy" />
                             <div className="ac-body">
                               <strong>{product.name}</strong>
-                              <span className="ac-price">{product.price.toLocaleString('ar-IQ')} د.ع</span>
+                              <span className="ac-price">{product.price > 0 ? formatPrice(product.price) : <em style={{ fontStyle: 'normal', color: '#a3701f' }}>السعر عند التأكيد</em>}</span>
+                              <span className="admin-chip" style={{ justifySelf: 'start' }}>{product.colorsEnabled === false ? 'الألوان مخفية' : `${product.colors.length} لون`}</span>
                               <div className="ac-actions">
                                 <button type="button" onClick={() => setEditing({ ...product, colors: product.colors.length ? product.colors : emptyProduct().colors, images: product.images.length ? product.images : [product.image] })}>
                                   <Pencil size={13} /> تعديل
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const next = { ...product, colorsEnabled: product.colorsEnabled === false }
+                                    persistProducts(overrides.some((item) => item.slug === product.slug)
+                                      ? overrides.map((item) => (item.slug === product.slug ? next : item))
+                                      : [next, ...overrides])
+                                    pushProductToServer(next)
+                                    setToast(next.colorsEnabled === false ? 'تم إخفاء ألوان المنتج' : 'تم إظهار ألوان المنتج')
+                                  }}
+                                  title="تفعيل/إخفاء ألوان هذا المنتج"
+                                >
+                                  {product.colorsEnabled === false ? <EyeOff size={13} /> : <Eye size={13} />} الألوان
                                 </button>
                                 <button type="button" className="danger" onClick={() => deleteProduct(product)}>
                                   <Trash2 size={13} /> حذف
@@ -988,6 +1152,91 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                         </button>
                       </div>
                     </div>
+                  ) : tab === 'orders' ? (
+                    <div>
+                      <div className="admin-actions" style={{ marginTop: 0, marginBottom: 14 }}>
+                        <button type="button" className="admin-btn" onClick={() => void loadOrders()} disabled={ordersLoading}>
+                          <RotateCcw size={15} /> {ordersLoading ? 'جارٍ التحديث...' : 'تحديث الطلبات'}
+                        </button>
+                        <span className="admin-chip">{orders.length} طلب</span>
+                      </div>
+                      {ordersError && <div className="admin-note" role="alert">{ordersError}</div>}
+                      {!ordersError && !orders.length && !ordersLoading && <div className="admin-note">لا توجد طلبات بعد. أول طلب يظهر هنا فور تأكيده من المتجر.</div>}
+                      <div className="admin-list">
+                        {orders.map((row) => {
+                          const number = row.order_number || row.orderNumber || ''
+                          const customer = parseJsonField<Record<string, unknown>>(row.customer, {})
+                          const totals = parseJsonField<Record<string, number>>(row.totals, {})
+                          const items = parseJsonField<unknown[]>(row.items, [])
+                          const name = typeof customer.name === 'string' ? customer.name : ''
+                          const phone = typeof customer.phone === 'string' ? customer.phone : ''
+                          const statuses: { key: string; label: string }[] = [
+                            { key: 'new', label: 'جديد' },
+                            { key: 'contacted', label: 'تم التواصل' },
+                            { key: 'shipped', label: 'تم الشحن' },
+                            { key: 'done', label: 'مكتمل' },
+                          ]
+                          return (
+                            <div className="admin-list-item" key={number} style={{ display: 'grid', gap: 8 }}>
+                              <div className="li-main">
+                                <strong dir="ltr">{number}</strong>
+                                <small>{[name, phone].filter(Boolean).join(' · ')}{row.created_at ? ` · ${row.created_at}` : ''}</small>
+                                <small>{Array.isArray(items) ? items.length : 0} قطعة · {formatPrice(Number(totals.total) || 0)}</small>
+                              </div>
+                              <div className="admin-actions" style={{ marginTop: 0 }}>
+                                {statuses.map((status) => (
+                                  <button
+                                    key={status.key}
+                                    type="button"
+                                    className={`admin-btn${row.status === status.key ? ' success' : ' ghost'}`}
+                                    style={{ padding: '6px 10px', fontSize: 11.5 }}
+                                    onClick={() => void setOrderStatus(number, status.key)}
+                                  >
+                                    {status.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  ) : tab === 'settings' ? (
+                    <div>
+                      <div className="admin-note" style={{ marginBottom: 14 }}>
+                        إعدادات عامة للمتجر: وضع الألوان، عتبة التوصيل المجاني، ورسوم التوصيل. تُحفظ في الخادم وتظهر فوراً لكل الزوار.
+                      </div>
+                      <div className="admin-field">
+                        <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                          <input
+                            type="checkbox"
+                            checked={settings.colorsEnabled !== false}
+                            onChange={(event) => setSettings({ ...settings, colorsEnabled: event.target.checked })}
+                            style={{ width: 16, height: 16 }}
+                          />
+                          تفعيل وضع الألوان في المتجر (عام)
+                        </label>
+                        <small style={{ display: 'block', marginTop: 4, color: 'var(--eva-muted)', fontSize: 11 }}>
+                          عند الإيقاف تختفي قوائم الألوان من البطاقات وصفحات المنتجات، ويمكن تفعيلها لمنتج معيّن من تبويب المنتجات.
+                        </small>
+                      </div>
+                      <div className="admin-row">
+                        <div className="admin-field">
+                          <label>التوصيل المجاني ابتداءً من (دينار)</label>
+                          <input type="number" min={0} step={1000} value={settings.freeDeliveryFrom} onChange={(event) => setSettings({ ...settings, freeDeliveryFrom: Number(event.target.value) || 0 })} dir="ltr" />
+                        </div>
+                        <div className="admin-field">
+                          <label>رسوم التوصيل (دينار)</label>
+                          <input type="number" min={0} step={500} value={settings.deliveryFee} onChange={(event) => setSettings({ ...settings, deliveryFee: Number(event.target.value) || 0 })} dir="ltr" />
+                        </div>
+                      </div>
+                      <div className="admin-actions">
+                        <button type="button" className="admin-btn success" onClick={() => void saveSettings()}>
+                          <Save size={15} /> حفظ الإعدادات
+                        </button>
+                        <span className="admin-chip">وضع الاتصال: {online ? 'الخادم' : 'محلي'}</span>
+                      </div>
+                    </div>
                   ) : (
                     <div>
                       <div className="admin-note" style={{ marginBottom: 14 }}>
@@ -1019,12 +1268,13 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                             onKeyDown={(event) => {
                               if (event.key !== 'Enter') return
                               const value = (event.target as HTMLInputElement).value.trim()
-                              if (/^\d{4,8}$/.test(value)) {
+                              if (/^\d{4,12}$/.test(value)) {
                                 try { window.localStorage.setItem(PIN_KEY, value) } catch { /* ignore */ }
+                                void adminFetch('/api/admin/pin', { method: 'POST', body: JSON.stringify({ pin: value }) }).catch(() => undefined)
                                 ;(event.target as HTMLInputElement).value = ''
                                 setToast('تم تغيير الرمز')
                               } else {
-                                setToast('الرمز يجب أن يكون 4-8 أرقام')
+                                setToast('الرمز يجب أن يكون 4-12 رقماً')
                               }
                             }}
                           />
@@ -1034,13 +1284,15 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                             onClick={() => {
                               const input = document.getElementById('new-pin') as HTMLInputElement | null
                               const value = input?.value.trim() ?? ''
-                              if (!/^\d{4,8}$/.test(value)) {
-                                setToast('الرمز يجب أن يكون 4-8 أرقام')
+                              if (!/^\d{4,12}$/.test(value)) {
+                                setToast('الرمز يجب أن يكون 4-12 رقماً')
                                 return
                               }
                               try { window.localStorage.setItem(PIN_KEY, value) } catch { /* ignore */ }
+                              void adminFetch('/api/admin/pin', { method: 'POST', body: JSON.stringify({ pin: value }) })
+                                .then(() => setToast('تم تغيير الرمز في الخادم'))
+                                .catch(() => setToast('تم تغيير الرمز محلياً'))
                               if (input) input.value = ''
-                              setToast('تم تغيير الرمز')
                             }}
                           >
                             <Save size={15} /> حفظ الرمز

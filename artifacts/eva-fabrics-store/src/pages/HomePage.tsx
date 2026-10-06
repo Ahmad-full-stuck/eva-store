@@ -4,6 +4,7 @@ import { Link } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
 import { guideQuestions, homeStory, trustItems } from '@/lib/fallback-data'
 import { contentLines, useSiteContent } from '@/lib/site-content'
+import { runDiscovery, type DiscoveryMatch } from '@/lib/discover'
 import { ProductCard } from '@/components/ProductCard'
 import { HeroSection } from '@/components/home/HeroSection'
 import { NewsletterSection } from '@/components/home/NewsletterSection'
@@ -34,24 +35,28 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
   const [openFaq, setOpenFaq] = useState<number | null>(0)
   const newProducts = products.filter((product) => product.isNew).slice(0, 4)
   const recentProducts = newProducts.length >= 4 ? newProducts : products.filter((product) => product.isFeatured).slice(0, 4)
+  const [suggestions, setSuggestions] = useState<DiscoveryMatch[]>([])
   const discoveryHref = (() => {
     const params = new URLSearchParams()
     if (answers[1] === 'نعم، مطاطي') params.set('stretch', '1')
     if (answers[1] === 'لا، غير مطاطي') params.set('stretch', '0')
-    if (answers[2] === 'داكن') params.set('tone', 'dark')
-    if (answers[2] === 'فاتح') params.set('tone', 'light')
-    if (answers[2] === 'لامع') params.set('finish', 'gloss')
-    params.set('search', answers[0] || 'قماش')
-    return `/catalog?${params.toString()}`
+    const query = params.toString()
+    return `/catalog${query ? `?${query}` : ''}`
   })()
 
   const chooseAnswer = (answer: string) => {
+    const next = [...answers.slice(0, discoveryStep), answer]
+    setAnswers(next)
     if (discoveryStep < discoveryQuestions.length - 1) {
-      setAnswers((current) => [...current.slice(0, discoveryStep), answer])
       setDiscoveryStep((step) => step + 1)
       return
     }
-    setAnswers((current) => [...current.slice(0, discoveryStep), answer])
+    setSuggestions(runDiscovery(products, {
+      garment: next[0] || '',
+      stretch: next[1] === 'نعم، مطاطي' ? 'yes' : next[1] === 'لا، غير مطاطي' ? 'no' : '',
+      tone: next[2] || '',
+      limit: 3,
+    }))
   }
 
   return (
@@ -86,8 +91,30 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
           <div className="discovery-progress"><span>الخطوة {discoveryStep + 1} من ٣</span><div><i style={{ width: `${((discoveryStep + 1) / 3) * 100}%` }} /></div></div>
           <h3>{discoveryQuestions[discoveryStep].title}</h3>
           <div className="discovery-options">{discoveryQuestions[discoveryStep].options.map((option) => <button type="button" key={option} onClick={() => chooseAnswer(option)}>{option}<ArrowLeft size={15} /></button>)}</div>
-          {discoveryStep > 0 && <button type="button" className="text-button" onClick={() => { setDiscoveryStep(0); setAnswers([]) }}>ابدئي من جديد</button>}
-          {discoveryStep === discoveryQuestions.length - 1 && <Link href={discoveryHref} className="button button-primary discovery-result">شاهدي اقتراحاتي <ArrowLeft size={16} /></Link>}
+          {discoveryStep > 0 && <button type="button" className="text-button" onClick={() => { setDiscoveryStep(0); setAnswers([]); setSuggestions([]) }}>ابدئي من جديد</button>}
+          {suggestions.length > 0 && (
+            <div className="discovery-result-list" role="status" aria-live="polite">
+              <strong className="discovery-result-title">اقتراحاتنا لك</strong>
+              {suggestions.map((match) => {
+                const product = products.find((item) => item.slug === match.slug)
+                if (!product) return null
+                return (
+                  <div className="discovery-result-item" key={match.slug}>
+                    <Link href={`/product/${product.slug}`} className="discovery-result-thumb"><SmartImage src={product.image} alt="" sizes="72px" /></Link>
+                    <div className="discovery-result-copy">
+                      <Link href={`/product/${product.slug}`}><strong>{product.name}</strong></Link>
+                      <span>{match.reasons.join(' · ') || 'خامة مطابقة لاختياراتك'}</span>
+                    </div>
+                    <Link href={`/product/${product.slug}`} className="button button-primary discovery-result" aria-label={`عرض ${product.name}`}>شاهدي <ArrowLeft size={15} /></Link>
+                  </div>
+                )
+              })}
+              <Link href={discoveryHref} className="underlined-link discovery-all">عرض كل الأقمشة المطابقة <ArrowLeft size={15} /></Link>
+            </div>
+          )}
+          {!suggestions.length && discoveryStep === discoveryQuestions.length - 1 && answers.length === discoveryQuestions.length && (
+            <Link href={discoveryHref} className="button button-primary discovery-result">شاهدي اقتراحاتي <ArrowLeft size={16} /></Link>
+          )}
         </div>
       </section>
 

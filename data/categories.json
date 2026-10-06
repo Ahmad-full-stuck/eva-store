@@ -1,0 +1,65 @@
+[
+ {
+  "id": "style",
+  "slug": "style",
+  "name": "ستايلات جاهزة",
+  "description": "تنسيقات تجمع أكثر من قماش",
+  "image": "fabrics/hero.jpg",
+  "accent": "#7a5a6b",
+  "sort_order": 1
+ },
+ {
+  "id": "embroidered",
+  "slug": "embroidered",
+  "name": "مطرز",
+  "description": "تطريز بارز وخيوط فاخرة",
+  "image": "fabrics/rose.jpg",
+  "accent": "#8f4766",
+  "sort_order": 2
+ },
+ {
+  "id": "plain",
+  "slug": "plain",
+  "name": "سادة",
+  "description": "ألوان هادئة للاستخدام اليومي",
+  "image": "fabrics/blue.jpg",
+  "accent": "#42647b",
+  "sort_order": 3
+ },
+ {
+  "id": "stretch",
+  "slug": "stretch",
+  "name": "مطاطي",
+  "description": "سبانديكس وتويل بمرونة مريحة",
+  "image": "fabrics/emerald.jpg",
+  "accent": "#34715e",
+  "sort_order": 4
+ },
+ {
+  "id": "sequined",
+  "slug": "sequined",
+  "name": "ترتر ولمّاع",
+  "description": "بريق وحركة للحفلات",
+  "image": "fabrics/hero.jpg",
+  "accent": "#8d2b4f",
+  "sort_order": 5
+ },
+ {
+  "id": "patterned",
+  "slug": "patterned",
+  "name": "مزخرف",
+  "description": "نقوش جاكار وتطريز منظم",
+  "image": "fabrics/rose.jpg",
+  "accent": "#8c5c82",
+  "sort_order": 6
+ },
+ {
+  "id": "harvard",
+  "slug": "harvard",
+  "name": "هارفرد",
+  "description": "فيسكوز ثقيل تايواني بعرض ١٥٣ سم",
+  "image": "fabrics/harvard-cover.jpg",
+  "accent": "#5f6b7a",
+  "sort_order": 7
+ }
+]

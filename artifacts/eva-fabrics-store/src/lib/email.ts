@@ -36,7 +36,7 @@ export const formatMeters = (m: number): string => {
   return s === '0.5' || s === '1.5' || s === '2.5' || s === '3.5' || s === '4.5' || s === '5.5' ? `${s} م` : `${s} متر`
 }
 
-export const formatPrice = (p: number): string => p.toLocaleString('ar-IQ') + ' د.ع'
+export const formatPrice = (p: number): string => (p >= 1000 && p % 1000 === 0 ? `${p / 1000} الف دينار عراقي` : `${p.toLocaleString('ar-IQ')} دينار عراقي`)
 
 const defaultSubject = (data: OrderEmailData): string => `طلب جديد #${data.orderNumber}`
 

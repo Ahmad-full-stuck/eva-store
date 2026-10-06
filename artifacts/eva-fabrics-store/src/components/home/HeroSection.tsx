@@ -38,12 +38,13 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
   ]
   const [activeSlide, setActiveSlide] = useState(0)
   const timerRef = useRef<number | undefined>(undefined)
+  const slideMs = Math.max(1200, Number(content.heroSlideMs) || 2600)
 
   const restart = () => {
     window.clearInterval(timerRef.current)
     timerRef.current = window.setInterval(() => {
       setActiveSlide((current) => (current + 1) % slides.length)
-    }, 4200)
+    }, slideMs)
   }
 
   const goSlide = (step: number) => {
@@ -64,7 +65,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
       window.clearInterval(timerRef.current)
       document.removeEventListener('visibilitychange', onVisibility)
     }
-  }, [])
+  }, [slideMs])
 
   return (
     <>

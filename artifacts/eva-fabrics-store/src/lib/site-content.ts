@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { readServerContent, readServerSettings } from '@/lib/api'
 
 export const CONTENT_KEY = 'eva-admin-content'
 
@@ -19,6 +20,7 @@ export interface SiteContent {
   heroNote: string
   heroNoteAlt: string
   statsTitle: string
+  heroSlideMs: string
   categoriesEyebrow: string
   categoriesTitle: string
   newEyebrow: string
@@ -60,6 +62,7 @@ export const defaultSiteContent: SiteContent = {
   heroNote: 'توصيل إلى جميع محافظات العراق',
   heroNoteAlt: 'دفع عند استلام الطلب',
   statsTitle: 'أرقام المعرض الآن',
+  heroSlideMs: '2600',
   categoriesEyebrow: 'اختاري من البداية',
   categoriesTitle: 'مساحات القماش',
   newEyebrow: 'نماذج مختارة',
@@ -97,8 +100,37 @@ const readJson = <T,>(key: string, fallback: T): T => {
 
 export const readSiteContent = (): SiteContent => ({
   ...defaultSiteContent,
+  ...(readServerContent<Partial<SiteContent>>() || {}),
   ...readJson<Partial<SiteContent>>(CONTENT_KEY, {}),
 })
+
+export interface StoreSettings {
+  colorsEnabled: boolean
+  freeDeliveryFrom: number
+  deliveryFee: number
+  [key: string]: unknown
+}
+
+export const defaultStoreSettings: StoreSettings = {
+  colorsEnabled: true,
+  freeDeliveryFrom: 50000,
+  deliveryFee: 5000,
+}
+
+export const readStoreSettings = (): StoreSettings => ({
+  ...defaultStoreSettings,
+  ...(readServerSettings() as Partial<StoreSettings>),
+})
+
+export const useStoreSettings = (): StoreSettings => {
+  const [settings, setSettings] = useState<StoreSettings>(() => readStoreSettings())
+  useEffect(() => {
+    const sync = () => setSettings(readStoreSettings())
+    window.addEventListener('eva-admin-changed', sync)
+    return () => window.removeEventListener('eva-admin-changed', sync)
+  }, [])
+  return settings
+}
 
 const listeners = new Set<() => void>()
 

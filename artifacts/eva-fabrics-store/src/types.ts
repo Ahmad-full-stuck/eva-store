@@ -37,12 +37,14 @@ export interface Product {
   images: string[]
   video?: string
   colors: ProductColor[]
+  colorsEnabled?: boolean
   specs: ProductSpecs
   faqs: ProductFaq[]
   isNew: boolean
   isFeatured: boolean
   stockMeters: number
   createdAt: string
+  sourceUrl?: string
 }
 
 export interface Category {

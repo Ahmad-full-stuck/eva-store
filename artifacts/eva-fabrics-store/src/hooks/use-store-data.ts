@@ -3,6 +3,7 @@ import type { Category, DataSource, Product, ProductColor, ProductFaq, ProductSp
 import { fallbackCategories, fallbackProducts, fallbackRoutes } from '@/lib/fallback-data'
 import { normalizeArabic } from '@/lib/catalog'
 import { apiUrl } from '@/lib/site'
+import { readStoreSettings } from '@/lib/site-content'
 import { mergeAdminCategories, mergeAdminProducts } from '@/components/AdminSecret'
 
 type ApiStatus = 'loading' | 'ready' | 'fallback'
@@ -124,7 +125,9 @@ const normalizeProduct = (value: unknown, index: number): Product | null => {
     faqs: Array.isArray(value.faqs) ? value.faqs.map(normalizeFaq).filter((item): item is ProductFaq => item !== null) : [],
     isNew: booleanFrom(value.isNew, false),
     isFeatured: booleanFrom(value.isFeatured, true),
+    colorsEnabled: booleanFrom(value.colorsEnabled, Array.isArray(value.colors) && value.colors.length > 0),
     stockMeters,
+    sourceUrl: textFrom(value.sourceUrl, ''),
     createdAt: textFrom(value.createdAt, new Date().toISOString().slice(0, 10)),
   }
 }
@@ -150,8 +153,20 @@ const fetchList = async (path: string, signal: AbortSignal, key: string): Promis
   return listFrom(payload, key)
 }
 
+/** المفتاح العام لوضع الألوان: عند إيقائه تختفي خيارات الألوان من كل المنتجات. */
+const applyGlobalColors = (products: Product[]): Product[] => {
+  let settings: ReturnType<typeof readStoreSettings>
+  try {
+    settings = readStoreSettings()
+  } catch {
+    return products
+  }
+  if (settings.colorsEnabled !== false) return products
+  return products.map((product) => (product.colorsEnabled === false ? product : { ...product, colorsEnabled: false }))
+}
+
 export const useStoreData = (): StorefrontData & { status: ApiStatus } => {
-  const [data, setData] = useState<StorefrontData>(() => ({ products: mergeAdminProducts(fallbackProducts), categories: mergeAdminCategories(fallbackCategories), routes: fallbackRoutes, source: 'fallback' }))
+  const [data, setData] = useState<StorefrontData>(() => ({ products: applyGlobalColors(mergeAdminProducts(fallbackProducts)), categories: mergeAdminCategories(fallbackCategories), routes: fallbackRoutes, source: 'fallback' }))
   const [status, setStatus] = useState<ApiStatus>('loading')
 
   useEffect(() => {
@@ -169,7 +184,7 @@ export const useStoreData = (): StorefrontData & { status: ApiStatus } => {
       const successful = Number(products.length > 0) + Number(categories.length > 0) + Number(routes.length > 0)
       const source: DataSource = successful === 0 ? 'fallback' : successful === 3 ? 'api' : 'mixed'
       setData({
-        products: mergeAdminProducts(products.length ? products : fallbackProducts),
+        products: applyGlobalColors(mergeAdminProducts(products.length ? products : fallbackProducts)),
         categories: mergeAdminCategories(categories.length ? categories : fallbackCategories),
         routes: routes.length ? routes : fallbackRoutes,
         source,
@@ -178,7 +193,7 @@ export const useStoreData = (): StorefrontData & { status: ApiStatus } => {
     }
     void load()
     const syncAdmin = () => {
-      setData((current) => ({ ...current, products: mergeAdminProducts(current.products), categories: mergeAdminCategories(current.categories) }))
+      setData((current) => ({ ...current, products: applyGlobalColors(mergeAdminProducts(current.products)), categories: mergeAdminCategories(current.categories) }))
     }
     window.addEventListener('eva-admin-changed', syncAdmin)
     return () => {

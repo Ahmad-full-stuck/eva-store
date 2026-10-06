@@ -916,7 +916,7 @@ const policies: PolicyContent[] = [
     intro: 'نجهّز الطلبات بعد التأكيد، ويظهر رقم الطلب في صفحة النجاح ويُرسل لك مع تحديثات الشحن.',
     points: [
       'التوصيل متاح إلى جميع المحافظات العراقية، ويعتمد الوقت على بعد المحافظة وحالة الطلب.',
-      'رسوم الشحن تُحتسب في مراجعة الطلب، وتصبح مجانية للطلبات التي تتجاوز ٥٠٬٠٠٠ دينار.',
+      'رسوم الشحن تُحتسب في مراجعة الطلب، وتصبح مجانية للطلبات التي تتجاوز 50 الف دينار.',
       'الشحن الدولي متاح عند توفّر شحنة مناسبة، ويُتفق على التفاصيل قبل الدفع.',
       'نحدّثك عبر واتساب عند خروج الطلب وعند تسليمه إلى مندوب الشحن.',
     ],
@@ -1320,7 +1320,7 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
             <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><Search size={16} />تتبّع الطلب</Link>
             <a href={siteConfig.whatsappUrl(`مرحباً، أستفسر عن الطلب رقم ${order.orderNumber}`)} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />تواصلي عبر واتساب</a>
           </div>
-          <div className="confirmation-trust"><Truck size={17} /><span>التوصيل مجاني للطلبات التي تتجاوز ٥٠٬٠٠٠ دينار، ونحدّث الحالة عبر واتساب.</span></div>
+          <div className="confirmation-trust"><Truck size={17} /><span>التوصيل مجاني للطلبات التي تتجاوز 50 الف دينار، ونحدّث الحالة عبر واتساب.</span></div>
         </div>
       </main>
     </>

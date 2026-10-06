@@ -196,8 +196,8 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
           <span className="product-price">{formatPrice(product.price)}<small>/م</small></span>
         </div>
         <div className="product-card-footer">
-          <div className="swatch-list" aria-label={`ألوان ${product.name} — اضغطي لعرض الصورة`}>
-            {product.colors.slice(0, 5).map((color) => (
+          <div className={`swatch-list${product.colorsEnabled === false ? ' is-hidden' : ''}`} aria-label={`ألوان ${product.name} — اضغطي لعرض الصورة`}>
+            {(product.colorsEnabled === false ? [] : product.colors.slice(0, 5)).map((color) => (
               <button
                 key={color.id}
                 type="button"
@@ -219,7 +219,7 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
             onClick={() => selectedColor && onAdd(product, selectedColor, 0.5)}
             aria-label={addLabel}
           >
-            {soldOut ? 'نفد المخزون' : <><ShoppingBag size={14} aria-hidden="true" /><span>أضيفي ٠٫٥ م</span></>}
+            {soldOut ? 'نفد المخزون' : <><ShoppingBag size={14} aria-hidden="true" /><span>أضيفي نصف متر</span></>}
           </button>
         </div>
       </div>

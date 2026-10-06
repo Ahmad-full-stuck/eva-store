@@ -1,4 +1,5 @@
 import type { CartItem, Product, ProductColor } from '@/types'
+import { readStoreSettings } from '@/lib/site-content'
 
 export const normalizeArabic = (value: string): string => value
   .normalize('NFKD')
@@ -33,14 +34,36 @@ export const matchesProductSearch = (product: Product, query: string): boolean =
 }
 
 export const getCartTotals = (cart: CartItem[]): { subtotal: number; deliveryFee: number; total: number } => {
+  const settings = readStoreSettings()
+  const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
+  const fee = Math.max(0, settings.deliveryFee ?? 5000)
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.length, 0)
-  const deliveryFee = subtotal === 0 || subtotal >= 50000 ? 0 : 5000
+  const deliveryFee = subtotal === 0 || subtotal >= freeFrom ? 0 : fee
   return { subtotal, deliveryFee, total: subtotal + deliveryFee }
 }
 
-export const formatPrice = (value: number): string => `${value.toLocaleString('ar-IQ')} د.ع`
+/** «15000 د.ع» → «15 الف دينار عراقي» كما طلب المتجر. */
+export const formatPrice = (value: number): string => {
+  const safe = Math.max(0, Math.round(value))
+  if (safe === 0) return 'السعر عند التأكيد'
+  if (safe >= 1000 && safe % 1000 === 0) return `${safe / 1000} الف دينار عراقي`
+  return `${safe.toLocaleString('ar-IQ')} دينار عراقي`
+}
 
-export const formatMeters = (value: number): string => `${value.toLocaleString('ar-IQ', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} م`
+/** صيغة قصيرة للبانرات والشريط: «50 الف دينار». */
+export const formatDinar = (value: number): string => {
+  const safe = Math.max(0, Math.round(value))
+  if (safe >= 1000 && safe % 1000 === 0) return `${safe / 1000} الف دينار`
+  return `${safe.toLocaleString('ar-IQ')} دينار`
+}
+
+/** «0.5» → «نصف متر» */
+export const metersLabel = (value: number): string =>
+  value === 0.5 ? 'نصف متر' : `${Number(value.toFixed(2)).toLocaleString('ar-IQ')} متر`
+
+export const formatMeters = (value: number): string => (value === 0.5
+  ? 'نصف متر'
+  : `${value.toLocaleString('ar-IQ', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} م`)
 
 export const normalizeHalfMeters = (value: number): number => {
   if (!Number.isFinite(value) || value <= 0) return 0

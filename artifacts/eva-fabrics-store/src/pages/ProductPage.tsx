@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Check, ChevronDown, ChevronLeft, ChevronRight, Heart, Minus, Plus, ShieldCheck, ShoppingBag, Zap, ZoomIn } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
-import { availableMeters, formatMeters, formatPrice } from '@/lib/catalog'
+import { availableMeters, formatMeters, formatPrice, metersLabel } from '@/lib/catalog'
 import { cachedColorMaps, type ColorImageMaps } from '@/lib/image-colors'
 import { ProductCard } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
@@ -170,12 +170,19 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
       <section className="product-purchase">
         <div className="product-purchase-top"><div><span className="eyebrow">{product.type}</span><h1>{product.name}</h1><p className="product-description">{product.description}</p></div><button type="button" className={`detail-wish ${wishlist.includes(product.slug) ? 'is-active' : ''}`} onClick={() => onWish(product.slug)} aria-label={wishlist.includes(product.slug) ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'} aria-pressed={wishlist.includes(product.slug)}><Heart size={20} fill={wishlist.includes(product.slug) ? 'currentColor' : 'none'} /></button></div>
         <div className="price-block"><span>السعر للمتر الواحد</span><strong>{formatPrice(product.price)}</strong>{product.compareAtPrice && <del>{formatPrice(product.compareAtPrice)}</del>}</div>
-        <div className="detail-divider" />
-        <fieldset className="color-fieldset"><legend>اللون <span>{selectedColor.name}</span></legend><div className="color-options">{product.colors.map((color) => <button type="button" key={color.id} className={`color-option ${selectedColor.id === color.id ? 'is-selected' : ''} ${!color.available ? 'is-unavailable' : ''}`} style={{ backgroundColor: color.hex }} onClick={() => pickColor(color)} disabled={!color.available} aria-label={`${color.name}${color.available ? '' : '، غير متوفر'}`} aria-pressed={selectedColor.id === color.id} title={color.name} />)}</div><small className="color-hint">اضغطي اللون لعرض صورته في المعرض</small></fieldset>
+        {product.colorsEnabled !== false && <>
+          <div className="detail-divider" />
+          <fieldset className="color-fieldset"><legend>اللون <span>{selectedColor.name}</span></legend><div className="color-options">{product.colors.map((color) => <button type="button" key={color.id} className={`color-option ${selectedColor.id === color.id ? 'is-selected' : ''} ${!color.available ? 'is-unavailable' : ''}`} style={{ backgroundColor: color.hex }} onClick={() => pickColor(color)} disabled={!color.available} aria-label={`${color.name}${color.available ? '' : '، غير متوفر'}`} aria-pressed={selectedColor.id === color.id} title={color.name} />)}</div><small className="color-hint">اضغطي اللون لعرض صورته في المعرض</small></fieldset>
+        </>}
         <div className="detail-divider" />
         <div className="quantity-heading"><div><strong>الكمية المطلوبة</strong><small>يمكن الطلب بنصف متر كحد أدنى</small></div><span>{formatMeters(product.stockMeters)} متاح</span></div>
-        <div className="quantity-control"><button type="button" onClick={decrease} disabled={length <= 0.5} aria-label="إنقاص نصف متر"><Minus size={17} /></button><output aria-live="polite">{formatMeters(length)}</output><button type="button" onClick={increase} disabled={length >= maxLength} aria-label="زيادة نصف متر"><Plus size={17} /></button></div>
-        <div className="line-total"><span>الإجمالي — {formatMeters(length)} × {formatPrice(product.price)} للمتر</span><strong>{formatPrice(product.price * length)}</strong></div>
+        <div className="quantity-control"><button type="button" onClick={decrease} disabled={length <= 0.5} aria-label="إنقاص نصف متر"><Minus size={17} /></button><output aria-live="polite">{metersLabel(length)}</output><button type="button" onClick={increase} disabled={length >= maxLength} aria-label="زيادة نصف متر"><Plus size={17} /></button></div>
+        <label className="meters-input-row"><span>كم متر تريدين؟</span><input className="meters-input" type="number" inputMode="decimal" min={0.5} max={Math.max(0.5, maxLength)} step={0.5} value={length} onChange={(event) => {
+          const next = Number(event.target.value)
+          if (!Number.isFinite(next)) return
+          setLength(Math.min(Math.max(0.5, next), Math.max(0.5, maxLength)))
+        }} aria-label="إدخال عدد الأمتار مباشرة" /><em>متر</em></label>
+        <div className="line-total"><span>الإجمالي — {metersLabel(length)} × {formatPrice(product.price)} للمتر</span><strong>{formatPrice(product.price * length)}</strong></div>
         <button ref={addBtnRef} type="button" className="button button-primary detail-add" onClick={add} disabled={maxLength <= 0}><ShoppingBag size={17} />{maxLength <= 0 ? 'غير متوفر حالياً' : 'أضيفي إلى السلة'}<ArrowLeft size={16} /></button>
         {justAdded && maxLength > 0 && <div className="add-confirm" role="status"><span><Check size={16} />أضيف {formatMeters(length)} من {product.name} إلى السلة</span><Link href="/checkout" className="button button-primary">إتمام الطلب الآن <ArrowLeft size={15} /></Link></div>}
         <div className="detail-perks"><div><ShieldCheck size={17} /><span>توصيل آمن للعراق</span></div><div><Zap size={17} /><span>الطلب بمربع واحد</span></div></div>

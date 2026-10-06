@@ -101,6 +101,9 @@ export const sanitizeProduct = (value: unknown): Product | null => {
   if (compareAtPrice > 0) product.compareAtPrice = compareAtPrice
   const video = text(value.video)
   if (video) product.video = video
+  if (value.colorsEnabled === false) product.colorsEnabled = false
+  const sourceUrl = text(value.sourceUrl)
+  if (sourceUrl) product.sourceUrl = sourceUrl
   return product
 }
 

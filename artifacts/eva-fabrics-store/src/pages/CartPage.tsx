@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Minus, Pencil, Plus, ShieldCheck, ShoppingBag, Trash2, Truck } from 'lucide-react'
 import { Link } from 'wouter'
 import type { CartItem } from '@/types'
-import { formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
+import { formatDinar, formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
+import { useStoreSettings } from '@/lib/site-content'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 interface CartPageProps {
@@ -10,8 +11,6 @@ interface CartPageProps {
   onUpdate: (key: string, length: number) => void
   onRemove: (key: string) => void
 }
-
-const FREE_DELIVERY_AT = 50000
 
 const glassStyles = `
 .glass-scope { --glass-fill: rgba(255, 252, 248, .58); --glass-strong: rgba(255, 251, 247, .88); --glass-line: rgba(255, 255, 255, .72); --glass-shadow: 0 22px 48px rgba(74, 24, 43, .1); }
@@ -80,6 +79,8 @@ const glassStyles = `
 `
 
 export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
+  const settings = useStoreSettings()
+  const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
   const totals = getCartTotals(cart)
   const [announcement, setAnnouncement] = useState('')
   const itemsRef = useRef<HTMLElement>(null)
@@ -122,8 +123,8 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   }
 
   const meters = cart.reduce((sum, item) => sum + item.length, 0)
-  const remaining = Math.max(0, FREE_DELIVERY_AT - totals.subtotal)
-  const progress = Math.min(100, Math.round((totals.subtotal / FREE_DELIVERY_AT) * 100))
+  const remaining = Math.max(0, freeFrom - totals.subtotal)
+  const progress = freeFrom ? Math.min(100, Math.round((totals.subtotal / freeFrom) * 100)) : 100
 
   return (
     <main className="container-eva cart-page glass-scope">
@@ -189,8 +190,8 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
           {remaining > 0 ? (
             <div className="delivery-progress">
               <div className="delivery-progress-head">
-                <span>التوصيل المجاني عند {formatPrice(FREE_DELIVERY_AT)}</span>
-                <b>{formatPrice(remaining)} متبقية</b>
+                <span>التوصيل المجاني عند {formatDinar(freeFrom)}</span>
+                <b>{formatDinar(remaining)} متبقية</b>
               </div>
               <div className="progress-track" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label="التقدم نحو التوصيل المجاني">
                 <i style={{ width: `${progress}%` }} />
