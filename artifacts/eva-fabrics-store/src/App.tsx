@@ -8,6 +8,7 @@ import { addCartItem, getStoredCart, getStoredWishlist, reconcileCart, removeCar
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { AdminSecret } from '@/components/AdminSecret'
+import { WhatsAppFab } from '@/components/WhatsAppFab'
 import { HomePage } from '@/pages/HomePage'
 import { CatalogPage } from '@/pages/CatalogPage'
 import { ProductPage } from '@/pages/ProductPage'
@@ -62,6 +63,20 @@ const shellStyles = `
 }
 `
 
+const PAGE_SEO: Record<string, { title: string; desc: string }> = {
+  '/': { title: 'إيفا ستور للأقمشة | خامات مختارة تصنع الفرق', desc: 'متجر إيفا ستور للأقمشة: تعرفي على الخامة والمرونة والشفافية واللون، اختاري ما يناسب قطعك، واطلبي بنصف متر مع توصيل إلى جميع محافظات العراق.' },
+  '/catalog': { title: 'كل الأقمشة | إيفا ستور', desc: 'تصفحي أقمشة إيفا ستور: قطن، كريب، ساتان وأكثر — مع المرونة واللون والسعر لكل متر.' },
+  '/cart': { title: 'سلة المشتريات | إيفا ستور', desc: 'راجعي قماشك المختار وعدد الأمتار قبل إتمام الطلب.' },
+  '/checkout': { title: 'إتمام الطلب | إيفا ستور', desc: 'أدخلي بياناتك وعدد الأمتار لتأكيد طلب الأقمشة مع التوصيل إلى جميع محافظات العراق.' },
+  '/favorites': { title: 'المفضلة | إيفا ستور', desc: 'الأقمشة التي حفظتيها للرجوع إليها لاحقاً.' },
+  '/about': { title: 'من نحن | إيفا ستور', desc: 'قصة إيفا ستور وخامة تصنع الفرق.' },
+  '/fabric-guide': { title: 'دليل الأقمشة | إيفا ستور', desc: 'كيف تفرقي بين أنواع الأقمشة؟ دليل عملي بالأسئلة الشائعة عن المرونة والكثافة والعناية.' },
+  '/contact': { title: 'تواصلي معنا | إيفا ستور', desc: 'تواصلي مع إيفا ستور عبر واتساب أو الهاتف للاستفسار عن الأقمشة والتوصيل.' },
+  '/policies': { title: 'السياسات والخصوصية | إيفا ستور', desc: 'سياسات الشحن والإرجاع والخصوصية الخاصة بمتجر إيفا ستور.' },
+  '/order-tracking': { title: 'تتبع الطلب | إيفا ستور', desc: 'تتبعي حالة طلبك برقم الطلب الخاص بك.' },
+  '/order-confirmation': { title: 'تم تسجيل طلبك | إيفا ستور', desc: 'تم تسجيل طلبك بنجاح، سنتواصل معك قريباً لتأكيد التفاصيل.' },
+}
+
 const safeDecode = (value: string): string => {
   try {
     return decodeURIComponent(value)
@@ -77,6 +92,18 @@ function App() {
   const [wishlist, setWishlist] = useState<string[]>(() => getStoredWishlist())
   const [notice, setNotice] = useState('')
   const pathname = location.split('?')[0]
+
+  useEffect(() => {
+    const product = pathname.startsWith('/product/')
+      ? products.find((item) => `/product/${item.slug}` === pathname)
+      : undefined
+    const fallback = pathname.startsWith('/order-confirmation') ? PAGE_SEO['/order-confirmation'] : undefined
+    const entry = product
+      ? { title: `${product.name} | إيفا ستور`, desc: product.description || PAGE_SEO['/catalog'].desc }
+      : PAGE_SEO[pathname] ?? fallback
+    document.title = entry?.title ?? PAGE_SEO['/'].title
+    if (entry?.desc) document.querySelector('meta[name="description"]')?.setAttribute('content', entry.desc)
+  }, [pathname, products])
 
   useEffect(() => {
     if (status === 'loading') return
@@ -160,6 +187,7 @@ function App() {
       </div>
       <SiteFooter routes={routes} categories={categories} />
       <AdminSecret products={products} categories={categories} />
+      <WhatsAppFab />
       <div className="toast-container">
         {notice && (
           <div className="toast" role="status" aria-live="polite">

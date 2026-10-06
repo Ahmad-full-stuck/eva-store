@@ -86,14 +86,34 @@ export const loadServerConfig = async (): Promise<void> => {
   }
 }
 
+export class AdminRequestError extends Error {
+  status: number
+  constructor(message: string, status: number) {
+    super(message)
+    this.status = status
+  }
+}
+
 export const adminLogin = async (pin: string): Promise<void> => {
-  const response = await fetch(apiUrl('/api/admin/login'), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify({ pin }),
-  })
+  let response: Response
+  try {
+    response = await fetch(apiUrl('/api/admin/login'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ pin }),
+    })
+  } catch {
+    // لا خادم أصلاً (أو انقطع الاتصال) — ينتقل المتجر للوضع المحلي
+    throw new Error('server-unreachable')
+  }
   const body = (await response.json().catch(() => null)) as { data?: { token?: string }; error?: string } | null
-  if (!response.ok || !body?.data?.token) throw new Error(body?.error || 'الرمز غير صحيح')
+  if (!response.ok || !body?.data?.token) {
+    // الخادم موجود ويرفض الرمز فعلاً:401/403 — تُعتبر خطأ حقيقياً ولا يُسقط للوضع المحلي
+    if (response.status === 401 || response.status === 403) {
+      throw new AdminRequestError(body?.error || 'الرمز غير صحيح', response.status)
+    }
+    throw new Error('server-unavailable')
+  }
   setToken(body.data.token)
 }
 
@@ -108,14 +128,6 @@ export const adminLogout = async (): Promise<void> => {
     })
   } catch {
     /* ignore */
-  }
-}
-
-export class AdminRequestError extends Error {
-  status: number
-  constructor(message: string, status: number) {
-    super(message)
-    this.status = status
   }
 }
 

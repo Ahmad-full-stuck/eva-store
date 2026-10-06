@@ -182,15 +182,21 @@ const toFileDataUrl = (file: File): Promise<string> =>
   })
 
 const adminStyles = `
-.admin-layer { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; padding: 16px; background: rgba(46,24,33,.55); backdrop-filter: blur(6px); }
-.admin-panel { width: min(940px, 100%); max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; background: #fffbfb; border: 1px solid rgba(255,255,255,.9); border-radius: 18px; box-shadow: 0 30px 70px -20px rgba(46,24,33,.5); }
-.admin-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; color: #fff6f8; background: linear-gradient(135deg, var(--eva-charcoal), var(--eva-rose-dark)); }
-.admin-head h2 { margin: 0; font-size: 16px; display: flex; align-items: center; gap: 8px; }
-.admin-head small { display: block; font-size: 11px; opacity: .75; font-weight: 400; }
-.admin-tabs { display: flex; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--eva-line); background: #fff; overflow-x: auto; }
-.admin-tab { flex: 0 0 auto; padding: 8px 14px; border: 1px solid var(--eva-line); border-radius: 999px; background: #fff; color: var(--eva-muted); font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit; }
-.admin-tab.is-active { color: #fff; background: var(--eva-rose); border-color: var(--eva-rose); }
-.admin-body { padding: 16px 18px; overflow-y: auto; }
+.admin-layer { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom)); background: rgba(46,24,33,.58); backdrop-filter: blur(9px) saturate(130%); -webkit-backdrop-filter: blur(9px) saturate(130%); animation: adminFade .18s ease both; }
+.admin-panel { width: min(940px, 100%); max-height: min(92vh, calc(100dvh - 28px)); display: flex; flex-direction: column; overflow: hidden; background: #fffbfb; border: 1px solid rgba(255,255,255,.92); border-radius: 20px; box-shadow: 0 34px 80px -24px rgba(46,24,33,.55); animation: adminPop .22s cubic-bezier(.22,1,.36,1) both; }
+@keyframes adminFade { from { opacity: 0; } }
+@keyframes adminPop { from { opacity: 0; transform: translateY(14px) scale(.985); } }
+.admin-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; color: #fff6f8; background: linear-gradient(135deg, var(--eva-charcoal), var(--eva-rose-dark)); }
+.admin-head h2 { margin: 0; font-size: 16.5px; display: flex; align-items: center; gap: 9px; }
+.admin-head small { display: block; font-size: 11px; opacity: .78; font-weight: 400; }
+.admin-head .admin-btn.ghost { min-height: 34px; padding: 6px 12px; font-size: 12px; }
+.admin-tabs { display: flex; gap: 7px; padding: 11px 14px; border-bottom: 1px solid var(--eva-line); background: #fff; overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--eva-rose-tint) transparent; }
+.admin-tabs::-webkit-scrollbar { height: 4px; }
+.admin-tabs::-webkit-scrollbar-thumb { background: var(--eva-rose-tint); border-radius: 99px; }
+.admin-tab { flex: 0 0 auto; min-height: 38px; padding: 8px 15px; border: 1px solid var(--eva-line); border-radius: 999px; background: #fff; color: var(--eva-muted); font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: color .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease; }
+.admin-tab:hover { color: var(--eva-rose); border-color: var(--eva-rose); }
+.admin-tab.is-active { color: #fff; background: var(--eva-rose); border-color: var(--eva-rose); box-shadow: 0 8px 18px -8px rgba(122, 30, 60, .55); }
+.admin-body { padding: 18px 18px 22px; overflow-y: auto; overflow-x: hidden; min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; word-break: break-word; }
 .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
 .admin-card { border: 1px solid var(--eva-line); border-radius: 14px; overflow: hidden; background: #fff; }
 .admin-card img { width: 100%; height: 118px; object-fit: cover; display: block; background: var(--eva-rose-soft); }
@@ -198,27 +204,35 @@ const adminStyles = `
 .admin-card strong { font-size: 13.5px; color: var(--eva-ink); line-height: 1.5; }
 .admin-card .ac-price { color: var(--eva-rose); font-weight: 700; font-size: 14px; }
 .admin-card .ac-actions { display: flex; gap: 6px; }
-.admin-card .ac-actions button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 7px; border: 1px solid var(--eva-line); border-radius: 9px; background: #fff; color: var(--eva-ink); font-size: 11.5px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.admin-card .ac-actions button { flex: 1; min-height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 7px; border: 1px solid var(--eva-line); border-radius: 10px; background: #fff; color: var(--eva-ink); font-size: 11.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: color .15s ease, border-color .15s ease, background .15s ease; }
+.admin-card .ac-actions button:hover { color: var(--eva-rose); border-color: var(--eva-rose); background: var(--eva-rose-soft); }
 .admin-card .ac-actions button.danger { color: #a3193f; border-color: #f0c9d4; background: #fff5f7; }
+.admin-card .ac-actions button.danger:hover { color: #fff; border-color: #a3193f; background: #a3193f; }
 .admin-field { display: grid; gap: 5px; margin-bottom: 12px; }
 .admin-field label { font-size: 12px; font-weight: 700; color: var(--eva-muted); }
-.admin-field input, .admin-field textarea, .admin-field select { width: 100%; padding: 9px 11px; border: 1px solid var(--eva-line-strong); border-radius: 10px; background: #fff; color: var(--eva-ink); font-family: inherit; font-size: 13.5px; }
+.admin-field input, .admin-field textarea, .admin-field select { width: 100%; padding: 9px 11px; border: 1px solid var(--eva-line-strong); border-radius: 12px; background: #fff; color: var(--eva-ink); font-family: inherit; font-size: 13.5px; transition: border-color .15s ease, box-shadow .15s ease; }
 .admin-field textarea { min-height: 78px; resize: vertical; line-height: 1.7; }
 .admin-field input:focus, .admin-field textarea:focus, .admin-field select:focus { outline: 2px solid var(--eva-rose); outline-offset: 1px; border-color: var(--eva-rose); }
 .admin-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .admin-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-.admin-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border: 1px solid transparent; border-radius: 10px; background: var(--eva-rose); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.admin-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; padding: 9px 16px; border: 1px solid transparent; border-radius: 12px; background: var(--eva-rose); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease, color .15s ease; }
+.admin-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 22px -10px rgba(122, 30, 60, .55); }
+.admin-btn:focus-visible { outline: 2px solid var(--eva-rose); outline-offset: 2px; }
 .admin-btn.ghost { background: #fff; color: var(--eva-ink); border-color: var(--eva-line-strong); }
+.admin-btn.ghost:hover:not(:disabled) { color: var(--eva-rose); border-color: var(--eva-rose); background: var(--eva-rose-soft); box-shadow: none; }
 .admin-btn.success { background: var(--eva-green); }
-.admin-btn:disabled { opacity: .5; cursor: not-allowed; }
-.admin-note { font-size: 12px; color: var(--eva-muted); line-height: 1.8; background: var(--eva-rose-soft); border: 1px solid var(--eva-rose-tint); border-radius: 10px; padding: 10px 12px; }
+.admin-btn.success:hover:not(:disabled) { box-shadow: 0 10px 22px -10px rgba(47, 92, 66, .55); }
+.admin-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+.admin-note { font-size: 12px; color: var(--eva-muted); line-height: 1.8; background: var(--eva-rose-soft); border: 1px solid var(--eva-rose-tint); border-radius: 12px; padding: 10px 12px; }
 .admin-note.ok { background: #eef7f1; border-color: #cfe7d8; color: #2f5c42; }
-.admin-login { display: grid; gap: 14px; justify-items: center; text-align: center; padding: 34px 20px; }
-.admin-login .lock { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; color: #fff; background: linear-gradient(135deg, var(--eva-rose), var(--eva-charcoal)); }
-.admin-login h3 { margin: 0; font-size: 17px; }
+.admin-login { display: grid; gap: 15px; justify-items: center; text-align: center; padding: 42px 22px; }
+.admin-login .lock { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; color: #fff; background: linear-gradient(135deg, var(--eva-rose), var(--eva-charcoal)); box-shadow: 0 16px 32px -14px rgba(122, 30, 60, .65); }
+.admin-login h3 { margin: 0; font-size: 18px; }
 .admin-login p { margin: 0; font-size: 12.5px; color: var(--eva-muted); max-width: 330px; line-height: 1.8; }
-.admin-pin { display: flex; gap: 8px; }
-.admin-pin input { width: 150px; padding: 10px 12px; text-align: center; letter-spacing: 6px; font-size: 17px; border: 1px solid var(--eva-line-strong); border-radius: 10px; font-family: inherit; }
+.admin-pin { display: flex; gap: 9px; flex-wrap: wrap; justify-content: center; width: 100%; }
+.admin-pin input { flex: 1 1 150px; width: auto; max-width: 190px; min-height: 44px; padding: 10px 12px; text-align: center; letter-spacing: 6px; font-size: 17px; border: 1px solid var(--eva-line-strong); border-radius: 12px; font-family: inherit; background: #fff; color: var(--eva-ink); }
+.admin-pin input:focus { outline: 2px solid var(--eva-rose); outline-offset: 1px; border-color: var(--eva-rose); }
+.admin-pin .admin-btn { min-height: 44px; }
 .admin-color-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .admin-color-row input[type=color] { width: 44px; height: 38px; padding: 2px; border: 1px solid var(--eva-line-strong); border-radius: 8px; background: #fff; cursor: pointer; }
 .admin-color-img { display: flex; gap: 6px; align-items: center; width: 100%; padding-inline-start: 52px; }
@@ -241,10 +255,18 @@ const adminStyles = `
 .admin-list-item .li-main strong { font-size: 13px; }
 .admin-list-item .li-main small { font-size: 11.5px; color: var(--eva-muted); }
 @media (max-width: 560px) {
+  .admin-layer { padding: 10px; }
   .admin-row { grid-template-columns: 1fr; }
-  .admin-body { padding: 13px 13px; }
-  .admin-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 9px; }
-  .admin-panel { max-height: 94vh; border-radius: 16px; }
+  .admin-body { padding: 14px 13px 20px; }
+  .admin-grid { grid-template-columns: repeat(auto-fill, minmax(146px, 1fr)); gap: 9px; }
+  .admin-panel { max-height: min(96vh, calc(100dvh - 16px)); border-radius: 16px; }
+  .admin-head { padding: 13px 14px; }
+  .admin-tab { min-height: 42px; }
+  .admin-btn { min-height: 44px; }
+  .admin-card .ac-actions button { min-height: 40px; }
+  .admin-field input, .admin-field textarea, .admin-field select, .admin-pin input { font-size: 16px; }
+  .admin-login { padding: 30px 16px; }
+  .admin-color-row input[type=color] { width: 46px; height: 44px; }
 }
 `
 
@@ -377,8 +399,16 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       return
     } catch (error) {
       if (error instanceof AdminRequestError) {
-        // الخادم يردّ لكن الرمز غير صحيح
-        setPinError('الرمز غير صحيح')
+        // الخادم يستجيب والرمز مرفوض — لا يُستبدل بمدخل محلي
+        const nextAttempts = pinAttempts + 1
+        if (nextAttempts >= 5) {
+          setPinAttempts(0)
+          setPinLockUntil(Date.now() + 60_000)
+          setPinError('تم إيقاف المحاولات لمدة دقيقة')
+        } else {
+          setPinAttempts(nextAttempts)
+          setPinError(`الرمز غير صحيح (${5 - nextAttempts} محاولات متبقية)`)
+        }
         setPin('')
         return
       }
@@ -471,6 +501,22 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     } catch {
       setToast('حُفظت محلياً — تعذر الوصول للخادم')
     }
+  }
+
+  const savePin = async (raw: string): Promise<boolean> => {
+    const value = raw.trim()
+    if (!/^\d{4,12}$/.test(value)) {
+      setToast('الرمز يجب أن يكون من 4 إلى 12 رقماً')
+      return false
+    }
+    try { window.localStorage.setItem(PIN_KEY, value) } catch { /* ignore */ }
+    try {
+      await adminFetch('/api/admin/pin', { method: 'POST', body: JSON.stringify({ pin: value }) })
+      setToast('تم تغيير الرمز في الخادم')
+    } catch {
+      setToast('حُفظ الرمز محلياً — الخادم غير متصل')
+    }
+    return true
   }
 
   const persistProducts = (next: Product[]) => {
@@ -661,7 +707,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                     onChange={(event) => { setPin(event.target.value); setPinError('') }}
                     onKeyDown={(event) => { if (event.key === 'Enter') submitPin() }}
                     placeholder="••••"
-                    maxLength={8}
+                    maxLength={12}
                     autoFocus
                     aria-label="رمز الدخول"
                   />
@@ -1210,6 +1256,39 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                         </button>
                         <span className="admin-chip">وضع الاتصال: {online ? 'الخادم' : 'محلي'}</span>
                       </div>
+
+                      <div className="admin-field" style={{ marginTop: 20 }}>
+                        <label>تغيير رمز الدخول إلى اللوحة</label>
+                        <small style={{ fontSize: 11, color: 'var(--eva-muted)', lineHeight: 1.7 }}>
+                          من 4 إلى 12 رقماً. يُحفظ في الخادم، وإذا كان الخادم غير متصل يُحفظ محلياً في هذا المتصفح.
+                        </small>
+                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 6 }}>
+                          <input
+                            id="new-pin"
+                            type="password"
+                            inputMode="numeric"
+                            placeholder="رمز جديد (4-12 رقماً)"
+                            maxLength={12}
+                            style={{ flex: '1 1 160px', maxWidth: 240 }}
+                            onKeyDown={(event) => {
+                              if (event.key !== 'Enter') return
+                              const target = event.target as HTMLInputElement
+                              void savePin(target.value).then((saved) => { if (saved) target.value = '' })
+                            }}
+                          />
+                          <button
+                            type="button"
+                            className="admin-btn"
+                            onClick={() => {
+                              const input = document.getElementById('new-pin') as HTMLInputElement | null
+                              const value = input?.value ?? ''
+                              void savePin(value).then((saved) => { if (saved && input) input.value = '' })
+                            }}
+                          >
+                            <Save size={15} /> حفظ الرمز
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   ) : (
                     <div>
@@ -1227,51 +1306,6 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                         <button type="button" className="admin-btn ghost" onClick={restoreAll}>
                           <RotateCcw size={15} /> استعادة الافتراضي
                         </button>
-                      </div>
-
-                      <div className="admin-field" style={{ marginTop: 18 }}>
-                        <label>تغيير رمز الدخول</label>
-                        <div className="admin-actions" style={{ marginTop: 0 }}>
-                          <input
-                            id="new-pin"
-                            type="password"
-                            inputMode="numeric"
-                            placeholder="رمز جديد (4-8 أرقام)"
-                            maxLength={8}
-                            style={{ flex: 1, minWidth: 150, padding: '9px 11px', border: '1px solid var(--eva-line-strong)', borderRadius: 10, fontFamily: 'inherit', fontSize: 14, letterSpacing: 4 }}
-                            onKeyDown={(event) => {
-                              if (event.key !== 'Enter') return
-                              const value = (event.target as HTMLInputElement).value.trim()
-                              if (/^\d{4,12}$/.test(value)) {
-                                try { window.localStorage.setItem(PIN_KEY, value) } catch { /* ignore */ }
-                                void adminFetch('/api/admin/pin', { method: 'POST', body: JSON.stringify({ pin: value }) }).catch(() => undefined)
-                                ;(event.target as HTMLInputElement).value = ''
-                                setToast('تم تغيير الرمز')
-                              } else {
-                                setToast('الرمز يجب أن يكون 4-12 رقماً')
-                              }
-                            }}
-                          />
-                          <button
-                            type="button"
-                            className="admin-btn"
-                            onClick={() => {
-                              const input = document.getElementById('new-pin') as HTMLInputElement | null
-                              const value = input?.value.trim() ?? ''
-                              if (!/^\d{4,12}$/.test(value)) {
-                                setToast('الرمز يجب أن يكون 4-12 رقماً')
-                                return
-                              }
-                              try { window.localStorage.setItem(PIN_KEY, value) } catch { /* ignore */ }
-                              void adminFetch('/api/admin/pin', { method: 'POST', body: JSON.stringify({ pin: value }) })
-                                .then(() => setToast('تم تغيير الرمز في الخادم'))
-                                .catch(() => setToast('تم تغيير الرمز محلياً'))
-                              if (input) input.value = ''
-                            }}
-                          >
-                            <Save size={15} /> حفظ الرمز
-                          </button>
-                        </div>
                       </div>
 
                       <div className="admin-list">

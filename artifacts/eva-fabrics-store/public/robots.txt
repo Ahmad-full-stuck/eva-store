@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://ahmad-full-stuck.github.io/eva-store-glass/sitemap.xml

@@ -286,7 +286,7 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
   if (resource === 'pin' && method === 'POST') {
     const body = await readBody<{ pin?: string }>(request)
     const pin = text(body?.pin)
-    if (pin.length < 4 || pin.length > 12) return json({ error: 'الرمز يجب أن يكون بين 4 و12 رقماً' }, 400)
+    if (!/^\d{4,12}$/.test(pin)) return json({ error: 'الرمز يجب أن يكون من 4 إلى 12 رقماً' }, 400)
     const hashed = await hashPin(pin)
     await env.DB.prepare(
       "INSERT INTO settings (key, value, updated_at) VALUES ('admin_pin', ?1, datetime('now')) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = datetime('now')",
