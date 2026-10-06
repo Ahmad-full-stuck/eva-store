@@ -154,6 +154,7 @@ function App() {
           <Route path="/policies" component={PoliciesPage} />
           <Route path="/order-tracking" component={OrderTrackingPage} />
           <Route path="/order-confirmation/:orderNumber">{(params) => <OrderConfirmationPage orderNumber={safeDecode(params.orderNumber)} />}</Route>
+          <Route path="/admin" component={() => null} />
           <Route component={NotFound} />
         </Switch>
       </div>

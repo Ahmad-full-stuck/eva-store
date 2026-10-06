@@ -35,6 +35,7 @@ export function SiteFooter({ routes, categories }: SiteFooterProps) {
           {infoRoutes.map((route) => <Link key={route.id} href={route.path}>{route.label}</Link>)}
           <Link href="/policies#privacy">الخصوصية</Link>
           <Link href="/policies#returns">الإرجاع والتبديل</Link>
+          <Link href="/admin">تسجيل الدخول كدير</Link>
         </div>
         <div className="footer-col">
           <h2>تواصلي معنا</h2>

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'wouter'
 import { Check, Eye, EyeOff, Image as ImageIcon, Lock, LogOut, Plus, Save, ShieldCheck, Trash2, Upload, X, Pencil, Download, RotateCcw } from 'lucide-react'
 import type { Category, Product, ProductColor } from '@/types'
 import { fallbackCategories, fallbackProducts } from '@/lib/fallback-data'
@@ -181,13 +182,6 @@ const toFileDataUrl = (file: File): Promise<string> =>
   })
 
 const adminStyles = `
-.admin-trigger { position: fixed; left: 16px; bottom: max(16px, env(safe-area-inset-bottom)); z-index: 150; display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border: 1px solid rgba(255,255,255,.8); border-radius: 999px; background: rgba(255,251,251,.93); color: var(--eva-rose); box-shadow: 0 14px 34px rgba(74,24,43,.22); backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%); font-size: 12.5px; font-weight: 700; font-family: inherit; line-height: 1.2; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .18s ease, background .18s ease, box-shadow .18s ease; }
-.admin-trigger:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 18px 40px rgba(74,24,43,.28); }
-.admin-trigger:focus-visible { outline: 2px solid var(--eva-rose); outline-offset: 2px; }
-@media (max-width: 820px) {
-  .admin-trigger { left: auto; right: 12px; bottom: calc(84px + env(safe-area-inset-bottom)); padding: 8px 12px; font-size: 11.5px; }
-  body:has(.mobile-sticky-buy) .admin-trigger { bottom: calc(142px + env(safe-area-inset-bottom)); }
-}
 .admin-layer { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; padding: 16px; background: rgba(46,24,33,.55); backdrop-filter: blur(6px); }
 .admin-panel { width: min(940px, 100%); max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; background: #fffbfb; border: 1px solid rgba(255,255,255,.9); border-radius: 18px; box-shadow: 0 30px 70px -20px rgba(46,24,33,.5); }
 .admin-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; color: #fff6f8; background: linear-gradient(135deg, var(--eva-charcoal), var(--eva-rose-dark)); }
@@ -285,6 +279,7 @@ const parseJsonField = <T,>(value: unknown, fallback: T): T => {
 }
 
 export function AdminSecret({ products, categories }: AdminSecretProps) {
+  const [location, navigate] = useLocation()
   const [open, setOpen] = useState(false)
   const [authed, setAuthed] = useState<boolean>(() => {
     try {
@@ -312,6 +307,15 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [online, setOnline] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
+  const closePanel = () => {
+    setOpen(false)
+    if (location === '/admin') navigate('/', { replace: true })
+  }
+
+  useEffect(() => {
+    setOpen(location === '/admin')
+  }, [location])
+
   useEffect(() => {
     if (!toast) return undefined
     const t = window.setTimeout(() => setToast(''), 2200)
@@ -323,7 +327,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
+      if (event.key === 'Escape') closePanel()
     }
     document.addEventListener('keydown', onKey)
     return () => {
@@ -425,7 +429,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     } catch {
       /* ignore */
     }
-    setOpen(false)
+    closePanel()
   }
 
   const loadOrders = async () => {
@@ -621,15 +625,6 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   return (
     <>
       <style>{adminStyles}</style>
-      <button
-        type="button"
-        className="admin-trigger"
-        onClick={() => setOpen(true)}
-        aria-label="تسجيل الدخول كمدير"
-        title="لوحة تحكم المتجر"
-      >
-        <Lock size={13} /> تسجيل الدخول كمدير
-      </button>
       {open && (
         <div className="admin-layer" role="dialog" aria-modal="true" aria-label="لوحة التحكم">
           <div className="admin-panel">
@@ -647,7 +642,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                     <LogOut size={14} /> خروج
                   </button>
                 )}
-                <button type="button" className="admin-btn ghost" style={{ padding: '6px 9px' }} onClick={() => setOpen(false)} aria-label="إغلاق">
+                <button type="button" className="admin-btn ghost" style={{ padding: '6px 9px' }} onClick={closePanel} aria-label="إغلاق">
                   <X size={16} />
                 </button>
               </div>
