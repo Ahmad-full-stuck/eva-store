@@ -46,7 +46,7 @@ export function SiteFooter({ routes, categories }: SiteFooterProps) {
         <div className="footer-col">
           <h2>نطاق الخدمة</h2>
           <p>نوصل إلى {nearbyGovernorates.join('، ')} وجميع محافظات العراق.</p>
-          <a href={siteConfig.whatsappUrl('مرحباً إيفا ستور، أستفسر عن الشحن الدولي للأقمشة')} target="_blank" rel="noreferrer"><MapPin size={15} />شحن دولي عند التوفر</a>
+          <a href={siteConfig.whatsappUrl('مرحباً إيفا ستور، أستفسر عن التوصيل والشحن')} target="_blank" rel="noreferrer"><MapPin size={15} />توصيل ٥ آلاف دينار</a>
         </div>
       </div>
       <div className="footer-bottom">

@@ -26,7 +26,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
   const stats: HeroStat[] = [
     { key: 'fabrics', icon: <Layers size={16} />, value: products.length, prefix: '+', suffix: '', label: 'خامة متاحة', trend: 'تشكيلة تتجدد' },
     { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '+', suffix: '', label: 'أقسام مختارة', trend: 'لكل مشروع' },
-    { key: 'delivery', icon: <Truck size={16} />, value: 24, prefix: '', suffix: '', label: 'ساعة للتوصيل', trend: 'كل محافظات العراق' },
+    { key: 'delivery', icon: <Truck size={16} />, value: 18, prefix: '', suffix: '', label: 'محافظة للتوصيل', trend: 'توصيل ٥ آلاف دينار' },
     { key: 'cash', icon: <Wallet size={16} />, value: 100, prefix: '', suffix: '٪', label: 'دفع عند الاستلام', trend: 'مريح وآمن' },
   ]
 

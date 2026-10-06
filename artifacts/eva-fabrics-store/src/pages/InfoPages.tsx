@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Instagram, Layers, MapPin, MessageCircle, PackageCheck, Phone, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Star, Truck } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Instagram, Layers, MapPin, MessageCircle, PackageCheck, Phone, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Truck } from 'lucide-react'
 import { Link, useLocation, useSearch } from 'wouter'
 import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
@@ -305,10 +305,10 @@ interface AboutStat {
 }
 
 const aboutStats: AboutStat[] = [
-  { label: 'خامة في المعرض', value: 139, note: 'تشكيلة تتجدد مع كل موسم' },
-  { label: 'أقسام للتصنيف', value: 5, note: 'مطرز، سادة، مطاطي، ترتر، مزخرف' },
+  { label: 'خامة في المعرض', value: 129, note: 'كلها بصورة ومواصفات مكتوبة' },
+  { label: 'أقسام للتصنيف', value: 7, note: 'ستايلات، مطرز، سادة، مطاطي، ترتر، مزخرف، هارفرد' },
   { label: 'محافظة نغطيها', value: 18, note: 'توصيل إلى كل العراق' },
-  { label: 'طلب مكتمل', value: 2400, note: 'منذ انطلاق المتجر' },
+  { label: 'منشور على إنستغرام', value: 201, note: 'من حسابنا @x__illc' },
 ]
 
 const aboutValues = [
@@ -319,17 +319,9 @@ const aboutValues = [
 ]
 
 const aboutTimeline = [
-  { year: '٢٠١٩', title: 'بداية من زاوية صغيرة', text: 'عرضنا خامتين يوميتين وشرحنا الفرق بينهما بالصور واللمس، فبدأ الطلب يتوافد.' },
-  { year: '٢٠٢١', title: 'قسم للمطرز والمناسبات', text: 'أضفنا التافتا والكريب المطرز مع شرح التطريز والعناية به بعد الحلاقة.' },
-  { year: '٢٠٢٣', title: 'ولدت فكرة الدليل', text: 'نشرنا دليل الأقمشة ليجيب عن الأسئلة التي تصلنا يومياً قبل الطلب.' },
-  { year: '٢٠٢٥', title: 'المتجر يبدأ أونلاين', text: 'أصبح بإمكانك تصفّح المواصفات كاملة وطلب نصف متر من أي محافظة.' },
-  { year: '٢٠٢٦', title: 'توصيل لكل العراق', text: 'شبكة شحن تغطي المحافظات مع متابعة الطلب عبر واتساب ورقم الطلب.' },
-]
-
-const testimonials = [
-  { name: 'سارة م.', city: 'بغداد', text: 'وصف الشفافية والمرونة كان أميضاً من الصور؛ وصل القماش مطابقاً لما توقعته.' },
-  { name: 'نور الهدى ك.', city: 'البصرة', text: 'طلبت نصف متر فقط لتجربة اللون، ثم أكملت الطلب بعد التأكد من الدرجة.' },
-  { name: 'رنا ع.', city: 'أربيل', text: 'الرد عبر واتساب كان سريعاً، وساعدوني في حساب كمية العباءة قبل الشراء.' },
+  { year: 'البداية', title: 'من حساب إنستغرام', text: 'نعرض الأقمشة بالصور والفيديو ونشرح الخامة في تسجيل قصير قبل الطلب — أكثر من ٢٠١ منشوراً حتى الآن.' },
+  { year: 'التوثيق', title: 'بطاقة لكل قماش', text: 'نستخرج من كل منشور وفيديو التركيب والعرض والوزن والمرونة والشفافية، ونضعها أمام الصورة بصيغة مكتوبة.' },
+  { year: 'الآن', title: 'متجر أونلاين', text: '١٢٩ خامة بالمواصفات كاملة، طلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية برسوم ثابتة.' },
 ]
 
 export function AboutPage() {
@@ -367,13 +359,13 @@ export function AboutPage() {
           <div className="section-head-tight">
             <div>
               <span className="eyebrow">قصة البراند</span>
-              <h2 id="about-story-title">من زاوية صغيرة إلى عادة يعتمد عليها.</h2>
+              <h2 id="about-story-title">من فيديو قصير إلى معرض كامل.</h2>
             </div>
             <Link href="/fabric-guide" className="underlined-link">اقرئي دليل الأقمشة <ArrowLeft size={15} /></Link>
           </div>
           <div className="story-copy-grid">
-            <p>في البداية كان العرض محدوداً: قماشان يوميان وسؤال يتكرر من كل زائرة عن الفرق بينهما. أدركنا أن الشرح الواضح أهم من الأرقام، فكتبتنا تفاصيل كل خامة كما تُختبر في الواقع: الوزن، العرض، الشفافية، المرونة، وطريقة العناية.</p>
-            <p>اليوم صار المتجر مساحة تجمع التشكيلة والشرح معاً. نبني ثقتك قبل الطلب، ونرتّب الرحلة بعده: تأكيد الطلب، تجهيزه، ثم متابعته برقم واضح حتى يصل إلى بابك.</p>
+            <p>من حسابنا على إنستغرام بدأنا نعرض الأقمشة بالصور والفيديو: نُظهر اللون في الضوء الطبيعي، ونشرح الوزن والمرونة والشفافية في تسجيل صوتي قصير قبل أن يصلك القماش.</p>
+            <p>اليوم تجد كل ذلك في مكان واحد: معرض يضم ١٢٩ خامة بمواصفات مكتوبة، وطلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية مع تأكيد يدوي لكل طلب عبر واتساب.</p>
           </div>
         </section>
 
@@ -382,7 +374,7 @@ export function AboutPage() {
             <div>
               <span className="eyebrow">أرقام تختصر الرحلة</span>
               <h2 id="about-stats-title">إيفا في أربعة أرقام</h2>
-              <p>مؤشرات نحدّثها مع كل موسم وكل قسم جديد يدخل المعرض.</p>
+              <p>أرقام فعلية من المعرض ومن مكتبة المنشورات على إنستغرام.</p>
             </div>
           </div>
           <div className="stats-grid">{aboutStats.map((stat) => <StatCard key={stat.label} stat={stat} />)}</div>
@@ -405,7 +397,7 @@ export function AboutPage() {
               <span className="eyebrow">الخط الزمني</span>
               <h2 id="about-timeline-title">كيف وصلنا إلى هنا</h2>
             </div>
-            <span className="chip chip-neutral">منذ ٢٠١٩</span>
+            <span className="chip chip-neutral">من إنستغرام إلى متجر</span>
           </div>
           <ol className="timeline">
             {aboutTimeline.map((item, index) => (
@@ -419,30 +411,6 @@ export function AboutPage() {
               </li>
             ))}
           </ol>
-        </section>
-
-        <section className="section-block" aria-labelledby="about-quotes-title">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">من صندوق الرسائل</span>
-              <h2 id="about-quotes-title">ما قالته عميلاتنا</h2>
-              <p>ملاحظات مختصرة بعد تجربة الطلب والاستلام.</p>
-            </div>
-          </div>
-          <div className="testimonials-grid">
-            {testimonials.map((item) => (
-              <article className="glass-card quote-card" key={item.name}>
-                <span className="stars" aria-label="تقييم خمس من خمس">
-                  {Array.from({ length: 5 }, (_, index) => <Star key={index} size={14} />)}
-                </span>
-                <p className="quote-text">«{item.text}»</p>
-                <div className="quote-head">
-                  <span className="quote-name"><strong>{item.name}</strong><small>{item.city}</small></span>
-                  <span className="chip chip-neutral">طلب مكتمل</span>
-                </div>
-              </article>
-            ))}
-          </div>
         </section>
 
         <section className="about-cta glass-dark">
@@ -679,8 +647,8 @@ export function FabricGuidePage() {
           <div className="chip-row" style={{ marginTop: '22px' }}>
             <span className="chip"><Scissors size={13} />قصّ بسيط</span>
             <span className="chip"><Heart size={13} />عناية بالمطرز</span>
-            <span className="chip"><Clock size={13} />رد خلال ساعات العمل</span>
-            <span className="chip"><ShieldCheck size={13} />فحص قبل الشحن</span>
+            <span className="chip"><Clock size={13} />الرد عبر واتساب</span>
+            <span className="chip"><ShieldCheck size={13} />تأكيد قبل الشحن</span>
           </div>
         </section>
 
@@ -796,10 +764,10 @@ export function ContactPage() {
             </div>
 
             <div className="contact-hours glass-card">
-              <span className="hours-title"><Clock size={15} />أوقات العمل</span>
-              <div className="hours-row"><span>السبت إلى الخميس</span><strong>١٠:٠٠ ص – ١٠:٠٠ م</strong></div>
-              <div className="hours-row"><span>الجمعة</span><strong>٤:٠٠ م – ١٠:٠٠ م</strong></div>
-              <div className="hours-row"><span>رسائل واتساب</span><strong>نردّ خلال ساعات العمل</strong></div>
+              <span className="hours-title"><Clock size={15} />كيف نتواصل</span>
+              <div className="hours-row"><span>الاستفسار والطلب</span><strong>عبر واتساب</strong></div>
+              <div className="hours-row"><span>تأكيد الطلب</span><strong>نتواصل معك قبل الشحن</strong></div>
+              <div className="hours-row"><span>التوصيل</span><strong>جميع المحافظات — ٥ آلاف دينار</strong></div>
             </div>
 
             <div className="map-card glass-dark">
@@ -819,7 +787,7 @@ export function ContactPage() {
                 <span className="eyebrow"><Send size={14} />راسلينا</span>
                 <h2>أرسلي رسالتك</h2>
               </div>
-              <span className="chip chip-neutral">رد خلال ٢٤ ساعة</span>
+              <span className="chip chip-neutral">الرد عبر واتساب</span>
             </div>
 
             <div className="form-fields">
@@ -916,8 +884,8 @@ const policies: PolicyContent[] = [
     intro: 'نجهّز الطلبات بعد التأكيد، ويظهر رقم الطلب في صفحة النجاح ويُرسل لك مع تحديثات الشحن.',
     points: [
       'التوصيل متاح إلى جميع المحافظات العراقية، ويعتمد الوقت على بعد المحافظة وحالة الطلب.',
-      'رسوم الشحن تُحتسب في مراجعة الطلب، وتصبح مجانية للطلبات التي تتجاوز 50 الف دينار.',
-      'الشحن الدولي متاح عند توفّر شحنة مناسبة، ويُتفق على التفاصيل قبل الدفع.',
+      'رسوم التوصيل ثابتة ٥ آلاف دينار، وتصبح مجانية للطلبات التي تتجاوز 50 الف دينار.',
+      'نجهّز الطلب بعد تأكيدك له، ونرسل لك تحديثاً عبر واتساب عند خروجه للشحن.',
       'نحدّثك عبر واتساب عند خروج الطلب وعند تسليمه إلى مندوب الشحن.',
     ],
     note: 'احتفظي برقم الطلب؛ فهو يكفي للاستفسار دون مشاركة بيانات إضافية.',
@@ -925,7 +893,7 @@ const policies: PolicyContent[] = [
   {
     id: 'returns',
     title: 'الإرجاع والتبديل',
-    intro: 'نقبل الإرجاع أو التبديل خلال ٤٨ ساعة من الاستلام إذا وصل القماش مختلفاً عن المواصفات أو حدث خطأ في التنفيذ.',
+    intro: 'نقبل الإرجاع أو التبديل إذا وصل القماش مختلفاً عن المواصفات المكتوبة أو حدث خطأ في التنفيذ، وتُحالة الحالة عبر واتساب ونتفق معك على الحل المناسب.',
     points: [
       'يجب أن يبقى القماش بحالته الأصلية وغير مقصوص ولا مستعمل.',
       'الأقمشة المقصوصة حسب الطلب أو المقطوعة حسب القياس غير قابلة للإرجاع.',

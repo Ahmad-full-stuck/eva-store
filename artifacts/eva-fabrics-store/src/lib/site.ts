@@ -10,7 +10,7 @@ const adminContent = (): Record<string, string> => {
 }
 
 const rawWhatsApp = import.meta.env.VITE_WHATSAPP_NUMBER || '9647727282001'
-const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || 'https://instagram.com'
+const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/x__illc/'
 const apiBase = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '')
 
 const digits = (value: string): string => value.replace(/[^0-9]/g, '')
