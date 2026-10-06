@@ -181,10 +181,13 @@ const toFileDataUrl = (file: File): Promise<string> =>
   })
 
 const adminStyles = `
-.admin-trigger { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 0); z-index: 150; width: 64px; height: 11px; border: 0; padding: 0; background: transparent; cursor: default; opacity: 0; color: transparent; font-size: 0; -webkit-tap-highlight-color: transparent; transition: opacity .18s ease; }
-.admin-trigger:hover, .admin-trigger:focus-visible { opacity: .5; color: var(--eva-muted); font-size: 8.5px; line-height: 11px; letter-spacing: .4px; background: rgba(255,255,255,.45); border-radius: 7px 7px 0 0; cursor: pointer; }
+.admin-trigger { position: fixed; left: 16px; bottom: max(16px, env(safe-area-inset-bottom)); z-index: 150; display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border: 1px solid rgba(255,255,255,.8); border-radius: 999px; background: rgba(255,251,251,.93); color: var(--eva-rose); box-shadow: 0 14px 34px rgba(74,24,43,.22); backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%); font-size: 12.5px; font-weight: 700; font-family: inherit; line-height: 1.2; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform .18s ease, background .18s ease, box-shadow .18s ease; }
+.admin-trigger:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 18px 40px rgba(74,24,43,.28); }
 .admin-trigger:focus-visible { outline: 2px solid var(--eva-rose); outline-offset: 2px; }
-.admin-trigger.armed { cursor: pointer; opacity: .55; color: var(--eva-muted); font-size: 8.5px; line-height: 14px; letter-spacing: .5px; background: rgba(255,255,255,.4); border-radius: 8px 8px 0 0; }
+@media (max-width: 820px) {
+  .admin-trigger { left: auto; right: 12px; bottom: calc(84px + env(safe-area-inset-bottom)); padding: 8px 12px; font-size: 11.5px; }
+  body:has(.mobile-sticky-buy) .admin-trigger { bottom: calc(142px + env(safe-area-inset-bottom)); }
+}
 .admin-layer { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; padding: 16px; background: rgba(46,24,33,.55); backdrop-filter: blur(6px); }
 .admin-panel { width: min(940px, 100%); max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; background: #fffbfb; border: 1px solid rgba(255,255,255,.9); border-radius: 18px; box-shadow: 0 30px 70px -20px rgba(46,24,33,.5); }
 .admin-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; color: #fff6f8; background: linear-gradient(135deg, var(--eva-charcoal), var(--eva-rose-dark)); }
@@ -282,8 +285,6 @@ const parseJsonField = <T,>(value: unknown, fallback: T): T => {
 }
 
 export function AdminSecret({ products, categories }: AdminSecretProps) {
-  const [presses, setPresses] = useState(0)
-  const [armed, setArmed] = useState(false)
   const [open, setOpen] = useState(false)
   const [authed, setAuthed] = useState<boolean>(() => {
     try {
@@ -310,17 +311,12 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [ordersError, setOrdersError] = useState('')
   const [online, setOnline] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
-  const pressTimer = useRef<number | null>(null)
 
   useEffect(() => {
     if (!toast) return undefined
     const t = window.setTimeout(() => setToast(''), 2200)
     return () => window.clearTimeout(t)
   }, [toast])
-
-  useEffect(() => () => {
-    if (pressTimer.current) window.clearTimeout(pressTimer.current)
-  }, [])
 
   useEffect(() => {
     if (!open) return undefined
@@ -338,23 +334,6 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
 
   const allProducts = useMemo(() => mergeAdminProducts(products), [products, overrides, removed])
   const allCategories = useMemo(() => [...categories, ...customCategories.filter((c) => !categories.some((x) => x.slug === c.slug))], [categories, customCategories])
-
-  const handleTrigger = () => {
-    if (armed) {
-      setOpen(true)
-      return
-    }
-    const next = presses + 1
-    setPresses(next)
-    if (pressTimer.current) window.clearTimeout(pressTimer.current)
-    if (next >= 5) {
-      setArmed(true)
-      setPresses(0)
-      window.setTimeout(() => setArmed(false), 6000)
-      return
-    }
-    pressTimer.current = window.setTimeout(() => setPresses(0), 1600)
-  }
 
   const enterAdmin = () => {
     setAuthed(true)
@@ -644,12 +623,12 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       <style>{adminStyles}</style>
       <button
         type="button"
-        className={`admin-trigger${armed ? ' armed' : ''}`}
-        onClick={handleTrigger}
-        aria-label="تسجيل صغير"
-        title=""
+        className="admin-trigger"
+        onClick={() => setOpen(true)}
+        aria-label="تسجيل الدخول كمدير"
+        title="لوحة تحكم المتجر"
       >
-        {armed ? 'تسجيل صغير' : ''}
+        <Lock size={13} /> تسجيل الدخول كمدير
       </button>
       {open && (
         <div className="admin-layer" role="dialog" aria-modal="true" aria-label="لوحة التحكم">
@@ -677,7 +656,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
             {!authed ? (
               <div className="admin-login">
                 <span className="lock"><Lock size={22} /></span>
-                <h3>تسجيل صغير</h3>
+                <h3>تسجيل الدخول كمدير</h3>
                 <p>أدخل رمز الدخول للوصول إلى لوحة إدارة المنتجات والمحتوى.</p>
                 <div className="admin-pin">
                   <input
