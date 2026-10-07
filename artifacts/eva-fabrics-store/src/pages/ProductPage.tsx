@@ -130,7 +130,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         <div className="detail-divider" />
         <div className="quantity-heading"><div><strong>الكمية المطلوبة</strong><small>يمكن الطلب بنصف متر كحد أدنى</small></div><span>التوفّر يُؤكَّد عند الطلب</span></div>
         <div className="quantity-control"><button type="button" onClick={decrease} disabled={length <= 0.5} aria-label="إنقاص نصف متر"><Minus size={17} /></button><output aria-live="polite">{metersLabel(length)}</output><button type="button" onClick={increase} disabled={length >= maxLength} aria-label="زيادة نصف متر"><Plus size={17} /></button></div>
-        <label className="meters-input-row"><span>كم متر تريدين؟</span><input className="meters-input" type="number" inputMode="decimal" min={0.5} max={Math.max(0.5, maxLength)} step={0.5} value={length} onChange={(event) => {
+        <label className="meters-input-row"><input className="meters-input" type="number" inputMode="decimal" min={0.5} max={Math.max(0.5, maxLength)} step={0.5} value={length} onChange={(event) => {
           const next = Number(event.target.value)
           if (!Number.isFinite(next)) return
           setLength(Math.min(Math.max(0.5, next), Math.max(0.5, maxLength)))
