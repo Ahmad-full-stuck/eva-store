@@ -1,6 +1,6 @@
 import type { Env } from './types'
 import { toProduct, type ProductRow, type StoreProduct } from './types'
-import { requireAdmin, verifyPin, createSession, destroySession, rateLimit, orderRateLimit } from './auth'
+import { requireAdmin, verifyPin, createSession, destroySession, rateLimit, orderRateLimit, ensureAuthSchema, verifyAdminUser, SESSION_TTL_MS } from './auth'
 import { handleAdmin } from './admin'
 import { runDiscovery, type DiscoveryInput } from './discover'
 
@@ -65,13 +65,25 @@ async function handleApi(request: Request, env: Env, path: string): Promise<Resp
 
   if (segment === 'admin') {
     if (rest[0] === 'login' && method === 'POST') {
-      const body = await readBody<{ pin?: string }>(request)
-      const pin = typeof body?.pin === 'string' ? body.pin : ''
+      const body = await readBody<{ pin?: string; username?: string; password?: string }>(request)
       if (!rateLimit(request)) return json({ error: 'حاولي لاحقاً' }, 429)
-      const valid = await verifyPin(env, pin)
-      if (!valid) return json({ error: 'الرمز غير صحيح' }, 401)
-      const token = await createSession(env)
-      return json({ data: { token, expiresIn: 60 * 60 * 8 } })
+      await ensureAuthSchema(env)
+      const username = typeof body?.username === 'string' ? body.username : ''
+      const password = typeof body?.password === 'string' ? body.password : ''
+      const pin = typeof body?.pin === 'string' ? body.pin : ''
+      let adminId: string | null = null
+      let valid = false
+      if (username && password) {
+        const admin = await verifyAdminUser(env, username, password)
+        if (admin) {
+          valid = true
+          adminId = admin.id
+        }
+      }
+      if (!valid && pin) valid = await verifyPin(env, pin)
+      if (!valid) return json({ error: 'بيانات الدخول غير صحيحة' }, 401)
+      const token = await createSession(env, adminId)
+      return json({ data: { token, expiresIn: Math.floor(SESSION_TTL_MS / 1000) } })
     }
 
     const auth = await requireAdmin(request, env)

@@ -5,7 +5,7 @@ import type { Category, Product, ProductColor } from '@/types'
 import { fallbackCategories, fallbackProducts } from '@/lib/fallback-data'
 import { sanitizeCategory, sanitizeProduct, sanitizeCategories, sanitizeProducts } from '@/lib/sanitize'
 import { formatPrice } from '@/lib/catalog'
-import { adminFetch, adminLogin, adminLogout, AdminRequestError, loadServerConfig, ping, pushServerContent, pushServerSettings } from '@/lib/api'
+import { adminFetch, adminLogin, adminLogout, adminWhoami, getToken, listAdmins, createAdminAccount, deleteAdminAccount, changeAdminPassword, type AdminAccount, AdminRequestError, loadServerConfig, ping, pushServerContent, pushServerSettings } from '@/lib/api'
 
 const PRODUCTS_KEY = 'eva-admin-products'
 const REMOVED_KEY = 'eva-admin-removed'
@@ -260,6 +260,10 @@ const adminStyles = `
 .admin-pin input { flex: 1 1 150px; width: auto; max-width: 190px; min-height: 44px; padding: 10px 12px; text-align: center; letter-spacing: 6px; font-size: 17px; border: 1px solid var(--eva-line-strong); border-radius: 12px; font-family: inherit; background: #fff; color: var(--eva-ink); }
 .admin-pin input:focus { outline: 2px solid var(--eva-rose); outline-offset: 1px; border-color: var(--eva-rose); }
 .admin-pin .admin-btn { min-height: 44px; }
+.admin-credentials { display: grid; gap: 9px; width: 100%; max-width: 320px; }
+.admin-credentials input { width: 100%; min-height: 44px; padding: 10px 12px; text-align: center; font-size: 15px; border: 1px solid var(--eva-line-strong); border-radius: 12px; font-family: inherit; background: #fff; color: var(--eva-ink); }
+.admin-credentials input:focus { outline: 2px solid var(--eva-rose); outline-offset: 1px; border-color: var(--eva-rose); }
+.admin-credentials .admin-btn { min-height: 44px; }
 .admin-color-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .admin-color-row input[type=color] { width: 44px; height: 38px; padding: 2px; border: 1px solid var(--eva-line-strong); border-radius: 8px; background: #fff; cursor: pointer; }
 .admin-color-img { display: flex; gap: 6px; align-items: center; width: 100%; padding-inline-start: 52px; }
@@ -343,11 +347,15 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [open, setOpen] = useState(false)
   const [authed, setAuthed] = useState<boolean>(() => {
     try {
-      return window.sessionStorage.getItem(SESSION_KEY) === '1'
+      if (window.sessionStorage.getItem(SESSION_KEY) === '1') return true
     } catch {
-      return false
+      /* ignore */
     }
+    return Boolean(getToken())
   })
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [usePinMode, setUsePinMode] = useState(false)
   const [pin, setPin] = useState('')
   const [pinError, setPinError] = useState('')
   const [pinAttempts, setPinAttempts] = useState(0)
@@ -366,6 +374,10 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [ordersLoading, setOrdersLoading] = useState(false)
   const [ordersError, setOrdersError] = useState('')
   const [online, setOnline] = useState(false)
+  const [admins, setAdmins] = useState<AdminAccount[]>([])
+  const [adminsLoaded, setAdminsLoaded] = useState(false)
+  const [adminsBusy, setAdminsBusy] = useState(false)
+  const [newAdmin, setNewAdmin] = useState({ username: '', password: '', displayName: '' })
   const fileRef = useRef<HTMLInputElement>(null)
 
   const closePanel = () => {
@@ -387,6 +399,13 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       active = false
     }
   }, [open])
+
+  useEffect(() => {
+    if (!getToken()) return
+    void adminWhoami().catch(() => {
+      /* 401 يُطلق حدث eva-admin-expired ويغلق الجلسة */
+    })
+  }, [])
 
   useEffect(() => {
     if (!toast) return undefined
@@ -428,6 +447,8 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const enterAdmin = () => {
     setAuthed(true)
     setPin('')
+    setPassword('')
+    setUsername('')
     setPinError('')
     setPinAttempts(0)
     try {
@@ -443,15 +464,21 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     setSettings(readStoreSettings())
   }
 
-  const submitPin = async () => {
+  const submitLogin = async () => {
     if (pinLockUntil > Date.now()) {
       setPinError('عدد كبير من المحاولات، حاولي بعد دقيقة')
+      return
+    }
+    const cleanUser = username.trim()
+    const withUser = Boolean(cleanUser && password)
+    if (!withUser && !pin) {
+      setPinError('أدخلي بيانات الدخول')
       return
     }
 
     // 1) محاولة الدخول إلى الخادم أولاً
     try {
-      await adminLogin(pin)
+      await adminLogin(withUser ? { username: cleanUser, password } : { pin })
       setOnline(true)
       enterAdmin()
       try {
@@ -463,7 +490,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       return
     } catch (error) {
       if (error instanceof AdminRequestError) {
-        // الخادم يستجيب والرمز مرفوض — لا يُستبدل بمدخل محلي
+        // الخادم يستجيب والبيانات مرفوضة — لا يُستبدل بمدخل محلي
         const nextAttempts = pinAttempts + 1
         if (nextAttempts >= 5) {
           setPinAttempts(0)
@@ -471,15 +498,20 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
           setPinError('تم إيقاف المحاولات لمدة دقيقة')
         } else {
           setPinAttempts(nextAttempts)
-          setPinError(`الرمز غير صحيح (${5 - nextAttempts} محاولات متبقية)`)
+          setPinError(`${error.message} (${5 - nextAttempts} محاولات متبقية)`)
         }
         setPin('')
+        setPassword('')
         return
       }
       setOnline(false)
+      if (withUser) {
+        setPinError('تعذر الوصول إلى الخادم، حاولي لاحقاً')
+        return
+      }
     }
 
-    // 2) وضع محلي (بدون خادم)
+    // 2) وضع محلي (بدون خادم) — عبر الرمز فقط
     const stored = (() => {
       try {
         return window.localStorage.getItem(PIN_KEY) || DEFAULT_PIN_HASH
@@ -541,6 +573,91 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       /* ignore */
     }
     closePanel()
+  }
+
+  useEffect(() => {
+    if (!authed || tab !== 'settings' || adminsLoaded) return
+    let active = true
+    void listAdmins()
+      .then((rows) => {
+        if (!active) return
+        setAdmins(rows)
+        setAdminsLoaded(true)
+      })
+      .catch(() => {
+        if (active) setAdminsLoaded(true)
+      })
+    return () => {
+      active = false
+    }
+  }, [authed, tab, adminsLoaded])
+
+  const refreshAdmins = async (): Promise<void> => {
+    try {
+      setAdmins(await listAdmins())
+      setAdminsLoaded(true)
+    } catch {
+      /* يبقى القائمة السابقة */
+    }
+  }
+
+  const addAdmin = async () => {
+    const u = newAdmin.username.trim().toLowerCase()
+    if (!/^[a-z0-9_.-]{3,24}$/.test(u)) {
+      setToast('اسم المستخدم: 3-24 حرفاً لاتينياً')
+      return
+    }
+    if (newAdmin.password.length < 6) {
+      setToast('كلمة المرور: 6 أحرف على الأقل')
+      return
+    }
+    setAdminsBusy(true)
+    try {
+      await createAdminAccount({ username: u, password: newAdmin.password, displayName: newAdmin.displayName.trim() })
+      setNewAdmin({ username: '', password: '', displayName: '' })
+      setToast('تمت إضافة المدير')
+      await refreshAdmins()
+    } catch (error) {
+      setToast(error instanceof AdminRequestError ? error.message : 'تعذّرت إضافة المدير')
+    } finally {
+      setAdminsBusy(false)
+    }
+  }
+
+  const removeAdmin = async (account: AdminAccount) => {
+    if (admins.length <= 1) {
+      setToast('لا يمكن حذف آخر مدير في المتجر')
+      return
+    }
+    if (!window.confirm(`حذف المدير "${account.username}"؟ سيتم إلغاء جلساته فوراً.`)) return
+    setAdminsBusy(true)
+    try {
+      await deleteAdminAccount(account.id)
+      setToast('تم حذف المدير')
+      await refreshAdmins()
+    } catch (error) {
+      setToast(error instanceof AdminRequestError ? error.message : 'تعذّر الحذف')
+    } finally {
+      setAdminsBusy(false)
+    }
+  }
+
+  const resetAdminPassword = async (account: AdminAccount) => {
+    const next = window.prompt(`كلمة مرور جديدة للمدير "${account.username}" (6 أحرف على الأقل):`)
+    if (next === null) return
+    if (next.length < 6) {
+      setToast('كلمة المرور: 6 أحرف على الأقل')
+      return
+    }
+    setAdminsBusy(true)
+    try {
+      await changeAdminPassword(account.id, next)
+      setToast('تم تغيير كلمة المرور وإلغاء جلساته')
+    } catch (error) {
+      setToast(error instanceof AdminRequestError ? error.message : 'تعذّر تغيير كلمة المرور')
+    } finally {
+      setAdminsBusy(false)
+    }
   }
 
   const loadOrders = async () => {
@@ -825,24 +942,59 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
               <div className="admin-login">
                 <span className="lock"><Lock size={22} /></span>
                 <h3>تسجيل الدخول كمدير</h3>
-                <p>أدخل رمز الدخول للوصول إلى لوحة إدارة المنتجات والمحتوى.</p>
-                <div className="admin-pin">
-                  <input
-                    type="password"
-                    inputMode="numeric"
-                    value={pin}
-                    onChange={(event) => { setPin(event.target.value); setPinError('') }}
-                    onKeyDown={(event) => { if (event.key === 'Enter') submitPin() }}
-                    placeholder="••••"
-                    maxLength={12}
-                    autoFocus
-                    aria-label="رمز الدخول"
-                  />
-                  <button type="button" className="admin-btn" onClick={submitPin} disabled={pinLockUntil > Date.now()}>
-                    <Lock size={15} /> دخول
-                  </button>
-                </div>
+                <p>{usePinMode ? 'أدخلي رمز الدخول السريع، أو استخدمي اسم المستخدم وكلمة المرور.' : 'أدخلي اسم المستخدم وكلمة المرور الدائمين للوصول إلى لوحة إدارة المنتجات والمحتوى.'}</p>
+                {usePinMode ? (
+                  <div className="admin-pin">
+                    <input
+                      type="password"
+                      inputMode="numeric"
+                      value={pin}
+                      onChange={(event) => { setPin(event.target.value); setPinError('') }}
+                      onKeyDown={(event) => { if (event.key === 'Enter') void submitLogin() }}
+                      placeholder="••••"
+                      maxLength={12}
+                      autoFocus
+                      aria-label="رمز الدخول"
+                    />
+                    <button type="button" className="admin-btn" onClick={() => void submitLogin()} disabled={pinLockUntil > Date.now()}>
+                      <Lock size={15} /> دخول
+                    </button>
+                  </div>
+                ) : (
+                  <div className="admin-credentials">
+                    <input
+                      value={username}
+                      onChange={(event) => { setUsername(event.target.value); setPinError('') }}
+                      placeholder="اسم المستخدم"
+                      autoComplete="username"
+                      autoFocus
+                      aria-label="اسم المستخدم"
+                      dir="ltr"
+                    />
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(event) => { setPassword(event.target.value); setPinError('') }}
+                      onKeyDown={(event) => { if (event.key === 'Enter') void submitLogin() }}
+                      placeholder="كلمة المرور"
+                      autoComplete="current-password"
+                      aria-label="كلمة المرور"
+                      dir="ltr"
+                    />
+                    <button type="button" className="admin-btn" onClick={() => void submitLogin()} disabled={pinLockUntil > Date.now()}>
+                      <Lock size={15} /> دخول
+                    </button>
+                  </div>
+                )}
                 {pinError && <p style={{ color: '#a3193f', fontWeight: 700, fontSize: 12.5 }}>{pinError}</p>}
+                <button
+                  type="button"
+                  className="admin-btn ghost"
+                  style={{ fontSize: 12, padding: '6px 12px' }}
+                  onClick={() => { setUsePinMode(!usePinMode); setPinError(''); setPin(''); setPassword(''); setUsername('') }}
+                >
+                  {usePinMode ? 'الدخول باسم المستخدم وكلمة المرور' : 'الدخول بالرمز السريع'}
+                </button>
               </div>
             ) : (
               <>
@@ -1447,6 +1599,55 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                           >
                             <Save size={15} /> حفظ الرمز
                           </button>
+                        </div>
+                      </div>
+
+                      <div className="admin-field" style={{ marginTop: 20 }}>
+                        <label>قائمة المدراء (دخول دائم باسم وكلمة مرور)</label>
+                        <small style={{ fontSize: 11, color: 'var(--eva-muted)', lineHeight: 1.7 }}>
+                          كل مدير يسجّل الدخول باسمه وكلمة مروره. تبقى الجلسة 45 يوماً وتتجدد تلقائياً مع كل زيارة، ولا حاجة لإعادة الدخول عند كل فتح تبويب.
+                        </small>
+                        <div className="admin-admins" style={{ display: 'grid', gap: 8, marginTop: 8 }}>
+                          {admins.length ? (
+                            admins.map((account) => (
+                              <div key={account.id} className="admin-list-item" style={{ alignItems: 'center' }}>
+                                <div className="li-main">
+                                  <strong dir="ltr" style={{ display: 'block' }}>{account.username}</strong>
+                                  {account.display_name ? <span style={{ fontSize: 12, color: 'var(--eva-muted)' }}>{account.display_name}</span> : null}
+                                </div>
+                                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                                  <button type="button" className="admin-btn ghost" style={{ fontSize: 12, padding: '5px 10px' }} disabled={adminsBusy} onClick={() => void resetAdminPassword(account)}>
+                                    تغيير كلمة المرور
+                                  </button>
+                                  <button type="button" className="admin-btn ghost" style={{ fontSize: 12, padding: '5px 10px', color: '#a3193f' }} disabled={adminsBusy} onClick={() => void removeAdmin(account)}>
+                                    حذف
+                                  </button>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="admin-note">لا توجد حسابات ظاهرة (أو الخادم غير متصل).</div>
+                          )}
+                        </div>
+                        <div className="admin-row" style={{ marginTop: 10 }}>
+                          <div className="admin-field">
+                            <label>اسم مستخدم جديد</label>
+                            <input value={newAdmin.username} onChange={(event) => setNewAdmin({ ...newAdmin, username: event.target.value })} dir="ltr" placeholder="manager1" autoComplete="off" />
+                          </div>
+                          <div className="admin-field">
+                            <label>كلمة المرور</label>
+                            <input type="password" value={newAdmin.password} onChange={(event) => setNewAdmin({ ...newAdmin, password: event.target.value })} dir="ltr" placeholder="6 أحرف على الأقل" autoComplete="new-password" />
+                          </div>
+                          <div className="admin-field">
+                            <label>الاسم الظاهر (اختياري)</label>
+                            <input value={newAdmin.displayName} onChange={(event) => setNewAdmin({ ...newAdmin, displayName: event.target.value })} placeholder="مثال: المساعدة" />
+                          </div>
+                        </div>
+                        <div className="admin-actions" style={{ marginTop: 6 }}>
+                          <button type="button" className="admin-btn success" disabled={adminsBusy} onClick={() => void addAdmin()}>
+                            <Plus size={15} /> إضافة مدير
+                          </button>
+                          <span className="admin-chip">عدد المدراء: {admins.length}</span>
                         </div>
                       </div>
                     </div>

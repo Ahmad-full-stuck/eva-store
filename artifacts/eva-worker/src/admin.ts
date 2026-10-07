@@ -1,6 +1,6 @@
 import type { Env, ProductRow, StoreProduct, ProductColor } from './types'
 import { toProduct } from './types'
-import { hashPin } from './auth'
+import { hashPin, hashPassword, ensureAuthSchema } from './auth'
 
 const json = (data: unknown, status = 200): Response =>
   new Response(JSON.stringify(data), {
@@ -353,6 +353,58 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
       "INSERT INTO settings (key, value, updated_at) VALUES ('admin_pin', ?1, datetime('now')) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = datetime('now')",
     ).bind(hashed).run()
     return json({ data: { changed: true } })
+  }
+
+  if (resource === 'admins') {
+    await ensureAuthSchema(env)
+    if (method === 'GET') {
+      const result = await env.DB.prepare('SELECT id, username, display_name, created_at FROM admins ORDER BY created_at ASC').all()
+      return json({ data: result.results ?? [] })
+    }
+    if (method === 'POST') {
+      const body = await readBody<{ username?: string; password?: string; displayName?: string }>(request)
+      const username = text(body?.username).toLowerCase()
+      const password = typeof body?.password === 'string' ? body.password : ''
+      if (!/^[a-z0-9_.-]{3,24}$/.test(username)) return json({ error: 'اسم المستخدم: 3-24 حرفاً لاتينياً أو أرقاماً' }, 400)
+      if (password.length < 6) return json({ error: 'كلمة المرور: 6 أحرف على الأقل' }, 400)
+      const existing = await env.DB.prepare('SELECT id FROM admins WHERE username = ?1').bind(username).first()
+      if (existing) return json({ error: 'اسم المستخدم مستخدم بالفعل' }, 409)
+      const hash = await hashPassword(password)
+      const id = `admin-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`
+      await env.DB.prepare('INSERT INTO admins (id, username, password_hash, display_name) VALUES (?1, ?2, ?3, ?4)')
+        .bind(id, username, hash, text(body?.displayName))
+        .run()
+      return json({ data: { id, username } }, 201)
+    }
+    if (method === 'PATCH' && id) {
+      const target = decodeURIComponent(id)
+      const body = await readBody<{ password?: string; displayName?: string }>(request)
+      if (typeof body?.password === 'string') {
+        if (body.password.length < 6) return json({ error: 'كلمة المرور: 6 أحرف على الأقل' }, 400)
+        const hash = await hashPassword(body.password)
+        const result = await env.DB.prepare('UPDATE admins SET password_hash = ?1 WHERE id = ?2').bind(hash, target).run()
+        if (!result.meta.changes) return json({ error: 'المدير غير موجود' }, 404)
+        await env.DB.prepare('DELETE FROM sessions WHERE admin_id = ?1').bind(target).run()
+        return json({ data: { id: target, passwordChanged: true } })
+      }
+      if (typeof body?.displayName === 'string') {
+        const result = await env.DB.prepare('UPDATE admins SET display_name = ?1 WHERE id = ?2')
+          .bind(text(body.displayName), target)
+          .run()
+        if (!result.meta.changes) return json({ error: 'المدير غير موجود' }, 404)
+        return json({ data: { id: target, displayName: text(body.displayName) } })
+      }
+      return json({ error: 'لا توجد بيانات للتعديل' }, 400)
+    }
+    if (method === 'DELETE' && id) {
+      const target = decodeURIComponent(id)
+      const count = await env.DB.prepare('SELECT COUNT(*) AS n FROM admins').first<{ n: number }>()
+      if ((count?.n ?? 0) <= 1) return json({ error: 'لا يمكن حذف آخر مدير في المتجر' }, 400)
+      const result = await env.DB.prepare('DELETE FROM admins WHERE id = ?1').bind(target).run()
+      if (!result.meta.changes) return json({ error: 'المدير غير موجود' }, 404)
+      await env.DB.prepare('DELETE FROM sessions WHERE admin_id = ?1').bind(target).run()
+      return json({ data: { id: target, deleted: true } })
+    }
   }
 
   if (resource === 'orders') {

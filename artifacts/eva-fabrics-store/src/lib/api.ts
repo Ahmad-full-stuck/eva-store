@@ -94,13 +94,20 @@ export class AdminRequestError extends Error {
   }
 }
 
-export const adminLogin = async (pin: string): Promise<void> => {
+export interface AdminCredentials {
+  username?: string
+  password?: string
+  pin?: string
+}
+
+export const adminLogin = async (credentials: AdminCredentials | string): Promise<void> => {
+  const payload: AdminCredentials = typeof credentials === 'string' ? { pin: credentials } : credentials
   let response: Response
   try {
     response = await fetch(apiUrl('/api/admin/login'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ pin }),
+      body: JSON.stringify(payload),
     })
   } catch {
     // لا خادم أصلاً (أو انقطع الاتصال) — ينتقل المتجر للوضع المحلي
@@ -108,14 +115,17 @@ export const adminLogin = async (pin: string): Promise<void> => {
   }
   const body = (await response.json().catch(() => null)) as { data?: { token?: string }; error?: string } | null
   if (!response.ok || !body?.data?.token) {
-    // الخادم موجود ويرفض الرمز (401/403) أو يحدّ المحاولات (429): تُعتبر حالة حقيقية ولا تسقط للوضع المحلي
+    // الخادم موجود ويرفض (401/403) أو يحدّ المحاولات (429): تُعتبر حالة حقيقية ولا تسقط للوضع المحلي
     if (response.status === 401 || response.status === 403 || response.status === 429) {
-      throw new AdminRequestError(body?.error || 'الرمز غير صحيح', response.status)
+      throw new AdminRequestError(body?.error || 'بيانات الدخول غير صحيحة', response.status)
     }
     throw new Error('server-unavailable')
   }
   setToken(body.data.token)
 }
+
+export const adminWhoami = async (): Promise<{ id?: string; username?: string; authenticated?: boolean }> =>
+  adminFetch('/api/admin/whoami')
 
 export const adminLogout = async (): Promise<void> => {
   const token = getToken()
@@ -177,6 +187,27 @@ export const pushServerSettings = async (settings: Record<string, unknown>): Pro
     if (error instanceof AdminRequestError && error.status === 401) return
     throw error
   }
+}
+
+export interface AdminAccount {
+  id: string
+  username: string
+  display_name?: string
+  created_at?: string
+}
+
+export const listAdmins = async (): Promise<AdminAccount[]> => adminFetch('/api/admin/admins')
+
+export const createAdminAccount = async (input: { username: string; password: string; displayName?: string }): Promise<void> => {
+  await adminFetch('/api/admin/admins', { method: 'POST', body: JSON.stringify(input) })
+}
+
+export const deleteAdminAccount = async (id: string): Promise<void> => {
+  await adminFetch(`/api/admin/admins/${encodeURIComponent(id)}`, { method: 'DELETE' })
+}
+
+export const changeAdminPassword = async (id: string, password: string): Promise<void> => {
+  await adminFetch(`/api/admin/admins/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify({ password }) })
 }
 
 const PENDING_KEY = 'eva-pending-orders'
