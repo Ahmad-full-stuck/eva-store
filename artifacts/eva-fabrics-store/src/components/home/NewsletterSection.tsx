@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { ArrowLeft, Mail, MessageCircle } from 'lucide-react'
+import { ArrowLeft, Mail } from 'lucide-react'
 import { siteConfig } from '@/lib/site'
 import { useSiteContent } from '@/lib/site-content'
 
@@ -11,7 +11,8 @@ export function NewsletterSection() {
   const [status, setStatus] = useState<'idle' | 'error' | 'sent'>('idle')
   const content = useSiteContent()
 
-  const subscribeUrl = siteConfig.whatsappUrl(
+  const subscribeUrl = siteConfig.emailUrl(
+    'اشتراك في النشرة',
     email.trim()
       ? `مرحباً إيفا ستور، أرغب بالاشتراك في النشرة عبر البريد: ${email.trim()}`
       : 'مرحباً إيفا ستور، أرغب بالاشتراك في نشرة الأقمشة',
@@ -29,7 +30,7 @@ export function NewsletterSection() {
   }
 
   return (
-    <section className="container-eva section-block" aria-label="اشتراك عبر واتساب">
+    <section className="container-eva section-block" aria-label="اشتراك بالنشرة">
       <div className="newsletter-card">
         <div>
           <span className="eyebrow"><Mail size={14} />{content.newsletterEyebrow}</span>
@@ -54,17 +55,17 @@ export function NewsletterSection() {
             aria-describedby="newsletter-status"
           />
           <button type="submit" className="button button-primary">
-            اشتراك عبر واتساب <ArrowLeft size={15} />
+            اشتراك بالبريد <ArrowLeft size={15} />
           </button>
         </form>
         <div id="newsletter-status" role="status" aria-live="polite" style={{ minHeight: 18, fontSize: 11.5 }}>
           {status === 'error' && 'يرجى إدخال بريد إلكتروني صحيح.'}
-          {status === 'sent' && 'فتحنا لك واتساب لإتمام الاشتراك في النشرة.'}
+          {status === 'sent' && 'فتحنا لك البريد لإتمام الاشتراك في النشرة.'}
         </div>
         <p className="newsletter-note">
           أو اطلبي استشارة في اختيار القماش عبر{' '}
-          <a href={siteConfig.whatsappUrl()} target="_blank" rel="noreferrer">
-            واتساب <MessageCircle size={13} />
+          <a href={siteConfig.emailUrl('استشارة في اختيار القماش', 'مرحباً، أريد استشارة في اختيار القماش المناسب.')} target="_blank" rel="noreferrer">
+            البريد <Mail size={13} />
           </a>
         </p>
       </div>

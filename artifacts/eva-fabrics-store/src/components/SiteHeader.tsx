@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BookOpen, ChevronLeft, Heart, Home, Info, Instagram, Menu, MessageCircle, PackageSearch, Phone, Search, ShieldCheck, ShoppingBag, Shirt, X } from 'lucide-react'
+import { BookOpen, ChevronLeft, Heart, Home, Info, Instagram, Menu, Mail, MessageCircle, PackageSearch, Phone, Search, ShieldCheck, ShoppingBag, Shirt, X } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
 import { formatMeters } from '@/lib/catalog'
@@ -187,9 +187,9 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
           ))}
           <div className="glass-divider" />
           <div className="drawer-contact">
-            <a className="chip drawer-chip drawer-chip-primary" href={siteConfig.whatsappUrl()} target="_blank" rel="noreferrer">
-              <MessageCircle size={17} />
-              تواصلي عبر واتساب
+            <a className="chip drawer-chip drawer-chip-primary" href={siteConfig.emailUrl()} target="_blank" rel="noreferrer">
+              <Mail size={17} />
+              راسلينا بالبريد
             </a>
             <a className="chip drawer-chip" href={`tel:${siteConfig.phone}`} dir="ltr">
               <Phone size={17} />

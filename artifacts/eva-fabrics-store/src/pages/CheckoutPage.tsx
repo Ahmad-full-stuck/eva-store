@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
-import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, MessageCircle, Navigation, Phone, RefreshCw, ShieldCheck, UserRound } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, Mail, Navigation, Phone, RefreshCw, ShieldCheck, UserRound } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { CartItem, CheckoutForm, CustomerProfile, OrderPayload } from '@/types'
 import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/catalog'
@@ -71,17 +71,17 @@ const glassStyles = `
 .glass-scope .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; color: var(--eva-muted); background: rgba(255, 255, 255, .78); border: 1px solid rgba(255, 255, 255, .92); border-radius: 999px; font-size: 11.5px; line-height: 1.7; }
 .glass-scope .chip i { width: 11px; height: 11px; border: 1px solid rgba(43, 33, 36, .2); border-radius: 50%; }
 .glass-scope .review-block { background: rgba(255, 255, 255, .62); border-color: rgba(255, 255, 255, .88); }
-.glass-scope .whatsapp-panel { display: grid; gap: 13px; margin-top: 20px; padding: 18px; border-radius: 16px; }
-.glass-scope .whatsapp-panel h3 { display: flex; align-items: center; gap: 8px; font-size: 15px; }
-.glass-scope .whatsapp-panel p { color: var(--eva-muted); font-size: 12.5px; line-height: 1.9; }
-.glass-scope .whatsapp-panel p strong { color: var(--eva-rose); }
-.glass-scope .whatsapp-actions { display: grid; gap: 10px; }
+.glass-scope .email-panel { display: grid; gap: 13px; margin-top: 20px; padding: 18px; border-radius: 16px; }
+.glass-scope .email-panel h3 { display: flex; align-items: center; gap: 8px; font-size: 15px; }
+.glass-scope .email-panel p { color: var(--eva-muted); font-size: 12.5px; line-height: 1.9; }
+.glass-scope .email-panel p strong { color: var(--eva-rose); }
+.glass-scope .contact-actions { display: grid; gap: 10px; }
 
 .glass-scope .server-error h3 { display: flex; align-items: center; gap: 8px; font-size: 15.5px; color: var(--eva-rose-dark); }
 .glass-scope .server-error p { color: var(--eva-muted); font-size: 12.5px; line-height: 1.9; margin: 0; }
 .glass-scope .server-error p strong { color: var(--eva-rose); }
-.glass-scope .button-whatsapp { color: #fff; background: var(--eva-green); box-shadow: 0 8px 18px rgba(73, 118, 91, .25); }
-.glass-scope .button-whatsapp:hover { background: #3c6350; box-shadow: 0 11px 24px rgba(73, 118, 91, .32); }
+.glass-scope .button-mail { color: #fff; background: var(--eva-green); box-shadow: 0 8px 18px rgba(73, 118, 91, .25); }
+.glass-scope .button-mail:hover { background: #3c6350; box-shadow: 0 11px 24px rgba(73, 118, 91, .32); }
 .glass-scope .server-error { background: rgba(249, 236, 231, .88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .glass-scope .order-notice { display: flex; gap: 8px; align-items: flex-start; padding: 11px 13px; border-radius: 12px; background: rgba(228, 245, 235, .92); border: 1px solid rgba(60, 130, 90, .32); color: #155e38; font-size: 13px; line-height: 1.75; }
 .glass-scope .order-notice svg { flex: 0 0 auto; margin-top: 3px; }
@@ -150,11 +150,11 @@ const glassStyles = `
   .glass-scope .order-box-head p { font-size: 13px; }
   .glass-scope .order-total-strip strong { font-size: 22px; }
   .glass-scope .order-submit { min-height: 54px; font-size: 15.5px; }
-  .glass-scope .whatsapp-actions { gap: 9px; }
+  .glass-scope .contact-actions { gap: 9px; }
   .glass-scope .empty-card { padding: 34px 18px; }
   .glass-scope .checkout-item, .glass-scope .checkout-item div { min-width: 0; }
   .glass-scope .checkout-item strong, .glass-scope .checkout-item b { overflow-wrap: anywhere; }
-  .glass-scope .whatsapp-panel { padding: 15px; }
+  .glass-scope .email-panel { padding: 15px; }
 }
 @media (max-width: 360px) {
   .glass-scope .order-box { padding: 20px 14px; }
@@ -179,7 +179,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [serverError, setServerError] = useState('')
   const [notice, setNotice] = useState('')
   const [pendingOrderNumber, setPendingOrderNumber] = useState('')
-  const [pendingWhatsAppHref, setPendingWhatsAppHref] = useState('')
+  const [pendingEmailHref, setPendingEmailHref] = useState('')
   const [liveMessage, setLiveMessage] = useState('')
   const totals = getCartTotals(cart)
   const siteContent = useSiteContent()
@@ -364,8 +364,8 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     const orderNumber = createLocalOrderNumber()
     saveLocalOrder(orderNumber, 'received', payload)
     notifyByEmail(payload, orderNumber)
-    openWhatsAppOrder(payload, orderNumber)
-    setPendingWhatsAppHref('')
+    openEmailOrder(payload, orderNumber)
+    setPendingEmailHref('')
     setSubmitState('idle')
     setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${orderNumber}`)
     onComplete(orderNumber)
@@ -381,7 +381,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     })
     notifyByEmail(payload, orderNumber)
     setPendingOrderNumber(orderNumber)
-    setPendingWhatsAppHref(siteConfig.whatsappUrl(whatsappOrderMessage(payload, orderNumber)))
+    setPendingEmailHref(siteConfig.emailUrl(`طلب جديد #${orderNumber}`, orderEmailBody(payload, orderNumber)))
     setServerError('تأكدي من الاتصال فقط')
     setNotice('')
     setSubmitState('idle')
@@ -439,9 +439,9 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         const serverNumber = getOrderNumber(body) || orderNumber
         saveLocalOrder(serverNumber, 'received', payload)
         notifyByEmail(payload, serverNumber)
-        openWhatsAppOrder(payload, serverNumber)
+        openEmailOrder(payload, serverNumber)
         setPendingOrderNumber('')
-        setPendingWhatsAppHref('')
+        setPendingEmailHref('')
         setSubmitState('idle')
         setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${serverNumber}`)
         onComplete(serverNumber)
@@ -537,10 +537,10 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
               <h3><CircleAlert size={18} />{serverError}</h3>
               <p>طلبك محفوظ عندنا وسيُسجَّل تلقائياً بمجرد عودة الاتصال، ولا داعي لإعادة كتابة أي شيء.</p>
               {pendingOrderNumber && <p>رقم طلبك المحفوظ: <strong dir="ltr">{pendingOrderNumber}</strong></p>}
-              <div className="whatsapp-actions">
+              <div className="contact-actions">
                 <button type="button" className="button button-primary" onClick={() => { setServerError(''); void submitOrder() }}><RefreshCw size={15} />إعادة المحاولة الآن</button>
-                {pendingWhatsAppHref && (
-                  <a className="button button-whatsapp" href={pendingWhatsAppHref} target="_blank" rel="noreferrer"><MessageCircle size={15} />أرسلي الطلب عبر واتساب</a>
+                {pendingEmailHref && (
+                  <a className="button button-mail" href={pendingEmailHref} target="_blank" rel="noreferrer"><Mail size={15} />أرسلي الطلب عبر البريد</a>
                 )}
               </div>
             </div>
@@ -626,7 +626,7 @@ function Field({ label, id, value, error, onChange, placeholder, type = 'text', 
   )
 }
 
-const whatsappOrderMessage = (payload: OrderPayload, orderNumber: string): string => {
+const orderEmailBody = (payload: OrderPayload, orderNumber: string): string => {
   const lines = [
     '*EVA STORE GLASS — طلب جديد*',
     `رقم الطلب: ${orderNumber}`,
@@ -649,11 +649,11 @@ const whatsappOrderMessage = (payload: OrderPayload, orderNumber: string): strin
   return lines.join('\n')
 }
 
-const openWhatsAppOrder = (payload: OrderPayload, orderNumber: string): void => {
+const openEmailOrder = (payload: OrderPayload, orderNumber: string): void => {
   try {
-    window.open(siteConfig.whatsappUrl(whatsappOrderMessage(payload, orderNumber)), '_blank', 'noopener,noreferrer')
+    window.open(siteConfig.emailUrl(`طلب جديد #${orderNumber}`, orderEmailBody(payload, orderNumber)), '_blank', 'noopener,noreferrer')
   } catch {
-    /* منع النوافذ المنبثقة — يبقى زر واتساب في رسالة التأكيد */
+    /* قد يمنع المتصفح فتح النافذة — يبقى زر البريد في رسالة التأكيد */
   }
 }
 

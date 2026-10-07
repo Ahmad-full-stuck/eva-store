@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Instagram, Layers, MapPin, MessageCircle, PackageCheck, Phone, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Truck } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Instagram, Layers, MapPin, Mail, MessageCircle, PackageCheck, Phone, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Truck } from 'lucide-react'
 import { Link, useLocation, useSearch } from 'wouter'
 import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
@@ -379,7 +379,7 @@ export function AboutPage() {
           </div>
           <div className="story-copy-grid">
             <p>من حسابنا على إنستغرام بدأنا نعرض الأقمشة بالصور والفيديو: نُظهر اللون في الضوء الطبيعي، ونشرح الوزن والمرونة والشفافية في تسجيل صوتي قصير قبل أن يصلك القماش.</p>
-            <p>اليوم تجد كل ذلك في مكان واحد: معرض يضم {catalogCounts().products.toLocaleString('ar-IQ')} خامة بمواصفات مكتوبة، وطلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية مع تأكيد يدوي لكل طلب عبر واتساب.</p>
+            <p>اليوم تجد كل ذلك في مكان واحد: معرض يضم {catalogCounts().products.toLocaleString('ar-IQ')} خامة بمواصفات مكتوبة، وطلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية مع تأكيد يدوي لكل طلب عبر البريد الإلكتروني.</p>
           </div>
         </section>
 
@@ -435,7 +435,7 @@ export function AboutPage() {
           </div>
           <div className="cta-actions">
             <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
-            <a href={siteConfig.whatsappUrl('مرحباً إيفا، أحتاج مساعدة في اختيار قماش')} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />اسألينا عبر واتساب</a>
+            <a href={siteConfig.emailUrl('استفسار عن الخرائم', 'مرحباً إيفا، أحتاج مساعدة في اختيار قماش')} target="_blank" rel="noreferrer" className="button button-outline"><Mail size={16} />اسألينا عبر البريد</a>
           </div>
         </section>
       </main>
@@ -661,7 +661,7 @@ export function FabricGuidePage() {
           <div className="chip-row" style={{ marginTop: '22px' }}>
             <span className="chip"><Scissors size={13} />قصّ بسيط</span>
             <span className="chip"><Heart size={13} />عناية بالمطرز</span>
-            <span className="chip"><Clock size={13} />الرد عبر واتساب</span>
+            <span className="chip"><Clock size={13} />الرد عبر البريد</span>
             <span className="chip"><ShieldCheck size={13} />تأكيد قبل الشحن</span>
           </div>
         </section>
@@ -686,8 +686,8 @@ export function ContactPage() {
   const [phone, setPhone] = useState('')
   const [message, setMessage] = useState('')
   const [errors, setErrors] = useState<ContactErrors>({})
-  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'whatsapp'>('idle')
-  const [whatsappUrl, setWhatsappUrl] = useState('')
+  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'email'>('idle')
+  const [emailUrl, setEmailUrl] = useState('')
   const [tabOpened, setTabOpened] = useState(false)
   const content = useSiteContent()
 
@@ -706,9 +706,9 @@ export function ContactPage() {
     return Object.keys(next).length === 0
   }
 
-  const openWhatsApp = (url: string) => {
-    setWhatsappUrl(url)
-    setState('whatsapp')
+  const openEmail = (url: string) => {
+    setEmailUrl(url)
+    setState('email')
     let handle: Window | null = null
     try {
       handle = window.open(url, '_blank')
@@ -738,7 +738,7 @@ export function ContactPage() {
       setState('sent')
     } catch {
       window.clearTimeout(timer)
-      openWhatsApp(composeText())
+      openEmail(siteConfig.emailUrl('رسالة من صفحة التواصل', composeText()))
       return
     }
     window.clearTimeout(timer)
@@ -750,7 +750,7 @@ export function ContactPage() {
     setMessage('')
     setErrors({})
     setState('idle')
-    setWhatsappUrl('')
+    setEmailUrl('')
   }
 
   return (
@@ -761,13 +761,13 @@ export function ContactPage() {
 
         <section className="contact-layout">
           <div className="contact-intro">
-            <span className="eyebrow"><MessageCircle size={14} />نحن قريبون</span>
+            <span className="eyebrow"><Mail size={14} />نحن قريبون</span>
             <h1>{content.contactTitle}</h1>
             <p>{content.contactText}</p>
 
             <div className="contact-methods">
-              <a href={siteConfig.whatsappUrl()} target="_blank" rel="noreferrer" aria-label="فتح محادثة واتساب مع إيفا ستور">
-                <MessageCircle size={19} /><span><strong>واتساب</strong><small dir="ltr">{siteConfig.phone}</small></span><ArrowLeft size={15} />
+              <a href={siteConfig.emailUrl()} target="_blank" rel="noreferrer" aria-label="راسلينا على البريد الإلكتروني">
+                <Mail size={19} /><span><strong>البريد الإلكتروني</strong><small dir="ltr">{siteConfig.contactEmail}</small></span><ArrowLeft size={15} />
               </a>
               <a href={`tel:${siteConfig.phone}`} aria-label={`الاتصال على ${siteConfig.phone}`}>
                 <Phone size={19} /><span><strong>اتصال هاتفي</strong><small dir="ltr">{siteConfig.phone}</small></span><ArrowLeft size={15} />
@@ -779,7 +779,7 @@ export function ContactPage() {
 
             <div className="contact-hours glass-card">
               <span className="hours-title"><Clock size={15} />كيف نتواصل</span>
-              <div className="hours-row"><span>الاستفسار والطلب</span><strong>عبر واتساب</strong></div>
+              <div className="hours-row"><span>الاستفسار والطلب</span><strong>عبر البريد الإلكتروني</strong></div>
               <div className="hours-row"><span>تأكيد الطلب</span><strong>نتواصل معك قبل الشحن</strong></div>
               <div className="hours-row"><span>التوصيل</span><strong>جميع المحافظات — ٥ آلاف دينار</strong></div>
             </div>
@@ -791,7 +791,7 @@ export function ContactPage() {
                 <strong>الموقع والعنوان</strong>
                 <p>بغداد نستقبل الطلبات عبر المتجر أونلاين، ونرتّب موعد الاستلام بعد تأكيد الطلب. التوصيل يشمل جميع المحافظات العراقية، وللعنوان التفصيلي نرسله لك عند التأكيد.</p>
               </div>
-              <a className="button button-light" href={siteConfig.whatsappUrl('مرحباً إيفا، أرجو إرسال موقع المعرض وساعات العمل')} target="_blank" rel="noreferrer">اطلبي الموقع على الخريطة <ArrowLeft size={16} /></a>
+              <a className="button button-light" href={siteConfig.emailUrl('مرحباً إيفا، أرجو إرسال موقع المعرض وساعات العمل')} target="_blank" rel="noreferrer">اطلبي الموقع على الخريطة <ArrowLeft size={16} /></a>
             </div>
           </div>
 
@@ -801,7 +801,7 @@ export function ContactPage() {
                 <span className="eyebrow"><Send size={14} />راسلينا</span>
                 <h2>أرسلي رسالتك</h2>
               </div>
-              <span className="chip chip-neutral">الرد عبر واتساب</span>
+              <span className="chip chip-neutral">الرد عبر البريد</span>
             </div>
 
             <div className="form-fields">
@@ -831,16 +831,16 @@ export function ContactPage() {
             {state === 'sent' && (
               <div className="form-status form-status-success" role="status">
                 <Check size={16} />
-                <span>وصلتنا رسالتك وسنتواصل معك عبر رقم الهاتف الذي أدخلتيه. إن أحببتِ البدء مباشرة، يمكننا متابعة المحادثة على واتساب.</span>
+                <span>وصلتنا رسالتك وسنتواصل معك عبر رقم الهاتف الذي أدخلتيه. إن أحببتِ البدء مباشرة، راسلنا على البريد الإلكتروني.</span>
               </div>
             )}
 
-            {state === 'whatsapp' && (
+            {state === 'email' && (
               <div className="form-status form-status-info" role="status">
-                <MessageCircle size={16} />
+                <Mail size={16} />
                 <span>
-                  {tabOpened ? 'فتحنا محادثة واتساب برسالتك جاهزة. وإن لم تظهر المحادثة، اضغطي الزر.' : 'تعذّر إرسال الرسالة من الموقع، فحوّلناها إلى واتساب. اضغطي الزر لإتمام المحادثة.'}
-                  {' '}<a href={whatsappUrl} target="_blank" rel="noreferrer">فتح محادثة واتساب</a>
+                  {tabOpened ? 'فتحنا لك البريد برسالتك جاهزة. وإن لم يفتح تلقائياً، اضغطي الزر.' : 'تعذّر إرسال الرسالة من الموقع، فحوّلناها إلى البريد. اضغطي الزر لإتمام الإرسال.'}
+                  {' '}<a href={emailUrl}>فتح البريد الإلكتروني</a>
                 </span>
               </div>
             )}
@@ -875,7 +875,7 @@ const policies: PolicyContent[] = [
     points: [
       'الأسعار والمواصفات والألوان قابلة للتحديث، ويظهر السعر النهائي في مراجعة الطلب قبل التأكيد.',
       'كمية القماش تُحسب بالمتر ونصف المتر، والمخزون يُخصم عند تأكيد الطلب لا عند إضافته إلى السلة.',
-      'يحق لنا التواصل معك للتأكيد عبر الهاتف أو واتساب قبل الشحن، ويُعد الطلب مؤكداً بعد هذا التواصل.',
+      'يحق لنا التواصل معك للتأكيد عبر الهاتف أو البريد الإلكتروني قبل الشحن، ويُعد الطلب مؤكداً بعد هذا التواصل.',
       'يُمنع إعادة بيع المنتجات أو استخدام صور المتجر دون إذن مكتوب.',
     ],
     note: 'بإرسال الطلب توافقين على هذه الشروط وعلى سياسة الإرجاع.',
@@ -888,7 +888,7 @@ const policies: PolicyContent[] = [
       'نجمع الاسم ورقم الهاتف والعنوان وتفاصيل الطلب اللازمة للتنفيذ.',
       'البريد الإلكتروني والملاحظات اختيارية ولا يشترط لإتمام الطلب.',
       'لا نحفظ بيانات الدفع، لأن الدفع يتم عند الاستلام في العراق.',
-      'يمكنك طلب عرض بياناتك أو حذفها في أي وقت عبر واتساب، وسنستجيب خلال أيام العمل.',
+      'يمكنك طلب عرض بياناتك أو حذفها في أي وقت عبر البريد الإلكتروني، وسنستجيب خلال أيام العمل.',
     ],
        note: 'لن نرسل رسائل تسويقية دون موافقتك الصريحة.',
   },
@@ -899,20 +899,20 @@ const policies: PolicyContent[] = [
     points: [
       'التوصيل متاح إلى جميع المحافظات العراقية، ويعتمد الوقت على بعد المحافظة وحالة الطلب.',
       'رسوم التوصيل ثابتة ٥ آلاف دينار، وتصبح مجانية للطلبات التي تتجاوز 50 الف دينار.',
-      'نجهّز الطلب بعد تأكيدك له، ونرسل لك تحديثاً عبر واتساب عند خروجه للشحن.',
-      'نحدّثك عبر واتساب عند خروج الطلب وعند تسليمه إلى مندوب الشحن.',
+      'نجهّز الطلب بعد تأكيدك له، ونرسل لك تحديثاً عبر البريد الإلكتروني عند خروجه للشحن.',
+      'نحدّثك عبر البريد الإلكتروني عند خروج الطلب وعند تسليمه إلى مندوب الشحن.',
     ],
     note: 'احتفظي برقم الطلب؛ فهو يكفي للاستفسار دون مشاركة بيانات إضافية.',
   },
   {
     id: 'returns',
     title: 'الإرجاع والتبديل',
-    intro: 'نقبل الإرجاع أو التبديل إذا وصل القماش مختلفاً عن المواصفات المكتوبة أو حدث خطأ في التنفيذ، وتُحالة الحالة عبر واتساب ونتفق معك على الحل المناسب.',
+    intro: 'نقبل الإرجاع أو التبديل إذا وصل القماش مختلفاً عن المواصفات المكتوبة أو حدث خطأ في التنفيذ، وتُحالة الحالة عبر البريد الإلكتروني ونتفق معك على الحل المناسب.',
     points: [
       'يجب أن يبقى القماش بحالته الأصلية وغير مقصوص ولا مستعمل.',
       'الأقمشة المقصوصة حسب الطلب أو المقطوعة حسب القياس غير قابلة للإرجاع.',
       'في حال ثبوت خطأ منّا نتحمل رسوم الإرجاع ونشحن البديل على حسابنا.',
-      'التواصل الأول يتم عبر واتساب مع إرفاق صورة للقماش ورقم الطلب.',
+      'التواصل الأول يتم عبر البريد الإلكتروني مع إرفاق صورة للقماش ورقم الطلب.',
     ],
     note: 'اللون المطابق للصور مضمون، والاختلاف البسيط تحت الإضاءة لا يُعد عيباً.',
   },
@@ -1002,7 +1002,7 @@ const ORDER_KEYS = ['eva-orders', 'eva-order', 'eva-last-order', 'eva-fabrics-or
 
 const statusSteps = ['تم استلام الطلب', 'قيد المراجعة', 'جاهز للشحن', 'في الطريق إليك', 'تم التوصيل']
 
-const confirmationWhatsappUrl = (order: StoredOrder): string => {
+const confirmationEmailUrl = (order: StoredOrder): string => {
   const lines = ['*EVA STORE GLASS*', `رقم الطلب: ${order.orderNumber}`]
   if (order.items?.length) {
     lines.push('', 'الأصناف:')
@@ -1021,7 +1021,7 @@ const confirmationWhatsappUrl = (order: StoredOrder): string => {
   if (order.phone) lines.push(`الهاتف: ${order.phone}`)
   if (order.address) lines.push(`العنوان: ${order.address}`)
   lines.push('', `أستفسر عن طلبي رقم ${order.orderNumber}`)
-  return siteConfig.whatsappUrl(lines.join('\n'))
+  return siteConfig.emailUrl(`طلب #${order.orderNumber}`, lines.join('\n'))
 }
 
 const readText = (record: Record<string, unknown>, keys: string[]): string => {
@@ -1264,7 +1264,7 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
             <p>لم يصلنا رقم طلب في هذا الرابط. افتحي رسالة التأكيد التي وصلك، أو ابحثي عن طلبك برقم الطلب.</p>
             <div className="empty-actions">
               <Link href="/order-tracking" className="button button-primary">تتبّع الطلب <ArrowLeft size={16} /></Link>
-              <a href={siteConfig.whatsappUrl('مرحباً إيفا، أحتاج مساعدة في الطلب')} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />تواصلي معنا</a>
+              <a href={siteConfig.emailUrl('مساعدة في الطلب', 'مرحباً إيفا، أحتاج مساعدة في الطلب')} target="_blank" rel="noreferrer" className="button button-outline"><Mail size={16} />راسلينا بالبريد</a>
             </div>
           </section>
         </main>
@@ -1322,9 +1322,9 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
           <div className="confirmation-actions">
             <Link href="/catalog" className="button button-primary">متابعة التسوق <ArrowLeft size={16} /></Link>
             <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><Search size={16} />تتبّع الطلب</Link>
-            <a href={confirmationWhatsappUrl(order)} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />إرسال الطلب عبر واتساب</a>
+            <a href={confirmationEmailUrl(order)} target="_blank" rel="noreferrer" className="button button-outline"><Mail size={16} />إرسال الطلب عبر البريد</a>
           </div>
-          <div className="confirmation-trust"><Truck size={17} /><span>التوصيل مجاني للطلبات التي تتجاوز 50 الف دينار، ونحدّث الحالة عبر واتساب.</span></div>
+          <div className="confirmation-trust"><Truck size={17} /><span>التوصيل مجاني للطلبات التي تتجاوز 50 الف دينار، ونحدّث الحالة عبر البريد الإلكتروني.</span></div>
         </div>
       </main>
     </>
@@ -1427,7 +1427,7 @@ export function OrderTrackingPage() {
             </div>
           )}
 
-          <a href={siteConfig.whatsappUrl(`مرحباً، أريد الاستفسار عن الطلب رقم ${active || ''}`)} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />اسألينا عبر واتساب</a>
+          <a href={siteConfig.emailUrl(`استفسار عن الطلب رقم ${active || ''}`, `مرحباً، أريد الاستفسار عن طلبي رقم ${active || ''}`)} target="_blank" rel="noreferrer" className="button button-outline"><Mail size={16} />اسألينا عبر البريد</a>
         </section>
       </main>
     </>

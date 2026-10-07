@@ -34,9 +34,9 @@ export const siteConfig = {
   get name() { return adminContent().shopName || 'إيفا ستور للأقمشة' },
   shortName: 'إيفا ستور',
   get phone() { return adminContent().phone || localPhone },
-  get whatsappNumber() { return adminContent().whatsapp || internationalWhatsApp },
   get instagramUrl() { return adminContent().instagram || safeInstagram },
-  whatsappUrl: (message = 'مرحباً إيفا ستور، أحتاج مساعدة في اختيار الأقمشة'): string => `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(message)}`,
+  get contactEmail() { return adminContent().emailOrdersTo || 'wealiahmad.ali@gmail.com' },
+  emailUrl: (subject = 'استفسار من متجر إيفا', body = 'مرحباً إيفا، أريد الاستفسار عن منتجاتكم.'): string => `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
   instagramText: 'إيفا ستور على إنستغرام',
 }
 

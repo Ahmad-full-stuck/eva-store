@@ -1,4 +1,4 @@
-import { Instagram, MapPin, MessageCircle, Phone } from 'lucide-react'
+import { Instagram, MapPin, Mail, Phone } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, SiteRoute } from '@/types'
 import { governorates } from '@/lib/fallback-data'
@@ -20,7 +20,7 @@ export function SiteFooter({ routes, categories }: SiteFooterProps) {
         <Logo light />
         <p>معرض أقمشة عربي يساعدك على معرفة الخامة والمرونة واللون قبل اختيار القطعة.</p>
         <div className="social-links">
-          <a href={siteConfig.whatsappUrl()} target="_blank" rel="noreferrer" aria-label="تواصلي معنا عبر واتساب"><MessageCircle size={17} /></a>
+          <a href={siteConfig.emailUrl()} target="_blank" rel="noreferrer" aria-label="راسلينا عبر البريد الإلكتروني"><Mail size={17} /></a>
           <a href={siteConfig.instagramUrl} target="_blank" rel="noreferrer" aria-label={siteConfig.instagramText}><Instagram size={17} /></a>
         </div>
       </div>
@@ -40,13 +40,13 @@ export function SiteFooter({ routes, categories }: SiteFooterProps) {
         <div className="footer-col">
           <h2>تواصلي معنا</h2>
           <a href={`tel:${siteConfig.phone}`}><Phone size={15} /><span dir="ltr">{siteConfig.phone}</span></a>
-          <a href={siteConfig.whatsappUrl()} target="_blank" rel="noreferrer"><MessageCircle size={15} />واتساب</a>
+          <a href={siteConfig.emailUrl()} target="_blank" rel="noreferrer"><Mail size={15} />البريد</a>
           <a href={siteConfig.instagramUrl} target="_blank" rel="noreferrer"><Instagram size={15} />إنستغرام</a>
         </div>
         <div className="footer-col">
           <h2>نطاق الخدمة</h2>
           <p>نوصل إلى {nearbyGovernorates.join('، ')} وجميع محافظات العراق.</p>
-          <a href={siteConfig.whatsappUrl('مرحباً إيفا ستور، أستفسر عن التوصيل والشحن')} target="_blank" rel="noreferrer"><MapPin size={15} />توصيل ٥ آلاف دينار</a>
+          <a href={siteConfig.emailUrl('التوصيل والشحن', 'مرحباً إيفا ستور، أستفسر عن التوصيل والشحن')} target="_blank" rel="noreferrer"><MapPin size={15} />توصيل ٥ آلاف دينار</a>
         </div>
       </div>
       <div className="footer-bottom">

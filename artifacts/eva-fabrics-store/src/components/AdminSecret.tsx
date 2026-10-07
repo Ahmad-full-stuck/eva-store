@@ -66,7 +66,7 @@ const groupFields: { title: string; fields: TextField[] }[] = [
     ],
   },
   {
-    title: 'النشرة (اشتراك عبر واتساب)',
+    title: 'النشرة (اشتراك بالبريد)',
     fields: [
       { key: 'newsletterEyebrow', label: 'العنوان الصغير' },
       { key: 'newsletterTitle', label: 'عنوان النشرة', area: true },
@@ -1064,7 +1064,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                       </div>
                       <div className="admin-row">
                         <div className="admin-field">
-                          <label>رقم واتساب (دولي بدون +)</label>
+                          <label>رقم تواصل إضافي (دولي بدون +)</label>
                           <input value={content.whatsapp} onChange={(event) => setContent({ ...content, whatsapp: event.target.value })} dir="ltr" />
                         </div>
                         <div className="admin-field">
