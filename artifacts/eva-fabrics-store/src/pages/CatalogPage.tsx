@@ -258,7 +258,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       : priceRange.max !== null
         ? `حتى ${formatPrice(priceRange.max)}`
         : ''
-  const statusLabel = status === 'loading' ? 'جارٍ الاتصال بالخادم' : status === 'fallback' ? 'نسخة محلية جاهزة' : 'تحديث مباشر عند توفر API'
+  const statusLabel = status === 'loading' ? 'جارٍ الاتصال بالخادم' : status === 'fallback' ? 'تعذّر الاتصال — المحتوى المحفوظ يعمل' : 'متصل بالخادم — تحديث مباشر'
 
   const chips = useMemo(() => [
     { id: '', label: 'كل الخامات', count: products.length },

@@ -5,7 +5,7 @@ import type { Category, Product, ProductColor } from '@/types'
 import { fallbackCategories, fallbackProducts } from '@/lib/fallback-data'
 import { sanitizeCategory, sanitizeProduct, sanitizeCategories, sanitizeProducts } from '@/lib/sanitize'
 import { formatPrice } from '@/lib/catalog'
-import { adminFetch, adminLogin, adminLogout, AdminRequestError, loadServerConfig, pushServerContent, pushServerSettings } from '@/lib/api'
+import { adminFetch, adminLogin, adminLogout, AdminRequestError, loadServerConfig, ping, pushServerContent, pushServerSettings } from '@/lib/api'
 
 const PRODUCTS_KEY = 'eva-admin-products'
 const REMOVED_KEY = 'eva-admin-removed'
@@ -346,6 +346,17 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   useEffect(() => {
     setOpen(location === '/admin')
   }, [location])
+
+  useEffect(() => {
+    if (!open) return undefined
+    let active = true
+    void ping().then((ok) => {
+      if (active) setOnline(ok)
+    })
+    return () => {
+      active = false
+    }
+  }, [open])
 
   useEffect(() => {
     if (!toast) return undefined
