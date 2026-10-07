@@ -8,6 +8,10 @@ out-tsc
 .expo
 .expo-shared
 
+# wrangler local runtime state
+.wrangler/
+.mf/
+
 # dependencies
 node_modules
 
