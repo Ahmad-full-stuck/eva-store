@@ -200,12 +200,14 @@ export default {
         const key = decodeURIComponent(url.pathname.slice('/media/'.length))
         const row = await env.DB.prepare('SELECT content, type FROM media WHERE key = ?1')
           .bind(key)
-          .first<{ content: ArrayBuffer | null; type: string | null }>()
+          .first<{ content: number[] | ArrayBuffer | null; type: string | null }>()
         if (!row?.content) return new Response('Not found', { status: 404 })
+        const raw = row.content
+        const bytes = Array.isArray(raw) ? new Uint8Array(raw) : new Uint8Array(raw)
         const headers = new Headers()
         headers.set('Content-Type', row.type || 'image/jpeg')
         headers.set('Cache-Control', 'public, max-age=31536000, immutable')
-        return new Response(row.content, { headers })
+        return new Response(bytes, { headers })
       }
 
       return new Response('EVA STORE API', { status: 404 })
