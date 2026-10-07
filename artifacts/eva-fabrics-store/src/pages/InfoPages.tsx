@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Instagram, Layers, MapPin, Mail, MessageCircle, PackageCheck, Phone, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Truck } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Layers, MapPin, Mail, MessageCircle, PackageCheck, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Truck } from 'lucide-react'
 import { Link, useLocation, useSearch } from 'wouter'
 import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
 import { fallbackCategories, fallbackProducts, guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
-import { apiUrl, siteConfig, telProps } from '@/lib/site'
+import { apiUrl } from '@/lib/site'
 import { sendSimpleEmail } from '@/lib/email'
 import { useSiteContent } from '@/lib/site-content'
 import { mergeAdminCategories, mergeAdminProducts } from '@/components/AdminSecret'
@@ -380,7 +380,7 @@ export function AboutPage() {
           </div>
           <div className="story-copy-grid">
             <p>من حسابنا على إنستغرام بدأنا نعرض الأقمشة بالصور والفيديو: نُظهر اللون في الضوء الطبيعي، ونشرح الوزن والمرونة والشفافية في تسجيل صوتي قصير قبل أن يصلك القماش.</p>
-            <p>اليوم تجد كل ذلك في مكان واحد: معرض يضم {catalogCounts().products.toLocaleString('ar-IQ')} خامة بمواصفات مكتوبة، وطلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية مع تأكيد يدوي لكل طلب عبر البريد الإلكتروني.</p>
+            <p>اليوم تجد كل ذلك في مكان واحد: معرض يضم {catalogCounts().products.toLocaleString('ar-IQ')} خامة بمواصفات مكتوبة، وطلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية مع تأكيد يدوي لكل طلب.</p>
           </div>
         </section>
 
@@ -436,7 +436,7 @@ export function AboutPage() {
           </div>
           <div className="cta-actions">
             <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
-            <a href={siteConfig.emailUrl('استفسار عن الخرائم', 'مرحباً إيفا، أحتاج مساعدة في اختيار قماش')} target="_blank" rel="noreferrer" className="button button-outline"><Mail size={16} />اسألينا عبر البريد</a>
+            <Link href="/contact" className="button button-outline"><MessageCircle size={16} />اسألينا عبر الموقع</Link>
           </div>
         </section>
       </main>
@@ -553,7 +553,7 @@ export function FabricGuidePage() {
               <h2 id="quick-answers-title">إجابات سريعة على أشهر الأسئلة</h2>
               <p>لكل سؤال أكثر من إجابة مختصرة — اضغطي السؤال لتظهر كل الإجابات، أو اقرئي الدليل كاملاً.</p>
             </div>
-            <a href="#guide-faq-title" className="underlined-link">أو اقرئي الدليل الكامل <ArrowLeft size={15} /></a>
+            <a href="#guide-faq-title" className="underlined-link" onClick={(event) => { event.preventDefault(); document.getElementById('guide-faq-title')?.scrollIntoView({ block: 'start', behavior: 'smooth' }) }}>أو اقرئي الدليل الكامل <ArrowLeft size={15} /></a>
           </div>
           <div className="quick-answers-grid">
             {quickGuideAnswers.map((entry, index) => (
@@ -662,7 +662,7 @@ export function FabricGuidePage() {
           <div className="chip-row" style={{ marginTop: '22px' }}>
             <span className="chip"><Scissors size={13} />قصّ بسيط</span>
             <span className="chip"><Heart size={13} />عناية بالمطرز</span>
-            <span className="chip"><Clock size={13} />الرد عبر البريد</span>
+            <span className="chip"><Clock size={13} />الرد عبر الهاتف</span>
             <span className="chip"><ShieldCheck size={13} />تأكيد قبل الشحن</span>
           </div>
         </section>
@@ -758,20 +758,20 @@ export function ContactPage() {
             <p>{content.contactText}</p>
 
             <div className="contact-methods">
-              <a href={siteConfig.emailUrl()} target="_blank" rel="noreferrer" aria-label="راسلينا على البريد الإلكتروني">
-                <Mail size={19} /><span><strong>البريد الإلكتروني</strong><small dir="ltr">{siteConfig.contactEmail}</small></span><ArrowLeft size={15} />
+              <a href="#contact-form" aria-label="افتحي نموذج التواصل في الموقع">
+                <Send size={19} /><span><strong>نموذج التواصل</strong><small>أرسلي رسالتك من هذه الصفحة</small></span><ArrowLeft size={15} />
               </a>
-              <a {...telProps(siteConfig.phone)} aria-label={`الاتصال على ${siteConfig.phone}`}>
-                <Phone size={19} /><span><strong>اتصال هاتفي</strong><small dir="ltr">{siteConfig.phone}</small></span><ArrowLeft size={15} />
-              </a>
-              <a href={siteConfig.instagramUrl} target="_blank" rel="noreferrer" aria-label={siteConfig.instagramText}>
-                <Instagram size={19} /><span><strong>إنستغرام</strong><small>راسلينا أو شاهدي أحدث القطع</small></span><ArrowLeft size={15} />
-              </a>
+              <Link href="/order-tracking" aria-label="تتبّع حالة طلبك">
+                <PackageCheck size={19} /><span><strong>تتبّع الطلب</strong><small>اعرفي حالة طلبك برقم الطلب</small></span><ArrowLeft size={15} />
+              </Link>
+              <Link href="/fabric-guide" aria-label="افتحي دليل الأقمشة">
+                <Ruler size={19} /><span><strong>دليل الأقمشة</strong><small>إجابات سريعة قبل الاستفسار</small></span><ArrowLeft size={15} />
+              </Link>
             </div>
 
             <div className="contact-hours glass-card">
               <span className="hours-title"><Clock size={15} />كيف نتواصل</span>
-              <div className="hours-row"><span>الاستفسار والطلب</span><strong>عبر البريد الإلكتروني</strong></div>
+              <div className="hours-row"><span>الاستفسار والطلب</span><strong>عبر نموذج التواصل في الموقع</strong></div>
               <div className="hours-row"><span>تأكيد الطلب</span><strong>نتواصل معك قبل الشحن</strong></div>
               <div className="hours-row"><span>التوصيل</span><strong>جميع المحافظات — ٥ آلاف دينار</strong></div>
             </div>
@@ -783,17 +783,16 @@ export function ContactPage() {
                 <strong>الموقع والعنوان</strong>
                 <p>بغداد نستقبل الطلبات عبر المتجر أونلاين، ونرتّب موعد الاستلام بعد تأكيد الطلب. التوصيل يشمل جميع المحافظات العراقية، وللعنوان التفصيلي نرسله لك عند التأكيد.</p>
               </div>
-              <a className="button button-light" href={siteConfig.emailUrl('مرحباً إيفا، أرجو إرسال موقع المعرض وساعات العمل')} target="_blank" rel="noreferrer">اطلبي الموقع على الخريطة <ArrowLeft size={16} /></a>
             </div>
           </div>
 
-          <form className="contact-form glass" onSubmit={submit} noValidate>
+          <form id="contact-form" className="contact-form glass" onSubmit={submit} noValidate>
             <div className="section-head-tight" style={{ marginBottom: '18px' }}>
               <div>
                 <span className="eyebrow"><Send size={14} />راسلينا</span>
                 <h2>أرسلي رسالتك</h2>
               </div>
-              <span className="chip chip-neutral">الرد عبر البريد</span>
+              <span className="chip chip-neutral">الرد عبر الهاتف</span>
             </div>
 
             <div className="form-fields">
@@ -823,7 +822,7 @@ export function ContactPage() {
             {state === 'sent' && (
               <div className="form-status form-status-success" role="status">
                 <Check size={16} />
-                <span>وصلتنا رسالتك وسنتواصل معك عبر رقم الهاتف الذي أدخلتيه. إن أحببتِ البدء مباشرة، راسلنا على البريد الإلكتروني.</span>
+                <span>وصلتنا رسالتك وسنتواصل معك عبر رقم الهاتف الذي أدخلتيه. وإن أحببتِ طلباً جديداً، أرسليه من صفحة إتمام الطلب.</span>
               </div>
             )}
 
@@ -864,7 +863,7 @@ const policies: PolicyContent[] = [
     points: [
       'الأسعار والمواصفات والألوان قابلة للتحديث، ويظهر السعر النهائي في مراجعة الطلب قبل التأكيد.',
       'كمية القماش تُحسب بالمتر ونصف المتر، والمخزون يُخصم عند تأكيد الطلب لا عند إضافته إلى السلة.',
-      'يحق لنا التواصل معك للتأكيد عبر الهاتف أو البريد الإلكتروني قبل الشحن، ويُعد الطلب مؤكداً بعد هذا التواصل.',
+      'يحق لنا التواصل معك للتأكيد عبر الهاتف قبل الشحن، ويُعد الطلب مؤكداً بعد هذا التواصل.',
       'يُمنع إعادة بيع المنتجات أو استخدام صور المتجر دون إذن مكتوب.',
     ],
     note: 'بإرسال الطلب توافقين على هذه الشروط وعلى سياسة الإرجاع.',
@@ -877,7 +876,7 @@ const policies: PolicyContent[] = [
       'نجمع الاسم ورقم الهاتف والعنوان وتفاصيل الطلب اللازمة للتنفيذ.',
       'البريد الإلكتروني والملاحظات اختيارية ولا يشترط لإتمام الطلب.',
       'لا نحفظ بيانات الدفع، لأن الدفع يتم عند الاستلام في العراق.',
-      'يمكنك طلب عرض بياناتك أو حذفها في أي وقت عبر البريد الإلكتروني، وسنستجيب خلال أيام العمل.',
+      'يمكنك طلب عرض بياناتك أو حذفها في أي وقت عبر نموذج التواصل في الموقع، وسنستجيب خلال أيام العمل.',
     ],
        note: 'لن نرسل رسائل تسويقية دون موافقتك الصريحة.',
   },
@@ -888,20 +887,20 @@ const policies: PolicyContent[] = [
     points: [
       'التوصيل متاح إلى جميع المحافظات العراقية، ويعتمد الوقت على بعد المحافظة وحالة الطلب.',
       'رسوم التوصيل ثابتة ٥ آلاف دينار، وتصبح مجانية للطلبات التي تتجاوز 50 الف دينار.',
-      'نجهّز الطلب بعد تأكيدك له، ونرسل لك تحديثاً عبر البريد الإلكتروني عند خروجه للشحن.',
-      'نحدّثك عبر البريد الإلكتروني عند خروج الطلب وعند تسليمه إلى مندوب الشحن.',
+      'نجهّز الطلب بعد تأكيدك له، ونحدّث حالته في صفحة تتبّع الطلب عند خروجه للشحن.',
+      'نحدّثك عبر الهاتف عند خروج الطلب وعند تسليمه إلى مندوب الشحن.',
     ],
     note: 'احتفظي برقم الطلب؛ فهو يكفي للاستفسار دون مشاركة بيانات إضافية.',
   },
   {
     id: 'returns',
     title: 'الإرجاع والتبديل',
-    intro: 'نقبل الإرجاع أو التبديل إذا وصل القماش مختلفاً عن المواصفات المكتوبة أو حدث خطأ في التنفيذ، وتُحالة الحالة عبر البريد الإلكتروني ونتفق معك على الحل المناسب.',
+    intro: 'نقبل الإرجاع أو التبديل إذا وصل القماش مختلفاً عن المواصفات المكتوبة أو حدث خطأ في التنفيذ، وتُحالة الحالة عبر نموذج التواصل في الموقع ونتفق معك على الحل المناسب.',
     points: [
       'يجب أن يبقى القماش بحالته الأصلية وغير مقصوص ولا مستعمل.',
       'الأقمشة المقصوصة حسب الطلب أو المقطوعة حسب القياس غير قابلة للإرجاع.',
       'في حال ثبوت خطأ منّا نتحمل رسوم الإرجاع ونشحن البديل على حسابنا.',
-      'التواصل الأول يتم عبر البريد الإلكتروني مع إرفاق صورة للقماش ورقم الطلب.',
+      'التواصل الأول يتم عبر نموذج التواصل في الموقع مع إرفاق صورة للقماش ورقم الطلب.',
     ],
     note: 'اللون المطابق للصور مضمون، والاختلاف البسيط تحت الإضاءة لا يُعد عيباً.',
   },
@@ -918,13 +917,13 @@ export function PoliciesPage() {
     const target = [fromRouter, fromHash].find((value) => policies.some((item) => item.id === value))
     if (!target) return undefined
     setActive(target)
-    const frame = window.requestAnimationFrame(() => document.getElementById(target)?.scrollIntoView({ block: 'start' }))
+    const frame = window.requestAnimationFrame(() => document.getElementById(target)?.scrollIntoView({ block: 'start', behavior: 'smooth' }))
     return () => window.cancelAnimationFrame(frame)
   }, [location])
 
   const openPolicy = (id: string) => {
     setActive(id)
-    window.setTimeout(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }), 60)
+    window.setTimeout(() => document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: 'smooth' }), 60)
   }
 
   return (
@@ -990,28 +989,6 @@ interface StoredOrder {
 const ORDER_KEYS = ['eva-orders', 'eva-order', 'eva-last-order', 'eva-fabrics-orders', 'eva-fabrics-order', 'eva-checkout-order', 'eva-pending-order', 'eva-order-number']
 
 const statusSteps = ['تم استلام الطلب', 'قيد المراجعة', 'جاهز للشحن', 'في الطريق إليك', 'تم التوصيل']
-
-const confirmationEmailUrl = (order: StoredOrder): string => {
-  const lines = ['*EVA STORE GLASS*', `رقم الطلب: ${order.orderNumber}`]
-  if (order.items?.length) {
-    lines.push('', 'الأصناف:')
-    order.items.forEach((item, index) => {
-      const parts = [`${index + 1}. ${item.name}`]
-      if (item.color) parts.push(item.color)
-      if (item.length) parts.push(formatMeters(item.length))
-      if (item.total) parts.push(formatPrice(item.total))
-      lines.push(parts.join(' — '))
-    })
-  }
-  if (order.subtotal) lines.push('', `المجموع الفرعي: ${formatPrice(order.subtotal)}`)
-  if (order.deliveryFee) lines.push(`التوصيل: ${formatPrice(order.deliveryFee)}`)
-  if (order.total) lines.push(`الإجمالي: ${formatPrice(order.total)}`)
-  if (order.customerName) lines.push('', `الاسم: ${order.customerName}`)
-  if (order.phone) lines.push(`الهاتف: ${order.phone}`)
-  if (order.address) lines.push(`العنوان: ${order.address}`)
-  lines.push('', `أستفسر عن طلبي رقم ${order.orderNumber}`)
-  return siteConfig.emailUrl(`طلب #${order.orderNumber}`, lines.join('\n'))
-}
 
 const readText = (record: Record<string, unknown>, keys: string[]): string => {
   for (const key of keys) {
@@ -1165,11 +1142,14 @@ const findOrder = (orders: StoredOrder[], number: string): StoredOrder | undefin
 const statusIndex = (status?: string): number => {
   const value = normalizeArabic(status || '')
   if (!value) return 0
+  if (value === 'contacted') return 1
+  if (value === 'shipped') return 3
+  if (value === 'done' || value === 'delivered') return 4
   if (value.includes('الغ') || value.includes('ملغي') || value.includes('cancel')) return -1
   if (value.includes('طريق') || value.includes('شحن') || value.includes('قيد التوصيل') || value.includes('ship') || value.includes('dispatch')) return 3
   if (value.includes('تسليم') || value.includes('توصيل') || value.includes('وصل') || value.includes('deliver')) return 4
   if (value.includes('تجهيز') || value.includes('جاهز') || value.includes('pack') || value.includes('prepare')) return 2
-  if (value.includes('راجع') || value.includes('تأكيد') || value.includes('review') || value.includes('pending') || value.includes('confirm')) return 1
+  if (value.includes('راجع') || value.includes('تأكيد') || value.includes('review') || value.includes('pending') || value.includes('confirm') || value.includes('contact')) return 1
   return 0
 }
 
@@ -1253,7 +1233,7 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
             <p>لم يصلنا رقم طلب في هذا الرابط. افتحي رسالة التأكيد التي وصلك، أو ابحثي عن طلبك برقم الطلب.</p>
             <div className="empty-actions">
               <Link href="/order-tracking" className="button button-primary">تتبّع الطلب <ArrowLeft size={16} /></Link>
-              <a href={siteConfig.emailUrl('مساعدة في الطلب', 'مرحباً إيفا، أحتاج مساعدة في الطلب')} target="_blank" rel="noreferrer" className="button button-outline"><Mail size={16} />راسلينا بالبريد</a>
+              <Link href="/contact" className="button button-outline"><MessageCircle size={16} />راسلينا عبر الموقع</Link>
             </div>
           </section>
         </main>
@@ -1311,9 +1291,9 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
           <div className="confirmation-actions">
             <Link href="/catalog" className="button button-primary">متابعة التسوق <ArrowLeft size={16} /></Link>
             <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><Search size={16} />تتبّع الطلب</Link>
-            <a href={confirmationEmailUrl(order)} target="_blank" rel="noreferrer" className="button button-outline"><Mail size={16} />إرسال الطلب عبر البريد</a>
+            <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><PackageCheck size={16} />تتبّع حالة الطلب</Link>
           </div>
-          <div className="confirmation-trust"><Truck size={17} /><span>التوصيل مجاني للطلبات التي تتجاوز 50 الف دينار، ونحدّث الحالة عبر البريد الإلكتروني.</span></div>
+          <div className="confirmation-trust"><Truck size={17} /><span>التوصيل مجاني للطلبات التي تتجاوز 50 الف دينار، ويمكنك متابعة الحالة في صفحة تتبّع الطلب.</span></div>
         </div>
       </main>
     </>
@@ -1330,6 +1310,8 @@ export function OrderTrackingPage() {
   const [error, setError] = useState('')
   const [version, setVersion] = useState(0)
   const orders = useMemo(readOrders, [version])
+  const [remote, setRemote] = useState<{ status: string; createdAt?: string } | null>(null)
+  const [remoteState, setRemoteState] = useState<'idle' | 'loading' | 'ok' | 'missing' | 'error'>('idle')
 
   useEffect(() => {
     if (!currentOrder) return undefined
@@ -1340,6 +1322,53 @@ export function OrderTrackingPage() {
 
   const active = submitted || currentOrder
   const match = active ? findOrder(orders, active) : undefined
+
+  useEffect(() => {
+    if (!active) {
+      setRemote(null)
+      setRemoteState('idle')
+      return undefined
+    }
+    let cancelled = false
+    setRemoteState('loading')
+    fetch(apiUrl(`/api/orders/${encodeURIComponent(active)}`), { headers: { Accept: 'application/json' } })
+      .then(async (response) => {
+        if (cancelled) return
+        if (response.status === 404) {
+          setRemote(null)
+          setRemoteState('missing')
+          return
+        }
+        if (!response.ok) {
+          setRemote(null)
+          setRemoteState('error')
+          return
+        }
+        const body = (await response.json().catch(() => null)) as { data?: { status?: string; created_at?: string } } | null
+        const data = body?.data
+        if (!data?.status) {
+          setRemote(null)
+          setRemoteState('missing')
+          return
+        }
+        setRemote({ status: data.status, createdAt: data.created_at || undefined })
+        setRemoteState('ok')
+      })
+      .catch(() => {
+        if (cancelled) return
+        setRemote(null)
+        setRemoteState('error')
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [active, version])
+
+  const displayed: StoredOrder | undefined = active
+    ? remote && remote.status
+      ? { ...(match ?? { orderNumber: active }), status: remote.status, createdAt: remote.createdAt || match?.createdAt }
+      : match
+    : undefined
 
   const submit = (event: FormEvent) => {
     event.preventDefault()
@@ -1361,9 +1390,9 @@ export function OrderTrackingPage() {
 
         <section className="tracking-card glass">
           <div className="tracking-icon"><PackageCheck size={28} /></div>
-          <span className="eyebrow">طلباتك من هذا الجهاز</span>
-          <h1>تتبّع الطلب المحفوظ</h1>
-          <p>أدخلي رقم الطلب الذي استلمته بعد التأكيد لعرض آخر حالة مسجّلة على هذا الجهاز. إن لم يكن لديك رقم بعد، تواصلي معنا وسنبحث عنه بالهاتف.</p>
+          <span className="eyebrow">حالة الطلب من المتجر مباشرة</span>
+          <h1>تتبّع الطلب</h1>
+          <p>أدخلي رقم الطلب الذي وصلك بعد التأكيد لعرض حالته الحالية من المتجر، مع الطلبات المحفوظة على هذا الجهاز.</p>
 
           <form className="tracking-form" onSubmit={submit} noValidate>
             <label className="sr-only" htmlFor="tracking-order">رقم الطلب</label>
@@ -1374,23 +1403,31 @@ export function OrderTrackingPage() {
 
           {error && <p className="field-error" id="tracking-error" role="alert">{error}</p>}
 
-          {active && match && (
+          {active && remoteState === 'loading' && !displayed && (
+            <div className="tracking-result-glass" role="status">
+              <Search size={18} />
+              <div><strong>جارٍ التحقق من حالة الطلب...</strong></div>
+            </div>
+          )}
+
+          {active && displayed && (
             <>
-              <OrderStatusPanel order={match} />
+              <OrderStatusPanel order={displayed} />
               <div className="local-orders">
                 <span>بحثتِ عن:</span>
-                <span className="chip" dir="ltr">{match.orderNumber}</span>
-                <button type="button" className="chip" onClick={() => setVersion((current) => current + 1)}><RotateCcw size={13} />تحديث القائمة</button>
+                <span className="chip" dir="ltr">{displayed.orderNumber}</span>
+                <button type="button" className="chip" onClick={() => setVersion((current) => current + 1)}><RotateCcw size={13} />تحديث الحالة</button>
+                {remoteState === 'ok' && <span className="chip">مزامنة مع المتجر ✓</span>}
               </div>
             </>
           )}
 
-          {active && !match && (
+          {active && !displayed && remoteState !== 'loading' && (
             <div className="tracking-result-glass form-status-error" role="status">
               <Search size={18} />
               <div>
-                <strong>لا يوجد طلب محفوظ على هذا الجهاز بالرقم {active}</strong>
-                <p>تأكدي من الرقم كما وصل في رسالة التأكيد، أو ابحثي ضمن الطلبات المحفوظة على هذا الجهاز.</p>
+                <strong>{remoteState === 'error' ? `تعذّر الاتصال للتحقق من الطلب ${active}` : `لم نجد طلباً بالرقم ${active}`}</strong>
+                <p>تأكدي من الرقم كما وصل في رسالة التأكيد، أو اختاري أحد الطلبات المحفوظة على هذا الجهاز.</p>
               </div>
             </div>
           )}
@@ -1416,7 +1453,7 @@ export function OrderTrackingPage() {
             </div>
           )}
 
-          <a href={siteConfig.emailUrl(`استفسار عن الطلب رقم ${active || ''}`, `مرحباً، أريد الاستفسار عن طلبي رقم ${active || ''}`)} target="_blank" rel="noreferrer" className="button button-outline"><Mail size={16} />اسألينا عبر البريد</a>
+          <Link href="/contact" className="button button-outline"><MessageCircle size={16} />اسألينا عبر نموذج التواصل في الموقع</Link>
         </section>
       </main>
     </>

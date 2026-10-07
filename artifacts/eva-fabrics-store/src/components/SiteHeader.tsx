@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import { BookOpen, ChevronLeft, Heart, Home, Info, Instagram, Menu, Mail, MessageCircle, PackageSearch, Phone, Search, ShieldCheck, ShoppingBag, Shirt, X } from 'lucide-react'
+import { BookOpen, ChevronLeft, Heart, Home, Info, Menu, MessageCircle, PackageSearch, Search, ShieldCheck, ShoppingBag, Shirt, X } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
 import { formatMeters } from '@/lib/catalog'
-import { siteConfig, telProps } from '@/lib/site'
 import { useSiteContent } from '@/lib/site-content'
 import { Logo } from './Logo'
 import { Modal } from './Modal'
@@ -95,7 +94,6 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
   const navigate = () => {
     setMenuOpen(false)
     setSearchOpen(false)
-    window.scrollTo({ top: 0, behavior: 'instant' })
   }
 
   useEffect(() => {
@@ -108,7 +106,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
       <div className="announcement-bar" role="region" aria-label="إعلان المتجر">
         <span className="announcement-msg announcement-msg-right">{content.announcementRight}</span>
         <span className="announcement-dot" />
-        <a {...telProps(siteConfig.phone)} dir="ltr">{siteConfig.phone}</a>
+        <Link href="/contact">تواصلي معنا عبر الموقع</Link>
         <span className="announcement-dot" />
         <span className="announcement-msg announcement-msg-left">{content.announcementLeft}</span>
       </div>
@@ -129,6 +127,9 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
             <button type="button" className="icon-button" onClick={() => setSearchOpen(true)} aria-label="فتح البحث في الأقمشة" aria-haspopup="dialog" aria-expanded={searchOpen}>
               <Search size={19} />
             </button>
+            <Link href="/order-tracking" className="icon-button tracking-header" onClick={navigate} aria-label="تتبع الطلب" title="تتبع الطلب">
+              <PackageSearch size={19} />
+            </Link>
             <Link href="/favorites" className="icon-button favorite-header" onClick={navigate} aria-label={`المفضلة، ${wishlistCount} عناصر`}>
               <Heart size={19} />
               {wishlistCount > 0 && <span>{wishlistCount}</span>}
@@ -145,7 +146,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
         </div>
         <nav className="mobile-quick-nav" aria-label="تنقل سريع">
           <div className="mobile-quick-nav-track">
-            {quickItems.filter((i) => ["home","catalog","favorites"].includes(i.id)).map((item) => {
+            {quickItems.filter((i) => ["home","catalog","favorites","tracking"].includes(i.id)).map((item) => {
               const Icon = item.Icon
               const active = isActive(item.path)
               return (
@@ -187,18 +188,14 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
           ))}
           <div className="glass-divider" />
           <div className="drawer-contact">
-            <a className="chip drawer-chip drawer-chip-primary" href={siteConfig.emailUrl()} target="_blank" rel="noreferrer">
-              <Mail size={17} />
-              راسلينا بالبريد
-            </a>
-            <a className="chip drawer-chip" {...telProps(siteConfig.phone)} dir="ltr">
-              <Phone size={17} />
-              {siteConfig.phone}
-            </a>
-            <a className="chip drawer-chip" href={siteConfig.instagramUrl} target="_blank" rel="noreferrer">
-              <Instagram size={17} />
-              حساب إيفا على إنستغرام
-            </a>
+            <Link className="chip drawer-chip drawer-chip-primary" href="/contact" onClick={navigate}>
+              <MessageCircle size={17} />
+              تواصلي معنا عبر الموقع
+            </Link>
+            <Link className="chip drawer-chip" href="/order-tracking" onClick={navigate}>
+              <PackageSearch size={17} />
+              تتبّع الطلب
+            </Link>
           </div>
         </div>
       </Modal>

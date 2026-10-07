@@ -38,7 +38,7 @@ export const guideQuestions: ProductFaq[] = [
 export const trustItems = [
   { title: 'توصيل لكل العراق', description: 'جميع المحافظات', icon: 'truck' },
   { title: 'توصيل ٥ آلاف دينار', description: 'رسوم ثابتة', icon: 'wallet' },
-  { title: 'دعم عبر البريد', description: 'قبل وبعد الطلب', icon: 'message' },
+  { title: 'دعم داخل الموقع', description: 'قبل وبعد الطلب', icon: 'message' },
   { title: 'اختيار واعٍ', description: 'مواصفات واضحة', icon: 'check' },
 ] as const
 

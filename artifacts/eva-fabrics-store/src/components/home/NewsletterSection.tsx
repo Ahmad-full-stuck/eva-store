@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { ArrowLeft, Mail } from 'lucide-react'
+import { ArrowLeft, Mail, MessageCircle } from 'lucide-react'
+import { Link } from 'wouter'
 import { sendSimpleEmail } from '@/lib/email'
-import { siteConfig } from '@/lib/site'
 import { useSiteContent } from '@/lib/site-content'
 
 const isValidEmail = (value: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)
@@ -64,9 +64,9 @@ export function NewsletterSection() {
         </div>
         <p className="newsletter-note">
           أو اطلبي استشارة في اختيار القماش عبر{' '}
-          <a href={siteConfig.emailUrl('استشارة في اختيار القماش', 'مرحباً، أريد استشارة في اختيار القماش المناسب.')} target="_blank" rel="noreferrer">
-            البريد <Mail size={13} />
-          </a>
+          <Link href="/contact">
+            نموذج التواصل في الموقع <MessageCircle size={13} />
+          </Link>
         </p>
       </div>
     </section>

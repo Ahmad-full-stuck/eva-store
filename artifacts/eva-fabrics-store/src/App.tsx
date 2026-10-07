@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from 'react'
+import { useEffect, useLayoutEffect, useState, type MouseEvent } from 'react'
 import { Route, Switch, useLocation } from 'wouter'
 import { Link } from 'wouter'
 import { ArrowLeft, Check, ShoppingBag } from 'lucide-react'
@@ -20,7 +20,6 @@ import NotFound from '@/pages/not-found'
 const shellStyles = `
 .skip-link { position: fixed; top: 14px; right: 14px; z-index: 140; display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; color: #fff6f8; background: var(--eva-rose); border: 1px solid rgba(255, 255, 255, .4); border-radius: 999px; box-shadow: var(--eva-shadow-small); backdrop-filter: blur(10px); font-size: 12px; font-weight: 600; transform: translateY(-190%); transition: transform .2s ease; }
 .skip-link:focus { transform: translateY(0); }
-.app-shell { overflow: clip; }
 .app-main { scroll-margin-top: 116px; }
 .footer-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 34px; padding-top: 46px; }
 .footer-top p { margin-top: 0; }
@@ -63,7 +62,7 @@ const PAGE_SEO: Record<string, { title: string; desc: string }> = {
   '/favorites': { title: 'المفضلة | إيفا ستور', desc: 'الأقمشة التي حفظتيها للرجوع إليها لاحقاً.' },
   '/about': { title: 'من نحن | إيفا ستور', desc: 'قصة إيفا ستور وخامة تصنع الفرق.' },
   '/fabric-guide': { title: 'دليل الأقمشة | إيفا ستور', desc: 'كيف تفرقي بين أنواع الأقمشة؟ دليل عملي بالأسئلة الشائعة عن المرونة والكثافة والعناية.' },
-  '/contact': { title: 'تواصلي معنا | إيفا ستور', desc: 'راسلي إيفا ستور عبر البريد أو اتصلي هاتفيًا للاستفسار عن الأقمشة والتوصيل.' },
+  '/contact': { title: 'تواصلي معنا | إيفا ستور', desc: 'أرسلي رسالتك عبر نموذج التواصل في موقع إيفا ستور للاستفسار عن الأقمشة والتوصيل وتتبّع الطلبات.' },
   '/policies': { title: 'السياسات والخصوصية | إيفا ستور', desc: 'سياسات الشحن والإرجاع والخصوصية الخاصة بمتجر إيفا ستور.' },
   '/order-tracking': { title: 'تتبع الطلب | إيفا ستور', desc: 'تتبعي حالة طلبك برقم الطلب الخاص بك.' },
   '/order-confirmation': { title: 'تم تسجيل طلبك | إيفا ستور', desc: 'تم تسجيل طلبك بنجاح، سنتواصل معك قريباً لتأكيد التفاصيل.' },
@@ -117,8 +116,8 @@ function App() {
     return () => window.clearTimeout(timer)
   }, [notice])
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' })
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
   }, [pathname])
 
   const addToCart = (product: Product, color: ProductColor, length: number) => {

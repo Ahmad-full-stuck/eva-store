@@ -93,7 +93,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
     if (!removed) return undefined
     const target = cart.length === 0 ? emptyRef.current : itemsRef.current
     if (!target) return undefined
-    const timer = window.setTimeout(() => target.focus(), 40)
+    const timer = window.setTimeout(() => target.focus({ preventScroll: true }), 40)
     return () => window.clearTimeout(timer)
   }, [cart.length])
 

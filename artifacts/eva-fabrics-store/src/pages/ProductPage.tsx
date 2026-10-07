@@ -25,13 +25,16 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const touchStart = useRef<{ x: number; y: number } | null>(null)
   const addBtnRef = useRef<HTMLButtonElement>(null)
   const relatedTrackRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const [showStickyBuy, setShowStickyBuy] = useState(false)
+  const [videoNeedsUnmute, setVideoNeedsUnmute] = useState(false)
 
   useEffect(() => {
     setActiveImage(0)
     setLength(0.5)
     setJustAdded(false)
     setZoomOpen(false)
+    setVideoNeedsUnmute(false)
   }, [product?.id])
 
   useEffect(() => {
@@ -43,6 +46,44 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     observer.observe(button)
     return () => observer.disconnect()
   }, [product?.id])
+
+  const gallery = product ? [...new Set([product.image, ...(product.video ? [product.video] : []), ...product.images])] : []
+  const activeSrc = gallery[activeImage]
+  const activeIsVideo = Boolean(product?.video) && activeSrc === product?.video
+
+  const playVideoAudible = () => {
+    const video = videoRef.current
+    if (!video) return
+    video.muted = false
+    setVideoNeedsUnmute(false)
+    const attempt = video.play()
+    if (attempt) attempt.catch(() => {
+      video.muted = true
+      const fallback = video.play()
+      if (fallback) fallback.then(() => setVideoNeedsUnmute(true)).catch(() => undefined)
+    })
+  }
+  const unmuteVideo = () => {
+    const video = videoRef.current
+    if (!video) return
+    video.muted = false
+    setVideoNeedsUnmute(false)
+    const attempt = video.play()
+    if (attempt) attempt.catch(() => setVideoNeedsUnmute(true))
+  }
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    if (activeIsVideo) {
+      if (video.paused) playVideoAudible()
+    } else {
+      if (!video.paused) video.pause()
+      if (video.muted) video.muted = false
+      setVideoNeedsUnmute(false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIsVideo, product?.id])
 
   const soldOut = product ? isSoldOut(product) : false
   const maxLength = product ? (soldOut ? 0 : product.stockMeters > 0 ? product.stockMeters : 1000) : 0
@@ -56,10 +97,12 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
 
   if (!product || !product.colors.length) return <ProductMissing />
 
-  const gallery = [...new Set([product.image, ...(product.video ? [product.video] : []), ...product.images])]
-  const activeSrc = gallery[activeImage]
-  const activeIsVideo = activeSrc === product.video
   const startSwipe = (x: number, y: number) => { touchStart.current = { x, y } }
+  const goTo = (index: number) => {
+    const next = (index + gallery.length) % gallery.length
+    setActiveImage(next)
+    if (gallery[next] === product.video) playVideoAudible()
+  }
   const endSwipe = (x: number, y: number) => {
     const start = touchStart.current
     touchStart.current = null
@@ -68,11 +111,11 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     const dy = y - start.y
     if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return
     const step = dx < 0 ? 1 : -1
-    setActiveImage((current) => (current + step + gallery.length) % gallery.length)
+    goTo(activeImage + step)
   }
   const onGalleryKey = (event: React.KeyboardEvent) => {
-    if (event.key === 'ArrowLeft') setActiveImage((current) => (current + 1) % gallery.length)
-    else if (event.key === 'ArrowRight') setActiveImage((current) => (current - 1 + gallery.length) % gallery.length)
+    if (event.key === 'ArrowLeft') goTo(activeImage + 1)
+    else if (event.key === 'ArrowRight') goTo(activeImage - 1)
     else return
     event.preventDefault()
   }
@@ -100,9 +143,22 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
           onTouchStart={(event) => startSwipe(event.touches[0].clientX, event.touches[0].clientY)}
           onTouchEnd={(event) => endSwipe(event.changedTouches[0].clientX, event.changedTouches[0].clientY)}
           onKeyDown={onGalleryKey}
-        >{activeIsVideo
-          ? <video className="gallery-video" src={activeSrc} poster={product.image} controls autoPlay muted loop playsInline aria-label={`${product.name} — فيديو`} />
-          : <>
+        >{product.video && (
+            <video
+              ref={videoRef}
+              className={`gallery-video${activeIsVideo ? ' is-active' : ''}`}
+              src={product.video}
+              poster={product.image}
+              controls={activeIsVideo}
+              loop
+              playsInline
+              preload="auto"
+              aria-label={`${product.name} — فيديو`}
+              onPointerDown={() => { const video = videoRef.current; if (video && video.muted) unmuteVideo() }}
+            />
+          )}
+          {activeIsVideo && videoNeedsUnmute && <button type="button" className="video-unmute" onClick={unmuteVideo}><span aria-hidden="true">🔊</span> اضغطي لتشغيل الصوت</button>}
+          {!activeIsVideo && <>
               <div className="gallery-stack">
                 {gallery.map((image, index) => image === product.video ? null : (
                   <div key={`${image}-${index}`} className={`gallery-layer${index === activeImage ? ' is-active' : ''}`} aria-hidden={index !== activeImage}>
@@ -113,12 +169,12 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
               <div className="gallery-shade" />
               <button type="button" className="gallery-zoom" onClick={() => setZoomOpen(true)} aria-label="تكبير الصورة"><ZoomIn size={19} /></button>
             </>}
-          <button type="button" className="gallery-arrow gallery-next" onClick={() => setActiveImage((activeImage + 1) % gallery.length)} aria-label={activeIsVideo ? 'التالي' : 'الصورة التالية'}><ChevronLeft size={20} /></button>
-          <button type="button" className="gallery-arrow gallery-prev" onClick={() => setActiveImage((activeImage - 1 + gallery.length) % gallery.length)} aria-label={activeIsVideo ? 'السابق' : 'الصورة السابقة'}><ChevronRight size={20} /></button>
+          <button type="button" className="gallery-arrow gallery-next" onClick={() => goTo(activeImage + 1)} aria-label={activeIsVideo ? 'التالي' : 'الصورة التالية'}><ChevronLeft size={20} /></button>
+          <button type="button" className="gallery-arrow gallery-prev" onClick={() => goTo(activeImage - 1)} aria-label={activeIsVideo ? 'السابق' : 'الصورة السابقة'}><ChevronRight size={20} /></button>
         </div>
         <div className="gallery-thumbs">{gallery.map((image, index) => {
           const thumbIsVideo = image === product.video
-          return <button type="button" key={`${image}-${index}`} className={index === activeImage ? 'is-active' : ''} onClick={() => setActiveImage(index)} aria-label={thumbIsVideo ? 'عرض الفيديو' : `عرض الصورة ${index + 1}`}>
+          return <button type="button" key={`${image}-${index}`} className={index === activeImage ? 'is-active' : ''} onClick={() => goTo(index)} aria-label={thumbIsVideo ? 'عرض الفيديو' : `عرض الصورة ${index + 1}`}>
             {thumbIsVideo ? <><SmartImage src={product.image} alt="" sizes="72px" intrinsicWidth={320} /><span className="thumb-play" aria-hidden="true">▶</span></> : <SmartImage src={image} alt="" sizes="72px" intrinsicWidth={320} />}
           </button>
         })}</div>
@@ -138,7 +194,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         <button ref={addBtnRef} type="button" className="button button-primary detail-add" onClick={add} disabled={maxLength <= 0}><ShoppingBag size={17} />{maxLength <= 0 ? 'غير متوفر حالياً' : 'أضيفي إلى السلة'}<ArrowLeft size={16} /></button>
         {justAdded && maxLength > 0 && <div className="add-confirm" role="status"><span><Check size={16} />أضيف {formatMeters(length)} من {product.name} إلى السلة</span><Link href="/checkout" className="button button-primary">إتمام الطلب الآن <ArrowLeft size={15} /></Link></div>}
         <div className="detail-perks"><div><ShieldCheck size={17} /><span>توصيل آمن للعراق</span></div><div><Zap size={17} /><span>الطلب بمربع واحد</span></div></div>
-        <div className="detail-accordions"><Accordion id="specs" title="مواصفات القماش" open={openSection === 'specs'} onToggle={() => setOpenSection(openSection === 'specs' ? '' : 'specs')}><div className="specs-grid"><Spec label="الخامة" value={product.specs.composition} /><Spec label="العرض" value={product.specs.width} /><Spec label="السماكة" value={product.specs.weight} /><Spec label="التمدد" value={product.specs.stretch} /><Spec label="الشفافية" value={product.specs.opacity} /><Spec label="التشطيب" value={product.specs.finish} /><Spec label="الاستخدام" value={product.specs.use} /><Spec label="العناية" value={product.specs.care} /></div></Accordion><Accordion id="faq" title="أسئلة حول الخامة" open={openSection === 'faq'} onToggle={() => setOpenSection(openSection === 'faq' ? '' : 'faq')}><div className="product-faq-list">{faqItems.map((item) => <div key={item.question}><strong>{item.question}</strong><p>{item.answer}</p></div>)}</div></Accordion><Accordion id="shipping" title="الشحن والإرجاع" open={openSection === 'shipping'} onToggle={() => setOpenSection(openSection === 'shipping' ? '' : 'shipping')}><p className="accordion-text">نجهز الطلبات بعد التأكيد، ونرتب الشحن بحسب المحافظة. لأي استفسار عن الإرجاع أو تبديل اللون راسلنا عبر البريد الإلكتروني بعد الاستلام.</p></Accordion></div>
+        <div className="detail-accordions"><Accordion id="specs" title="مواصفات القماش" open={openSection === 'specs'} onToggle={() => setOpenSection(openSection === 'specs' ? '' : 'specs')}><div className="specs-grid"><Spec label="الخامة" value={product.specs.composition} /><Spec label="العرض" value={product.specs.width} /><Spec label="السماكة" value={product.specs.weight} /><Spec label="التمدد" value={product.specs.stretch} /><Spec label="الشفافية" value={product.specs.opacity} /><Spec label="التشطيب" value={product.specs.finish} /><Spec label="الاستخدام" value={product.specs.use} /><Spec label="العناية" value={product.specs.care} /></div></Accordion><Accordion id="faq" title="أسئلة حول الخامة" open={openSection === 'faq'} onToggle={() => setOpenSection(openSection === 'faq' ? '' : 'faq')}><div className="product-faq-list">{faqItems.map((item) => <div key={item.question}><strong>{item.question}</strong><p>{item.answer}</p></div>)}</div></Accordion><Accordion id="shipping" title="الشحن والإرجاع" open={openSection === 'shipping'} onToggle={() => setOpenSection(openSection === 'shipping' ? '' : 'shipping')}><p className="accordion-text">نجهز الطلبات بعد التأكيد، ونرتب الشحن بحسب المحافظة. لأي استفسار عن الإرجاع أو تبديل اللون راسلنا عبر نموذج التواصل في الموقع.</p></Accordion></div>
       </section>
     </div>
     {related.length > 0 && <section className="related-section"><div className="section-heading"><div><span className="eyebrow">اختيارات قريبة</span><h2>أقمشة ذات صلة</h2></div><div className="section-heading-actions">{related.length > 3 && <div className="related-nav" aria-label="تصفّح الأقمشة ذات الصلة"><button type="button" onClick={() => scrollRelated('prev')} aria-label="عرض الأقمشة السابقة"><ChevronRight size={17} /></button><button type="button" onClick={() => scrollRelated('next')} aria-label="عرض الأقمشة التالية"><ChevronLeft size={17} /></button></div>}<Link href={`/catalog?category=${encodeURIComponent(product.categoryId)}`} className="underlined-link">عرض الفئة <ArrowLeft size={15} /></Link></div></div><div className="related-track" ref={relatedTrackRef}>{related.map((item) => <ProductCard key={item.id} product={item} wished={wishlist.includes(item.slug)} onWish={onWish} onAdd={onAdd} />)}</div></section>}

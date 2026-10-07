@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
-import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, Mail, Navigation, Phone, RefreshCw, ShieldCheck, UserRound } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, Navigation, Phone, RefreshCw, ShieldCheck, UserRound } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { CartItem, CheckoutForm, CustomerProfile, OrderPayload } from '@/types'
 import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/catalog'
-import { apiUrl, siteConfig } from '@/lib/site'
+import { apiUrl } from '@/lib/site'
 import { governorates } from '@/lib/fallback-data'
 import { useSiteContent } from '@/lib/site-content'
 import { sendOrderEmail } from '@/lib/email'
@@ -179,7 +179,6 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [serverError, setServerError] = useState('')
   const [notice, setNotice] = useState('')
   const [pendingOrderNumber, setPendingOrderNumber] = useState('')
-  const [pendingEmailHref, setPendingEmailHref] = useState('')
   const [liveMessage, setLiveMessage] = useState('')
   const totals = getCartTotals(cart)
   const siteContent = useSiteContent()
@@ -240,7 +239,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
       setConsentError('شدّي الموافقة على شروط الاستخدام وسياسة الخصوصية لتأكيد الطلب')
       const box = document.getElementById('consent')
       box?.scrollIntoView({ block: 'center', behavior: 'smooth' })
-      window.setTimeout(() => box?.focus(), 260)
+      window.setTimeout(() => box?.focus({ preventScroll: true }), 260)
       return false
     }
     setConsentError('')
@@ -255,7 +254,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     if (target) {
       const element = document.getElementById(target)
       element?.scrollIntoView({ block: 'center', behavior: 'smooth' })
-      window.setTimeout(() => element?.focus(), 260)
+      window.setTimeout(() => element?.focus({ preventScroll: true }), 260)
     }
     return false
   }
@@ -359,12 +358,11 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     ).catch(() => undefined)
   }
 
-  // احتياط: إن تعذّر حفظ الطلب في الخادم يُسجَّل محلياً ويوصل بالبريد.
+  // احتياط: إن تعذّر حفظ الطلب في الخادم يُسجَّل محلياً ويُرسل تلقائياً عند عودة الاتصال.
   const completeStaticOrder = (payload: OrderPayload): void => {
     const orderNumber = createLocalOrderNumber()
     saveLocalOrder(orderNumber, 'received', payload)
     notifyByEmail(payload, orderNumber)
-    setPendingEmailHref('')
     setSubmitState('idle')
     setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${orderNumber}`)
     onComplete(orderNumber)
@@ -380,7 +378,6 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     })
     notifyByEmail(payload, orderNumber)
     setPendingOrderNumber(orderNumber)
-    setPendingEmailHref(siteConfig.emailUrl(`طلب جديد #${orderNumber}`, orderEmailBody(payload, orderNumber)))
     setServerError('تأكدي من الاتصال فقط')
     setNotice('')
     setSubmitState('idle')
@@ -439,7 +436,6 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         saveLocalOrder(serverNumber, 'received', payload)
         notifyByEmail(payload, serverNumber)
         setPendingOrderNumber('')
-        setPendingEmailHref('')
         setSubmitState('idle')
         setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${serverNumber}`)
         onComplete(serverNumber)
@@ -537,9 +533,6 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
               {pendingOrderNumber && <p>رقم طلبك المحفوظ: <strong dir="ltr">{pendingOrderNumber}</strong></p>}
               <div className="contact-actions">
                 <button type="button" className="button button-primary" onClick={() => { setServerError(''); void submitOrder() }}><RefreshCw size={15} />إعادة المحاولة الآن</button>
-                {pendingEmailHref && (
-                  <a className="button button-mail" href={pendingEmailHref} target="_blank" rel="noreferrer"><Mail size={15} />أرسلي الطلب عبر البريد</a>
-                )}
               </div>
             </div>
           )}
@@ -622,29 +615,6 @@ function Field({ label, id, value, error, onChange, placeholder, type = 'text', 
       {error && <small className="field-error" id={`${id}-error`} aria-live="polite">{error}</small>}
     </div>
   )
-}
-
-const orderEmailBody = (payload: OrderPayload, orderNumber: string): string => {
-  const lines = [
-    '*EVA STORE GLASS — طلب جديد*',
-    `رقم الطلب: ${orderNumber}`,
-    '',
-    'الأصناف:',
-  ]
-  payload.items.forEach((item, index) => {
-    lines.push(`${index + 1}. ${item.productName} — ${item.colorName} — ${formatMeters(item.quantity)} — ${formatPrice(item.totalPrice)}`)
-  })
-  lines.push('')
-  lines.push(`المجموع الفرعي: ${formatPrice(payload.subtotal)}`)
-  lines.push(`التوصيل: ${payload.deliveryFee ? formatPrice(payload.deliveryFee) : 'مجاني'}`)
-  lines.push(`الإجمالي: ${formatPrice(payload.total)}`)
-  lines.push('')
-  lines.push(`الاسم: ${payload.customerName}`)
-  lines.push(`الهاتف: ${payload.phone}`)
-  lines.push(`العنوان: ${payload.governorate} — ${payload.district} — ${payload.address}`)
-  if (payload.landmark) lines.push(`نقطة دالة: ${payload.landmark}`)
-  if (payload.notes) lines.push(`ملاحظات: ${payload.notes}`)
-  return lines.join('\n')
 }
 
 function errorMessage(payload: unknown, fallback: string): string {

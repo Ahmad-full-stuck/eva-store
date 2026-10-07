@@ -1,8 +1,8 @@
-import { Instagram, MapPin, Mail, Phone } from 'lucide-react'
+import { MapPin, MessageCircle, PackageSearch } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, SiteRoute } from '@/types'
 import { governorates } from '@/lib/fallback-data'
-import { siteConfig, telProps } from '@/lib/site'
+import { siteConfig } from '@/lib/site'
 import { Logo } from './Logo'
 
 interface SiteFooterProps {
@@ -10,8 +10,19 @@ interface SiteFooterProps {
   categories: Category[]
 }
 
+const infoItems = [
+  { path: '/about', label: 'من نحن' },
+  { path: '/fabric-guide', label: 'دليل الأقمشة' },
+  { path: '/order-tracking', label: 'تتبّع الطلب' },
+  { path: '/contact', label: 'تواصلي معنا' },
+  { path: '/policies', label: 'السياسات' },
+]
+
 export function SiteFooter({ routes, categories }: SiteFooterProps) {
-  const infoRoutes = routes.filter((route) => ['/about', '/fabric-guide', '/contact', '/order-tracking', '/policies'].includes(route.path))
+  const infoRoutes = infoItems.map((item) => {
+    const matched = routes.find((route) => route.path === item.path)
+    return { ...item, id: item.path, label: matched?.label || item.label }
+  })
   const nearbyGovernorates = governorates.slice(0, 6)
 
   return (
@@ -20,8 +31,7 @@ export function SiteFooter({ routes, categories }: SiteFooterProps) {
         <Logo light />
         <p>معرض أقمشة عربي يساعدك على معرفة الخامة والمرونة واللون قبل اختيار القطعة.</p>
         <div className="social-links">
-          <a href={siteConfig.emailUrl()} target="_blank" rel="noreferrer" aria-label="راسلينا عبر البريد الإلكتروني"><Mail size={17} /></a>
-          <a href={siteConfig.instagramUrl} target="_blank" rel="noreferrer" aria-label={siteConfig.instagramText}><Instagram size={17} /></a>
+          <Link href="/contact" aria-label="تواصلي معنا عبر الموقع"><MessageCircle size={17} /></Link>
         </div>
       </div>
       <div className="container-eva footer-grid">
@@ -39,14 +49,13 @@ export function SiteFooter({ routes, categories }: SiteFooterProps) {
         </div>
         <div className="footer-col">
           <h2>تواصلي معنا</h2>
-          <a {...telProps(siteConfig.phone)}><Phone size={15} /><span dir="ltr">{siteConfig.phone}</span></a>
-          <a href={siteConfig.emailUrl()} target="_blank" rel="noreferrer"><Mail size={15} />البريد</a>
-          <a href={siteConfig.instagramUrl} target="_blank" rel="noreferrer"><Instagram size={15} />إنستغرام</a>
+          <Link href="/contact"><MessageCircle size={15} />نموذج التواصل في الموقع</Link>
+          <Link href="/order-tracking"><PackageSearch size={15} />تتبّع حالة الطلب</Link>
         </div>
         <div className="footer-col">
           <h2>نطاق الخدمة</h2>
           <p>نوصل إلى {nearbyGovernorates.join('، ')} وجميع محافظات العراق.</p>
-          <a href={siteConfig.emailUrl('التوصيل والشحن', 'مرحباً إيفا ستور، أستفسر عن التوصيل والشحن')} target="_blank" rel="noreferrer"><MapPin size={15} />توصيل ٥ آلاف دينار</a>
+          <span className="footer-delivery-note"><MapPin size={15} />توصيل ٥ آلاف دينار</span>
         </div>
       </div>
       <div className="footer-bottom">
