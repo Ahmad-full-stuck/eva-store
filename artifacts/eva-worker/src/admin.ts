@@ -379,9 +379,16 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
     }
   }
 
-  if (resource === 'contacts' && method === 'GET') {
-    const result = await env.DB.prepare('SELECT * FROM contact_messages ORDER BY created_at DESC LIMIT 200').all()
-    return json({ data: result.results ?? [] })
+  if (resource === 'contacts') {
+    if (method === 'GET') {
+      const result = await env.DB.prepare('SELECT * FROM contact_messages ORDER BY created_at DESC LIMIT 200').all()
+      return json({ data: result.results ?? [] })
+    }
+    if (method === 'DELETE' && id) {
+      const result = await env.DB.prepare('DELETE FROM contact_messages WHERE id = ?1').bind(Number(id)).run()
+      if (!result.meta.changes) return json({ error: 'الرسالة غير موجودة' }, 404)
+      return json({ data: { id: Number(id), deleted: true } })
+    }
   }
 
   if (resource === 'categories' && method === 'GET') {

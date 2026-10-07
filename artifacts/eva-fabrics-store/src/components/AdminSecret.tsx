@@ -317,6 +317,14 @@ interface AdminOrder {
   items?: string | unknown[]
 }
 
+interface AdminMessage {
+  id: number
+  name?: string
+  phone?: string
+  message?: string
+  created_at?: string
+}
+
 const parseJsonField = <T,>(value: unknown, fallback: T): T => {
   if (value === null || value === undefined) return fallback
   if (typeof value === 'object') return value as T
@@ -354,6 +362,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [newCat, setNewCat] = useState('')
   const [settings, setSettings] = useState<StoreSettings>(() => readStoreSettings())
   const [orders, setOrders] = useState<AdminOrder[]>([])
+  const [messages, setMessages] = useState<AdminMessage[]>([])
   const [ordersLoading, setOrdersLoading] = useState(false)
   const [ordersError, setOrdersError] = useState('')
   const [online, setOnline] = useState(false)
@@ -539,13 +548,28 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     setOrdersLoading(true)
     setOrdersError('')
     try {
-      const rows = await adminFetch<AdminOrder[]>('/api/admin/orders')
+      const [rows, inbox] = await Promise.all([
+        adminFetch<AdminOrder[]>('/api/admin/orders'),
+        adminFetch<AdminMessage[]>('/api/admin/contacts').catch(() => [] as AdminMessage[]),
+      ])
       setOrders(Array.isArray(rows) ? rows : [])
+      setMessages(Array.isArray(inbox) ? inbox : [])
       setOnline(true)
     } catch (error) {
       setOrdersError(error instanceof AdminRequestError ? error.message : 'تعذر الوصول إلى الخادم')
     } finally {
       setOrdersLoading(false)
+    }
+  }
+
+  const deleteMessage = async (id: number) => {
+    if (!window.confirm('حذف هذه الرسالة؟')) return
+    try {
+      await adminFetch(`/api/admin/contacts/${id}`, { method: 'DELETE' })
+      setMessages((current) => current.filter((row) => row.id !== id))
+      setToast('تم حذف الرسالة')
+    } catch {
+      setToast('تعذر حذف الرسالة من الخادم')
     }
   }
 
@@ -1329,6 +1353,32 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                             </div>
                           )
                         })}
+                      </div>
+                      <div style={{ marginTop: 24 }}>
+                        <div className="admin-actions" style={{ marginTop: 0, marginBottom: 10 }}>
+                          <strong style={{ fontSize: 13.5 }}>رسائل التواصل</strong>
+                          <span className="admin-chip">{messages.length} رسالة</span>
+                        </div>
+                        {!messages.length && <div className="admin-note">لا توجد رسائل بعد. تصل رسائل صفحة «تواصلي معنا» هنا.</div>}
+                        <div className="admin-list">
+                          {messages.map((row) => (
+                            <div className="admin-list-item" key={row.id} style={{ display: 'grid', gap: 6 }}>
+                              <div className="li-main">
+                                <strong>{row.name || 'بدون اسم'}</strong>
+                                <small dir="ltr">{[row.phone, row.created_at].filter(Boolean).join(' · ')}</small>
+                                <small style={{ whiteSpace: 'pre-wrap' }}>{row.message}</small>
+                              </div>
+                              <button
+                                type="button"
+                                className="admin-btn ghost"
+                                style={{ padding: '6px 10px', fontSize: 11.5 }}
+                                onClick={() => void deleteMessage(row.id)}
+                              >
+                                <Trash2 size={14} /> حذف
+                              </button>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   ) : tab === 'settings' ? (
