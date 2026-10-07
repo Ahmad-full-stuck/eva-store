@@ -198,27 +198,13 @@ export default {
 
       if (url.pathname.startsWith('/media/')) {
         const key = decodeURIComponent(url.pathname.slice('/media/'.length))
-        const row = await env.DB.prepare(
-          "SELECT content, type, LENGTH(content) AS db_len, typeof(content) AS sql_type FROM media WHERE key = ?1",
-        )
+        const row = await env.DB.prepare('SELECT content, type FROM media WHERE key = ?1')
           .bind(key)
-          .first<{ content: unknown; type: string | null; db_len: number | null; sql_type: string | null }>()
-        const dbg = new Headers()
-        dbg.set('X-Db-Row', row ? '1' : '0')
-        dbg.set('X-Sql-Type', String(row?.sql_type ?? 'none'))
-        dbg.set('X-Db-Len', String(row?.db_len ?? -1))
-        const raw = row?.content
-        dbg.set('X-Db-Shape', JSON.stringify({ t: typeof raw, a: Array.isArray(raw), c: raw && typeof raw === 'object' ? (raw as object).constructor?.name : 'null', n: Array.isArray(raw) ? raw.length : -1 }))
-        if (!row?.content) {
-          if (!row) {
-            const stat = await env.DB.prepare('SELECT COUNT(*) AS c, GROUP_CONCAT(key, \' | \') AS ks FROM media').first<{ c: number; ks: string | null }>()
-            dbg.set('X-Db-Total', String(stat?.c ?? -1))
-            dbg.set('X-Db-Keys', String(stat?.ks ?? 'empty'))
-          }
-          return new Response('Not found', { status: 404, headers: dbg })
-        }
-        const bytes = Array.isArray(raw) ? new Uint8Array(raw as number[]) : new Uint8Array(raw as ArrayBuffer)
-        const headers = new Headers(dbg)
+          .first<{ content: number[] | ArrayBuffer | null; type: string | null }>()
+        if (!row?.content) return new Response('Not found', { status: 404 })
+        const raw = row.content
+        const bytes = Array.isArray(raw) ? new Uint8Array(raw) : new Uint8Array(raw)
+        const headers = new Headers()
         headers.set('Content-Type', row.type || 'image/jpeg')
         headers.set('Cache-Control', 'public, max-age=31536000, immutable')
         return new Response(bytes, { headers })
