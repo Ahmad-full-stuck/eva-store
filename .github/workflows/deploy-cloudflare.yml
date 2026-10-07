@@ -54,35 +54,6 @@ jobs:
       - name: Build storefront
         run: pnpm --filter @workspace/eva-fabrics-store build
 
-      - name: Ensure D1 database exists and bind its id
-        run: |
-          set -e
-          ID=$(pnpm --filter @workspace/eva-worker exec wrangler d1 list --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{const rows=JSON.parse(s);const db=Array.isArray(rows)?rows.find(r=>r&&r.name==='eva-store'):null;console.log(db?(db.uuid||db.id||''):'')}catch(e){console.log('')}})")
-          if [ -z "$ID" ]; then
-            echo "Creating D1 database eva-store..."
-            OUT=$(pnpm --filter @workspace/eva-worker exec wrangler d1 create eva-store)
-            echo "$OUT"
-            ID=$(echo "$OUT" | grep -oE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' | head -1)
-          fi
-          if [ -z "$ID" ]; then echo "Could not resolve D1 database id"; exit 1; fi
-          echo "Using D1 id: $ID"
-          node -e "const fs=require('fs');const p='artifacts/eva-worker/wrangler.jsonc';const c=JSON.parse(fs.readFileSync(p,'utf8'));c.d1_databases[0].database_id='$ID';fs.writeFileSync(p,JSON.stringify(c,null,2)+'\n')"
-
-      - name: Apply D1 migrations
-        run: pnpm --filter @workspace/eva-worker exec wrangler d1 migrations apply eva-store --remote
-
-      - name: Seed catalog if empty
-        run: |
-          set -e
-          COUNT=$(pnpm --filter @workspace/eva-worker exec wrangler d1 execute eva-store --remote --json --command "SELECT COUNT(*) AS c FROM products" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{const j=JSON.parse(s);console.log(j[0]?.results?.[0]?.c ?? 0)}catch(e){console.log(0)}})")
-          echo "Existing products: $COUNT"
-          if [ "$COUNT" = "0" ]; then
-            echo "Seeding catalog..."
-            pnpm --filter @workspace/eva-worker exec wrangler d1 execute eva-store --remote --yes --file ../../data/seed.sql
-          else
-            echo "Catalog already populated, skipping seed."
-          fi
-
       - name: Deploy Worker
         uses: cloudflare/wrangler-action@v3
         with:
