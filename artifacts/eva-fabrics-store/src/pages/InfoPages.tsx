@@ -1002,6 +1002,28 @@ const ORDER_KEYS = ['eva-orders', 'eva-order', 'eva-last-order', 'eva-fabrics-or
 
 const statusSteps = ['تم استلام الطلب', 'قيد المراجعة', 'جاهز للشحن', 'في الطريق إليك', 'تم التوصيل']
 
+const confirmationWhatsappUrl = (order: StoredOrder): string => {
+  const lines = ['*EVA STORE GLASS*', `رقم الطلب: ${order.orderNumber}`]
+  if (order.items?.length) {
+    lines.push('', 'الأصناف:')
+    order.items.forEach((item, index) => {
+      const parts = [`${index + 1}. ${item.name}`]
+      if (item.color) parts.push(item.color)
+      if (item.length) parts.push(formatMeters(item.length))
+      if (item.total) parts.push(formatPrice(item.total))
+      lines.push(parts.join(' — '))
+    })
+  }
+  if (order.subtotal) lines.push('', `المجموع الفرعي: ${formatPrice(order.subtotal)}`)
+  if (order.deliveryFee) lines.push(`التوصيل: ${formatPrice(order.deliveryFee)}`)
+  if (order.total) lines.push(`الإجمالي: ${formatPrice(order.total)}`)
+  if (order.customerName) lines.push('', `الاسم: ${order.customerName}`)
+  if (order.phone) lines.push(`الهاتف: ${order.phone}`)
+  if (order.address) lines.push(`العنوان: ${order.address}`)
+  lines.push('', `أستفسر عن طلبي رقم ${order.orderNumber}`)
+  return siteConfig.whatsappUrl(lines.join('\n'))
+}
+
 const readText = (record: Record<string, unknown>, keys: string[]): string => {
   for (const key of keys) {
     const value = record[key]
@@ -1300,7 +1322,7 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
           <div className="confirmation-actions">
             <Link href="/catalog" className="button button-primary">متابعة التسوق <ArrowLeft size={16} /></Link>
             <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><Search size={16} />تتبّع الطلب</Link>
-            <a href={siteConfig.whatsappUrl(`مرحباً، أستفسر عن الطلب رقم ${order.orderNumber}`)} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />تواصلي عبر واتساب</a>
+            <a href={confirmationWhatsappUrl(order)} target="_blank" rel="noreferrer" className="button button-outline"><MessageCircle size={16} />إرسال الطلب عبر واتساب</a>
           </div>
           <div className="confirmation-trust"><Truck size={17} /><span>التوصيل مجاني للطلبات التي تتجاوز 50 الف دينار، ونحدّث الحالة عبر واتساب.</span></div>
         </div>

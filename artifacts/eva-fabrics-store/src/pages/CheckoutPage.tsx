@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
-import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, Navigation, Phone, RefreshCw, ShieldCheck, UserRound } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, MessageCircle, Navigation, Phone, RefreshCw, ShieldCheck, UserRound } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { CartItem, CheckoutForm, CustomerProfile, OrderPayload } from '@/types'
 import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/catalog'
-import { apiUrl } from '@/lib/site'
+import { apiUrl, siteConfig } from '@/lib/site'
 import { governorates } from '@/lib/fallback-data'
 import { useSiteContent } from '@/lib/site-content'
 import { sendOrderEmail } from '@/lib/email'
@@ -179,6 +179,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [serverError, setServerError] = useState('')
   const [notice, setNotice] = useState('')
   const [pendingOrderNumber, setPendingOrderNumber] = useState('')
+  const [pendingWhatsAppHref, setPendingWhatsAppHref] = useState('')
   const [liveMessage, setLiveMessage] = useState('')
   const totals = getCartTotals(cart)
   const siteContent = useSiteContent()
@@ -363,6 +364,8 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     const orderNumber = createLocalOrderNumber()
     saveLocalOrder(orderNumber, 'received', payload)
     notifyByEmail(payload, orderNumber)
+    openWhatsAppOrder(payload, orderNumber)
+    setPendingWhatsAppHref('')
     setSubmitState('idle')
     setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${orderNumber}`)
     onComplete(orderNumber)
@@ -378,6 +381,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     })
     notifyByEmail(payload, orderNumber)
     setPendingOrderNumber(orderNumber)
+    setPendingWhatsAppHref(siteConfig.whatsappUrl(whatsappOrderMessage(payload, orderNumber)))
     setServerError('تأكدي من الاتصال فقط')
     setNotice('')
     setSubmitState('idle')
@@ -435,7 +439,9 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         const serverNumber = getOrderNumber(body) || orderNumber
         saveLocalOrder(serverNumber, 'received', payload)
         notifyByEmail(payload, serverNumber)
+        openWhatsAppOrder(payload, serverNumber)
         setPendingOrderNumber('')
+        setPendingWhatsAppHref('')
         setSubmitState('idle')
         setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${serverNumber}`)
         onComplete(serverNumber)
@@ -533,6 +539,9 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
               {pendingOrderNumber && <p>رقم طلبك المحفوظ: <strong dir="ltr">{pendingOrderNumber}</strong></p>}
               <div className="whatsapp-actions">
                 <button type="button" className="button button-primary" onClick={() => { setServerError(''); void submitOrder() }}><RefreshCw size={15} />إعادة المحاولة الآن</button>
+                {pendingWhatsAppHref && (
+                  <a className="button button-whatsapp" href={pendingWhatsAppHref} target="_blank" rel="noreferrer"><MessageCircle size={15} />أرسلي الطلب عبر واتساب</a>
+                )}
               </div>
             </div>
           )}
@@ -615,6 +624,37 @@ function Field({ label, id, value, error, onChange, placeholder, type = 'text', 
       {error && <small className="field-error" id={`${id}-error`} aria-live="polite">{error}</small>}
     </div>
   )
+}
+
+const whatsappOrderMessage = (payload: OrderPayload, orderNumber: string): string => {
+  const lines = [
+    '*EVA STORE GLASS — طلب جديد*',
+    `رقم الطلب: ${orderNumber}`,
+    '',
+    'الأصناف:',
+  ]
+  payload.items.forEach((item, index) => {
+    lines.push(`${index + 1}. ${item.productName} — ${item.colorName} — ${formatMeters(item.quantity)} — ${formatPrice(item.totalPrice)}`)
+  })
+  lines.push('')
+  lines.push(`المجموع الفرعي: ${formatPrice(payload.subtotal)}`)
+  lines.push(`التوصيل: ${payload.deliveryFee ? formatPrice(payload.deliveryFee) : 'مجاني'}`)
+  lines.push(`الإجمالي: ${formatPrice(payload.total)}`)
+  lines.push('')
+  lines.push(`الاسم: ${payload.customerName}`)
+  lines.push(`الهاتف: ${payload.phone}`)
+  lines.push(`العنوان: ${payload.governorate} — ${payload.district} — ${payload.address}`)
+  if (payload.landmark) lines.push(`نقطة دالة: ${payload.landmark}`)
+  if (payload.notes) lines.push(`ملاحظات: ${payload.notes}`)
+  return lines.join('\n')
+}
+
+const openWhatsAppOrder = (payload: OrderPayload, orderNumber: string): void => {
+  try {
+    window.open(siteConfig.whatsappUrl(whatsappOrderMessage(payload, orderNumber)), '_blank', 'noopener,noreferrer')
+  } catch {
+    /* منع النوافذ المنبثقة — يبقى زر واتساب في رسالة التأكيد */
+  }
 }
 
 function errorMessage(payload: unknown, fallback: string): string {

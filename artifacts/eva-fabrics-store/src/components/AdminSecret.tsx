@@ -12,6 +12,12 @@ const REMOVED_KEY = 'eva-admin-removed'
 const CATEGORIES_KEY = 'eva-admin-categories'
 const PIN_KEY = 'eva-admin-pin'
 const SESSION_KEY = 'eva-admin-session'
+const DEFAULT_PIN_HASH = 'a1fb4e703a9ef1fa4936801721ff285a97ac85330856674412e054892afe6972'
+
+const sha256Hex = async (value: string): Promise<string> => {
+  const digest = await window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))
+  return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, '0')).join('')
+}
 
 export type { SiteContent as AdminContent } from '@/lib/site-content'
 export { readSiteContent as readAdminContent, CONTENT_KEY } from '@/lib/site-content'
@@ -421,12 +427,29 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     // 2) وضع محلي (بدون خادم)
     const stored = (() => {
       try {
-        return window.localStorage.getItem(PIN_KEY) || '2468'
+        return window.localStorage.getItem(PIN_KEY) || DEFAULT_PIN_HASH
       } catch {
-        return '2468'
+        return DEFAULT_PIN_HASH
       }
     })()
-    if (pin === stored) {
+    let matches = false
+    if (/^[0-9a-f]{64}$/i.test(stored)) {
+      try {
+        matches = (await sha256Hex(pin)) === stored.toLowerCase()
+      } catch {
+        matches = false
+      }
+    } else {
+      matches = pin === stored
+      if (matches) {
+        try {
+          window.localStorage.setItem(PIN_KEY, await sha256Hex(pin))
+        } catch {
+          /* ترقية قديمة تفشل — يبقى المخزّن كما هو */
+        }
+      }
+    }
+    if (matches) {
       enterAdmin()
     } else {
       const nextAttempts = pinAttempts + 1
@@ -512,7 +535,11 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       setToast('الرمز يجب أن يكون من 4 إلى 12 رقماً')
       return false
     }
-    try { window.localStorage.setItem(PIN_KEY, value) } catch { /* ignore */ }
+    try {
+      window.localStorage.setItem(PIN_KEY, await sha256Hex(value))
+    } catch {
+      try { window.localStorage.setItem(PIN_KEY, value) } catch { /* ignore */ }
+    }
     try {
       await adminFetch('/api/admin/pin', { method: 'POST', body: JSON.stringify({ pin: value }) })
       setToast('تم تغيير الرمز في الخادم')
