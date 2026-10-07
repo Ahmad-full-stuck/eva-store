@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Minus, Pencil, Plus, ShieldCheck, ShoppingBag, Trash2, Truck } from 'lucide-react'
 import { Link } from 'wouter'
 import type { CartItem } from '@/types'
-import { formatDinar, formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
+import { availableMeters, formatDinar, formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
 import { useStoreSettings } from '@/lib/site-content'
 import { SmartImage } from '@/components/ui/SmartImage'
 
@@ -46,8 +46,8 @@ const glassStyles = `
 @media (max-width: 820px) {
   .glass-scope .glass.checkout-summary, .glass-scope .glass.order-summary { position: static; top: auto; }
   .glass-scope .cart-items { padding: 4px 15px; }
-  .glass-scope .cart-page { padding-bottom: 168px; }
-  .glass-scope .cart-mobile-bar { position: fixed; right: 10px; bottom: calc(74px + env(safe-area-inset-bottom)); left: 10px; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 16px; background: rgba(255, 251, 250, .93); border: 1px solid rgba(122, 30, 60, .16); border-radius: 20px; box-shadow: 0 18px 38px rgba(74, 24, 43, .2); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
+  .glass-scope .cart-page { padding-bottom: 110px; }
+  .glass-scope .cart-mobile-bar { position: fixed; right: 10px; bottom: calc(14px + env(safe-area-inset-bottom)); left: 10px; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 16px; background: rgba(255, 251, 250, .93); border: 1px solid rgba(122, 30, 60, .16); border-radius: 20px; box-shadow: 0 18px 38px rgba(74, 24, 43, .2); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
   .glass-scope .cart-mobile-bar > span { display: grid; gap: 1px; }
   .glass-scope .cart-mobile-bar small { color: var(--eva-muted); font-size: 11.5px; }
   .glass-scope .cart-mobile-bar strong { color: var(--eva-rose); font-size: 19px; }
@@ -147,7 +147,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
           <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
           {cart.map((item) => {
             const key = orderKey(item)
-            const maxMeters = item.product.stockMeters
+            const maxMeters = availableMeters(item.product, item.color)
             const lineTotal = item.product.price * item.length
             return (
               <article className="cart-item" key={key}>

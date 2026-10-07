@@ -100,23 +100,17 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
 
   useEffect(() => {
     setMenuOpen(false)
+    setSearchOpen(false)
   }, [pathname])
-
-  const bottomItems = [
-    { id: 'home', label: 'الرئيسية', path: '/', Icon: Home, badge: '' },
-    { id: 'catalog', label: 'الأقمشة', path: '/catalog', Icon: Shirt, badge: '' },
-    { id: 'favorites', label: 'المفضلة', path: '/favorites', Icon: Heart, badge: wishlistCount > 0 ? `${wishlistCount}` : '' },
-    { id: 'cart', label: 'السلة', path: '/cart', Icon: ShoppingBag, badge: cartMeters > 0 ? formatMeters(cartMeters) : '' },
-  ]
 
   return (
     <>
       <div className="announcement-bar" role="region" aria-label="إعلان المتجر">
-        <span>{content.announcementRight}</span>
+        <span className="announcement-msg announcement-msg-right">{content.announcementRight}</span>
         <span className="announcement-dot" />
         <a href={`tel:${siteConfig.phone}`} dir="ltr">{siteConfig.phone}</a>
         <span className="announcement-dot" />
-        <span>{content.announcementLeft}</span>
+        <span className="announcement-msg announcement-msg-left">{content.announcementLeft}</span>
       </div>
       <header className="site-header glass">
         <div className="container-eva header-inner">
@@ -208,21 +202,6 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
           </div>
         </div>
       </Modal>
-      <nav className="bottom-nav glass-strong" aria-label="التنقل السريع">
-        {bottomItems.map((item) => {
-          const Icon = item.Icon
-          const active = isActive(item.path)
-          return (
-            <Link key={item.id} href={item.path} className={active ? 'is-active' : ''} aria-current={active ? 'page' : undefined} onClick={navigate} aria-label={item.badge ? `${item.label}، ${item.badge}` : item.label}>
-              <span className="bottom-nav-icon">
-                <Icon size={20} />
-                {item.badge && <b className="bottom-nav-badge">{item.badge}</b>}
-              </span>
-              <span className="bottom-nav-label">{item.label}</span>
-            </Link>
-          )
-        })}
-      </nav>
     </>
   )
 }

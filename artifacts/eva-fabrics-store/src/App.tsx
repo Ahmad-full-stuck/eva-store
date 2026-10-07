@@ -27,9 +27,6 @@ const shellStyles = `
 .footer-top .social-links { margin-top: 0; }
 .footer-col { display: flex; flex-direction: column; align-items: flex-start; }
 .mobile-nav a.is-active { color: var(--eva-rose); font-weight: 600; }
-.bottom-nav .bottom-nav-icon { position: relative; display: inline-flex; align-items: center; justify-content: center; }
-.bottom-nav .bottom-nav-badge { position: absolute; top: -5px; left: -4px; min-width: 15px; height: 15px; display: inline-grid; place-items: center; padding-inline: 3px; color: #fff; background: var(--eva-rose); border: 1.5px solid var(--eva-bg); border-radius: 999px; font-size: 8px; line-height: 1; font-weight: 600; }
-.bottom-nav .bottom-nav-label { white-space: nowrap; }
 @media (max-width: 1100px) {
   .desktop-nav { gap: 14px; }
   .desktop-nav a { font-size: 11.5px; }
@@ -40,9 +37,7 @@ const shellStyles = `
   .desktop-nav a { font-size: 11.5px; }
 }
 @media (max-width: 820px) {
-  .announcement-bar span:nth-of-type(2) { display: none; }
-  .site-footer { padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
-  .toast { bottom: calc(88px + env(safe-area-inset-bottom)); }
+  .toast { bottom: calc(20px + env(safe-area-inset-bottom)); }
 }
 @media (max-width: 560px) {
   .header-inner { gap: 8px; }
@@ -53,12 +48,10 @@ const shellStyles = `
   .header-inner { gap: 6px; }
   .logo-copy strong { font-size: 13px; }
   .logo-copy small { font-size: 9px; }
-  .header-actions .icon-button { width: 40px; height: 40px; }
   .cart-button { padding: 7px 10px; }
-  .cart-button span { display: none; }
 }
   @media (prefers-reduced-motion: reduce) {
-  .skip-link, .site-header, .site-header *, .bottom-nav, .bottom-nav *, .site-footer, .site-footer *, .modal-layer, .modal-layer *, .toast, .toast * { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  .skip-link, .site-header, .site-header *, .site-footer, .site-footer *, .modal-layer, .modal-layer *, .toast, .toast * { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
 `
 

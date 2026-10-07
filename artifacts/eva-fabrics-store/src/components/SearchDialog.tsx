@@ -19,18 +19,33 @@ export function SearchDialog({ open, onClose, products }: SearchDialogProps) {
   const [, setLocation] = useLocation()
   const results = query.trim().length > 1 ? products.filter((product) => matchesProductSearch(product, query)).slice(0, 7) : []
 
+  const close = () => {
+    setQuery('')
+    onClose()
+  }
+
   const submit = (event: FormEvent) => {
     event.preventDefault()
     const clean = query.trim()
     if (!clean) return
     setLocation(`/catalog?search=${encodeURIComponent(clean)}`)
-    onClose()
-    setQuery('')
+    close()
+  }
+
+  const pickSuggestion = (suggestion: string) => {
+    const first = products.find((product) => matchesProductSearch(product, suggestion))
+    if (first) setLocation(`/product/${first.slug}`)
+    else setLocation(`/catalog?search=${encodeURIComponent(suggestion)}`)
+    close()
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="البحث في الأقمشة" variant="top" className="search-panel">
+    <Modal open={open} onClose={close} title="البحث في الأقمشة" variant="top" className="search-panel">
       <div className="search-panel-inner">
+        <div className="search-panel-head">
+          <strong>البحث في الأقمشة</strong>
+          <button type="button" className="icon-button" onClick={close} aria-label="إغلاق البحث"><X size={19} aria-hidden="true" /></button>
+        </div>
         <form className="search-form" onSubmit={submit} role="search">
           <Search size={20} aria-hidden="true" />
           <label className="sr-only" htmlFor="global-search">ابحثي عن قماش أو لون أو استخدام</label>
@@ -38,10 +53,10 @@ export function SearchDialog({ open, onClose, products }: SearchDialogProps) {
           {query && <button type="button" className="clear-search" onClick={() => setQuery('')} aria-label="مسح البحث"><X size={16} /></button>}
           <button type="submit" className="button button-primary button-small">بحث</button>
         </form>
-        {!query && <div className="search-suggestions"><span>بحث شائع</span>{suggestions.map((suggestion) => <button type="button" key={suggestion} onClick={() => setQuery(suggestion)}>{suggestion}</button>)}</div>}
+        {!query && <div className="search-suggestions"><span>بحث شائع</span>{suggestions.map((suggestion) => <button type="button" key={suggestion} onClick={() => pickSuggestion(suggestion)}>{suggestion}</button>)}</div>}
         {query && <div className="search-results" aria-live="polite">
           <p className="search-results-count">{results.length ? `${results.length} نتائج مناسبة` : 'لا توجد نتائج مطابقة'}</p>
-          {results.map((product) => <Link key={product.id} href={`/product/${product.slug}`} className="search-result-item" onClick={onClose}>
+          {results.map((product) => <Link key={product.id} href={`/product/${product.slug}`} className="search-result-item" onClick={close}>
             <SmartImage src={product.image} alt="" sizes="64px" />
             <span><strong>{product.name}</strong><small>{product.type} · {product.specs.width}</small></span>
             <b>{formatPrice(product.price)}</b>

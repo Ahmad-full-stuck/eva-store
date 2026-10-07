@@ -57,7 +57,7 @@ export const sanitizeProduct = (value: unknown): Product | null => {
   if (!slug || !name) return null
 
   const images = list(value.images).filter((item): item is string => typeof item === 'string' && item.length > 0)
-  const image = text(value.image) || images[0] || 'fabrics/hero.jpg'
+  const image = text(value.image) || images[0] || ''
   const stockMeters = Math.max(0, number(value.stockMeters))
   const rawSpecs = isRecord(value.specs) ? value.specs : {}
   const specs: ProductSpecs = {
@@ -83,7 +83,7 @@ export const sanitizeProduct = (value: unknown): Product | null => {
     id: text(value.id) || slug,
     slug,
     name,
-    type: text(value.type, 'قماش'),
+    type: text(value.type),
     categoryId: text(value.categoryId),
     description: text(value.description),
     price: Math.max(0, number(value.price)),
@@ -120,7 +120,7 @@ export const sanitizeCategory = (value: unknown, index: number): Category | null
     slug: text(value.slug) || id,
     name,
     description: text(value.description, 'تشكيلة من الأقمشة المختارة'),
-    image: text(value.image, 'fabrics/hero.jpg'),
+    image: text(value.image),
     accent: text(value.accent, '#a34163'),
   }
 }

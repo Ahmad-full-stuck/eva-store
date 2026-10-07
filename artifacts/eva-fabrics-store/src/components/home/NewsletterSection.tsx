@@ -29,7 +29,7 @@ export function NewsletterSection() {
   }
 
   return (
-    <section className="container-eva section-block" aria-label="النشرة البريدية">
+    <section className="container-eva section-block" aria-label="اشتراك عبر واتساب">
       <div className="newsletter-card">
         <div>
           <span className="eyebrow"><Mail size={14} />{content.newsletterEyebrow}</span>
@@ -54,12 +54,12 @@ export function NewsletterSection() {
             aria-describedby="newsletter-status"
           />
           <button type="submit" className="button button-primary">
-            اشتركي بالنشرة <ArrowLeft size={15} />
+            اشتراك عبر واتساب <ArrowLeft size={15} />
           </button>
         </form>
         <div id="newsletter-status" role="status" aria-live="polite" style={{ minHeight: 18, fontSize: 11.5 }}>
           {status === 'error' && 'يرجى إدخال بريد إلكتروني صحيح.'}
-          {status === 'sent' && 'فتحنا لك واتساب لإتمام الاشتراك.'}
+          {status === 'sent' && 'فتحنا لك واتساب لإتمام الاشتراك في النشرة.'}
         </div>
         <p className="newsletter-note">
           أو اطلبي استشارة في اختيار القماش عبر{' '}

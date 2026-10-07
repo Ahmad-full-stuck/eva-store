@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { ArrowLeft, Check, Filter, Layers, Package, Search, SlidersHorizontal, Tag, X } from 'lucide-react'
 import { Link, useLocation, useSearch } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
-import { formatPrice, normalizeArabic } from '@/lib/catalog'
+import { formatPrice, isSoldOut, normalizeArabic } from '@/lib/catalog'
 import { ProductCard, ProductGridSkeleton } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
 
@@ -15,13 +15,12 @@ interface CatalogPageProps {
   onAdd: (product: Product, color: ProductColor, length: number) => void
 }
 
-type SortKey = 'featured' | 'newest' | 'price-asc' | 'price-desc'
+type SortKey = 'featured' | 'price-asc' | 'price-desc'
 type StretchKey = 'all' | 'stretch' | 'non'
 type ParamChanges = Record<string, string | null>
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: 'featured', label: 'الترتيب الافتراضي' },
-  { value: 'newest', label: 'الأحدث أولاً' },
   { value: 'price-asc', label: 'السعر: الأقل أولاً' },
   { value: 'price-desc', label: 'السعر: الأعلى أولاً' },
 ]
@@ -193,6 +192,9 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
   useEffect(() => setMinInput(minRaw), [minRaw])
   useEffect(() => setMaxInput(maxRaw), [maxRaw])
 
+  const pathname = location.split('?')[0]
+  useEffect(() => setFilterOpen(false), [pathname])
+
   const updateParams = (changes: ParamChanges, replace = false) => {
     const next = new URLSearchParams(query)
     Object.entries(changes).forEach(([key, value]) => {
@@ -232,22 +234,21 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
         if (!categoryMatch) return false
       }
       if (stretch !== 'all' && isStretchProduct(product) !== (stretch === 'stretch')) return false
-      if (inStock && product.stockMeters <= 0) return false
+      if (inStock && isSoldOut(product)) return false
       if (priceRange.min !== null && product.price < priceRange.min) return false
       if (priceRange.max !== null && product.price > priceRange.max) return false
       return matchesQuery(product, search, categories)
     })
     const sorted = [...list]
     sorted.sort((a, b) => {
-      if (sort === 'newest') return b.createdAt.localeCompare(a.createdAt) || Number(b.isFeatured) - Number(a.isFeatured)
-      if (sort === 'price-asc') return a.price - b.price || b.createdAt.localeCompare(a.createdAt)
-      if (sort === 'price-desc') return b.price - a.price || b.createdAt.localeCompare(a.createdAt)
+      if (sort === 'price-asc') return a.price - b.price || Number(b.isFeatured) - Number(a.isFeatured)
+      if (sort === 'price-desc') return b.price - a.price || Number(b.isFeatured) - Number(a.isFeatured)
       return Number(b.isFeatured) - Number(a.isFeatured) || Number(b.isNew) - Number(a.isNew) || b.createdAt.localeCompare(a.createdAt)
     })
     return sorted
   }, [activeCategory, categoryId, categories, inStock, priceRange, products, search, sort, stretch])
 
-  const availableCount = shown.filter((product) => product.stockMeters > 0).length
+  const availableCount = shown.filter((product) => !isSoldOut(product)).length
   const averagePrice = shown.length ? Math.round(shown.reduce((total, product) => total + product.price, 0) / shown.length) : 0
   const activeCount = Number(Boolean(categoryId)) + Number(stretch !== 'all') + Number(inStock) + Number(minPrice !== null) + Number(maxPrice !== null) + Number(Boolean(search))
   const priceLabel = priceRange.min !== null && priceRange.max !== null
@@ -367,9 +368,6 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
           تصفية
           {activeCount > 0 && <b>{activeCount}</b>}
         </button>
-        <Link href="/catalog?sort=newest" className="underlined-link">
-          وصل حديثاً <ArrowLeft size={14} aria-hidden="true" />
-        </Link>
       </div>
 
       <div className="catalog-layout">

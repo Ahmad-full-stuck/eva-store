@@ -31,10 +31,10 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
   ]
 
   const slides = [
-    { src: 'fabrics/hero.jpg', alt: 'نماذج من أقمشة إيفا ستور' },
-    { src: 'fabrics/rose.jpg', alt: 'قماش مطرز بلون وردي من تشكيلة إيفا' },
-    { src: 'fabrics/blue.jpg', alt: 'قماش أزرق ناعم من تشكيلة إيفا' },
-    { src: 'fabrics/emerald.jpg', alt: 'قماش أخضر مرن من تشكيلة إيفا' },
+    { src: 'products/staylat/01.jpg', alt: 'ستايلات' },
+    { src: 'products/twlmshhyakh/01.jpg', alt: 'تول مَش حياكة' },
+    { src: 'products/ambrwdry/01.jpg', alt: 'أمبرودري' },
+    { src: 'products/fyskwzharbd/01.jpg', alt: 'فيسكوز هاربد' },
   ]
   const [activeSlide, setActiveSlide] = useState(0)
   const timerRef = useRef<number | undefined>(undefined)
@@ -83,7 +83,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
           <p>{content.heroText}</p>
           <div className="hero-actions">
             <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
-            <Link href="/catalog?sort=newest" className="button button-outline">اكتشفي الجديد <ArrowRight size={16} /></Link>
+            <Link href="/catalog" className="button button-outline">اكتشفي الجديد <ArrowRight size={16} /></Link>
           </div>
           <div className="hero-note"><span className="note-dot" />{content.heroNote} <span className="note-divider" /><span className="note-alt">{content.heroNoteAlt}</span></div>
         </div>

@@ -3,16 +3,17 @@ import rawCategories from '../../../../data/categories.json'
 import rawProducts from '../../../../data/products.json'
 import { sanitizeCategories, sanitizeProducts } from '@/lib/sanitize'
 
-const fabricImages = ['fabrics/hero.jpg', 'fabrics/rose.jpg', 'fabrics/blue.jpg', 'fabrics/emerald.jpg']
+const isHidden = (value: unknown): boolean =>
+  Boolean(value) && typeof value === 'object' && (value as { hidden?: unknown }).hidden === true
 
 export const fallbackCategories: Category[] = sanitizeCategories(rawCategories)
 
-export const fallbackProducts: Product[] = sanitizeProducts(rawProducts)
+export const fallbackProducts: Product[] = sanitizeProducts((rawProducts as unknown[]).filter((item) => !isHidden(item)))
 
 export const fallbackRoutes: SiteRoute[] = [
   { id: 'home', label: 'الرئيسية', path: '/', header: true },
   { id: 'catalog', label: 'الأقمشة', path: '/catalog', header: true },
-  { id: 'new', label: 'وصل حديثاً', path: '/catalog?sort=newest', header: true },
+  { id: 'new', label: 'وصل حديثاً', path: '/catalog', header: true },
   { id: 'favorites', label: 'المفضلة', path: '/favorites', header: false },
   { id: 'about', label: 'من نحن', path: '/about', header: true },
   { id: 'guide', label: 'دليل الأقمشة', path: '/fabric-guide', header: true },
@@ -101,5 +102,3 @@ export const quickGuideAnswers: QuickGuideAnswer[] = [
     ],
   },
 ]
-
-export { fabricImages }

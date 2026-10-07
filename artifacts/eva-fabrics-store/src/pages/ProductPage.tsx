@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Check, ChevronDown, ChevronLeft, ChevronRight, Heart, Minus, Plus, ShieldCheck, ShoppingBag, Zap, ZoomIn } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
-import { formatMeters, formatPrice, metersLabel } from '@/lib/catalog'
+import { formatMeters, formatPrice, isSoldOut, metersLabel } from '@/lib/catalog'
 import { ProductCard } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -32,6 +32,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     setActiveImage(0)
     setLength(0.5)
     setJustAdded(false)
+    setZoomOpen(false)
   }, [product?.id])
 
   useEffect(() => {
@@ -44,7 +45,8 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     return () => observer.disconnect()
   }, [product?.id])
 
-  const maxLength = product ? Math.max(0, product.stockMeters) : 0
+  const soldOut = product ? isSoldOut(product) : false
+  const maxLength = product ? (soldOut ? 0 : product.stockMeters > 0 ? product.stockMeters : 1000) : 0
 
   useEffect(() => {
     if (maxLength <= 0) return

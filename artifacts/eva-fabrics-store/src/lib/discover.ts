@@ -153,7 +153,6 @@ export function runDiscovery(products: Product[], input: DiscoveryInput): Discov
   const rule = GARMENT_RULES[garment]
 
   const scored = products
-    .filter((product) => product.stockMeters > 0)
     .map((product) => {
       const profile = profileOf(product)
       const source = flat(

@@ -29,7 +29,31 @@ CARDS = os.path.join(INDEX, "06_بطاقات_الرفع.csv")
 PUB = os.path.join(REPO, "artifacts", "eva-fabrics-store", "public")
 PRODUCTS_DIR = os.path.join(PUB, "products")
 DATA_DIR = os.path.join(REPO, "data")
+SOURCE_MAP = os.path.join(DATA_DIR, "source-names-map.json")
+VIDEOS_DIR = os.path.join(PUB, "videos")
 WIDTHS = (320, 640, 1024)
+
+TYPE_BY_CATEGORY = {
+    "style": "ستايل",
+    "embroidered": "مطرز",
+    "plain": "سادة",
+    "stretch": "مطاطي",
+    "sequined": "ترتر",
+    "patterned": "مزخرف",
+    "harvard": "هارفرد",
+}
+
+UNSPECIFIED = "غير محددة"
+
+CATEGORY_META = [
+    ("style", "ستايلات جاهزة", "عروض جاهزة تجمع أكثر من خامة في منتج واحد مثل ستان وأوركانزا ودوشيس", "#7a5a6b", 1),
+    ("embroidered", "مطرز", "خامات بتطريز أمبرودري فوق لينن وبلك ودانتيل", "#8f4766", 2),
+    ("plain", "سادة", "خامات سادة بلا نقوش مثل ستان وتول وكريب وشيفون", "#42647b", 3),
+    ("stretch", "مطاطي", "خامات فيها سباندكس أو ليكرا تمنح مرونة وتمدداً", "#34715e", 4),
+    ("sequined", "ترتر ولمّاع", "تول مشغول بحجارة الزركون والكريستال وخامات ميتالك بلمعة", "#8d2b4f", 5),
+    ("patterned", "مزخرف", "نقوش جاكار وبروكارد ومطبوع ونمنم على تول وبلك", "#8c5c82", 6),
+    ("harvard", "هارفرد", "فيسكوز هاربد بعرض 153 سم لخامة السترات الرسمية والبدلات", "#5f6b7a", 7),
+]
 
 AR_DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹", "01234567890123456789")
 
@@ -193,7 +217,7 @@ def extract_colors(*texts: str) -> list[dict]:
     for word in COLOR_WORDS:
         if word in source and word not in found:
             found.append(word)
-    return [{"id": f"color-{i + 1}", "name": word, "hex": COLOR_HEX[word], "available": True, "stockMeters": 10}
+    return [{"id": f"color-{i + 1}", "name": word, "hex": COLOR_HEX[word], "available": True, "stockMeters": 0}
             for i, word in enumerate(found[:5])]
 
 
@@ -239,7 +263,7 @@ def palette_from_image(path: str, count: int = 5) -> list[dict]:
             "name": name,
             "hex": hex_value,
             "available": True,
-            "stockMeters": 10,
+            "stockMeters": 0,
             "share": round(size / total, 3),
         })
         if len(picked) >= count:
@@ -266,6 +290,13 @@ def write_variants(source: str, dest_jpg: str) -> None:
 def main() -> None:
     os.makedirs(DATA_DIR, exist_ok=True)
     rows = list(csv.DictReader(open(CARDS, encoding="utf-8-sig")))
+    source_map = {}
+    if os.path.isfile(SOURCE_MAP):
+        source_map = {
+            record.get("slug"): record
+            for record in json.load(open(SOURCE_MAP, encoding="utf-8"))
+            if record.get("slug")
+        }
 
     captions: dict[str, list[str]] = {}
     for record in csv.DictReader(open(os.path.join(INDEX, "01_فهرس_الكل.csv"), encoding="utf-8-sig")):
@@ -331,20 +362,25 @@ def main() -> None:
 
         is_style = kind.startswith("فيديو ستايلات")
         category = "style" if is_style else pick_category(name, families, description)
+        override = source_map.get(slug) or {}
+        if override.get("source_name"):
+            name = override["source_name"]
+        if override.get("categoryId"):
+            category = override["categoryId"]
         stretch = any(word in f"{name} {families} {description}" for word in STRETCH_WORDS)
         heavy = any(word in f"{families} {description}" for word in WEIGHT_WORDS_HEAVY)
         light = any(word in f"{families} {description}" for word in WEIGHT_WORDS_LIGHT)
 
         specs = {
-            "composition": families or "غير محددة",
-            "width": width or "غير محددة",
-            "weight": "ثقيل" if heavy else ("خفيف" if light else "متوسط"),
+            "composition": families or UNSPECIFIED,
+            "width": width or UNSPECIFIED,
+            "weight": "ثقيل" if heavy else ("خفيف" if light else UNSPECIFIED),
             "stretch": "مطاطي" if stretch else "غير مطاطي",
             "isStretch": stretch,
-            "opacity": "غير شفاف",
-            "finish": "لامع" if any(word in f"{families} {name}" for word in SEQUIN_WORDS) else "مطفي",
-            "care": "غسيل لطيف على البارد وتجفيف بعيداً عن الشمس المباشرة",
-            "use": uses or "حسب تصميم القطعة",
+            "opacity": UNSPECIFIED,
+            "finish": "لامع" if any(word in f"{families} {name}" for word in SEQUIN_WORDS) else UNSPECIFIED,
+            "care": UNSPECIFIED,
+            "use": uses or UNSPECIFIED,
         }
 
         colors = extract_colors(row.get("الألوان") or "", families, description, name)
@@ -368,8 +404,9 @@ def main() -> None:
             if not colors:
                 colors = palette_from_image(sources[0])
 
-        if not images:
-            images = ["fabrics/hero.jpg"]
+        cover = images[0] if images else ""
+        video_file = os.path.join(VIDEOS_DIR, f"{slug}.mp4")
+        has_video = os.path.isfile(video_file) and os.path.getsize(video_file) > 10_000
 
         if not price:
             report.append(f"- **{name}** (`{slug}`): لم يُعثر على سعر صريح — راجعيه من لوحة المدير.")
@@ -378,22 +415,24 @@ def main() -> None:
             "id": slug,
             "slug": slug,
             "name": name,
-            "type": ("ستايل جاهز" if is_style else "قماش"),
+            "type": TYPE_BY_CATEGORY[category],
             "categoryId": category,
             "description": description or f"{name} — {families}".strip(" —"),
             "price": price,
-            "image": images[0],
-            "images": images,
+            "image": cover,
+            "images": [],
             "colors": colors,
             "colorsEnabled": bool(colors),
             "specs": specs,
-            "faqs": [
-                {"question": "ما عرض القماش؟", "answer": width or "١٥٠ سم غالباً — تأكدي قبل الطلب."},
+            "faqs": (
+                [{"question": "ما عرض القماش؟", "answer": width}]
+                if width else []
+            ) + [
                 {"question": "هل يمكن طلب نصف متر؟", "answer": "نعم، الحد الأدنى نصف متر وتُضاف الكمية على خطوات ٠٫٥ م."},
             ],
-            "isNew": order <= 12,
-            "isFeatured": bool(price) or len(sources) > 1,
-            "stockMeters": 60 if sources else 25,
+            "isNew": False,
+            "isFeatured": False,
+            "stockMeters": 0,
             "sourceUrl": links[0] if links else "",
             "createdAt": "2026-10-06",
             "sort_order": order,
@@ -401,18 +440,23 @@ def main() -> None:
             "_country": country,
             "_links": links,
         }
+        if has_video:
+            product["video"] = f"videos/{slug}.mp4"
+        else:
+            product["hidden"] = True
         products.append(product)
 
-    style_image = next((p["image"] for p in products if p["categoryId"] == "style"), "fabrics/hero.jpg")
-    harvard_image = next((p["image"] for p in products if p["categoryId"] == "harvard"), "fabrics/harvard-cover.jpg")
     categories = [
-        {"id": "style", "slug": "style", "name": "ستايلات جاهزة", "description": "تنسيقات تجمع أكثر من قماش", "image": style_image, "accent": "#7a5a6b", "sort_order": 1},
-        {"id": "embroidered", "slug": "embroidered", "name": "مطرز", "description": "تطريز بارز وخيوط فاخرة", "image": "fabrics/rose.jpg", "accent": "#8f4766", "sort_order": 2},
-        {"id": "plain", "slug": "plain", "name": "سادة", "description": "ألوان هادئة للاستخدام اليومي", "image": "fabrics/blue.jpg", "accent": "#42647b", "sort_order": 3},
-        {"id": "stretch", "slug": "stretch", "name": "مطاطي", "description": "سبانديكس وتويل بمرونة مريحة", "image": "fabrics/emerald.jpg", "accent": "#34715e", "sort_order": 4},
-        {"id": "sequined", "slug": "sequined", "name": "ترتر ولمّاع", "description": "بريق وحركة للحفلات", "image": "fabrics/hero.jpg", "accent": "#8d2b4f", "sort_order": 5},
-        {"id": "patterned", "slug": "patterned", "name": "مزخرف", "description": "نقوش جاكار وتطريز منظم", "image": "fabrics/rose.jpg", "accent": "#8c5c82", "sort_order": 6},
-        {"id": "harvard", "slug": "harvard", "name": "هارفرد", "description": "فيسكوز ثقيل تايواني بعرض ١٥٣ سم", "image": harvard_image, "accent": "#5f6b7a", "sort_order": 7},
+        {
+            "id": category_id,
+            "slug": category_id,
+            "name": name,
+            "description": description,
+            "image": next((p["image"] for p in products if p["categoryId"] == category_id and p["image"]), ""),
+            "accent": accent,
+            "sort_order": sort_order,
+        }
+        for category_id, name, description, accent, sort_order in CATEGORY_META
     ]
 
     json.dump(products, open(os.path.join(DATA_DIR, "products.json"), "w", encoding="utf-8"),
@@ -420,7 +464,7 @@ def main() -> None:
     json.dump(categories, open(os.path.join(DATA_DIR, "categories.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
 
-    with_images = sum(1 for product in products if product["image"] != "fabrics/hero.jpg")
+    with_images = sum(1 for product in products if product["image"])
     with_price = sum(1 for product in products if product["price"] > 0)
     with_colors = sum(1 for product in products if product["colors"])
     counts = Counter(product["categoryId"] for product in products)

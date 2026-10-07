@@ -3,9 +3,10 @@ import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Hea
 import { Link, useLocation, useSearch } from 'wouter'
 import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
-import { guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
+import { fallbackCategories, fallbackProducts, guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
 import { apiUrl, siteConfig } from '@/lib/site'
 import { useSiteContent } from '@/lib/site-content'
+import { mergeAdminCategories, mergeAdminProducts } from '@/components/AdminSecret'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 const glassCss = `
@@ -85,7 +86,7 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
 .stars svg { width: 14px; height: 14px; fill: currentColor; }
 .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .steps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.testimonials-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+
 .about-values { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .stat-card { position: relative; overflow: hidden; }
 .stat-card:before {
@@ -272,7 +273,7 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .about-values { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .testimonials-grid, .steps-grid { grid-template-columns: minmax(0, 1fr); }
+  .steps-grid { grid-template-columns: minmax(0, 1fr); }
   .section-soft { padding: 34px 24px; }
   .story-copy-grid { grid-template-columns: minmax(0, 1fr); }
 }
@@ -304,12 +305,20 @@ interface AboutStat {
   note: string
 }
 
-const aboutStats: AboutStat[] = [
-  { label: 'خامة في المعرض', value: 129, note: 'كلها بصورة ومواصفات مكتوبة' },
-  { label: 'أقسام للتصنيف', value: 7, note: 'ستايلات، مطرز، سادة، مطاطي، ترتر، مزخرف، هارفرد' },
-  { label: 'محافظة نغطيها', value: 18, note: 'توصيل إلى كل العراق' },
-  { label: 'منشور على إنستغرام', value: 201, note: 'من حسابنا @x__illc' },
-]
+const catalogCounts = (): { products: number; categories: number } => ({
+  products: mergeAdminProducts(fallbackProducts).length,
+  categories: mergeAdminCategories(fallbackCategories).length,
+})
+
+const buildAboutStats = (): AboutStat[] => {
+  const counts = catalogCounts()
+  return [
+    { label: 'خامة في المعرض', value: counts.products, note: 'كلها بصورة ومواصفات مكتوبة' },
+    { label: 'أقسام للتصنيف', value: counts.categories, note: 'ستايلات، مطرز، سادة، مطاطي، ترتر، مزخرف، هارفرد' },
+    { label: 'محافظة نغطيها', value: 18, note: 'توصيل إلى كل العراق' },
+    { label: 'منشور على إنستغرام', value: 201, note: 'من حسابنا @x__illc' },
+  ]
+}
 
 const aboutValues = [
   { title: 'وضوح قبل الشراء', text: 'نكتب الشفافية والمرونة والوزن كما هي، بلا مبالغة ولا وعود مبهمة.', icon: <BadgeCheck size={18} /> },
@@ -318,14 +327,19 @@ const aboutValues = [
   { title: 'ابدئي من نصف متر', text: 'لا نفرض كميات كبيرة؛ اطلبي ما تحتاجينه فعلاً وزيدي لاحقاً.', icon: <Ruler size={18} /> },
 ]
 
-const aboutTimeline = [
-  { year: 'البداية', title: 'من حساب إنستغرام', text: 'نعرض الأقمشة بالصور والفيديو ونشرح الخامة في تسجيل قصير قبل الطلب — أكثر من ٢٠١ منشوراً حتى الآن.' },
-  { year: 'التوثيق', title: 'بطاقة لكل قماش', text: 'نستخرج من كل منشور وفيديو التركيب والعرض والوزن والمرونة والشفافية، ونضعها أمام الصورة بصيغة مكتوبة.' },
-  { year: 'الآن', title: 'متجر أونلاين', text: '١٢٩ خامة بالمواصفات كاملة، طلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية برسوم ثابتة.' },
-]
+const buildAboutTimeline = () => {
+  const productsLabel = catalogCounts().products.toLocaleString('ar-IQ')
+  return [
+    { year: 'البداية', title: 'من حساب إنستغرام', text: 'نعرض الأقمشة بالصور والفيديو ونشرح الخامة في تسجيل قصير قبل الطلب — أكثر من ٢٠١ منشوراً حتى الآن.' },
+    { year: 'التوثيق', title: 'بطاقة لكل قماش', text: 'نستخرج من كل منشور وفيديو التركيب والعرض والوزن والمرونة والشفافية، ونضعها أمام الصورة بصيغة مكتوبة.' },
+    { year: 'الآن', title: 'متجر أونلاين', text: `${productsLabel} خامة بالمواصفات كاملة، طلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية برسوم ثابتة.` },
+  ]
+}
 
 export function AboutPage() {
   const content = useSiteContent()
+  const aboutStats = buildAboutStats()
+  const aboutTimeline = buildAboutTimeline()
   return (
     <>
       <GlassStyles />
@@ -349,8 +363,8 @@ export function AboutPage() {
             </div>
           </div>
           <div className="about-collage">
-            <SmartImage src="fabrics/rose.jpg" alt="قماش مطرز من معرض إيفا" sizes="(max-width: 820px) 46vw, 24vw" />
-            <SmartImage src="fabrics/blue.jpg" alt="قماش أزرق ناعم" sizes="(max-width: 820px) 46vw, 24vw" />
+            <SmartImage src="products/dantylfrnsyambrwdry/01.jpg" alt="دانتيل فرنسي أمبرودري" sizes="(max-width: 820px) 46vw, 24vw" />
+            <SmartImage src="products/lmshalbwklywnsyjalankwra/01.jpg" alt="لمسة البوكلي ونسيج الأنكورا" sizes="(max-width: 820px) 46vw, 24vw" />
             <span>EVA<br /><strong>FABRICS</strong></span>
           </div>
         </section>
@@ -365,7 +379,7 @@ export function AboutPage() {
           </div>
           <div className="story-copy-grid">
             <p>من حسابنا على إنستغرام بدأنا نعرض الأقمشة بالصور والفيديو: نُظهر اللون في الضوء الطبيعي، ونشرح الوزن والمرونة والشفافية في تسجيل صوتي قصير قبل أن يصلك القماش.</p>
-            <p>اليوم تجد كل ذلك في مكان واحد: معرض يضم ١٢٩ خامة بمواصفات مكتوبة، وطلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية مع تأكيد يدوي لكل طلب عبر واتساب.</p>
+            <p>اليوم تجد كل ذلك في مكان واحد: معرض يضم {catalogCounts().products.toLocaleString('ar-IQ')} خامة بمواصفات مكتوبة، وطلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية مع تأكيد يدوي لكل طلب عبر واتساب.</p>
           </div>
         </section>
 
@@ -1336,9 +1350,9 @@ export function OrderTrackingPage() {
 
         <section className="tracking-card glass">
           <div className="tracking-icon"><PackageCheck size={28} /></div>
-          <span className="eyebrow">تحديث رحلتك</span>
-          <h1>تتبّع الطلب</h1>
-          <p>أدخلي رقم الطلب الذي استلمته بعد التأكيد. إن لم يكن لديك رقم بعد، تواصلي معنا وسنبحث عنه بالهاتف.</p>
+          <span className="eyebrow">طلباتك من هذا الجهاز</span>
+          <h1>تتبّع الطلب المحفوظ</h1>
+          <p>أدخلي رقم الطلب الذي استلمته بعد التأكيد لعرض آخر حالة مسجّلة على هذا الجهاز. إن لم يكن لديك رقم بعد، تواصلي معنا وسنبحث عنه بالهاتف.</p>
 
           <form className="tracking-form" onSubmit={submit} noValidate>
             <label className="sr-only" htmlFor="tracking-order">رقم الطلب</label>
@@ -1364,8 +1378,8 @@ export function OrderTrackingPage() {
             <div className="tracking-result-glass form-status-error" role="status">
               <Search size={18} />
               <div>
-                <strong>لم نعثر على طلب بالرقم {active}</strong>
-                <p>تأكدي من الرقم كما وصل في رسالة التأكيد، أو ابحثي في الطلبات المحفوظة على هذا الجهاز.</p>
+                <strong>لا يوجد طلب محفوظ على هذا الجهاز بالرقم {active}</strong>
+                <p>تأكدي من الرقم كما وصل في رسالة التأكيد، أو ابحثي ضمن الطلبات المحفوظة على هذا الجهاز.</p>
               </div>
             </div>
           )}
@@ -1373,8 +1387,8 @@ export function OrderTrackingPage() {
           {!active && orders.length === 0 && (
             <section className="order-empty glass">
               <div className="empty-icon"><Search size={25} /></div>
-              <h1>لا توجد طلبات محفوظة بعد</h1>
-              <p>عند إتمام أول طلب يُحفظ رقم الطلب هنا تلقائياً لتتبعي حالته بدون تسجيل دخول.</p>
+              <h1>لا توجد طلبات محفوظة على هذا الجهاز بعد</h1>
+              <p>عند إتمام أول طلب يُحفظ رقم الطلب على هذا الجهاز لتتبعي حالته بدون تسجيل دخول.</p>
               <div className="empty-actions">
                 <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
                 <Link href="/contact" className="button button-outline">تواصلي معنا <ArrowLeft size={16} /></Link>

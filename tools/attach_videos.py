@@ -83,9 +83,14 @@ def main() -> None:
                   flush=True)
 
     ok = {r["slug"] for r in results if r["status"] in ("ok", "cached")}
+
+    def has_encoded(slug: str) -> bool:
+        path = os.path.join(VIDEOS, f"{slug}.mp4")
+        return os.path.isfile(path) and os.path.getsize(path) > 10_000
+
     attached = 0
     for product in products:
-        if product["slug"] in ok:
+        if product["slug"] in ok or has_encoded(product["slug"]):
             if product.get("video") != f"videos/{product['slug']}.mp4":
                 product["video"] = f"videos/{product['slug']}.mp4"
                 attached += 1

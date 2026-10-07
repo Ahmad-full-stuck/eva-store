@@ -46,7 +46,7 @@ def main() -> None:
         lines.append(
             "INSERT INTO categories (id, slug, name, description, image, accent, sort_order) VALUES "
             f"({q(cat.get('id'))}, {q(cat.get('slug'))}, {q(cat.get('name'))}, {q(cat.get('description', ''))}, "
-            f"{q(cat.get('image', 'fabrics/hero.jpg'))}, {q(cat.get('accent', '#7a5a6b'))}, {q(cat.get('sort_order', 0))});"
+            f"{q(cat.get('image', ''))}, {q(cat.get('accent', '#7a5a6b'))}, {q(cat.get('sort_order', 0))});"
         )
 
     for row in ROUTES:
@@ -58,19 +58,20 @@ def main() -> None:
     for product in products:
         specs = product.get("specs") or {}
         colors = product.get("colors") or []
-        images = product.get("images") or [product.get("image", "fabrics/hero.jpg")]
+        images = product.get("images") or [product.get("image", '')]
         faqs = product.get("faqs") or []
         lines.append(
             "INSERT INTO products (id, slug, name, type, category_id, description, price, compare_at_price, image, "
             "images_json, colors_json, specs_json, faqs_json, colors_enabled, is_new, is_featured, hidden, "
             "stock_meters, source_url, origin, sort_order, created_at, updated_at, video) VALUES ("
-            f"{q(product['slug'])}, {q(product['slug'])}, {q(product['name'])}, {q(product.get('type', 'قماش'))}, "
+            f"{q(product['slug'])}, {q(product['slug'])}, {q(product['name'])}, {q(product.get('type', ''))}, "
             f"{q(product.get('categoryId', 'plain'))}, {q(product.get('description', ''))}, {q(product.get('price', 0))}, "
-            f"NULL, {q(product.get('image', 'fabrics/hero.jpg'))}, {q(json.dumps(images, ensure_ascii=False))}, "
+            f"NULL, {q(product.get('image', ''))}, {q(json.dumps(images, ensure_ascii=False))}, "
             f"{q(json.dumps(colors, ensure_ascii=False))}, {q(json.dumps(specs, ensure_ascii=False))}, "
             f"{q(json.dumps(faqs, ensure_ascii=False))}, {q(bool(product.get('colorsEnabled', False)))}, "
-            f"{q(bool(product.get('isNew', False)))}, {q(bool(product.get('isFeatured', True)))}, 0, "
-            f"{q(product.get('stockMeters', 25))}, {q(product.get('sourceUrl', ''))}, 'seed', "
+            f"{q(bool(product.get('isNew', False)))}, {q(bool(product.get('isFeatured', False)))}, "
+            f"{q(bool(product.get('hidden', False)))}, "
+            f"{q(product.get('stockMeters', 0))}, {q(product.get('sourceUrl', ''))}, 'seed', "
             f"{q(product.get('sort_order', 0))}, {q(product.get('createdAt', '2026-10-06'))}, datetime('now'), "
             f"{q(product.get('video'))});"
         )

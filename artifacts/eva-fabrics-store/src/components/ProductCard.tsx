@@ -1,7 +1,7 @@
 import { Heart, Plus, ShoppingBag } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
-import { formatPrice } from '@/lib/catalog'
+import { formatPrice, isSoldOut } from '@/lib/catalog'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 interface ProductCardProps {
@@ -45,6 +45,9 @@ const glassStyles = `
   transform: translateY(-6px);
   border-color: rgba(122, 30, 60, .38);
   box-shadow: 0 26px 48px rgba(122, 30, 60, .18);
+}
+@media (max-width: 560px) {
+  .product-card.glass-card { padding: 10px 10px 14px; }
 }
 .product-card.glass-card .product-card-media {
   border-radius: 12px;
@@ -112,8 +115,8 @@ injectStyles('eva-glass-styles', glassStyles)
 
 export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps) {
   const addColor = product.colors.find((color) => color.available && color.stockMeters > 0) || product.colors[0]
-  const soldOut = product.stockMeters <= 0 || !addColor
-  const lowStock = !soldOut && product.stockMeters <= 3
+  const soldOut = !addColor || isSoldOut(product)
+  const lowStock = !soldOut && product.stockMeters > 0 && product.stockMeters <= 3
   const wishLabel = wished ? `إزالة ${product.name} من المفضلة` : `إضافة ${product.name} إلى المفضلة`
   const addLabel = `أضيفي نصف متر من ${product.name} إلى السلة`
   const detailPath = `/product/${product.slug}`
@@ -134,9 +137,15 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
                 priority
                 onError={(event) => {
                   const node = event.currentTarget
-                  if (node.dataset.fallback === '1') return
-                  node.dataset.fallback = '1'
-                  node.src = 'fabrics/hero.jpg'
+                  const stack = [...new Set([product.image, ...product.images].filter(Boolean))]
+                  const attempt = Number(node.dataset.attempt || 0)
+                  const next = stack[attempt + 1]
+                  if (next) {
+                    node.dataset.attempt = String(attempt + 1)
+                    node.src = next
+                  } else {
+                    node.style.display = 'none'
+                  }
                 }}
               />
             </span>
@@ -194,7 +203,7 @@ export function ProductGridSkeleton() {
 }
 
 export function InlineAddButton({ product, onAdd }: { product: Product; onAdd: (product: Product, color: ProductColor, length: number) => void }) {
-  const color = product.colors.find((item) => item.available && item.stockMeters > 0)
+  const color = product.colors.find((item) => item.available)
   return (
     <button
       type="button"

@@ -45,9 +45,9 @@ const groupFields: { title: string; fields: TextField[] }[] = [
       { key: 'newEyebrow', label: 'عنوان صغير - وصل حديثاً' },
       { key: 'newTitle', label: 'عنوان قسم وصل حديثاً' },
       { key: 'newDesc', label: 'وصف قسم وصل حديثاً', area: true },
-      { key: 'promoPill', label: 'شارة شريط العرض' },
-      { key: 'promoLead', label: 'الجزء المميز من شريط العرض' },
-      { key: 'promoText', label: 'نص شريط العرض', hint: 'استخدمي {price} لوضع السعر' },
+      { key: 'promoPill', label: 'شارة شريط التوصيل' },
+      { key: 'promoLead', label: 'الجزء المميز من شريط التوصيل' },
+      { key: 'promoText', label: 'نص شريط التوصيل', hint: 'استخدمي {price} لوضع حد التوصيل المجاني' },
     ],
   },
   {
@@ -60,7 +60,7 @@ const groupFields: { title: string; fields: TextField[] }[] = [
     ],
   },
   {
-    title: 'النشرة البريدية',
+    title: 'النشرة (اشتراك عبر واتساب)',
     fields: [
       { key: 'newsletterEyebrow', label: 'العنوان الصغير' },
       { key: 'newsletterTitle', label: 'عنوان النشرة', area: true },
@@ -148,7 +148,7 @@ const emptyProduct = (): Product => ({
   id: `custom-${Date.now()}`,
   slug: `custom-${Date.now()}`,
   name: '',
-  type: 'قماش',
+  type: '',
   categoryId: 'plain',
   description: '',
   price: 0,
@@ -156,15 +156,15 @@ const emptyProduct = (): Product => ({
   images: [],
   colors: [{ id: 'color-1', name: 'أساسي', hex: '#8e6e7d', available: true, stockMeters: 10 }],
   specs: {
-    composition: 'قطن',
-    width: '150 سم',
-    weight: 'خفيف',
-    stretch: 'بدون تأمل',
+    composition: 'خامة غير محددة',
+    width: 'غير محددة',
+    weight: 'غير محددة',
+    stretch: 'غير محدد',
     isStretch: false,
-    opacity: 'غير شفاف',
-    finish: 'ناعم',
-    care: 'غسيل لطيف',
-    use: 'ملابس',
+    opacity: 'غير محددة',
+    finish: 'غير محدد',
+    care: 'اتباع تعليمات العناية على البطاقة',
+    use: 'حسب تصميم القطعة',
   },
   faqs: [],
   isNew: true,
@@ -261,7 +261,10 @@ const adminStyles = `
   .admin-grid { grid-template-columns: repeat(auto-fill, minmax(146px, 1fr)); gap: 9px; }
   .admin-panel { max-height: min(96vh, calc(100dvh - 16px)); border-radius: 16px; }
   .admin-head { padding: 13px 14px; }
-  .admin-tab { min-height: 42px; }
+  .admin-tabs { flex-wrap: wrap; overflow-x: visible; gap: 7px; padding: 10px; }
+  .admin-tab { flex: 1 1 auto; min-height: 44px; padding: 8px 12px; text-align: center; }
+  .admin-chip { max-width: 100%; overflow-wrap: anywhere; }
+  .admin-actions input { flex-basis: 100% !important; min-width: 0 !important; }
   .admin-btn { min-height: 44px; }
   .admin-card .ac-actions button { min-height: 40px; }
   .admin-field input, .admin-field textarea, .admin-field select, .admin-pin input { font-size: 16px; }
@@ -488,7 +491,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   }
 
   const pushProductToServer = (product: Product) => {
-    const payload = { ...product, images: product.images.filter((src) => !src.startsWith('data:')), image: product.image.startsWith('data:') ? (product.images.find((src) => !src.startsWith('data:')) || 'fabrics/hero.jpg') : product.image }
+    const payload = { ...product, images: product.images.filter((src) => !src.startsWith('data:')), image: product.image.startsWith('data:') ? (product.images.find((src) => !src.startsWith('data:')) || '') : product.image }
     void adminFetch('/api/admin/products', { method: 'POST', body: JSON.stringify(payload) })
       .then(() => setToast('تم حفظ المنتج في الخادم'))
       .catch((error) => setToast(error instanceof AdminRequestError ? error.message : 'حُفظ محلياً — تعذر الوصول للخادم'))
@@ -538,8 +541,8 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       name: product.name.trim(),
       price: Math.max(0, Number(product.price) || 0),
       stockMeters: Math.max(0, Number(product.stockMeters) || 0),
-      image: product.image || product.images[0] || 'fabrics/hero.jpg',
-      images: product.images.length ? product.images : [product.image || 'fabrics/hero.jpg'],
+      image: product.image || product.images[0] || '',
+      images: product.images.length ? product.images : (product.image ? [product.image] : []),
     }
     const exists = overrides.some((item) => item.slug === slug)
     persistProducts(exists ? overrides.map((item) => (item.slug === slug ? clean : item)) : [clean, ...overrides])
@@ -579,7 +582,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       }),
     )
     const next = { ...editing, images: [...editing.images, ...uploaded].slice(0, 8) }
-    if (!next.image || next.image === 'fabrics/hero.jpg') next.image = uploaded[0]
+    if (!next.image) next.image = uploaded[0]
     setEditing(next)
     setToast('تم رفع الصور')
   }
@@ -650,7 +653,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     const name = newCat.trim()
     if (!name) return
     const slug = `cat-${Date.now()}`
-    const next = [...customCategories, { id: slug, slug, name, description: name, image: 'fabrics/hero.jpg', accent: '#a34163' }]
+    const next = [...customCategories, { id: slug, slug, name, description: name, image: '', accent: '#a34163' }]
     setCustomCategories(next)
     writeJson(CATEGORIES_KEY, next)
     setNewCat('')
@@ -748,7 +751,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                       </div>
 
                       <div className="admin-thumb-row" style={{ marginBottom: 14 }}>
-                        {(editing.images.length ? editing.images : ['fabrics/hero.jpg']).map((src, index) => (
+                        {editing.images.map((src, index) => (
                           <div className="admin-thumb" key={`${src.slice(0, 24)}-${index}`}>
                             <img src={src} alt="" />
                             <button
@@ -1001,6 +1004,27 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                       <div className="admin-note" style={{ marginBottom: 14 }}>
                         عدّل نصوص وبيانات المتجر. تُحفظ التعديلات فوراً في متصفحك وتنعكس على الواجهة مباشرة.
                       </div>
+                      <div className="admin-field" style={{ marginBottom: 16 }}>
+                        <label>التصنيفات</label>
+                        <div className="admin-actions" style={{ marginTop: 0 }}>
+                          <input value={newCat} onChange={(event) => setNewCat(event.target.value)} placeholder="اسم تصنيف جديد" style={{ flex: 1, minWidth: 160, padding: '9px 11px', border: '1px solid var(--eva-line-strong)', borderRadius: 10, fontFamily: 'inherit', fontSize: 13.5 }} />
+                          <button type="button" className="admin-btn" onClick={addCategory}>
+                            <Plus size={14} /> إضافة
+                          </button>
+                        </div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 9 }}>
+                          {allCategories.map((item) => (
+                            <span className="admin-chip" key={item.id}>
+                              {item.name}
+                              {customCategories.some((c) => c.slug === item.slug) && (
+                                <button type="button" onClick={() => removeCategory(item.slug)} aria-label="حذف التصنيف">
+                                  <X size={12} />
+                                </button>
+                              )}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                       <div className="admin-row">
                         <div className="admin-field">
                           <label>اسم المتجر</label>
@@ -1141,28 +1165,6 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                         </div>
                       </div>
 
-                      <div className="admin-field">
-                        <label>التصنيفات</label>
-                        <div className="admin-actions" style={{ marginTop: 0 }}>
-                          <input value={newCat} onChange={(event) => setNewCat(event.target.value)} placeholder="اسم تصنيف جديد" style={{ flex: 1, minWidth: 160, padding: '9px 11px', border: '1px solid var(--eva-line-strong)', borderRadius: 10, fontFamily: 'inherit', fontSize: 13.5 }} />
-                          <button type="button" className="admin-btn" onClick={addCategory}>
-                            <Plus size={14} /> إضافة
-                          </button>
-                        </div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 9 }}>
-                          {allCategories.map((item) => (
-                            <span className="admin-chip" key={item.id}>
-                              {item.name}
-                              {customCategories.some((c) => c.slug === item.slug) && (
-                                <button type="button" onClick={() => removeCategory(item.slug)} aria-label="حذف التصنيف">
-                                  <X size={12} />
-                                </button>
-                              )}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
                       <div className="admin-actions">
                         <button type="button" className="admin-btn success" onClick={saveContent}>
                           <Save size={15} /> حفظ المحتوى
@@ -1224,7 +1226,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                   ) : tab === 'settings' ? (
                     <div>
                       <div className="admin-note" style={{ marginBottom: 14 }}>
-                        إعدادات عامة للمتجر: وضع الألوان، عتبة التوصيل المجاني، ورسوم التوصيل. تُحفظ في الخادم وتظهر فوراً لكل الزوار.
+                        إعدادات عامة للمتجر: وضع الألوان، عتبة التوصيل المجاني، ورسوم التوصيل. تُحفظ في الخادم (أو محلياً عند انقطاعه) وتظهر فوراً في واجهة المتجر.
                       </div>
                       <div className="admin-field">
                         <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>

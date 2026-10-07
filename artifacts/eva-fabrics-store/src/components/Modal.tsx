@@ -65,7 +65,7 @@ export function Modal({ open, onClose, title, children, variant = 'center', clas
       document.removeEventListener('keydown', handleKeyDown)
       const target = restoreRef.current
       if (target && document.contains(target)) {
-        window.requestAnimationFrame(() => target.focus())
+        window.requestAnimationFrame(() => target.focus({ preventScroll: true }))
       }
     }
   }, [open])
