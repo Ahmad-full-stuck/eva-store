@@ -77,12 +77,14 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
         </div>
       </section>
 
-      <section className="container-eva section-block new-section" aria-label="وصل حديثاً">
-        <SectionHeading eyebrow={content.newEyebrow} title={content.newTitle} description={content.newDesc} linkLabel="كل العينات" linkHref="/catalog" />
-        <div className="glass" style={{ padding: 'clamp(14px, 2.5vw, 28px)' }}>
-          <div className="product-grid">{recentProducts.map((product) => <ProductCard key={product.id} product={product} wished={wishlist.includes(product.slug)} onWish={onWish} onAdd={onAdd} />)}</div>
-        </div>
-      </section>
+      {recentProducts.length > 0 && (
+        <section className="container-eva section-block new-section" aria-label="وصل حديثاً">
+          <SectionHeading eyebrow={content.newEyebrow} title={content.newTitle} description={content.newDesc} linkLabel="شاهدي الجديد" linkHref="/catalog" />
+          <div className="glass" style={{ padding: 'clamp(14px, 2.5vw, 28px)' }}>
+            <div className="product-grid">{recentProducts.map((product) => <ProductCard key={product.id} product={product} wished={wishlist.includes(product.slug)} onWish={onWish} onAdd={onAdd} />)}</div>
+          </div>
+        </section>
+      )}
 
       <section className="container-eva section-block discovery-section">
         <div className="discovery-intro"><span className="eyebrow"><Sparkles size={14} />اكتشاف موجّه</span><h2>دعي القماش المناسب<br />يقترب منك.</h2><p>ثلاث خطوات صغيرة تساعدك على تضييق الخيارات قبل التصفح.</p></div>
