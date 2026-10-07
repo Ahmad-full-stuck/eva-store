@@ -1,6 +1,6 @@
 import type { Env } from './types'
 import { toProduct, type ProductRow, type StoreProduct } from './types'
-import { requireAdmin, readPin, verifyPin, createSession, destroySession, rateLimit } from './auth'
+import { requireAdmin, verifyPin, createSession, destroySession, rateLimit, orderRateLimit } from './auth'
 import { handleAdmin } from './admin'
 import { runDiscovery, type DiscoveryInput } from './discover'
 
@@ -52,8 +52,15 @@ async function handleApi(request: Request, env: Env, path: string): Promise<Resp
   const [segment, ...rest] = path.split('/').filter(Boolean)
 
   if (segment === 'health') {
-    const count = await env.DB.prepare('SELECT COUNT(*) AS n FROM products').first<{ n: number }>()
-    return json({ status: 'ok', products: count?.n ?? 0, storage: 'r2', checkedAt: new Date().toISOString() })
+    const visible = await env.DB.prepare('SELECT COUNT(*) AS n FROM products WHERE hidden = 0').first<{ n: number }>()
+    const total = await env.DB.prepare('SELECT COUNT(*) AS n FROM products').first<{ n: number }>()
+    return json({
+      status: 'ok',
+      products: visible?.n ?? 0,
+      total: total?.n ?? 0,
+      storage: 'd1',
+      checkedAt: new Date().toISOString(),
+    })
   }
 
   if (segment === 'admin') {
@@ -86,7 +93,7 @@ async function handleApi(request: Request, env: Env, path: string): Promise<Resp
   if (segment === 'products') {
     const slug = rest[0]
     if (slug) {
-      const row = await env.DB.prepare('SELECT * FROM products WHERE slug = ?1').bind(slug).first<ProductRow>()
+      const row = await env.DB.prepare('SELECT * FROM products WHERE slug = ?1 AND hidden = 0').bind(slug).first<ProductRow>()
       if (!row) return json({ error: 'المنتج غير موجود' }, 404)
       return json({ data: publicProduct(toProduct(row)) })
     }
@@ -145,6 +152,7 @@ async function handleApi(request: Request, env: Env, path: string): Promise<Resp
       return json({ data: row })
     }
     if (method === 'POST') {
+      if (!orderRateLimit(request)) return json({ error: 'حاولي إرسال الطلب بعد قليل' }, 429)
       const body = await readBody<Record<string, unknown>>(request)
       if (!body || typeof body !== 'object') return json({ error: 'تعذّر قراءة الطلب' }, 400)
       const items = Array.isArray(body.items) ? body.items : []

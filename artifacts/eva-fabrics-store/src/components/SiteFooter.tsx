@@ -11,7 +11,7 @@ interface SiteFooterProps {
 }
 
 export function SiteFooter({ routes, categories }: SiteFooterProps) {
-  const infoRoutes = routes.filter((route) => ['about', 'guide', 'contact', 'tracking', 'policies'].includes(route.id))
+  const infoRoutes = routes.filter((route) => ['/about', '/fabric-guide', '/contact', '/order-tracking', '/policies'].includes(route.path))
   const nearbyGovernorates = governorates.slice(0, 6)
 
   return (

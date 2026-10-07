@@ -108,8 +108,8 @@ export const adminLogin = async (pin: string): Promise<void> => {
   }
   const body = (await response.json().catch(() => null)) as { data?: { token?: string }; error?: string } | null
   if (!response.ok || !body?.data?.token) {
-    // الخادم موجود ويرفض الرمز فعلاً:401/403 — تُعتبر خطأ حقيقياً ولا يُسقط للوضع المحلي
-    if (response.status === 401 || response.status === 403) {
+    // الخادم موجود ويرفض الرمز (401/403) أو يحدّ المحاولات (429): تُعتبر حالة حقيقية ولا تسقط للوضع المحلي
+    if (response.status === 401 || response.status === 403 || response.status === 429) {
       throw new AdminRequestError(body?.error || 'الرمز غير صحيح', response.status)
     }
     throw new Error('server-unavailable')
@@ -144,7 +144,16 @@ export const adminFetch = async <T,>(path: string, init: RequestInit = {}): Prom
   })
   const body = (await response.json().catch(() => null)) as { data?: T; error?: string } | null
   if (!response.ok) {
-    if (response.status === 401) setToken('')
+    if (response.status === 401) {
+      if (token) {
+        setToken('')
+        try {
+          window.dispatchEvent(new Event('eva-admin-expired'))
+        } catch {
+          /* ignore */
+        }
+      }
+    }
     throw new AdminRequestError(body?.error || `خطأ ${response.status}`, response.status)
   }
   return (body && 'data' in body ? (body.data as T) : (body as unknown as T))

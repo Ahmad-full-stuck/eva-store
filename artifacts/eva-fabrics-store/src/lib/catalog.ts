@@ -71,12 +71,12 @@ export const normalizeHalfMeters = (value: number): number => {
 }
 
 export const availableMeters = (product: Product, color?: ProductColor): number => {
-  if (product.stockMeters > 0) return color?.available === false ? 0 : product.stockMeters
-  return 1000
+  if (color?.available === false) return 0
+  return product.stockMeters > 0 ? product.stockMeters : 1000
 }
 
 export const isSoldOut = (product: Product): boolean =>
-  product.colorsEnabled !== false && product.colors.length > 0 && product.stockMeters > 0 && !product.colors.some((color) => color.available)
+  product.colorsEnabled !== false && product.colors.length > 0 && !product.colors.some((color) => color.available)
 
 export const orderKey = (item: Pick<CartItem, 'product' | 'color'>): string => `${item.product.slug}:${item.color.id}`
 

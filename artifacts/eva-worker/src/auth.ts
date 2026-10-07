@@ -8,17 +8,6 @@ const sha256 = async (value: string): Promise<string> => {
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('')
 }
 
-export const readPin = async (env: Env): Promise<string> => {
-  if (env.ADMIN_PIN) return env.ADMIN_PIN
-  const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'admin_pin'").first<{ value: string }>()
-  if (row?.value) {
-    // stored either as a raw pin (first run) or as `sha256:<hash>`
-    if (row.value.startsWith('sha256:')) return ''
-    return row.value
-  }
-  return DEFAULT_PIN
-}
-
 export const verifyPin = async (env: Env, pin: string): Promise<boolean> => {
   if (!pin) return false
   if (env.ADMIN_PIN) return pin === env.ADMIN_PIN
@@ -73,18 +62,29 @@ const nullWith = (message: string): Response =>
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
   })
 
-const attempts = new Map<string, { count: number; resetAt: number }>()
+const buckets = new Map<string, Map<string, { count: number; resetAt: number }>>()
 
-/** Best-effort login throttle (per isolate). 8 attempts per minute per client. */
-export const rateLimit = (request: Request): boolean => {
-  const client = request.headers.get('CF-Connecting-IP') || 'anon'
+const hit = (bucket: string, client: string, max: number): boolean => {
+  let entries = buckets.get(bucket)
+  if (!entries) {
+    entries = new Map()
+    buckets.set(bucket, entries)
+  }
   const now = Date.now()
-  const entry = attempts.get(client)
+  const entry = entries.get(client)
   if (!entry || entry.resetAt < now) {
-    attempts.set(client, { count: 1, resetAt: now + 60_000 })
+    entries.set(client, { count: 1, resetAt: now + 60_000 })
     return true
   }
   entry.count += 1
-  if (attempts.size > 5000) attempts.clear()
-  return entry.count <= 8
+  if (entries.size > 5000) entries.clear()
+  return entry.count <= max
 }
+
+/** Best-effort login throttle (per isolate). 8 attempts per minute per client. */
+export const rateLimit = (request: Request): boolean =>
+  hit('login', request.headers.get('CF-Connecting-IP') || 'anon', 8)
+
+/** الطلبات: 30 طلباً في الدقيقة لكل عميل (يفصل عن حد تسجيل الدخول). */
+export const orderRateLimit = (request: Request): boolean =>
+  hit('orders', request.headers.get('CF-Connecting-IP') || 'anon', 30)

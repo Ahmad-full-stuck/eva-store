@@ -2,7 +2,7 @@ import type { ImgHTMLAttributes } from 'react'
 
 const WIDTHS = [320, 640, 1024]
 
-const isLocalFabric = (src: string) => /^fabrics\/[\w-]+\.jpe?g$/i.test(src)
+const isLocalFabric = (src: string) => /^(fabrics\/[\w-]+|products\/[\w-]+\/[\w-]+)\.jpe?g$/i.test(src)
 
 type SmartImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'srcSet' | 'width' | 'height'> & {
   src: string

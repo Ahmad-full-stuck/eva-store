@@ -386,6 +386,20 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   }, [toast])
 
   useEffect(() => {
+    const onExpired = () => {
+      setAuthed(false)
+      try {
+        window.sessionStorage.removeItem(SESSION_KEY)
+      } catch {
+        /* ignore */
+      }
+      setToast('انتهت الجلسة، سجّلي الدخول من جديد')
+    }
+    window.addEventListener('eva-admin-expired', onExpired)
+    return () => window.removeEventListener('eva-admin-expired', onExpired)
+  }, [])
+
+  useEffect(() => {
     if (!open) return undefined
     const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -536,12 +550,14 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   }
 
   const setOrderStatus = async (number: string, status: string) => {
+    const previous = orders
     setOrders((current) => current.map((row) => ((row.order_number || row.orderNumber) === number ? { ...row, status } : row)))
     try {
       await adminFetch(`/api/admin/orders/${encodeURIComponent(number)}`, { method: 'PATCH', body: JSON.stringify({ status }) })
       setToast('تم تحديث حالة الطلب')
     } catch {
-      setToast('تم التحديث محلياً فقط')
+      setOrders(previous)
+      setToast('تعذر التحديث على الخادم')
     }
   }
 
@@ -596,29 +612,30 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     const clean: Product = {
       ...product,
       slug,
-      id: product.id || slug,
+      id: slug,
       name: product.name.trim(),
       price: Math.max(0, Number(product.price) || 0),
       stockMeters: Math.max(0, Number(product.stockMeters) || 0),
       image: product.image || product.images[0] || '',
       images: product.images.length ? product.images : (product.image ? [product.image] : []),
     }
-    const exists = overrides.some((item) => item.slug === slug)
-    persistProducts(exists ? overrides.map((item) => (item.slug === slug ? clean : item)) : [clean, ...overrides])
+    const rest = overrides.filter((item) => item.slug !== slug && item.id !== clean.id)
+    persistProducts([clean, ...rest])
     if (removed.includes(slug)) persistRemoved(removed.filter((item) => item !== slug))
     setEditing(null)
     pushProductToServer(clean)
-    if (!exists) setToast('تمت إضافة المنتج')
+    if (!overrides.some((item) => item.slug === slug)) setToast('تمت إضافة المنتج')
   }
 
   const deleteProduct = (product: Product) => {
+    if (!window.confirm(`حذف «${product.name || product.slug}» من المتجر؟`)) return
     if (overrides.some((item) => item.slug === product.slug)) {
       persistProducts(overrides.filter((item) => item.slug !== product.slug))
     }
     if (!removed.includes(product.slug)) persistRemoved([...removed, product.slug])
     void adminFetch(`/api/admin/products/${encodeURIComponent(product.slug)}`, { method: 'DELETE' })
-      .catch(() => undefined)
-    setToast('تم حذف المنتج')
+      .then(() => setToast('تم حذف المنتج'))
+      .catch(() => setToast('أُخفي المنتج من المتجر — تعذر حفظه في الخادم'))
   }
 
   const uploadImages = async (files: FileList | null) => {
@@ -650,10 +667,30 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     else setToast('تم رفع الصور بنجاح')
   }
 
-  const restoreAll = () => {
+  const restoreAll = async () => {
+    const edited = overrides
+    const restoreSlugs = removed
     persistProducts([])
     persistRemoved([])
-    setToast('تمت استعادة المنتجات الأصلية')
+    const originalBySlug = new Map(fallbackProducts.map((item) => [item.slug, item]))
+    let failed = 0
+    for (const item of edited) {
+      const original = originalBySlug.get(item.slug)
+      if (!original) continue
+      try {
+        await adminFetch('/api/admin/products', { method: 'POST', body: JSON.stringify(original) })
+      } catch {
+        failed += 1
+      }
+    }
+    if (restoreSlugs.length) {
+      try {
+        await adminFetch('/api/admin/restore', { method: 'POST', body: JSON.stringify({ slugs: restoreSlugs }) })
+      } catch {
+        failed += 1
+      }
+    }
+    setToast(failed ? 'تمت الاستعادة محلياً — تعذر الوصول للخادم' : 'تمت استعادة المنتجات الأصلية')
   }
 
   const exportData = () => {

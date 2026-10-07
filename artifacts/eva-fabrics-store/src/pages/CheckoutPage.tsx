@@ -359,7 +359,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     ).catch(() => undefined)
   }
 
-  // لا يوجد /api/orders إطلاقاً: يُسجَّل الطلب محلياً ويصل بالبريد.
+  // احتياط: إن تعذّر حفظ الطلب في الخادم يُسجَّل محلياً ويوصل بالبريد.
   const completeStaticOrder = (payload: OrderPayload): void => {
     const orderNumber = createLocalOrderNumber()
     saveLocalOrder(orderNumber, 'received', payload)

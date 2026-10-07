@@ -22,6 +22,8 @@ const num = (value: unknown, fallback = 0): number => {
 
 const flag = (value: unknown, fallback = false): boolean => (typeof value === 'boolean' ? value : fallback)
 
+const ORDER_STATUSES = ['new', 'contacted', 'shipped', 'done']
+
 const slugify = (value: string): string => {
   const cleaned = value
     .trim()
@@ -50,6 +52,7 @@ const normalizeColors = (value: unknown, stock: number): ProductColor[] => {
 }
 
 interface ProductInput {
+  id?: string
   slug?: string
   name?: string
   type?: string
@@ -86,11 +89,20 @@ const buildProduct = (input: ProductInput, existing?: ProductRow) => {
   const name = text(input.name, existing ? existing.name : '')
   const images = Array.isArray(input.images)
     ? (input.images as unknown[]).filter((item): item is string => typeof item === 'string' && item.length > 0)
-    : []
+    : null
   const stock = Math.max(0, num(input.stockMeters, existing ? existing.stock_meters : 10))
-  const image = text(input.image, images[0] || (existing ? existing.image : 'fabrics/hero.jpg'))
+  const image = text(input.image, (images && images[0]) || (existing ? existing.image : 'fabrics/hero.jpg'))
+  const imagesJson = images
+    ? jsonColumn(images.length ? images : [image], existing ? existing.images_json : '[]')
+    : existing
+      ? existing.images_json
+      : jsonColumn([image], '[]')
+  const colorsJson =
+    input.colors === undefined && existing
+      ? existing.colors_json
+      : jsonColumn(normalizeColors(input.colors, stock), existing ? existing.colors_json : '[]')
   return {
-    id: existing ? existing.id : slug,
+    id: slug,
     slug,
     name,
     type: text(input.type, existing ? existing.type : 'قماش'),
@@ -100,8 +112,8 @@ const buildProduct = (input: ProductInput, existing?: ProductRow) => {
     compareAtPrice:
       input.compareAtPrice === null ? null : Number.isFinite(num(input.compareAtPrice, NaN)) ? num(input.compareAtPrice, 0) : (existing?.compare_at_price ?? null),
     image,
-    images: jsonColumn(images.length ? images : [image], existing ? existing.images_json : '[]'),
-    colors: jsonColumn(normalizeColors(input.colors, stock), existing ? existing.colors_json : '[]'),
+    images: imagesJson,
+    colors: colorsJson,
     specs: jsonColumn(input.specs, existing ? existing.specs_json : '{}'),
     faqs: jsonColumn(input.faqs, existing ? existing.faqs_json : '[]'),
     colorsEnabled: (input.colorsEnabled === undefined ? existing?.colors_enabled === undefined || existing.colors_enabled === 1 : input.colorsEnabled) ? 1 : 0,
@@ -162,10 +174,52 @@ const readBody = async <T>(request: Request): Promise<T | null> => {
   }
 }
 
+const UPDATE_SQL = `UPDATE products SET
+  id = ?1, slug = ?2, name = ?3, type = ?4, category_id = ?5, description = ?6, price = ?7,
+  compare_at_price = ?8, image = ?9, images_json = ?10, colors_json = ?11, specs_json = ?12,
+  faqs_json = ?13, colors_enabled = ?14, is_new = ?15, is_featured = ?16, hidden = ?17,
+  stock_meters = ?18, source_url = ?19, origin = ?20, sort_order = ?21, created_at = ?22,
+  updated_at = datetime('now')
+WHERE id = ?23`
+
+const findExisting = async (env: Env, keys: string[]): Promise<ProductRow | null> => {
+  const unique = [...new Set(keys.map((key) => key.trim()).filter(Boolean))]
+  if (!unique.length) return null
+  const [a, b] = unique
+  if (!b) return env.DB.prepare('SELECT * FROM products WHERE id = ?1 OR slug = ?1 LIMIT 1').bind(a).first<ProductRow>()
+  return env.DB.prepare('SELECT * FROM products WHERE id = ?1 OR slug = ?1 OR id = ?2 OR slug = ?2 LIMIT 1')
+    .bind(a, b)
+    .first<ProductRow>()
+}
+
+type PersistResult = { ok: true; slug: string; status: number } | { ok: false; error: string }
+
+const persistProduct = async (
+  env: Env,
+  input: ProductInput,
+  existing: ProductRow | null,
+  origin: string,
+): Promise<PersistResult> => {
+  const value = buildProduct(input, existing ?? undefined)
+  if (!existing) {
+    await env.DB.prepare(UPSERT_SQL).bind(...bindProduct(value, origin)).run()
+    return { ok: true, slug: value.slug, status: 201 }
+  }
+  if (value.slug !== existing.slug || value.id !== existing.id) {
+    const clash = await env.DB.prepare('SELECT id FROM products WHERE (id = ?1 OR slug = ?1) AND id != ?2 LIMIT 1')
+      .bind(value.slug, existing.id)
+      .first<{ id: string }>()
+    if (clash) return { ok: false, error: 'رابط مستخدم لمنتج آخر' }
+  }
+  await env.DB.prepare(UPDATE_SQL).bind(...bindProduct(value, origin), existing.id).run()
+  return { ok: true, slug: value.slug, status: 200 }
+}
+
 const dataUrlToKey = (dataUrl: string, product: string): { key: string; bytes: number; type: string; data: string } | null => {
   const match = /^data:([^;,]+)?;base64,(.*)$/s.exec(dataUrl)
   if (!match) return null
-  const type = match[1] || 'image/jpeg'
+  const type = (match[1] || 'image/jpeg').toLowerCase()
+  if (!/^image\/(jpeg|jpg|png|webp|gif|avif)$/.test(type)) return null
   const extension = type.includes('png') ? 'png' : type.includes('webp') ? 'webp' : 'jpg'
   const base = product.trim().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '') || 'upload'
   const key = `products/${base}/${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.${extension}`
@@ -183,10 +237,10 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
     if (method === 'POST' && id !== 'import') {
       const body = await readBody<ProductInput>(request)
       if (!body?.name) return json({ error: 'اسم المنتج مطلوب' }, 400)
-      const value = buildProduct(body)
-      if (!value.name) return json({ error: 'اسم المنتج مطلوب' }, 400)
-      await env.DB.prepare(UPSERT_SQL).bind(...bindProduct(value, 'admin')).run()
-      return json({ data: { slug: value.slug } }, 201)
+      const existing = await findExisting(env, [text(body.id), text(body.slug) || slugify(text(body.name))])
+      const result = await persistProduct(env, body, existing, existing ? existing.origin : 'admin')
+      if (!result.ok) return json({ error: result.error }, 409)
+      return json({ data: { slug: result.slug } }, result.status)
     }
     if (method === 'POST' && id === 'import') {
       const body = await readBody<{ products?: ProductInput[] }>(request)
@@ -195,10 +249,9 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
       let saved = 0
       for (const item of list) {
         if (!item?.name) continue
-        const value = buildProduct(item)
-        if (!value.name) continue
-        await env.DB.prepare(UPSERT_SQL).bind(...bindProduct(value, 'import')).run()
-        saved += 1
+        const existing = await findExisting(env, [text(item.id), text(item.slug) || slugify(text(item.name))])
+        const result = await persistProduct(env, item, existing, existing ? existing.origin : 'import')
+        if (result.ok) saved += 1
       }
       return json({ data: { imported: saved } }, 201)
     }
@@ -206,11 +259,11 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
       const slug = decodeURIComponent(id)
       const body = await readBody<ProductInput>(request)
       if (!body) return json({ error: 'بيانات غير صالحة' }, 400)
-      const existing = await env.DB.prepare('SELECT * FROM products WHERE slug = ?1').bind(slug).first<ProductRow>()
+      const existing = await env.DB.prepare('SELECT * FROM products WHERE id = ?1 OR slug = ?1').bind(slug).first<ProductRow>()
       if (!existing) return json({ error: 'المنتج غير موجود' }, 404)
-      const value = buildProduct({ ...body, slug: body.slug || slug }, existing)
-      await env.DB.prepare(UPSERT_SQL).bind(...bindProduct(value, existing.origin)).run()
-      return json({ data: { slug: value.slug } })
+      const result = await persistProduct(env, { ...body, slug: body.slug || slug }, existing, existing.origin)
+      if (!result.ok) return json({ error: result.error }, 409)
+      return json({ data: { slug: result.slug } })
     }
     if (method === 'DELETE' && id) {
       const slug = decodeURIComponent(id)
@@ -249,10 +302,11 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
 
   if (resource === 'upload' && method === 'DELETE') {
     const body = await readBody<{ key?: string }>(request)
-    if (body?.key) {
-      await env.DB.prepare('DELETE FROM media WHERE key = ?1').bind(body.key).run()
-      if (env.MEDIA) await env.MEDIA.delete(body.key)
-    }
+    const key = text(body?.key)
+    if (!key) return json({ error: 'مفتاح الصورة مطلوب' }, 400)
+    const result = await env.DB.prepare('DELETE FROM media WHERE key = ?1').bind(key).run()
+    if (env.MEDIA) await env.MEDIA.delete(key)
+    if (!result.meta.changes) return json({ error: 'الصورة غير موجودة' }, 404)
     return json({ data: true })
   }
 
@@ -308,11 +362,20 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
     }
     if (method === 'PATCH' && id) {
       const body = await readBody<{ status?: string }>(request)
-      const status = text(body?.status, 'new')
-      await env.DB.prepare("UPDATE orders SET status = ?1, updated_at = datetime('now') WHERE order_number = ?2")
+      const status = text(body?.status)
+      if (!ORDER_STATUSES.includes(status)) return json({ error: 'حالة غير صالحة' }, 400)
+      const result = await env.DB.prepare("UPDATE orders SET status = ?1, updated_at = datetime('now') WHERE order_number = ?2")
         .bind(status, decodeURIComponent(id))
         .run()
-      return json({ data: { orderNumber: id, status } })
+      if (!result.meta.changes) return json({ error: 'الطلب غير موجود' }, 404)
+      return json({ data: { orderNumber: decodeURIComponent(id), status } })
+    }
+    if (method === 'DELETE' && id) {
+      const result = await env.DB.prepare('DELETE FROM orders WHERE order_number = ?1')
+        .bind(decodeURIComponent(id))
+        .run()
+      if (!result.meta.changes) return json({ error: 'الطلب غير موجود' }, 404)
+      return json({ data: { orderNumber: decodeURIComponent(id), deleted: true } })
     }
   }
 
