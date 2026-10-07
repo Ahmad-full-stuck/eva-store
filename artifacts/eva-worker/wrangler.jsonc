@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "eva-store-glass",
+  "name": "eva-store",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
   "compatibility_flags": ["nodejs_compat"],
@@ -17,6 +17,6 @@
     }
   ],
   "vars": {
-    "STORE_ORIGIN": "https://eva-store-glass.eva-store.workers.dev"
+    "STORE_ORIGIN": "https://eva-store.eva-store.workers.dev"
   }
 }
