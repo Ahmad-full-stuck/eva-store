@@ -364,7 +364,6 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     const orderNumber = createLocalOrderNumber()
     saveLocalOrder(orderNumber, 'received', payload)
     notifyByEmail(payload, orderNumber)
-    openEmailOrder(payload, orderNumber)
     setPendingEmailHref('')
     setSubmitState('idle')
     setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${orderNumber}`)
@@ -439,7 +438,6 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         const serverNumber = getOrderNumber(body) || orderNumber
         saveLocalOrder(serverNumber, 'received', payload)
         notifyByEmail(payload, serverNumber)
-        openEmailOrder(payload, serverNumber)
         setPendingOrderNumber('')
         setPendingEmailHref('')
         setSubmitState('idle')
@@ -647,14 +645,6 @@ const orderEmailBody = (payload: OrderPayload, orderNumber: string): string => {
   if (payload.landmark) lines.push(`نقطة دالة: ${payload.landmark}`)
   if (payload.notes) lines.push(`ملاحظات: ${payload.notes}`)
   return lines.join('\n')
-}
-
-const openEmailOrder = (payload: OrderPayload, orderNumber: string): void => {
-  try {
-    window.open(siteConfig.emailUrl(`طلب جديد #${orderNumber}`, orderEmailBody(payload, orderNumber)), '_blank', 'noopener,noreferrer')
-  } catch {
-    /* قد يمنع المتصفح فتح النافذة — يبقى زر البريد في رسالة التأكيد */
-  }
 }
 
 function errorMessage(payload: unknown, fallback: string): string {

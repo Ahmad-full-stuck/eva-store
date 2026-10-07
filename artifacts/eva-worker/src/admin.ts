@@ -309,6 +309,11 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
     }
   }
 
+  if (resource === 'contacts' && method === 'GET') {
+    const result = await env.DB.prepare('SELECT * FROM contact_messages ORDER BY created_at DESC LIMIT 200').all()
+    return json({ data: result.results ?? [] })
+  }
+
   if (resource === 'categories' && method === 'GET') {
     const result = await env.DB.prepare('SELECT * FROM categories ORDER BY sort_order ASC, name ASC').all()
     return json({ data: result.results ?? [] })

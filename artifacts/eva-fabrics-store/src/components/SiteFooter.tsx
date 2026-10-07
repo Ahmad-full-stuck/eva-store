@@ -2,7 +2,7 @@ import { Instagram, MapPin, Mail, Phone } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, SiteRoute } from '@/types'
 import { governorates } from '@/lib/fallback-data'
-import { siteConfig } from '@/lib/site'
+import { siteConfig, telProps } from '@/lib/site'
 import { Logo } from './Logo'
 
 interface SiteFooterProps {
@@ -39,7 +39,7 @@ export function SiteFooter({ routes, categories }: SiteFooterProps) {
         </div>
         <div className="footer-col">
           <h2>تواصلي معنا</h2>
-          <a href={`tel:${siteConfig.phone}`}><Phone size={15} /><span dir="ltr">{siteConfig.phone}</span></a>
+          <a {...telProps(siteConfig.phone)}><Phone size={15} /><span dir="ltr">{siteConfig.phone}</span></a>
           <a href={siteConfig.emailUrl()} target="_blank" rel="noreferrer"><Mail size={15} />البريد</a>
           <a href={siteConfig.instagramUrl} target="_blank" rel="noreferrer"><Instagram size={15} />إنستغرام</a>
         </div>

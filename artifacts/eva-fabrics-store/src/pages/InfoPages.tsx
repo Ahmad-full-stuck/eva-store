@@ -4,7 +4,8 @@ import { Link, useLocation, useSearch } from 'wouter'
 import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
 import { fallbackCategories, fallbackProducts, guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
-import { apiUrl, siteConfig } from '@/lib/site'
+import { apiUrl, siteConfig, telProps } from '@/lib/site'
+import { sendSimpleEmail } from '@/lib/email'
 import { useSiteContent } from '@/lib/site-content'
 import { mergeAdminCategories, mergeAdminProducts } from '@/components/AdminSecret'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -686,9 +687,7 @@ export function ContactPage() {
   const [phone, setPhone] = useState('')
   const [message, setMessage] = useState('')
   const [errors, setErrors] = useState<ContactErrors>({})
-  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'email'>('idle')
-  const [emailUrl, setEmailUrl] = useState('')
-  const [tabOpened, setTabOpened] = useState(false)
+  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle')
   const content = useSiteContent()
 
   const composeText = (): string => `مرحباً إيفا ستور،${'\n'}الاسم: ${name.trim()}${'\n'}الهاتف: ${phone.trim()}${'\n'}${message.trim()}`
@@ -704,19 +703,6 @@ export function ContactPage() {
     if (cleanMessage.length < 10) next.message = 'اكتبي رسالة من ١٠ أحرف على الأقل حتى نساعدك بدقة'
     setErrors(next)
     return Object.keys(next).length === 0
-  }
-
-  const openEmail = (url: string) => {
-    setEmailUrl(url)
-    setState('email')
-    let handle: Window | null = null
-    try {
-      handle = window.open(url, '_blank')
-    } catch {
-      handle = null
-    }
-    setTabOpened(Boolean(handle))
-    if (!handle) window.location.href = url
   }
 
   const submit = async (event: FormEvent) => {
@@ -738,7 +724,14 @@ export function ContactPage() {
       setState('sent')
     } catch {
       window.clearTimeout(timer)
-      openEmail(siteConfig.emailUrl('رسالة من صفحة التواصل', composeText()))
+      const mailed = await sendSimpleEmail({
+        to: content.emailOrdersTo,
+        action: content.emailFormSubmitAction || undefined,
+        subject: 'رسالة من صفحة تواصل إيفا ستور',
+        body: composeText(),
+        fields: { name: name.trim(), phone: phone.replace(/[\s()-]/g, '') },
+      })
+      setState(mailed ? 'sent' : 'failed')
       return
     }
     window.clearTimeout(timer)
@@ -750,7 +743,6 @@ export function ContactPage() {
     setMessage('')
     setErrors({})
     setState('idle')
-    setEmailUrl('')
   }
 
   return (
@@ -769,7 +761,7 @@ export function ContactPage() {
               <a href={siteConfig.emailUrl()} target="_blank" rel="noreferrer" aria-label="راسلينا على البريد الإلكتروني">
                 <Mail size={19} /><span><strong>البريد الإلكتروني</strong><small dir="ltr">{siteConfig.contactEmail}</small></span><ArrowLeft size={15} />
               </a>
-              <a href={`tel:${siteConfig.phone}`} aria-label={`الاتصال على ${siteConfig.phone}`}>
+              <a {...telProps(siteConfig.phone)} aria-label={`الاتصال على ${siteConfig.phone}`}>
                 <Phone size={19} /><span><strong>اتصال هاتفي</strong><small dir="ltr">{siteConfig.phone}</small></span><ArrowLeft size={15} />
               </a>
               <a href={siteConfig.instagramUrl} target="_blank" rel="noreferrer" aria-label={siteConfig.instagramText}>
@@ -835,13 +827,10 @@ export function ContactPage() {
               </div>
             )}
 
-            {state === 'email' && (
-              <div className="form-status form-status-info" role="status">
+            {state === 'failed' && (
+              <div className="form-status form-status-error" role="status">
                 <Mail size={16} />
-                <span>
-                  {tabOpened ? 'فتحنا لك البريد برسالتك جاهزة. وإن لم يفتح تلقائياً، اضغطي الزر.' : 'تعذّر إرسال الرسالة من الموقع، فحوّلناها إلى البريد. اضغطي الزر لإتمام الإرسال.'}
-                  {' '}<a href={emailUrl}>فتح البريد الإلكتروني</a>
-                </span>
+                <span>تعذّر إرسال الرسالة الآن. حاولي مرة أخرى بعد قليل.</span>
               </div>
             )}
 

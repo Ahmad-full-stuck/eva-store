@@ -123,12 +123,29 @@ export const sendOrderEmail = async (data: OrderEmailData, config: OrderEmailCon
       await fetch(action, { method: 'POST', body: formData, mode: 'no-cors' })
       return true
     } catch {
-      const url = buildMailtoUrl(data, config)
-      try { window.location.href = url } catch { /* ignore */ }
       return false
     }
   }
-  const url = buildMailtoUrl(data, config)
-  try { window.location.href = url } catch { return false }
-  return true
+  return false
+}
+
+export const sendSimpleEmail = async (config: {
+  to: string
+  action?: string
+  subject: string
+  body: string
+  fields?: Record<string, string>
+}): Promise<boolean> => {
+  try {
+    const action = config.action || `https://formsubmit.co/${encodeURIComponent(config.to)}`
+    const formData = new FormData()
+    formData.append('_subject', config.subject)
+    formData.append('_captcha', 'false')
+    formData.append('message', config.body)
+    Object.entries(config.fields ?? {}).forEach(([key, value]) => formData.append(key, value))
+    await fetch(action, { method: 'POST', body: formData, mode: 'no-cors' })
+    return true
+  } catch {
+    return false
+  }
 }

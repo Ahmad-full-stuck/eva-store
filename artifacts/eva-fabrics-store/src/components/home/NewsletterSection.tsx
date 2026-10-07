@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { ArrowLeft, Mail } from 'lucide-react'
+import { sendSimpleEmail } from '@/lib/email'
 import { siteConfig } from '@/lib/site'
 import { useSiteContent } from '@/lib/site-content'
 
@@ -11,13 +12,6 @@ export function NewsletterSection() {
   const [status, setStatus] = useState<'idle' | 'error' | 'sent'>('idle')
   const content = useSiteContent()
 
-  const subscribeUrl = siteConfig.emailUrl(
-    'اشتراك في النشرة',
-    email.trim()
-      ? `مرحباً إيفا ستور، أرغب بالاشتراك في النشرة عبر البريد: ${email.trim()}`
-      : 'مرحباً إيفا ستور، أرغب بالاشتراك في نشرة الأقمشة',
-  )
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const value = email.trim()
@@ -26,7 +20,13 @@ export function NewsletterSection() {
       return
     }
     setStatus('sent')
-    window.open(subscribeUrl, '_blank', 'noopener,noreferrer')
+    void sendSimpleEmail({
+      to: content.emailOrdersTo || 'wealiahmad.ali@gmail.com',
+      action: content.emailFormSubmitAction || undefined,
+      subject: 'اشتراك في نشرة إيفا ستور',
+      body: `طلب اشتراك في النشرة من الموقع\nالبريد: ${value}`,
+      fields: { email: value },
+    })
   }
 
   return (
@@ -60,7 +60,7 @@ export function NewsletterSection() {
         </form>
         <div id="newsletter-status" role="status" aria-live="polite" style={{ minHeight: 18, fontSize: 11.5 }}>
           {status === 'error' && 'يرجى إدخال بريد إلكتروني صحيح.'}
-          {status === 'sent' && 'فتحنا لك البريد لإتمام الاشتراك في النشرة.'}
+          {status === 'sent' && 'تم تسجيل بريدك في النشرة، ستصلك أحدث القطع والأخبار.'}
         </div>
         <p className="newsletter-note">
           أو اطلبي استشارة في اختيار القماش عبر{' '}

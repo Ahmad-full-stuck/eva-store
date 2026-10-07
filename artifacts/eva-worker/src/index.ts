@@ -115,6 +115,18 @@ async function handleApi(request: Request, env: Env, path: string): Promise<Resp
     return json({ data: { colorsEnabled: true, freeDeliveryFrom: 50000, deliveryFee: 5000, ...stored } })
   }
 
+  if (segment === 'contact' && method === 'POST') {
+    const body = await readBody<{ name?: unknown; phone?: unknown; message?: unknown }>(request)
+    const name = String(body?.name ?? '').trim()
+    const phone = String(body?.phone ?? '').trim()
+    const message = String(body?.message ?? '').trim()
+    if (name.length < 3 || phone.length < 7 || message.length < 10) return json({ error: 'بيانات الرسالة غير مكتملة' }, 400)
+    await env.DB.prepare("INSERT INTO contact_messages (name, phone, message, created_at) VALUES (?1, ?2, ?3, datetime('now'))")
+      .bind(name, phone, message)
+      .run()
+    return json({ data: { saved: true } }, 201)
+  }
+
   if (segment === 'discover' && method === 'POST') {
     const input = await readBody<DiscoveryInput>(request)
     if (!input) return json({ error: 'بيانات غير صالحة' }, 400)
@@ -185,6 +197,7 @@ export default {
       }
 
       if (url.pathname.startsWith('/media/')) {
+        if (!env.MEDIA) return new Response('Not found', { status: 404 })
         const key = decodeURIComponent(url.pathname.slice('/media/'.length))
         const object = await env.MEDIA.get(key)
         if (!object) return new Response('Not found', { status: 404 })

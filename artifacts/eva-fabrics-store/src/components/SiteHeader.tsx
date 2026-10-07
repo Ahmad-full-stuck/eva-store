@@ -3,7 +3,7 @@ import { BookOpen, ChevronLeft, Heart, Home, Info, Instagram, Menu, Mail, Messag
 import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
 import { formatMeters } from '@/lib/catalog'
-import { siteConfig } from '@/lib/site'
+import { siteConfig, telProps } from '@/lib/site'
 import { useSiteContent } from '@/lib/site-content'
 import { Logo } from './Logo'
 import { Modal } from './Modal'
@@ -108,7 +108,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
       <div className="announcement-bar" role="region" aria-label="إعلان المتجر">
         <span className="announcement-msg announcement-msg-right">{content.announcementRight}</span>
         <span className="announcement-dot" />
-        <a href={`tel:${siteConfig.phone}`} dir="ltr">{siteConfig.phone}</a>
+        <a {...telProps(siteConfig.phone)} dir="ltr">{siteConfig.phone}</a>
         <span className="announcement-dot" />
         <span className="announcement-msg announcement-msg-left">{content.announcementLeft}</span>
       </div>
@@ -191,7 +191,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
               <Mail size={17} />
               راسلينا بالبريد
             </a>
-            <a className="chip drawer-chip" href={`tel:${siteConfig.phone}`} dir="ltr">
+            <a className="chip drawer-chip" {...telProps(siteConfig.phone)} dir="ltr">
               <Phone size={17} />
               {siteConfig.phone}
             </a>
