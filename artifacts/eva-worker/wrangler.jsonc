@@ -13,16 +13,10 @@
     {
       "binding": "DB",
       "database_name": "eva-store",
-      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
-    }
-  ],
-  "r2_buckets": [
-    {
-      "binding": "MEDIA",
-      "bucket_name": "eva-media"
+      "database_id": "e45faebc-0ae8-422e-a20b-0c0525b4e8db"
     }
   ],
   "vars": {
-    "STORE_ORIGIN": "https://eva-store-glass.workers.dev"
+    "STORE_ORIGIN": "https://eva-store-glass.eva-store.workers.dev"
   }
 }

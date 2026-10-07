@@ -71,9 +71,6 @@ jobs:
       - name: Apply D1 migrations
         run: pnpm --filter @workspace/eva-worker exec wrangler d1 migrations apply eva-store --remote
 
-      - name: Create R2 bucket (if missing)
-        run: pnpm --filter @workspace/eva-worker exec wrangler r2 bucket create eva-media || true
-
       - name: Seed catalog if empty
         run: |
           set -e
