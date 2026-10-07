@@ -1,6 +1,6 @@
 export interface Env {
   DB: D1Database
-  MEDIA: R2Bucket
+  MEDIA?: R2Bucket
   STORE_ORIGIN: string
   ADMIN_PIN?: string
 }

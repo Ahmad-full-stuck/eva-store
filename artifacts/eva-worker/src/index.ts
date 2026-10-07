@@ -197,15 +197,15 @@ export default {
       }
 
       if (url.pathname.startsWith('/media/')) {
-        if (!env.MEDIA) return new Response('Not found', { status: 404 })
         const key = decodeURIComponent(url.pathname.slice('/media/'.length))
-        const object = await env.MEDIA.get(key)
-        if (!object) return new Response('Not found', { status: 404 })
+        const row = await env.DB.prepare('SELECT content, type FROM media WHERE key = ?1')
+          .bind(key)
+          .first<{ content: ArrayBuffer | null; type: string | null }>()
+        if (!row?.content) return new Response('Not found', { status: 404 })
         const headers = new Headers()
-        headers.set('Content-Type', object.httpMetadata?.contentType || 'application/octet-stream')
+        headers.set('Content-Type', row.type || 'image/jpeg')
         headers.set('Cache-Control', 'public, max-age=31536000, immutable')
-        if (object.httpMetadata?.contentDisposition) headers.set('Content-Disposition', object.httpMetadata.contentDisposition)
-        return new Response(object.body, { headers })
+        return new Response(row.content, { headers })
       }
 
       return new Response('EVA STORE API', { status: 404 })

@@ -229,13 +229,20 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
     if (!body?.dataUrl) return json({ error: 'لا توجد صورة' }, 400)
     const parsed = dataUrlToKey(body.dataUrl, text(body.product, 'upload'))
     if (!parsed) return json({ error: 'صيغة الصورة غير مدعومة' }, 400)
-    if (parsed.bytes > 12 * 1024 * 1024) return json({ error: 'حجم الصورة يتجاوز 12 ميجابايت' }, 413)
+    if (parsed.bytes > 1700000) return json({ error: 'حجم الصورة يتجاوز 1.7 ميجابايت' }, 413)
     const bytes = Uint8Array.from(atob(parsed.data), (char) => char.charCodeAt(0))
-    await env.MEDIA.put(parsed.key, bytes, {
-      httpMetadata: { contentType: parsed.type, cacheControl: 'public, max-age=31536000, immutable' },
-    })
-    await env.DB.prepare('INSERT OR REPLACE INTO media (key, url, bytes, product) VALUES (?1, ?2, ?3, ?4)')
-      .bind(parsed.key, `/media/${parsed.key}`, parsed.bytes, text(body.product))
+    try {
+      await env.DB.prepare('ALTER TABLE media ADD COLUMN content BLOB').run()
+    } catch {
+      /* exists */
+    }
+    try {
+      await env.DB.prepare("ALTER TABLE media ADD COLUMN type TEXT NOT NULL DEFAULT 'image/jpeg'").run()
+    } catch {
+      /* exists */
+    }
+    await env.DB.prepare('INSERT OR REPLACE INTO media (key, url, bytes, product, type, content) VALUES (?1, ?2, ?3, ?4, ?5, ?6)')
+      .bind(parsed.key, `/media/${parsed.key}`, parsed.bytes, text(body.product), parsed.type, bytes)
       .run()
     return json({ data: { url: `/media/${parsed.key}`, key: parsed.key } }, 201)
   }
@@ -243,8 +250,8 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
   if (resource === 'upload' && method === 'DELETE') {
     const body = await readBody<{ key?: string }>(request)
     if (body?.key) {
-      await env.MEDIA.delete(body.key)
       await env.DB.prepare('DELETE FROM media WHERE key = ?1').bind(body.key).run()
+      if (env.MEDIA) await env.MEDIA.delete(body.key)
     }
     return json({ data: true })
   }

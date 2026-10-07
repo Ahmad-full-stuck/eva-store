@@ -182,7 +182,28 @@ const emptyProduct = (): Product => ({
 const toFileDataUrl = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
-    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '')
+    reader.onload = () => {
+      const source = typeof reader.result === 'string' ? reader.result : ''
+      if (!source || !source.startsWith('data:image/')) return resolve(source)
+      const image = new Image()
+      image.onload = () => {
+        const maxEdge = 1600
+        const scale = Math.min(1, maxEdge / Math.max(image.width || 1, image.height || 1))
+        const width = Math.max(1, Math.round((image.width || 1) * scale))
+        const height = Math.max(1, Math.round((image.height || 1) * scale))
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const context = canvas.getContext('2d')
+        if (!context) return resolve(source)
+        context.fillStyle = '#ffffff'
+        context.fillRect(0, 0, width, height)
+        context.drawImage(image, 0, 0, width, height)
+        resolve(canvas.toDataURL('image/jpeg', 0.82))
+      }
+      image.onerror = () => reject(new Error('read failed'))
+      image.src = source
+    }
     reader.onerror = () => reject(new Error('read failed'))
     reader.readAsDataURL(file)
   })
@@ -606,23 +627,27 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     const valid = list.filter((item) => item.length > 200)
     if (!valid.length) return
     setToast('جارٍ رفع الصور...')
-    const uploaded = await Promise.all(
-      valid.map(async (dataUrl) => {
-        try {
-          const result = await adminFetch<{ url?: string }>('/api/admin/upload', {
-            method: 'POST',
-            body: JSON.stringify({ dataUrl, product: editing.slug }),
-          })
-          return result?.url || dataUrl
-        } catch {
-          return dataUrl
-        }
-      }),
-    )
-    const next = { ...editing, images: [...editing.images, ...uploaded].slice(0, 8) }
-    if (!next.image) next.image = uploaded[0]
-    setEditing(next)
-    setToast('تم رفع الصور')
+    const uploaded: string[] = []
+    let failed = 0
+    for (const dataUrl of valid) {
+      try {
+        const result = await adminFetch<{ url?: string }>('/api/admin/upload', {
+          method: 'POST',
+          body: JSON.stringify({ dataUrl, product: editing.slug }),
+        })
+        if (result?.url) uploaded.push(result.url)
+        else failed += 1
+      } catch {
+        failed += 1
+      }
+    }
+    if (uploaded.length) {
+      const next = { ...editing, images: [...editing.images, ...uploaded].slice(0, 8) }
+      if (!next.image) next.image = uploaded[0]
+      setEditing(next)
+    }
+    if (failed) setToast(`تعذر رفع ${failed} صورة، حاول مرة أخرى`)
+    else setToast('تم رفع الصور بنجاح')
   }
 
   const restoreAll = () => {
@@ -951,10 +976,18 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                                       if (!file) return
                                       try {
                                         const dataUrl = await toFileDataUrl(file)
+                                        const result = await adminFetch<{ url?: string }>('/api/admin/upload', {
+                                          method: 'POST',
+                                          body: JSON.stringify({ dataUrl, product: editing.slug }),
+                                        })
+                                        if (!result?.url) throw new Error('upload-failed')
                                         const next = [...editing.colors]
-                                        next[index] = { ...color, image: dataUrl }
+                                        next[index] = { ...color, image: result.url }
                                         setField('colors', next)
-                                      } catch { /* ignore */ }
+                                        setToast('تم رفع صورة اللون')
+                                      } catch {
+                                        setToast('تعذر رفع صورة اللون')
+                                      }
                                     }}
                                   />
                                 </label>
