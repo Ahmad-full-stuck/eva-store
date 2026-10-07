@@ -198,15 +198,17 @@ export default {
 
       if (url.pathname.startsWith('/media/')) {
         const key = decodeURIComponent(url.pathname.slice('/media/'.length))
-        const row = await env.DB.prepare('SELECT content, type FROM media WHERE key = ?1')
+        const row = await env.DB.prepare('SELECT content, type, LENGTH(content) AS db_len FROM media WHERE key = ?1')
           .bind(key)
-          .first<{ content: number[] | ArrayBuffer | null; type: string | null }>()
+          .first<{ content: number[] | ArrayBuffer | null; type: string | null; db_len: number | null }>()
         if (!row?.content) return new Response('Not found', { status: 404 })
         const raw = row.content
         const bytes = Array.isArray(raw) ? new Uint8Array(raw) : new Uint8Array(raw)
         const headers = new Headers()
         headers.set('Content-Type', row.type || 'image/jpeg')
         headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+        headers.set('X-Db-Len', String(row.db_len ?? -1))
+        headers.set('X-Db-Shape', JSON.stringify({ t: typeof raw, a: Array.isArray(raw), c: raw && (raw as object).constructor ? (raw as object).constructor.name : 'null', n: Array.isArray(raw) ? raw.length : -1 }))
         return new Response(bytes, { headers })
       }
 
