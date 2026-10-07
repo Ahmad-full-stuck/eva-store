@@ -5,6 +5,7 @@ import type { Category, Product } from '@/types'
 import { CountUp } from './CountUp'
 import { SmartImage } from '@/components/ui/SmartImage'
 import { contentLines, contentParts, useSiteContent } from '@/lib/site-content'
+import { useT } from '@/lib/i18n'
 
 interface HeroSectionProps {
   products: Product[]
@@ -22,19 +23,20 @@ interface HeroStat {
 }
 
 export function HeroSection({ products, categories }: HeroSectionProps) {
+  const { t } = useT()
   const content = useSiteContent()
   const stats: HeroStat[] = [
-    { key: 'fabrics', icon: <Layers size={16} />, value: products.length, prefix: '+', suffix: '', label: 'خامة متاحة', trend: 'تشكيلة تتجدد' },
-    { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '+', suffix: '', label: 'أقسام مختارة', trend: 'لكل مشروع' },
-    { key: 'delivery', icon: <Truck size={16} />, value: 18, prefix: '', suffix: '', label: 'محافظة للتوصيل', trend: 'توصيل ٥ آلاف دينار' },
-    { key: 'cash', icon: <Wallet size={16} />, value: 100, prefix: '', suffix: '٪', label: 'دفع عند الاستلام', trend: 'مريح وآمن' },
+    { key: 'fabrics', icon: <Layers size={16} />, value: products.length, prefix: '+', suffix: '', label: t('home.stats.fabricsLabel'), trend: t('home.stats.fabricsTrend') },
+    { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '+', suffix: '', label: t('home.stats.categoriesLabel'), trend: t('home.stats.categoriesTrend') },
+    { key: 'delivery', icon: <Truck size={16} />, value: 18, prefix: '', suffix: '', label: t('home.stats.deliveryLabel'), trend: t('home.stats.deliveryTrend') },
+    { key: 'cash', icon: <Wallet size={16} />, value: 100, prefix: '', suffix: t('home.stats.percent'), label: t('home.stats.cashLabel'), trend: t('home.stats.cashTrend') },
   ]
 
   const slides = [
-    { src: 'products/staylat/01.jpg', alt: 'ستايلات' },
-    { src: 'products/twlmshhyakh/01.jpg', alt: 'تول مَش حياكة' },
-    { src: 'products/ambrwdry/01.jpg', alt: 'أمبرودري' },
-    { src: 'products/fyskwzharbd/01.jpg', alt: 'فيسكوز هاربد' },
+    { src: 'products/staylat/01.jpg', alt: t('home.slide.staylat') },
+    { src: 'products/twlmshhyakh/01.jpg', alt: t('home.slide.tulle') },
+    { src: 'products/ambrwdry/01.jpg', alt: t('home.slide.embroidery') },
+    { src: 'products/fyskwzharbd/01.jpg', alt: t('home.slide.viscose') },
   ]
   const [activeSlide, setActiveSlide] = useState(0)
   const timerRef = useRef<number | undefined>(undefined)
@@ -82,8 +84,8 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
           </h1>
           <p>{content.heroText}</p>
           <div className="hero-actions">
-            <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
-            <Link href="/catalog" className="button button-outline">اكتشفي الجديد <ArrowRight size={16} /></Link>
+            <Link href="/catalog" className="button button-primary">{t('home.hero.browse')} <ArrowLeft size={16} /></Link>
+            <Link href="/catalog" className="button button-outline">{t('home.hero.discoverNew')} <ArrowRight size={16} /></Link>
           </div>
           <div className="hero-note"><span className="note-dot" />{content.heroNote} <span className="note-divider" /><span className="note-alt">{content.heroNoteAlt}</span></div>
         </div>
@@ -97,9 +99,9 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
           </div>
           <div className="hero-visual-overlay" />
           {slides.length > 1 && <>
-            <button type="button" className="hero-arrow hero-next" onClick={() => goSlide(1)} aria-label="الصورة التالية"><ChevronLeft size={18} /></button>
-            <button type="button" className="hero-arrow hero-prev" onClick={() => goSlide(-1)} aria-label="الصورة السابقة"><ChevronRight size={18} /></button>
-            <div className="hero-dots" role="tablist" aria-label="صور الغلاف">
+            <button type="button" className="hero-arrow hero-next" onClick={() => goSlide(1)} aria-label={t('home.hero.next')}><ChevronLeft size={18} /></button>
+            <button type="button" className="hero-arrow hero-prev" onClick={() => goSlide(-1)} aria-label={t('home.hero.prev')}><ChevronRight size={18} /></button>
+            <div className="hero-dots" role="tablist" aria-label={t('home.hero.dots')}>
               {slides.map((slide, index) => <button key={slide.src} type="button" role="tab" aria-selected={index === activeSlide} aria-label={slide.alt} className={index === activeSlide ? 'is-active' : ''} onClick={() => { setActiveSlide(index); restart() }} />)}
             </div>
           </>}

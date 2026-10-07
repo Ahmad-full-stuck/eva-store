@@ -1,5 +1,6 @@
 import { ArrowLeft, Search } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
+import { useT } from '@/lib/i18n'
 import {
   AboutPage,
   ContactPage,
@@ -10,6 +11,7 @@ import {
 } from '@/pages/InfoPages'
 
 export default function NotFound() {
+  const { t } = useT()
   const [rawLocation] = useLocation()
   const location = rawLocation.split('?')[0]
   const fragmentIndex = location.indexOf('#')
@@ -29,20 +31,20 @@ export default function NotFound() {
       <main className="container-eva not-found-page">
         <section className="glass not-found-card">
           <span className="not-found-code" aria-hidden="true">404</span>
-          <span className="eyebrow"><Search size={14} />الصفحة غير موجودة</span>
-          <h1>هذا الرابط لم يعد متاحاً</h1>
-          <p>ربما تغيّر العنوان أو حُذفت الصفحة. لا بأس: يمكنك العودة إلى الرئيسية أو متابعة تصفّح الأقمشة واختيار خامة جديدة.</p>
+          <span className="eyebrow"><Search size={14} />{t('nf.eyebrow')}</span>
+          <h1>{t('nf.title')}</h1>
+          <p>{t('nf.text')}</p>
           <div className="not-found-actions">
-            <Link href="/" className="button button-primary">العودة إلى الرئيسية <ArrowLeft size={16} /></Link>
-            <Link href="/catalog" className="button button-outline">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
+            <Link href="/" className="button button-primary">{t('nf.home')} <ArrowLeft size={16} /></Link>
+            <Link href="/catalog" className="button button-outline">{t('nf.browse')} <ArrowLeft size={16} /></Link>
           </div>
           <div className="not-found-links">
-            <Link href="/fabric-guide" className="chip">دليل الأقمشة</Link>
-            <Link href="/about" className="chip">من نحن</Link>
-            <Link href="/contact" className="chip">تواصلي معنا</Link>
-            <Link href="/order-tracking" className="chip">تتبّع الطلب</Link>
-            <Link href="/favorites" className="chip">المفضلة</Link>
-            <Link href="/policies" className="chip">السياسات</Link>
+            <Link href="/fabric-guide" className="chip">{t('nf.guide')}</Link>
+            <Link href="/about" className="chip">{t('nf.about')}</Link>
+            <Link href="/contact" className="chip">{t('nf.contact')}</Link>
+            <Link href="/order-tracking" className="chip">{t('nf.tracking')}</Link>
+            <Link href="/favorites" className="chip">{t('nf.favorites')}</Link>
+            <Link href="/policies" className="chip">{t('nf.policies')}</Link>
           </div>
         </section>
       </main>

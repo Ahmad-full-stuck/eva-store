@@ -1,4 +1,5 @@
 import { Component, type ComponentType, type ErrorInfo, type ReactNode } from 'react'
+import { tr } from '@/lib/i18n'
 
 export interface ErrorFallbackProps {
   error: Error
@@ -26,7 +27,7 @@ const toError = (value: unknown): Error => {
 }
 
 function DefaultFallback({ error, resetError }: ErrorFallbackProps) {
-  return <main className="error-page"><div className="error-mark">!</div><span className="eyebrow">حدث خطأ غير متوقع</span><h1>تعذر عرض هذه الصفحة</h1><p>{error.message || 'حاولي تحديث الصفحة أو العودة لاحقاً.'}</p><button type="button" className="button button-primary" onClick={resetError}>إعادة المحاولة</button></main>
+  return <main className="error-page"><div className="error-mark">!</div><span className="eyebrow">{tr('core.errorEyebrow')}</span><h1>{tr('core.errorTitle')}</h1><p>{error.message || tr('core.errorHint')}</p><button type="button" className="button button-primary" onClick={resetError}>{tr('core.errorRetry')}</button></main>
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {

@@ -3,6 +3,8 @@ import { ArrowLeft, Minus, Pencil, Plus, ShieldCheck, ShoppingBag, Trash2, Truck
 import { Link } from 'wouter'
 import type { CartItem } from '@/types'
 import { availableMeters, formatDinar, formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
+import { useT } from '@/lib/i18n'
+import { typeLabelsEn } from '@/lib/strings/product'
 import { useStoreSettings } from '@/lib/site-content'
 import { SmartImage } from '@/components/ui/SmartImage'
 
@@ -79,6 +81,7 @@ const glassStyles = `
 `
 
 export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
+  const { t, lang } = useT()
   const settings = useStoreSettings()
   const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
   const totals = getCartTotals(cart)
@@ -99,12 +102,12 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
 
   const handleUpdate = (item: CartItem, nextLength: number) => {
     onUpdate(orderKey(item), nextLength)
-    setAnnouncement(`تم تحديث كمية ${item.product.name} إلى ${formatMeters(nextLength)}`)
+    setAnnouncement(t('cart.updated').replace('{name}', item.product.name).replace('{meters}', formatMeters(nextLength)))
   }
 
   const handleRemove = (item: CartItem) => {
     onRemove(orderKey(item))
-    setAnnouncement(`تم حذف ${item.product.name} من السلة`)
+    setAnnouncement(t('cart.removed').replace('{name}', item.product.name))
   }
 
   if (cart.length === 0) {
@@ -114,9 +117,9 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
         <div className="glass glass-card empty-card" tabIndex={-1} ref={emptyRef}>
           <div className="empty-icon"><ShoppingBag size={26} /></div>
-          <h1>السلة هادئة الآن</h1>
-          <p>أضيفي قماشاً يعجبك، وستظهر تفاصيله هنا مع السعر لكل متر وإمكانية تعديل الكمية بنصف متر.</p>
-          <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
+          <h1>{t('cart.emptyTitle')}</h1>
+          <p>{t('cart.emptyText')}</p>
+          <Link href="/catalog" className="button button-primary">{t('cart.browse')} <ArrowLeft size={16} /></Link>
         </div>
       </main>
     )
@@ -130,20 +133,20 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
     <main className="container-eva cart-page glass-scope">
       <style>{glassStyles}</style>
       <div className="breadcrumbs">
-        <Link href="/">الرئيسية</Link>
+        <Link href="/">{t('cart.home')}</Link>
         <span>›</span>
-        <span>السلة</span>
+        <span>{t('cart.crumb')}</span>
       </div>
       <div className="page-title-row">
         <div>
-          <span className="eyebrow">اختياراتك</span>
-          <h1>سلة التسوق</h1>
-          <p>{formatMeters(meters)} في السلة</p>
+          <span className="eyebrow">{t('cart.eyebrow')}</span>
+          <h1>{t('cart.title')}</h1>
+          <p>{t('cart.inCart').replace('{meters}', formatMeters(meters))}</p>
         </div>
-        <Link href="/catalog" className="underlined-link">متابعة التسوق <ArrowLeft size={15} /></Link>
+        <Link href="/catalog" className="underlined-link">{t('cart.continue')} <ArrowLeft size={15} /></Link>
       </div>
       <div className="cart-layout">
-        <section className="cart-items glass glass-card" aria-label="عناصر السلة" tabIndex={-1} ref={itemsRef}>
+        <section className="cart-items glass glass-card" aria-label={t('cart.itemsAria')} tabIndex={-1} ref={itemsRef}>
           <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
           {cart.map((item) => {
             const key = orderKey(item)
@@ -157,22 +160,22 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
                 <div className="cart-item-info">
                   <div className="cart-item-top">
                     <div className="cart-item-details">
-                      <span className="product-type">{item.product.type}</span>
+                      <span className="product-type">{lang === 'en' ? typeLabelsEn[item.product.type] || item.product.type : item.product.type}</span>
                       <Link href={`/product/${item.product.slug}`} className="product-name">{item.product.name}</Link>
                       <div className="cart-item-chips">
-                        <span className="chip glass-pill">{formatPrice(item.product.price)} / متر</span>
+                        <span className="chip glass-pill">{formatPrice(item.product.price)} / {t('cart.perMeter')}</span>
                       </div>
                     </div>
                     <div className="cart-item-tools">
-                      <Link href={`/product/${item.product.slug}`} className="chip"><Pencil size={12} />تعديل</Link>
-                      <button type="button" className="remove-button" onClick={() => handleRemove(item)} aria-label={`حذف ${item.product.name} من السلة`}><Trash2 size={16} /></button>
+                      <Link href={`/product/${item.product.slug}`} className="chip"><Pencil size={12} />{t('cart.edit')}</Link>
+                      <button type="button" className="remove-button" onClick={() => handleRemove(item)} aria-label={t('cart.removeAria').replace('{name}', item.product.name)}><Trash2 size={16} /></button>
                     </div>
                   </div>
                   <div className="cart-item-bottom">
                     <div className="quantity-control compact">
-                      <button type="button" onClick={() => handleUpdate(item, item.length - 0.5)} disabled={item.length <= 0.5} aria-label={`إنقاص كمية ${item.product.name}`}><Minus size={15} /></button>
-                      <output aria-label={`كمية ${item.product.name}`}>{formatMeters(item.length)}</output>
-                      <button type="button" onClick={() => handleUpdate(item, item.length + 0.5)} disabled={item.length >= maxMeters} aria-label={`زيادة كمية ${item.product.name}`}><Plus size={15} /></button>
+                      <button type="button" onClick={() => handleUpdate(item, item.length - 0.5)} disabled={item.length <= 0.5} aria-label={t('cart.decreaseAria').replace('{name}', item.product.name)}><Minus size={15} /></button>
+                      <output aria-label={t('cart.qtyAria').replace('{name}', item.product.name)}>{formatMeters(item.length)}</output>
+                      <button type="button" onClick={() => handleUpdate(item, item.length + 0.5)} disabled={item.length >= maxMeters} aria-label={t('cart.increaseAria').replace('{name}', item.product.name)}><Plus size={15} /></button>
                     </div>
                     <div className="cart-item-total">
                       <small>{formatMeters(item.length)} × {formatPrice(item.product.price)}</small>
@@ -184,42 +187,42 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
             )
           })}
         </section>
-        <aside className="order-summary glass glass-strong" aria-label="ملخص الطلب">
-          <h2>ملخص الطلب</h2>
+        <aside className="order-summary glass glass-strong" aria-label={t('cart.summary')}>
+          <h2>{t('cart.summary')}</h2>
           {remaining > 0 ? (
             <div className="delivery-progress">
               <div className="delivery-progress-head">
-                <span>التوصيل المجاني عند {formatDinar(freeFrom)}</span>
-                <b>{formatDinar(remaining)} متبقية</b>
+                <span>{t('cart.freeAt').replace('{amount}', formatDinar(freeFrom))}</span>
+                <b>{t('cart.remaining').replace('{amount}', formatDinar(remaining))}</b>
               </div>
-              <div className="progress-track" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label="التقدم نحو التوصيل المجاني">
+              <div className="progress-track" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={t('cart.progressAria')}>
                 <i style={{ width: `${progress}%` }} />
               </div>
             </div>
           ) : (
-            <div className="delivery-free glass-dark"><Truck size={16} /><span>حصلتِ على توصيل مجاني لهذا الطلب</span></div>
+            <div className="delivery-free glass-dark"><Truck size={16} /><span>{t('cart.freeUnlocked')}</span></div>
           )}
           <div className="glass-divider" />
           <div className="summary-line">
-            <span>المجموع الفرعي</span>
+            <span>{t('cart.subtotal')}</span>
             <strong>{formatPrice(totals.subtotal)}</strong>
           </div>
           <div className="summary-line">
-            <span>التوصيل <small>(تقديري)</small></span>
-            <strong>{totals.deliveryFee ? formatPrice(totals.deliveryFee) : 'مجاناً'}</strong>
+            <span>{t('cart.delivery')} <small>{t('cart.estimated')}</small></span>
+            <strong>{totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('cart.free')}</strong>
           </div>
           <div className="summary-total">
-            <span>الإجمالي</span>
+            <span>{t('cart.total')}</span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
-          <Link href="/checkout" className="button button-primary summary-button">إتمام الطلب <ArrowLeft size={16} /></Link>
-          <p className="summary-note">يُحتسب التوصيل حسب المحافظة، ويمكنك مراجعة كل التفاصيل قبل التأكيد النهائي.</p>
-          <div className="summary-trust"><ShieldCheck size={16} /><span>السلة محفوظة على هذا الجهاز</span></div>
+          <Link href="/checkout" className="button button-primary summary-button">{t('cart.checkout')} <ArrowLeft size={16} /></Link>
+          <p className="summary-note">{t('cart.summaryNote')}</p>
+          <div className="summary-trust"><ShieldCheck size={16} /><span>{t('cart.savedNote')}</span></div>
         </aside>
       </div>
       <div className="cart-mobile-bar">
-        <span><small>الإجمالي</small><strong>{formatPrice(totals.total)}</strong></span>
-        <Link href="/checkout" className="button button-primary">إتمام الطلب <ArrowLeft size={15} /></Link>
+        <span><small>{t('cart.total')}</small><strong>{formatPrice(totals.total)}</strong></span>
+        <Link href="/checkout" className="button button-primary">{t('cart.checkout')} <ArrowLeft size={15} /></Link>
       </div>
     </main>
   )

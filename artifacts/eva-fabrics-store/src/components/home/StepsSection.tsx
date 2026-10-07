@@ -1,46 +1,48 @@
 import { ArrowLeft } from 'lucide-react'
 import { Link } from 'wouter'
+import { useT } from '@/lib/i18n'
 import { SectionHeading } from './SectionHeading'
 
 const orderSteps = [
   {
-    index: '٠١',
-    title: 'اختاري القماش',
-    text: 'تصفحي الأقسام وقارني الصور والمواصفات: السماكة والمرونة والشفافية قبل أن تقرري.',
-    hint: 'بدون تسجيل',
+    index: 'home.steps.s1.index',
+    title: 'home.steps.s1.title',
+    text: 'home.steps.s1.text',
+    hint: 'home.steps.s1.hint',
   },
   {
-    index: '٠٢',
-    title: 'حددي الكمية',
-    text: 'أضيفي نصف متر فأكثر إلى السلة، واختاري اللون المناسب، ونؤكد التوافر معك عبر الهاتف عند تأكيد الطلب.',
-    hint: 'من نصف متر',
+    index: 'home.steps.s2.index',
+    title: 'home.steps.s2.title',
+    text: 'home.steps.s2.text',
+    hint: 'home.steps.s2.hint',
   },
   {
-    index: '٠٣',
-    title: 'أرسلي الطلب وادفعي',
-    text: 'أكملي اسمك ومحافظتك وعنوانك، ثم ادفعي نقداً عند استلام الطلب في باب المنزل.',
-    hint: 'دفع عند الاستلام',
+    index: 'home.steps.s3.index',
+    title: 'home.steps.s3.title',
+    text: 'home.steps.s3.text',
+    hint: 'home.steps.s3.hint',
   },
 ]
 
 export function StepsSection() {
+  const { t } = useT()
   return (
-    <section className="container-eva section-soft" aria-label="كيف تطلب؟" style={{ marginBlock: 'clamp(16px, 3vw, 32px)' }}>
-      <SectionHeading eyebrow="ثلاث خطوات فقط" title="كيف تطلب؟" description="من اختيار القماش إلى باب المنزل" linkLabel="ابدئي التسوق" linkHref="/catalog" />
+    <section className="container-eva section-soft" aria-label={t('home.steps.title')} style={{ marginBlock: 'clamp(16px, 3vw, 32px)' }}>
+      <SectionHeading eyebrow={t('home.steps.eyebrow')} title={t('home.steps.title')} description={t('home.steps.description')} linkLabel={t('home.steps.cta')} linkHref="/catalog" />
       <div className="steps-grid">
         {orderSteps.map((step) => (
           <article className="step-card glass-card" key={step.index}>
-            <span className="step-index">{step.index}</span>
+            <span className="step-index">{t(step.index)}</span>
             <div>
-              <h3>{step.title}</h3>
-              <p>{step.text}</p>
-              <span className="chip" style={{ display: 'inline-flex', marginTop: 14 }}>{step.hint}</span>
+              <h3>{t(step.title)}</h3>
+              <p>{t(step.text)}</p>
+              <span className="chip" style={{ display: 'inline-flex', marginTop: 14 }}>{t(step.hint)}</span>
             </div>
           </article>
         ))}
       </div>
       <div className="center-action">
-        <Link href="/catalog" className="button button-primary">تصفحي كل الأقمشة <ArrowLeft size={16} /></Link>
+        <Link href="/catalog" className="button button-primary">{t('home.steps.browseAll')} <ArrowLeft size={16} /></Link>
       </div>
     </section>
   )

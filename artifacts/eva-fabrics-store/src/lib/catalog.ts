@@ -1,5 +1,6 @@
 import type { CartItem, Product, ProductColor } from '@/types'
 import { readStoreSettings } from '@/lib/site-content'
+import { getCurrentLang, tr } from '@/lib/i18n'
 
 export const normalizeArabic = (value: string): string => value
   .normalize('NFKD')
@@ -45,25 +46,25 @@ export const getCartTotals = (cart: CartItem[]): { subtotal: number; deliveryFee
 /** «15000 د.ع» → «15 الف دينار عراقي» كما طلب المتجر. */
 export const formatPrice = (value: number): string => {
   const safe = Math.max(0, Math.round(value))
-  if (safe === 0) return 'السعر عند التأكيد'
-  if (safe >= 1000 && safe % 1000 === 0) return `${safe / 1000} الف دينار عراقي`
-  return `${safe.toLocaleString('ar-IQ')} دينار عراقي`
+  if (safe === 0) return tr('core.priceOnConfirm')
+  if (safe >= 1000 && safe % 1000 === 0) return tr('core.priceThousand').replace('{n}', String(safe / 1000))
+  return tr('core.priceFull').replace('{n}', safe.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ'))
 }
 
 /** صيغة قصيرة للبانرات والشريط: «50 الف دينار». */
 export const formatDinar = (value: number): string => {
   const safe = Math.max(0, Math.round(value))
-  if (safe >= 1000 && safe % 1000 === 0) return `${safe / 1000} الف دينار`
-  return `${safe.toLocaleString('ar-IQ')} دينار`
+  if (safe >= 1000 && safe % 1000 === 0) return tr('core.dinarShortThousand').replace('{n}', String(safe / 1000))
+  return tr('core.dinarShort').replace('{n}', safe.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ'))
 }
 
 /** «0.5» → «نصف متر» */
 export const metersLabel = (value: number): string =>
-  value === 0.5 ? 'نصف متر' : `${Number(value.toFixed(2)).toLocaleString('ar-IQ')} متر`
+  value === 0.5 ? tr('core.metersHalf') : `${Number(value.toFixed(2)).toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ')} ${tr('core.metersWord')}`
 
 export const formatMeters = (value: number): string => (value === 0.5
-  ? 'نصف متر'
-  : `${value.toLocaleString('ar-IQ', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} م`)
+  ? tr('core.metersShortHalf')
+  : `${value.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} ${tr('core.metersShortUnit')}`)
 
 export const normalizeHalfMeters = (value: number): number => {
   if (!Number.isFinite(value) || value <= 0) return 0

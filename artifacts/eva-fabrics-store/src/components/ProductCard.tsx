@@ -1,7 +1,9 @@
 import { Heart, Plus, ShoppingBag } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
+import { useT } from '@/lib/i18n'
 import { formatPrice, isSoldOut } from '@/lib/catalog'
+import { typeLabelEn } from '@/lib/strings/catalog'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 interface ProductCardProps {
@@ -114,17 +116,18 @@ const injectStyles = (id: string, css: string) => {
 injectStyles('eva-glass-styles', glassStyles)
 
 export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps) {
+  const { t, lang } = useT()
   const addColor = product.colors.find((color) => color.available && color.stockMeters > 0) || product.colors[0]
   const soldOut = !addColor || isSoldOut(product)
   const lowStock = !soldOut && product.stockMeters > 0 && product.stockMeters <= 3
-  const wishLabel = wished ? `إزالة ${product.name} من المفضلة` : `إضافة ${product.name} إلى المفضلة`
-  const addLabel = `أضيفي نصف متر من ${product.name} إلى السلة`
+  const wishLabel = wished ? t('card.wishRemove').replace('{name}', product.name) : t('card.wishAdd').replace('{name}', product.name)
+  const addLabel = t('card.addHalfAria').replace('{name}', product.name)
   const detailPath = `/product/${product.slug}`
 
   return (
     <article className="product-card glass-card">
       <div className="product-card-media">
-        <Link href={detailPath} className="product-card-image-link" aria-label={`عرض تفاصيل ${product.name}`}>
+        <Link href={detailPath} className="product-card-image-link" aria-label={t('card.detailsAria').replace('{name}', product.name)}>
           <span className="card-image-stack">
             <span className="card-image-layer is-active">
               <SmartImage
@@ -152,10 +155,10 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
           </span>
         </Link>
         <div className="product-card-badges">
-          {product.categoryId === 'style' && <span className="badge badge-muted">ستايل</span>}
-          {product.isNew && <span className="badge badge-accent">جديد</span>}
-          {lowStock && <span className="badge badge-warm">كمية محدودة</span>}
-          {soldOut && <span className="badge badge-muted">غير متوفر</span>}
+          {product.categoryId === 'style' && <span className="badge badge-muted">{t('card.badgeStyle')}</span>}
+          {product.isNew && <span className="badge badge-accent">{t('card.badgeNew')}</span>}
+          {lowStock && <span className="badge badge-warm">{t('card.badgeLow')}</span>}
+          {soldOut && <span className="badge badge-muted">{t('card.badgeSold')}</span>}
         </div>
         <button
           type="button"
@@ -171,10 +174,10 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
       <div className="product-card-body">
         <div className="product-card-heading">
           <div>
-            <p className="product-type">{product.type}</p>
+            <p className="product-type">{lang === 'en' ? typeLabelEn(product.type) : product.type}</p>
             <Link href={detailPath} className="product-name">{product.name}</Link>
           </div>
-          <span className="product-price">{formatPrice(product.price)}<small>/م</small></span>
+          <span className="product-price">{formatPrice(product.price)}<small>{t('card.perMeter')}</small></span>
         </div>
         <div className="product-card-footer">
           <button
@@ -184,7 +187,7 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
             onClick={() => addColor && onAdd(product, addColor, 0.5)}
             aria-label={addLabel}
           >
-            {soldOut ? 'نفد المخزون' : <><ShoppingBag size={14} aria-hidden="true" /><span>أضيفي نصف متر</span></>}
+            {soldOut ? t('card.soldOut') : <><ShoppingBag size={14} aria-hidden="true" /><span>{t('card.addHalf')}</span></>}
           </button>
         </div>
       </div>
@@ -193,8 +196,9 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
 }
 
 export function ProductGridSkeleton() {
+  const { t } = useT()
   return (
-    <div className="product-grid" role="status" aria-busy="true" aria-label="جارٍ تحميل الأقمشة">
+    <div className="product-grid" role="status" aria-busy="true" aria-label={t('card.loadingAria')}>
       {Array.from({ length: 8 }, (_, index) => (
         <div key={index} className="product-skeleton skeleton-shimmer" aria-hidden="true"><div /><span /><span /></div>
       ))}
@@ -203,6 +207,7 @@ export function ProductGridSkeleton() {
 }
 
 export function InlineAddButton({ product, onAdd }: { product: Product; onAdd: (product: Product, color: ProductColor, length: number) => void }) {
+  const { t } = useT()
   const color = product.colors.find((item) => item.available)
   return (
     <button
@@ -210,7 +215,7 @@ export function InlineAddButton({ product, onAdd }: { product: Product; onAdd: (
       className="icon-button"
       disabled={!color}
       onClick={() => color && onAdd(product, color, 0.5)}
-      aria-label={`إضافة ${product.name} إلى السلة`}
+      aria-label={t('card.addToCartAria').replace('{name}', product.name)}
     >
       <Plus size={18} aria-hidden="true" />
     </button>

@@ -3,6 +3,8 @@ import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Hea
 import { Link, useLocation, useSearch } from 'wouter'
 import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
+import { useT } from '@/lib/i18n'
+import { guideFaqsEn, quickGuideAnswersEn } from '@/lib/strings/info'
 import { fallbackCategories, fallbackProducts, guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
 import { apiUrl } from '@/lib/site'
 import { sendSimpleEmail } from '@/lib/email'
@@ -314,58 +316,59 @@ const catalogCounts = (): { products: number; categories: number } => ({
 const buildAboutStats = (): AboutStat[] => {
   const counts = catalogCounts()
   return [
-    { label: 'خامة في المعرض', value: counts.products, note: 'كلها بصورة ومواصفات مكتوبة' },
-    { label: 'أقسام للتصنيف', value: counts.categories, note: 'ستايلات، مطرز، سادة، مطاطي، ترتر، مزخرف، هارفرد' },
-    { label: 'محافظة نغطيها', value: 18, note: 'توصيل إلى كل العراق' },
-    { label: 'منشور على إنستغرام', value: 201, note: 'من حسابنا @x__illc' },
+    { label: 'about.stat1Label', value: counts.products, note: 'about.stat1Note' },
+    { label: 'about.stat2Label', value: counts.categories, note: 'about.stat2Note' },
+    { label: 'about.stat3Label', value: 18, note: 'about.stat3Note' },
+    { label: 'about.stat4Label', value: 201, note: 'about.stat4Note' },
   ]
 }
 
 const aboutValues = [
-  { title: 'وضوح قبل الشراء', text: 'نكتب الشفافية والمرونة والوزن كما هي، بلا مبالغة ولا وعود مبهمة.', icon: <BadgeCheck size={18} /> },
-  { title: 'جودة تُلمَس', text: 'نراجع النسيج والتشطيب والثبات قبل أن تدخل الخامة إلى المعرض.', icon: <ShieldCheck size={18} /> },
-  { title: 'قرب من العميل', text: 'نسأل عن قصتك قبل أن نقترح الخامة، ونبقى معك حتى الاستلام.', icon: <MessageCircle size={18} /> },
-  { title: 'ابدئي من نصف متر', text: 'لا نفرض كميات كبيرة؛ اطلبي ما تحتاجينه فعلاً وزيدي لاحقاً.', icon: <Ruler size={18} /> },
+  { title: 'about.value1Title', text: 'about.value1Text', icon: <BadgeCheck size={18} /> },
+  { title: 'about.value2Title', text: 'about.value2Text', icon: <ShieldCheck size={18} /> },
+  { title: 'about.value3Title', text: 'about.value3Text', icon: <MessageCircle size={18} /> },
+  { title: 'about.value4Title', text: 'about.value4Text', icon: <Ruler size={18} /> },
 ]
 
 const buildAboutTimeline = () => {
-  const productsLabel = catalogCounts().products.toLocaleString('ar-IQ')
   return [
-    { year: 'البداية', title: 'من حساب إنستغرام', text: 'نعرض الأقمشة بالصور والفيديو ونشرح الخامة في تسجيل قصير قبل الطلب — أكثر من ٢٠١ منشوراً حتى الآن.' },
-    { year: 'التوثيق', title: 'بطاقة لكل قماش', text: 'نستخرج من كل منشور وفيديو التركيب والعرض والوزن والمرونة والشفافية، ونضعها أمام الصورة بصيغة مكتوبة.' },
-    { year: 'الآن', title: 'متجر أونلاين', text: `${productsLabel} خامة بالمواصفات كاملة، طلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية برسوم ثابتة.` },
+    { year: 'about.timeline1Year', title: 'about.timeline1Title', text: 'about.timeline1Text' },
+    { year: 'about.timeline2Year', title: 'about.timeline2Title', text: 'about.timeline2Text' },
+    { year: 'about.timeline3Year', title: 'about.timeline3Title', text: 'about.timeline3Text' },
   ]
 }
 
 export function AboutPage() {
+  const { t, lang } = useT()
   const content = useSiteContent()
   const aboutStats = buildAboutStats()
   const aboutTimeline = buildAboutTimeline()
+  const productsCount = catalogCounts().products.toLocaleString(lang === 'en' ? 'en-US' : 'ar-IQ')
   return (
     <>
       <GlassStyles />
       <main className="container-eva info-page">
-        <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>من نحن</span></div>
+        <div className="breadcrumbs"><Link href="/">{t('about.crumbHome')}</Link><span>›</span><span>{t('about.crumbCurrent')}</span></div>
 
         <section className="about-hero">
           <div className="about-copy">
-            <span className="eyebrow"><Sparkles size={14} />من إيفا إلى يدك</span>
+            <span className="eyebrow"><Sparkles size={14} />{t('about.eyebrow')}</span>
             <h1>{content.aboutTitle}</h1>
             <p>{content.aboutText}</p>
             <div className="chip-row" style={{ marginTop: '22px' }}>
-              <span className="chip"><Ruler size={13} />طلب من نصف متر</span>
-              <span className="chip"><ShieldCheck size={13} />مواصفات مكتوبة</span>
-              <span className="chip"><Truck size={13} />توصيل لكل العراق</span>
+              <span className="chip"><Ruler size={13} />{t('about.chipOrder')}</span>
+              <span className="chip"><ShieldCheck size={13} />{t('about.chipSpecs')}</span>
+              <span className="chip"><Truck size={13} />{t('about.chipDelivery')}</span>
             </div>
             <div className="about-points">
-              <div><span>٠١</span><strong>وضوح قبل الطلب</strong><p>مواصفات وخطوات طلب بنصف متر.</p></div>
-              <div><span>٠٢</span><strong>اختيار أهدأ</strong><p>صور وتفاصيل تساعدك على المقارنة.</p></div>
-              <div><span>٠٣</span><strong>دعم قريب</strong><p>تواصلي معنا قبل وبعد الطلب.</p></div>
+              <div><span>{t('about.point1Num')}</span><strong>{t('about.point1Title')}</strong><p>{t('about.point1Text')}</p></div>
+              <div><span>{t('about.point2Num')}</span><strong>{t('about.point2Title')}</strong><p>{t('about.point2Text')}</p></div>
+              <div><span>{t('about.point3Num')}</span><strong>{t('about.point3Title')}</strong><p>{t('about.point3Text')}</p></div>
             </div>
           </div>
           <div className="about-collage">
-            <SmartImage src="products/dantylfrnsyambrwdry/01.jpg" alt="دانتيل فرنسي أمبرودري" sizes="(max-width: 820px) 46vw, 24vw" />
-            <SmartImage src="products/lmshalbwklywnsyjalankwra/01.jpg" alt="لمسة البوكلي ونسيج الأنكورا" sizes="(max-width: 820px) 46vw, 24vw" />
+            <SmartImage src="products/dantylfrnsyambrwdry/01.jpg" alt={t('about.imgAlt1')} sizes="(max-width: 820px) 46vw, 24vw" />
+            <SmartImage src="products/lmshalbwklywnsyjalankwra/01.jpg" alt={t('about.imgAlt2')} sizes="(max-width: 820px) 46vw, 24vw" />
             <span>EVA<br /><strong>FABRICS</strong></span>
           </div>
         </section>
@@ -373,23 +376,23 @@ export function AboutPage() {
         <section className="section-soft" aria-labelledby="about-story-title">
           <div className="section-head-tight">
             <div>
-              <span className="eyebrow">قصة البراند</span>
-              <h2 id="about-story-title">من فيديو قصير إلى معرض كامل.</h2>
+              <span className="eyebrow">{t('about.storyEyebrow')}</span>
+              <h2 id="about-story-title">{t('about.storyTitle')}</h2>
             </div>
-            <Link href="/fabric-guide" className="underlined-link">اقرئي دليل الأقمشة <ArrowLeft size={15} /></Link>
+            <Link href="/fabric-guide" className="underlined-link">{t('about.storyLink')} <ArrowLeft size={15} /></Link>
           </div>
           <div className="story-copy-grid">
-            <p>من حسابنا على إنستغرام بدأنا نعرض الأقمشة بالصور والفيديو: نُظهر اللون في الضوء الطبيعي، ونشرح الوزن والمرونة والشفافية في تسجيل صوتي قصير قبل أن يصلك القماش.</p>
-            <p>اليوم تجد كل ذلك في مكان واحد: معرض يضم {catalogCounts().products.toLocaleString('ar-IQ')} خامة بمواصفات مكتوبة، وطلب يبدأ من نصف متر، وتوصيل إلى جميع المحافظات العراقية مع تأكيد يدوي لكل طلب.</p>
+            <p>{t('about.storyP1')}</p>
+            <p>{t('about.storyP2').replace('{count}', productsCount)}</p>
           </div>
         </section>
 
         <section className="section-block" aria-labelledby="about-stats-title">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">أرقام تختصر الرحلة</span>
-              <h2 id="about-stats-title">إيفا في أربعة أرقام</h2>
-              <p>أرقام فعلية من المعرض ومن مكتبة المنشورات على إنستغرام.</p>
+              <span className="eyebrow">{t('about.statsEyebrow')}</span>
+              <h2 id="about-stats-title">{t('about.statsTitle')}</h2>
+              <p>{t('about.statsText')}</p>
             </div>
           </div>
           <div className="stats-grid">{aboutStats.map((stat) => <StatCard key={stat.label} stat={stat} />)}</div>
@@ -398,30 +401,30 @@ export function AboutPage() {
         <section className="section-block" aria-labelledby="about-values-title">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">ما نؤمن به</span>
-              <h2 id="about-values-title">أربع قيم تحكم كل قرار</h2>
-              <p>من اختيار الخامة إلى طريقة الرد على رسالتك.</p>
+              <span className="eyebrow">{t('about.valuesEyebrow')}</span>
+              <h2 id="about-values-title">{t('about.valuesTitle')}</h2>
+              <p>{t('about.valuesText')}</p>
             </div>
           </div>
-          <div className="about-values">{aboutValues.map((value) => <article className="glass-card value-card" key={value.title}><span className="value-icon">{value.icon}</span><h3>{value.title}</h3><p>{value.text}</p></article>)}</div>
+          <div className="about-values">{aboutValues.map((value) => <article className="glass-card value-card" key={value.title}><span className="value-icon">{value.icon}</span><h3>{t(value.title)}</h3><p>{t(value.text)}</p></article>)}</div>
         </section>
 
         <section className="section-soft" aria-labelledby="about-timeline-title">
           <div className="section-head-tight">
             <div>
-              <span className="eyebrow">الخط الزمني</span>
-              <h2 id="about-timeline-title">كيف وصلنا إلى هنا</h2>
+              <span className="eyebrow">{t('about.timelineEyebrow')}</span>
+              <h2 id="about-timeline-title">{t('about.timelineTitle')}</h2>
             </div>
-            <span className="chip chip-neutral">من إنستغرام إلى متجر</span>
+            <span className="chip chip-neutral">{t('about.timelineChip')}</span>
           </div>
           <ol className="timeline">
             {aboutTimeline.map((item, index) => (
               <li className="timeline-item" key={item.year}>
                 <span className="timeline-dot" aria-hidden="true">{index + 1}</span>
                 <div className="glass-card timeline-body">
-                  <span className="timeline-year">{item.year}</span>
-                  <strong>{item.title}</strong>
-                  <p>{item.text}</p>
+                  <span className="timeline-year">{t(item.year)}</span>
+                  <strong>{t(item.title)}</strong>
+                  <p>{t(item.text).replace('{count}', productsCount)}</p>
                 </div>
               </li>
             ))}
@@ -430,13 +433,13 @@ export function AboutPage() {
 
         <section className="about-cta glass-dark">
           <div>
-            <span className="eyebrow"><Sparkles size={14} />الخطوة التالية</span>
-            <h2>جاهزة لتختاري خامتك الأولى؟</h2>
-            <p>ابدئي من المعرض لتتصفّحي التفاصيل، أو ارسلي لنا ما تبحثين عنه وسنقترح عليك بديلة مناسبة.</p>
+            <span className="eyebrow"><Sparkles size={14} />{t('about.ctaEyebrow')}</span>
+            <h2>{t('about.ctaTitle')}</h2>
+            <p>{t('about.ctaText')}</p>
           </div>
           <div className="cta-actions">
-            <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
-            <Link href="/contact" className="button button-outline"><MessageCircle size={16} />اسألينا عبر الموقع</Link>
+            <Link href="/catalog" className="button button-primary">{t('about.ctaBrowse')} <ArrowLeft size={16} /></Link>
+            <Link href="/contact" className="button button-outline"><MessageCircle size={16} />{t('about.ctaAsk')}</Link>
           </div>
         </section>
       </main>
@@ -445,6 +448,7 @@ export function AboutPage() {
 }
 
 function StatCard({ stat }: { stat: AboutStat }) {
+  const { t, lang } = useT()
   const nodeRef = useRef<HTMLDivElement | null>(null)
   const startedRef = useRef(false)
   const [value, setValue] = useState(0)
@@ -498,65 +502,67 @@ function StatCard({ stat }: { stat: AboutStat }) {
 
   return (
     <div className="glass-card stat-card" ref={nodeRef}>
-      <span className="stat-label">{stat.label}</span>
-      <strong className="stat-value" aria-label={`${stat.value} ${stat.label}`}>{value.toLocaleString('ar-IQ')}</strong>
-      <span className="stat-note">{stat.note}</span>
+      <span className="stat-label">{t(stat.label)}</span>
+      <strong className="stat-value" aria-label={`${stat.value} ${t(stat.label)}`}>{value.toLocaleString(lang === 'en' ? 'en-US' : 'ar-IQ')}</strong>
+      <span className="stat-note">{t(stat.note)}</span>
     </div>
   )
 }
-const extraGuideQuestions: ProductFaq[] = [
-  { question: 'هل أحتاج إلى بطانة؟', answer: 'إذا ظهر حقل الشفافية بعبارة شفاف أو نصف شفاف فالأجدر استخدام بطانة. القطع الفاتحة والخفيفة تحتاج بطانة دائماً، بينما القماش غير الشفاف يكفي نفسه في الفساتين والعبايات.' },
-  { question: 'كيف أختبر المرونة قبل الشراء؟', answer: 'اسحبي القماش برفق بين إصبعين في الاتجاهين: المطاطي يعود إلى مكانه فوراً، والمرونة الخفيفة تعود ببطء، وغير المطاطي يقاوم السحب أصلاً. تفاصيل كل منتج مكتوبة في حقل المرونة.' },
-  { question: 'كيف أعتني بالقماش المطرز؟', answer: 'التطريز الحساس يفضّل التنظيف الجاف أو الغسيل اليدوي بماء فاتر مع قلب القطعة قبل التجفيف. تجنّبي المجفف وتعريض التطريز لخطافات الأثاث.' },
-  { question: 'ما الفرق بين الكريب والتويل؟', answer: 'الكريب سطحه مطفي بملمس حبيبي خفيف ويستقيم بسرعة، أما التويل فنسيجه قطري أوضح وأكثر ثباتاً في البنية، وهو أنسب للبناطيل والقطع الرسمية.' },
-  { question: 'كم متراً أحتاج لعمّة كاملة؟', answer: 'العباءة المستقيمة تحتاج عادة بين ٣ و٤ أمتار، وتزيد القطعة ذات الأكمام الواسعة أو التراكيب. أضيفي نصف متر إضافي للقص إن كان النمط مزدوجاً.' },
+const extraGuideQuestions = (t: (key: string) => string): ProductFaq[] => [
+  { question: t('guide.extraQ1Question'), answer: t('guide.extraQ1Answer') },
+  { question: t('guide.extraQ2Question'), answer: t('guide.extraQ2Answer') },
+  { question: t('guide.extraQ3Question'), answer: t('guide.extraQ3Answer') },
+  { question: t('guide.extraQ4Question'), answer: t('guide.extraQ4Answer') },
+  { question: t('guide.extraQ5Question'), answer: t('guide.extraQ5Answer') },
 ]
 
 const fabricTips = [
-  { use: 'فستان يومي', fabric: 'لينن قطن أو كريب سبانديكس', weight: 'خفيف إلى متوسط', tip: 'اختر لوناً صلباً يتحمّل الغسيل المتكرر.' },
-  { use: 'فستان سهرة', fabric: 'ساتان أو تافتا مطرزة', weight: 'متوسط إلى ثقيل', tip: 'لمعة هادئة وبطانة تمنح القماش سقوطاً أجمل.' },
-  { use: 'عباءة أو برنوش', fabric: 'كريب مطرز أو جاكار', weight: 'متوسط', tip: 'راعي السقوط والطول قبل قصّ الأكمام.' },
-  { use: 'بناطيل وتنانير', fabric: 'تويل سبانديكس أو تويل قطني', weight: 'متوسط إلى ثقيل', tip: 'مرونة باتجاه واحد تكفي لراحة الحركة.' },
-  { use: 'جاكيت شتوي', fabric: 'مخمل', weight: 'ثقيل', tip: 'الوبرة الكثيفة تحفظ الدفئة وتقلل التجعيد.' },
-  { use: 'حفلة ومناسبة', fabric: 'ترتر هولوغرام', weight: 'متوسط', tip: 'قصّة بسيطة لأن البريق يضيف حجماً بصرياً.' },
+  { use: 'guide.tip1Use', fabric: 'guide.tip1Fabric', weight: 'guide.tip1Weight', tip: 'guide.tip1Tip' },
+  { use: 'guide.tip2Use', fabric: 'guide.tip2Fabric', weight: 'guide.tip2Weight', tip: 'guide.tip2Tip' },
+  { use: 'guide.tip3Use', fabric: 'guide.tip3Fabric', weight: 'guide.tip3Weight', tip: 'guide.tip3Tip' },
+  { use: 'guide.tip4Use', fabric: 'guide.tip4Fabric', weight: 'guide.tip4Weight', tip: 'guide.tip4Tip' },
+  { use: 'guide.tip5Use', fabric: 'guide.tip5Fabric', weight: 'guide.tip5Weight', tip: 'guide.tip5Tip' },
+  { use: 'guide.tip6Use', fabric: 'guide.tip6Fabric', weight: 'guide.tip6Weight', tip: 'guide.tip6Tip' },
 ]
 
 const qualityChecks = [
-  'اللون متجانس من الحافة إلى الحافة دون تدرّج مفاجئ.',
-  'الخيط لا ينفلت بسحب خفيف على الحافة المقصوصة.',
-  'الوزن يواجد مع الوصف: خفيف لا يعني رديئاً، وثقيل لا يعني مريحاً.',
-  'الطباعة أو التطريز متماسك من الوجهين.',
-  'العطر غائب، لأن بقايا المعالجة الكيميائية تظهر لاحقاً.',
-  'العرض مطابق للمكتوب، ففرق السنتيمترات يغيّر حساب الكمية.',
+  'guide.check1',
+  'guide.check2',
+  'guide.check3',
+  'guide.check4',
+  'guide.check5',
+  'guide.check6',
 ]
 
 export function FabricGuidePage() {
-  const questions = [...guideQuestions, ...extraGuideQuestions]
+  const { t, lang } = useT()
+  const questions: ProductFaq[] = [...(lang === 'en' ? guideFaqsEn : guideQuestions), ...extraGuideQuestions(t)]
+  const quickAnswers = lang === 'en' ? quickGuideAnswersEn : quickGuideAnswers
   const [openQuick, setOpenQuick] = useState<number | null>(0)
   const [openGuide, setOpenGuide] = useState<number | null>(0)
   return (
     <>
       <GlassStyles />
       <main className="container-eva info-page">
-        <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>دليل الأقمشة</span></div>
+        <div className="breadcrumbs"><Link href="/">{t('guide.crumbHome')}</Link><span>›</span><span>{t('guide.crumbCurrent')}</span></div>
 
         <section className="info-heading">
-          <span className="eyebrow"><Ruler size={14} />تعلّمي قبل أن تختاري</span>
-          <h1>دليل الأقمشة الشامل</h1>
-          <p>كل خامة لها إيقاعها وطريقة عناية مختلفة. ابدأي من هذه الأسئلة الثلاثة، ثم اقرئي الإجابات السريعة، وأخيراً افتحي صفحة المنتج لتفاصيل الخامة التي تعجبك.</p>
+          <span className="eyebrow"><Ruler size={14} />{t('guide.heroEyebrow')}</span>
+          <h1>{t('guide.heroTitle')}</h1>
+          <p>{t('guide.heroText')}</p>
         </section>
 
         <section className="quick-answers" aria-labelledby="quick-answers-title">
           <div className="section-head-tight">
             <div>
-              <span className="eyebrow"><MessageCircle size={14} />ابدئي من هنا</span>
-              <h2 id="quick-answers-title">إجابات سريعة على أشهر الأسئلة</h2>
-              <p>لكل سؤال أكثر من إجابة مختصرة — اضغطي السؤال لتظهر كل الإجابات، أو اقرئي الدليل كاملاً.</p>
+              <span className="eyebrow"><MessageCircle size={14} />{t('guide.quickEyebrow')}</span>
+              <h2 id="quick-answers-title">{t('guide.quickTitle')}</h2>
+              <p>{t('guide.quickText')}</p>
             </div>
-            <a href="#guide-faq-title" className="underlined-link" onClick={(event) => { event.preventDefault(); document.getElementById('guide-faq-title')?.scrollIntoView({ block: 'start', behavior: 'smooth' }) }}>أو اقرئي الدليل الكامل <ArrowLeft size={15} /></a>
+            <a href="#guide-faq-title" className="underlined-link" onClick={(event) => { event.preventDefault(); document.getElementById('guide-faq-title')?.scrollIntoView({ block: 'start', behavior: 'smooth' }) }}>{t('guide.quickLink')} <ArrowLeft size={15} /></a>
           </div>
           <div className="quick-answers-grid">
-            {quickGuideAnswers.map((entry, index) => (
+            {quickAnswers.map((entry, index) => (
               <article className={`quick-answer ${openQuick === index ? 'is-open' : ''}`} key={entry.question}>
                 <button type="button" onClick={() => setOpenQuick(openQuick === index ? null : index)} aria-expanded={openQuick === index}>
                   <strong>{entry.question}</strong>
@@ -572,29 +578,29 @@ export function FabricGuidePage() {
           </div>
         </section>
 
-        <section className="steps-grid" aria-label="ثلاثة أسئلة قبل الشراء">
+        <section className="steps-grid" aria-label={t('guide.stepsAria')}>
           <article className="glass-card">
-            <span className="chip">الخطوة ١</span>
-            <div className="value-card"><h3>حددي الاستخدام</h3><p>فستان يومي، سهرة، عباءة، بناطيل أو قطعة عملية؟ الاستخدام يضيّق الخيارات إلى خامات معدودة.</p></div>
+            <span className="chip">{t('guide.stepChip1')}</span>
+            <div className="value-card"><h3>{t('guide.step1Title')}</h3><p>{t('guide.step1Text')}</p></div>
           </article>
           <article className="glass-card">
-            <span className="chip">الخطوة ٢</span>
-            <div className="value-card"><h3>قارني الخامة</h3><p>الوزن، العرض، المرونة، الشفافية والتشطيب؛ خمس قراءات تكفي لتجنّب المفاجآت.</p></div>
+            <span className="chip">{t('guide.stepChip2')}</span>
+            <div className="value-card"><h3>{t('guide.step2Title')}</h3><p>{t('guide.step2Text')}</p></div>
           </article>
           <article className="glass-card">
-            <span className="chip">الخطوة ٣</span>
-            <div className="value-card"><h3>احسبي الكمية</h3><p>أضيفي هامشاً للقص والخياطة، ثم اطلبي نصف متر كبداية وزيدي عند الحاجة.</p></div>
+            <span className="chip">{t('guide.stepChip3')}</span>
+            <div className="value-card"><h3>{t('guide.step3Title')}</h3><p>{t('guide.step3Text')}</p></div>
           </article>
         </section>
 
         <section className="section-block" aria-labelledby="guide-faq-title">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">أسئلة تتكرر</span>
-              <h2 id="guide-faq-title">أسئلة وإجابات سريعة</h2>
-              <p>افتحي أي سؤال لتظهر الإجابة كاملة دون مغادرة الصفحة.</p>
+              <span className="eyebrow">{t('guide.faqEyebrow')}</span>
+              <h2 id="guide-faq-title">{t('guide.faqTitle')}</h2>
+              <p>{t('guide.faqText')}</p>
             </div>
-            <Link href="/contact" className="underlined-link">سؤال آخر؟ راسلينا <ArrowLeft size={15} /></Link>
+            <Link href="/contact" className="underlined-link">{t('guide.faqLink')} <ArrowLeft size={15} /></Link>
           </div>
           <div className="guide-grid">
             {questions.map((item, index) => (
@@ -603,7 +609,7 @@ export function FabricGuidePage() {
                   onClick={(event) => { event.preventDefault(); setOpenGuide(openGuide === index ? null : index) }}
                   aria-expanded={openGuide === index}
                 >
-                  <span>{index + 1 < 10 ? `٠${index + 1}` : index + 1}</span>
+                  <span>{index + 1 < 10 ? t('guide.faqPad').replace('{n}', String(index + 1)) : index + 1}</span>
                   <strong>{item.question}</strong>
                   <ChevronDown size={18} />
                 </summary>
@@ -616,59 +622,59 @@ export function FabricGuidePage() {
         <section className="section-soft" aria-labelledby="guide-tips-title">
           <div className="section-head-tight">
             <div>
-              <span className="eyebrow">جدول عملي</span>
-              <h2 id="guide-tips-title">نصائح اختيار القماش حسب القطعة</h2>
-              <p>مرجع سريع تراجعينه قبل إضافة أي خامة إلى السلة.</p>
+              <span className="eyebrow">{t('guide.tipsEyebrow')}</span>
+              <h2 id="guide-tips-title">{t('guide.tipsTitle')}</h2>
+              <p>{t('guide.tipsText')}</p>
             </div>
-            <span className="chip"><Layers size={13} />٦ حالات شائعة</span>
+            <span className="chip"><Layers size={13} />{t('guide.tipsChip')}</span>
           </div>
-          <div className="tips-table-wrap" role="region" aria-label="جدول نصائح اختيار القماش حسب القطعة" tabIndex={0}>
+          <div className="tips-table-wrap" role="region" aria-label={t('guide.tipsAria')} tabIndex={0}>
             <table className="tips-table">
-              <caption>اخترِي صفّ قطعتك ثم اقرئي الخامة والوزن والملاحظة.</caption>
+              <caption>{t('guide.tipsCaption')}</caption>
               <thead>
                 <tr>
-                  <th scope="col">القطعة</th>
-                  <th scope="col">الخامة المقترحة</th>
-                  <th scope="col">الوزن</th>
-                  <th scope="col">ملاحظة القياس</th>
+                  <th scope="col">{t('guide.thUse')}</th>
+                  <th scope="col">{t('guide.thFabric')}</th>
+                  <th scope="col">{t('guide.thWeight')}</th>
+                  <th scope="col">{t('guide.thTip')}</th>
                 </tr>
               </thead>
               <tbody>
                 {fabricTips.map((row) => (
                   <tr key={row.use}>
-                    <th scope="row">{row.use}</th>
-                    <td>{row.fabric}</td>
-                    <td>{row.weight}</td>
-                    <td>{row.tip}</td>
+                    <th scope="row">{t(row.use)}</th>
+                    <td>{t(row.fabric)}</td>
+                    <td>{t(row.weight)}</td>
+                    <td>{t(row.tip)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="table-hint">اسحبي الجدول أفقياً لعرض بقية الأعمدة.</p>
+          <p className="table-hint">{t('guide.tableHint')}</p>
         </section>
 
         <section className="section-block" aria-labelledby="guide-quality-title">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">فحص سريع</span>
-              <h2 id="guide-quality-title">علامات خامة جيدة</h2>
-              <p>ست نقاط تراجعينها على العينة قبل إتمام الطلب.</p>
+              <span className="eyebrow">{t('guide.qualityEyebrow')}</span>
+              <h2 id="guide-quality-title">{t('guide.qualityTitle')}</h2>
+              <p>{t('guide.qualityText')}</p>
             </div>
           </div>
           <ul className="guide-checklist">
-            {qualityChecks.map((item) => <li key={item}><Check size={15} />{item}</li>)}
+            {qualityChecks.map((item) => <li key={item}><Check size={15} />{t(item)}</li>)}
           </ul>
           <div className="chip-row" style={{ marginTop: '22px' }}>
-            <span className="chip"><Scissors size={13} />قصّ بسيط</span>
-            <span className="chip"><Heart size={13} />عناية بالمطرز</span>
-            <span className="chip"><Clock size={13} />الرد عبر الهاتف</span>
-            <span className="chip"><ShieldCheck size={13} />تأكيد قبل الشحن</span>
+            <span className="chip"><Scissors size={13} />{t('guide.chipCut')}</span>
+            <span className="chip"><Heart size={13} />{t('guide.chipCare')}</span>
+            <span className="chip"><Clock size={13} />{t('guide.chipReply')}</span>
+            <span className="chip"><ShieldCheck size={13} />{t('guide.chipConfirm')}</span>
           </div>
         </section>
 
         <div className="center-action">
-          <Link href="/catalog" className="button button-primary">ابدئي من المعرض <ArrowLeft size={16} /></Link>
+          <Link href="/catalog" className="button button-primary">{t('guide.ctaStart')} <ArrowLeft size={16} /></Link>
         </div>
       </main>
     </>
@@ -683,6 +689,7 @@ interface ContactErrors {
 const validIraqiPhone = (value: string): boolean => /^(?:07\d{9}|9647\d{9}|\+9647\d{9})$/.test(value.replace(/[\s()-]/g, ''))
 
 export function ContactPage() {
+  const { t } = useT()
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [message, setMessage] = useState('')
@@ -690,17 +697,20 @@ export function ContactPage() {
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle')
   const content = useSiteContent()
 
-  const composeText = (): string => `مرحباً إيفا ستور،${'\n'}الاسم: ${name.trim()}${'\n'}الهاتف: ${phone.trim()}${'\n'}${message.trim()}`
+  const composeText = (): string => t('contact.emailBody')
+    .replace('{name}', name.trim())
+    .replace('{phone}', phone.trim())
+    .replace('{message}', message.trim())
 
   const validate = (): boolean => {
     const next: ContactErrors = {}
     const cleanName = name.trim()
     const cleanPhone = phone.replace(/[\s()-]/g, '')
     const cleanMessage = message.trim()
-    if (cleanName.length < 3) next.name = 'اكتبي اسمك من ٣ أحرف على الأقل'
-    else if (!/[ء-يA-Za-z]/.test(cleanName)) next.name = 'اكتبي اسمك بالحروف العربية أو اللاتينية'
-    if (!validIraqiPhone(cleanPhone)) next.phone = 'أدخلي رقم هاتف عراقي صحيحاً يبدأ بـ 07'
-    if (cleanMessage.length < 10) next.message = 'اكتبي رسالة من ١٠ أحرف على الأقل حتى نساعدك بدقة'
+    if (cleanName.length < 3) next.name = t('contact.errorNameShort')
+    else if (!/[ء-يA-Za-z]/.test(cleanName)) next.name = t('contact.errorNameScript')
+    if (!validIraqiPhone(cleanPhone)) next.phone = t('contact.errorPhone')
+    if (cleanMessage.length < 10) next.message = t('contact.errorMessage')
     setErrors(next)
     return Object.keys(next).length === 0
   }
@@ -727,7 +737,7 @@ export function ContactPage() {
       const mailed = await sendSimpleEmail({
         to: content.emailOrdersTo,
         action: content.emailFormSubmitAction || undefined,
-        subject: 'رسالة من صفحة تواصل إيفا ستور',
+        subject: t('contact.emailSubject'),
         body: composeText(),
         fields: { name: name.trim(), phone: phone.replace(/[\s()-]/g, '') },
       })
@@ -749,39 +759,39 @@ export function ContactPage() {
     <>
       <GlassStyles />
       <main className="container-eva info-page">
-        <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>تواصلي معنا</span></div>
+        <div className="breadcrumbs"><Link href="/">{t('contact.crumbHome')}</Link><span>›</span><span>{t('contact.crumbCurrent')}</span></div>
 
         <section className="contact-layout">
           <div className="contact-intro">
-            <span className="eyebrow"><Mail size={14} />نحن قريبون</span>
+            <span className="eyebrow"><Mail size={14} />{t('contact.eyebrow')}</span>
             <h1>{content.contactTitle}</h1>
             <p>{content.contactText}</p>
 
             <div className="contact-methods">
-              <a href="#contact-form" aria-label="افتحي نموذج التواصل في الموقع">
-                <Send size={19} /><span><strong>نموذج التواصل</strong><small>أرسلي رسالتك من هذه الصفحة</small></span><ArrowLeft size={15} />
+              <a href="#contact-form" aria-label={t('contact.method1Aria')}>
+                <Send size={19} /><span><strong>{t('contact.method1Title')}</strong><small>{t('contact.method1Text')}</small></span><ArrowLeft size={15} />
               </a>
-              <Link href="/order-tracking" aria-label="تتبّع حالة طلبك">
-                <PackageCheck size={19} /><span><strong>تتبّع الطلب</strong><small>اعرفي حالة طلبك برقم الطلب</small></span><ArrowLeft size={15} />
+              <Link href="/order-tracking" aria-label={t('contact.method2Aria')}>
+                <PackageCheck size={19} /><span><strong>{t('contact.method2Title')}</strong><small>{t('contact.method2Text')}</small></span><ArrowLeft size={15} />
               </Link>
-              <Link href="/fabric-guide" aria-label="افتحي دليل الأقمشة">
-                <Ruler size={19} /><span><strong>دليل الأقمشة</strong><small>إجابات سريعة قبل الاستفسار</small></span><ArrowLeft size={15} />
+              <Link href="/fabric-guide" aria-label={t('contact.method3Aria')}>
+                <Ruler size={19} /><span><strong>{t('contact.method3Title')}</strong><small>{t('contact.method3Text')}</small></span><ArrowLeft size={15} />
               </Link>
             </div>
 
             <div className="contact-hours glass-card">
-              <span className="hours-title"><Clock size={15} />كيف نتواصل</span>
-              <div className="hours-row"><span>الاستفسار والطلب</span><strong>عبر نموذج التواصل في الموقع</strong></div>
-              <div className="hours-row"><span>تأكيد الطلب</span><strong>نتواصل معك قبل الشحن</strong></div>
-              <div className="hours-row"><span>التوصيل</span><strong>جميع المحافظات — ٥ آلاف دينار</strong></div>
+              <span className="hours-title"><Clock size={15} />{t('contact.hoursTitle')}</span>
+              <div className="hours-row"><span>{t('contact.hours1Label')}</span><strong>{t('contact.hours1Value')}</strong></div>
+              <div className="hours-row"><span>{t('contact.hours2Label')}</span><strong>{t('contact.hours2Value')}</strong></div>
+              <div className="hours-row"><span>{t('contact.hours3Label')}</span><strong>{t('contact.hours3Value')}</strong></div>
             </div>
 
             <div className="map-card glass-dark">
               <span className="map-grid" aria-hidden="true" />
               <div className="map-copy">
                 <span className="map-pin"><MapPin size={18} /></span>
-                <strong>الموقع والعنوان</strong>
-                <p>بغداد نستقبل الطلبات عبر المتجر أونلاين، ونرتّب موعد الاستلام بعد تأكيد الطلب. التوصيل يشمل جميع المحافظات العراقية، وللعنوان التفصيلي نرسله لك عند التأكيد.</p>
+                <strong>{t('contact.mapTitle')}</strong>
+                <p>{t('contact.mapText')}</p>
               </div>
             </div>
           </div>
@@ -789,58 +799,58 @@ export function ContactPage() {
           <form id="contact-form" className="contact-form glass" onSubmit={submit} noValidate>
             <div className="section-head-tight" style={{ marginBottom: '18px' }}>
               <div>
-                <span className="eyebrow"><Send size={14} />راسلينا</span>
-                <h2>أرسلي رسالتك</h2>
+                <span className="eyebrow"><Send size={14} />{t('contact.formEyebrow')}</span>
+                <h2>{t('contact.formTitle')}</h2>
               </div>
-              <span className="chip chip-neutral">الرد عبر الهاتف</span>
+              <span className="chip chip-neutral">{t('contact.formChip')}</span>
             </div>
 
             <div className="form-fields">
               <div className="field">
-                <label htmlFor="contact-name">الاسم <small>(مطلوب)</small></label>
-                <input id="contact-name" className="glass-input" value={name} onChange={(event) => setName(event.target.value)} placeholder="كيف نناديك؟" autoComplete="name" aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'contact-name-error' : undefined} />
+                <label htmlFor="contact-name">{t('contact.nameLabel')} <small>{t('contact.required')}</small></label>
+                <input id="contact-name" className="glass-input" value={name} onChange={(event) => setName(event.target.value)} placeholder={t('contact.namePlaceholder')} autoComplete="name" aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'contact-name-error' : undefined} />
                 {errors.name && <small className="field-error" id="contact-name-error">{errors.name}</small>}
               </div>
               <div className="field">
-                <label htmlFor="contact-phone">رقم الهاتف <small>(مطلوب)</small></label>
+                <label htmlFor="contact-phone">{t('contact.phoneLabel')} <small>{t('contact.required')}</small></label>
                 <input id="contact-phone" className="glass-input" type="tel" dir="ltr" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="07XXXXXXXXX" autoComplete="tel" aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'contact-phone-error' : undefined} />
                 {errors.phone && <small className="field-error" id="contact-phone-error">{errors.phone}</small>}
               </div>
               <div className="field">
-                <label htmlFor="contact-message">الرسالة <small>(مطلوب)</small></label>
-                <textarea id="contact-message" className="glass-input" rows={6} value={message} onChange={(event) => setMessage(event.target.value)} placeholder="اكتبي سؤالك أو نوع الخامة التي تبحثين عنها" aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? 'contact-message-error' : undefined} />
+                <label htmlFor="contact-message">{t('contact.messageLabel')} <small>{t('contact.required')}</small></label>
+                <textarea id="contact-message" className="glass-input" rows={6} value={message} onChange={(event) => setMessage(event.target.value)} placeholder={t('contact.messagePlaceholder')} aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? 'contact-message-error' : undefined} />
                 {errors.message && <small className="field-error" id="contact-message-error">{errors.message}</small>}
               </div>
             </div>
 
             {state === 'idle' || state === 'sending' ? (
               <button type="submit" className="button button-primary" disabled={state === 'sending'}>
-                {state === 'sending' ? 'جارٍ إرسال الرسالة' : <>إرسال الرسالة <Send size={16} /></>}
+                {state === 'sending' ? t('contact.sending') : <>{t('contact.send')} <Send size={16} /></>}
               </button>
             ) : null}
 
             {state === 'sent' && (
               <div className="form-status form-status-success" role="status">
                 <Check size={16} />
-                <span>وصلتنا رسالتك وسنتواصل معك عبر رقم الهاتف الذي أدخلتيه. وإن أحببتِ طلباً جديداً، أرسليه من صفحة إتمام الطلب.</span>
+                <span>{t('contact.sent')}</span>
               </div>
             )}
 
             {state === 'failed' && (
               <div className="form-status form-status-error" role="status">
                 <Mail size={16} />
-                <span>تعذّر إرسال الرسالة الآن. حاولي مرة أخرى بعد قليل.</span>
+                <span>{t('contact.failed')}</span>
               </div>
             )}
 
             {state !== 'idle' && (
               <div className="form-actions">
-                <button type="button" className="button button-outline" onClick={reset}>كتابة رسالة أخرى</button>
-                <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
+                <button type="button" className="button button-outline" onClick={reset}>{t('contact.again')}</button>
+                <Link href="/catalog" className="button button-primary">{t('contact.browse')} <ArrowLeft size={16} /></Link>
               </div>
             )}
 
-            <p className="form-footnote">نستخدم بياناتك للتواصل بشأن استفسارك فقط، ويمكنك مراجعة تفاصيل ذلك في <Link href="/policies#privacy">سياسة الخصوصية</Link>.</p>
+            <p className="form-footnote">{t('contact.footnote')} <Link href="/policies#privacy">{t('contact.footnoteLink')}</Link>.</p>
           </form>
         </section>
       </main>
@@ -858,55 +868,56 @@ interface PolicyContent {
 const policies: PolicyContent[] = [
   {
     id: 'terms',
-    title: 'شروط الاستخدام',
-    intro: 'باستخدامك موقع إيفا ستور فإنك تقرّين بصحة البيانات التي تدخلينها وأن الهدف من الموقع هو طلب المنتجات المتاحة لدينا.',
+    title: 'policies.termsTitle',
+    intro: 'policies.termsIntro',
     points: [
-      'الأسعار والمواصفات والألوان قابلة للتحديث، ويظهر السعر النهائي في مراجعة الطلب قبل التأكيد.',
-      'كمية القماش تُحسب بالمتر ونصف المتر، والمخزون يُخصم عند تأكيد الطلب لا عند إضافته إلى السلة.',
-      'يحق لنا التواصل معك للتأكيد عبر الهاتف قبل الشحن، ويُعد الطلب مؤكداً بعد هذا التواصل.',
-      'يُمنع إعادة بيع المنتجات أو استخدام صور المتجر دون إذن مكتوب.',
+      'policies.termsPoint1',
+      'policies.termsPoint2',
+      'policies.termsPoint3',
+      'policies.termsPoint4',
     ],
-    note: 'بإرسال الطلب توافقين على هذه الشروط وعلى سياسة الإرجاع.',
+    note: 'policies.termsNote',
   },
   {
     id: 'privacy',
-    title: 'سياسة الخصوصية',
-    intro: 'نستخدم البيانات التي تدخلينها لتنفيذ طلبك والتواصل معك بشأنه فقط، ونلتزم بعدم مشاركتها مع جهات غير ضرورية.',
+    title: 'policies.privacyTitle',
+    intro: 'policies.privacyIntro',
     points: [
-      'نجمع الاسم ورقم الهاتف والعنوان وتفاصيل الطلب اللازمة للتنفيذ.',
-      'البريد الإلكتروني والملاحظات اختيارية ولا يشترط لإتمام الطلب.',
-      'لا نحفظ بيانات الدفع، لأن الدفع يتم عند الاستلام في العراق.',
-      'يمكنك طلب عرض بياناتك أو حذفها في أي وقت عبر نموذج التواصل في الموقع، وسنستجيب خلال أيام العمل.',
+      'policies.privacyPoint1',
+      'policies.privacyPoint2',
+      'policies.privacyPoint3',
+      'policies.privacyPoint4',
     ],
-       note: 'لن نرسل رسائل تسويقية دون موافقتك الصريحة.',
+       note: 'policies.privacyNote',
   },
   {
     id: 'shipping',
-    title: 'الشحن والتوصيل',
-    intro: 'نجهّز الطلبات بعد التأكيد، ويظهر رقم الطلب في صفحة النجاح ويُرسل لك مع تحديثات الشحن.',
+    title: 'policies.shippingTitle',
+    intro: 'policies.shippingIntro',
     points: [
-      'التوصيل متاح إلى جميع المحافظات العراقية، ويعتمد الوقت على بعد المحافظة وحالة الطلب.',
-      'رسوم التوصيل ثابتة ٥ آلاف دينار، وتصبح مجانية للطلبات التي تتجاوز 50 الف دينار.',
-      'نجهّز الطلب بعد تأكيدك له، ونحدّث حالته في صفحة تتبّع الطلب عند خروجه للشحن.',
-      'نحدّثك عبر الهاتف عند خروج الطلب وعند تسليمه إلى مندوب الشحن.',
+      'policies.shippingPoint1',
+      'policies.shippingPoint2',
+      'policies.shippingPoint3',
+      'policies.shippingPoint4',
     ],
-    note: 'احتفظي برقم الطلب؛ فهو يكفي للاستفسار دون مشاركة بيانات إضافية.',
+    note: 'policies.shippingNote',
   },
   {
     id: 'returns',
-    title: 'الإرجاع والتبديل',
-    intro: 'نقبل الإرجاع أو التبديل إذا وصل القماش مختلفاً عن المواصفات المكتوبة أو حدث خطأ في التنفيذ، وتُحالة الحالة عبر نموذج التواصل في الموقع ونتفق معك على الحل المناسب.',
+    title: 'policies.returnsTitle',
+    intro: 'policies.returnsIntro',
     points: [
-      'يجب أن يبقى القماش بحالته الأصلية وغير مقصوص ولا مستعمل.',
-      'الأقمشة المقصوصة حسب الطلب أو المقطوعة حسب القياس غير قابلة للإرجاع.',
-      'في حال ثبوت خطأ منّا نتحمل رسوم الإرجاع ونشحن البديل على حسابنا.',
-      'التواصل الأول يتم عبر نموذج التواصل في الموقع مع إرفاق صورة للقماش ورقم الطلب.',
+      'policies.returnsPoint1',
+      'policies.returnsPoint2',
+      'policies.returnsPoint3',
+      'policies.returnsPoint4',
     ],
-    note: 'اللون المطابق للصور مضمون، والاختلاف البسيط تحت الإضاءة لا يُعد عيباً.',
+    note: 'policies.returnsNote',
   },
 ]
 
 export function PoliciesPage() {
+  const { t } = useT()
   const [location] = useLocation()
   const [active, setActive] = useState<string | null>('terms')
 
@@ -930,37 +941,37 @@ export function PoliciesPage() {
     <>
       <GlassStyles />
       <main className="container-eva info-page policies-page">
-        <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>السياسات</span></div>
+        <div className="breadcrumbs"><Link href="/">{t('policies.crumbHome')}</Link><span>›</span><span>{t('policies.crumbCurrent')}</span></div>
 
         <section className="info-heading">
-          <span className="eyebrow"><ShieldCheck size={14} />واضحة منذ البداية</span>
-          <h1>سياسات المتجر</h1>
-          <p>أربعة بنود تقرأينها مرة واحدة قبل إتمام الطلب: الاستخدام، الخصوصية، الشحن، والإرجاع. اضغطي على أي بند لفتحه.</p>
+          <span className="eyebrow"><ShieldCheck size={14} />{t('policies.eyebrow')}</span>
+          <h1>{t('policies.title')}</h1>
+          <p>{t('policies.intro')}</p>
         </section>
 
-        <div className="policy-nav" role="group" aria-label="الانتقال إلى بند من السياسات">
-          {policies.map((item) => <button type="button" key={item.id} className="chip" onClick={() => openPolicy(item.id)}>{item.title}</button>)}
+        <div className="policy-nav" role="group" aria-label={t('policies.navAria')}>
+          {policies.map((item) => <button type="button" key={item.id} className="chip" onClick={() => openPolicy(item.id)}>{t(item.title)}</button>)}
         </div>
 
         <div className="policy-accordions">
           {policies.map((item, index) => (
             <details className="glass-card policy-accordion" id={item.id} key={item.id} open={active === item.id}>
               <summary onClick={(event) => { event.preventDefault(); setActive(active === item.id ? null : item.id) }} aria-expanded={active === item.id}>
-                <span>٠{index + 1}</span>
-                <strong>{item.title}</strong>
+                <span>{t('policies.numPad').replace('{n}', String(index + 1))}</span>
+                <strong>{t(item.title)}</strong>
                 <ChevronDown size={18} />
               </summary>
               <div className="policy-body">
-                <p>{item.intro}</p>
-                <ul>{item.points.map((point) => <li key={point}>{point}</li>)}</ul>
-                <p className="policy-highlight"><ShieldCheck size={15} />{item.note}</p>
+                <p>{t(item.intro)}</p>
+                <ul>{item.points.map((point) => <li key={point}>{t(point)}</li>)}</ul>
+                <p className="policy-highlight"><ShieldCheck size={15} />{t(item.note)}</p>
               </div>
             </details>
           ))}
         </div>
 
         <div className="center-action">
-          <Link href="/contact" className="button button-primary">لديك سؤال آخر؟ تواصلي معنا <ArrowLeft size={16} /></Link>
+          <Link href="/contact" className="button button-primary">{t('policies.cta')} <ArrowLeft size={16} /></Link>
         </div>
       </main>
     </>
@@ -988,7 +999,20 @@ interface StoredOrder {
 
 const ORDER_KEYS = ['eva-orders', 'eva-order', 'eva-last-order', 'eva-fabrics-orders', 'eva-fabrics-order', 'eva-checkout-order', 'eva-pending-order', 'eva-order-number']
 
-const statusSteps = ['تم استلام الطلب', 'قيد المراجعة', 'جاهز للشحن', 'في الطريق إليك', 'تم التوصيل']
+const statusSteps = ['track.step1', 'track.step2', 'track.step3', 'track.step4', 'track.step5']
+
+const STATUS_LABEL_KEYS: Record<string, string> = {
+  'تم استلام الطلب': 'track.step1',
+  'قيد المراجعة': 'track.step2',
+  'جاهز للشحن': 'track.step3',
+  'في الطريق إليك': 'track.step4',
+  'تم التوصيل': 'track.step5',
+  'تم التواصل': 'track.statusContacted',
+  'تم الشحن': 'track.statusShipped',
+  'قيد التوصيل': 'track.statusInTransit',
+  'مكتمل': 'track.statusDone',
+  'جديد': 'track.statusNew',
+}
 
 const readText = (record: Record<string, unknown>, keys: string[]): string => {
   for (const key of keys) {
@@ -1153,44 +1177,46 @@ const statusIndex = (status?: string): number => {
   return 0
 }
 
-const formatDate = (value: string): string => {
+const formatDate = (value: string, locale = 'ar-IQ'): string => {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return value
   try {
-    return date.toLocaleString('ar-IQ', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit' })
+    return date.toLocaleString(locale, { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: '2-digit' })
   } catch {
     return value
   }
 }
 function OrderStatusPanel({ order }: { order: StoredOrder }) {
+  const { t, lang } = useT()
   const index = statusIndex(order.status)
   const cancelled = index < 0
   const step = cancelled ? 0 : index
   const rawStatus = order.status || ''
+  const labelKey = STATUS_LABEL_KEYS[rawStatus]
   const statusLabel = !cancelled
-    ? (/^[\x20-\x7E]+$/.test(rawStatus) ? statusSteps[step] : (rawStatus || statusSteps[step]))
+    ? (/^[\x20-\x7E]+$/.test(rawStatus) ? t(statusSteps[step]) : (labelKey ? t(labelKey) : (rawStatus || t(statusSteps[step]))))
     : ''
   return (
-    <section className="status-panel glass-dark" aria-label="حالة الطلب">
+    <section className="status-panel glass-dark" aria-label={t('track.panelAria')}>
       <div className="status-head">
-        <span>{cancelled ? 'حالة الطلب' : 'آخر تحديث'}</span>
-        <strong>{cancelled ? 'تم إلغاء الطلب' : statusLabel}</strong>
-        {order.createdAt && <small>تاريخ التسجيل: {formatDate(order.createdAt)}</small>}
+        <span>{cancelled ? t('track.statusTitle') : t('track.lastUpdate')}</span>
+        <strong>{cancelled ? t('track.cancelled') : statusLabel}</strong>
+        {order.createdAt && <small>{t('track.registeredAt')}: {formatDate(order.createdAt, lang === 'en' ? 'en-US' : 'ar-IQ')}</small>}
       </div>
       <ol className="status-steps">
         {statusSteps.map((label, position) => (
           <li key={label} className={!cancelled && position <= step ? 'is-done' : undefined}>
             <span>{!cancelled && position <= step ? <Check size={14} /> : position + 1}</span>
             <div>
-              <strong>{label}</strong>
-              <small>{!cancelled && position < step ? 'مكتمل' : !cancelled && position === step ? 'الوضع الحالي' : 'لاحقاً'}</small>
+              <strong>{t(label)}</strong>
+              <small>{!cancelled && position < step ? t('track.stepDone') : !cancelled && position === step ? t('track.stepCurrent') : t('track.stepLater')}</small>
             </div>
           </li>
         ))}
       </ol>
       {order.items && order.items.length > 0 && (
         <div className="status-items">
-          <span>عناصر الطلب</span>
+          <span>{t('track.itemsTitle')}</span>
           {order.items.map((item, position) => (
             <div className="status-item" key={`${item.name}-${position}`}>
               <b>{item.name}{item.color ? ` · ${item.color}` : ''}</b>
@@ -1200,7 +1226,7 @@ function OrderStatusPanel({ order }: { order: StoredOrder }) {
         </div>
       )}
       <div className="order-meta">
-        {order.total !== undefined && <span className="chip chip-dark">الإجمالي: {formatPrice(order.total)}</span>}
+        {order.total !== undefined && <span className="chip chip-dark">{t('track.total')}: {formatPrice(order.total)}</span>}
         {order.customerName && <span className="chip chip-dark">{order.customerName}</span>}
         {order.address && <span className="chip chip-dark">{order.address}</span>}
       </div>
@@ -1209,6 +1235,7 @@ function OrderStatusPanel({ order }: { order: StoredOrder }) {
 }
 
 export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) {
+  const { t } = useT()
   const trimmed = orderNumber.trim()
   const [copied, setCopied] = useState(false)
   const orders = useMemo(readOrders, [])
@@ -1229,11 +1256,11 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
         <main className="container-eva confirmation-page">
           <section className="order-empty glass">
             <div className="empty-icon"><PackageCheck size={25} /></div>
-            <h1>لا يوجد طلب لعرضه</h1>
-            <p>لم يصلنا رقم طلب في هذا الرابط. افتحي رسالة التأكيد التي وصلك، أو ابحثي عن طلبك برقم الطلب.</p>
+            <h1>{t('confirm.emptyTitle')}</h1>
+            <p>{t('confirm.emptyText')}</p>
             <div className="empty-actions">
-              <Link href="/order-tracking" className="button button-primary">تتبّع الطلب <ArrowLeft size={16} /></Link>
-              <Link href="/contact" className="button button-outline"><MessageCircle size={16} />راسلينا عبر الموقع</Link>
+              <Link href="/order-tracking" className="button button-primary">{t('confirm.track')} <ArrowLeft size={16} /></Link>
+              <Link href="/contact" className="button button-outline"><MessageCircle size={16} />{t('confirm.ask')}</Link>
             </div>
           </section>
         </main>
@@ -1247,11 +1274,11 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
       <main className="container-eva confirmation-page">
         <div className="glass glass-card confirmation-panel">
           <div className="confirmation-mark"><Check size={30} /></div>
-          <span className="eyebrow">تم استلام طلبك</span>
-          <h1>شكراً لاختيارك إيفا.</h1>
-          <p>سنراجع تفاصيل طلبك ونتواصل معك لتأكيد التوصيل. احتفظي برقم الطلب لمتابعة حالته في أي وقت.</p>
+          <span className="eyebrow">{t('confirm.eyebrow')}</span>
+          <h1>{t('confirm.title')}</h1>
+          <p>{t('confirm.text')}</p>
           <div className="confirmation-number">
-            <small>رقم الطلب</small>
+            <small>{t('confirm.orderNumber')}</small>
             <div className="order-number-row">
               <strong dir="ltr">{order.orderNumber}</strong>
               <button
@@ -1279,21 +1306,21 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
                     window.setTimeout(() => setCopied(false), 2200)
                   }
                 }}
-                aria-label="نسخ رقم الطلب"
+                aria-label={t('confirm.copy')}
               >
                 {copied
-                  ? <><Check size={15} strokeWidth={2.6} /> تم النسخ</>
-                  : <><CopyIcon size={15} strokeWidth={2.4} /> نسخ رقم الطلب</>}
+                  ? <><Check size={15} strokeWidth={2.6} /> {t('confirm.copied')}</>
+                  : <><CopyIcon size={15} strokeWidth={2.4} /> {t('confirm.copy')}</>}
               </button>
             </div>
           </div>
           <OrderStatusPanel order={order} />
           <div className="confirmation-actions">
-            <Link href="/catalog" className="button button-primary">متابعة التسوق <ArrowLeft size={16} /></Link>
-            <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><Search size={16} />تتبّع الطلب</Link>
-            <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><PackageCheck size={16} />تتبّع حالة الطلب</Link>
+            <Link href="/catalog" className="button button-primary">{t('confirm.continue')} <ArrowLeft size={16} /></Link>
+            <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><Search size={16} />{t('confirm.track')}</Link>
+            <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><PackageCheck size={16} />{t('confirm.trackStatus')}</Link>
           </div>
-          <div className="confirmation-trust"><Truck size={17} /><span>التوصيل مجاني للطلبات التي تتجاوز 50 الف دينار، ويمكنك متابعة الحالة في صفحة تتبّع الطلب.</span></div>
+          <div className="confirmation-trust"><Truck size={17} /><span>{t('confirm.trust')}</span></div>
         </div>
       </main>
     </>
@@ -1301,6 +1328,7 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
 }
 
 export function OrderTrackingPage() {
+  const { t } = useT()
   const [, navigate] = useLocation()
   const browserSearch = useSearch()
   const query = new URLSearchParams(browserSearch)
@@ -1374,7 +1402,7 @@ export function OrderTrackingPage() {
     event.preventDefault()
     const clean = value.trim()
     if (!clean) {
-      setError('أدخلي رقم الطلب الذي وصلك بعد التأكيد')
+      setError(t('track.errorEmpty'))
       return
     }
     setError('')
@@ -1386,19 +1414,19 @@ export function OrderTrackingPage() {
     <>
       <GlassStyles />
       <main className="container-eva info-page">
-        <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>تتبّع الطلب</span></div>
+        <div className="breadcrumbs"><Link href="/">{t('track.crumbHome')}</Link><span>›</span><span>{t('track.crumbCurrent')}</span></div>
 
         <section className="tracking-card glass">
           <div className="tracking-icon"><PackageCheck size={28} /></div>
-          <span className="eyebrow">حالة الطلب من المتجر مباشرة</span>
-          <h1>تتبّع الطلب</h1>
-          <p>أدخلي رقم الطلب الذي وصلك بعد التأكيد لعرض حالته الحالية من المتجر، مع الطلبات المحفوظة على هذا الجهاز.</p>
+          <span className="eyebrow">{t('track.eyebrow')}</span>
+          <h1>{t('track.title')}</h1>
+          <p>{t('track.intro')}</p>
 
           <form className="tracking-form" onSubmit={submit} noValidate>
-            <label className="sr-only" htmlFor="tracking-order">رقم الطلب</label>
+            <label className="sr-only" htmlFor="tracking-order">{t('track.inputLabel')}</label>
             <Search size={18} />
-            <input id="tracking-order" value={value} onChange={(event) => setValue(event.target.value)} placeholder="مثال: EVA-1024" dir="ltr" aria-invalid={Boolean(error)} aria-describedby={error ? 'tracking-error' : undefined} />
-            <button type="submit" className="button button-primary">عرض الحالة</button>
+            <input id="tracking-order" value={value} onChange={(event) => setValue(event.target.value)} placeholder={t('track.placeholder')} dir="ltr" aria-invalid={Boolean(error)} aria-describedby={error ? 'tracking-error' : undefined} />
+            <button type="submit" className="button button-primary">{t('track.submit')}</button>
           </form>
 
           {error && <p className="field-error" id="tracking-error" role="alert">{error}</p>}
@@ -1406,7 +1434,7 @@ export function OrderTrackingPage() {
           {active && remoteState === 'loading' && !displayed && (
             <div className="tracking-result-glass" role="status">
               <Search size={18} />
-              <div><strong>جارٍ التحقق من حالة الطلب...</strong></div>
+              <div><strong>{t('track.loading')}</strong></div>
             </div>
           )}
 
@@ -1414,10 +1442,10 @@ export function OrderTrackingPage() {
             <>
               <OrderStatusPanel order={displayed} />
               <div className="local-orders">
-                <span>بحثتِ عن:</span>
+                <span>{t('track.searchedFor')}</span>
                 <span className="chip" dir="ltr">{displayed.orderNumber}</span>
-                <button type="button" className="chip" onClick={() => setVersion((current) => current + 1)}><RotateCcw size={13} />تحديث الحالة</button>
-                {remoteState === 'ok' && <span className="chip">مزامنة مع المتجر ✓</span>}
+                <button type="button" className="chip" onClick={() => setVersion((current) => current + 1)}><RotateCcw size={13} />{t('track.refresh')}</button>
+                {remoteState === 'ok' && <span className="chip">{t('track.synced')}</span>}
               </div>
             </>
           )}
@@ -1426,8 +1454,8 @@ export function OrderTrackingPage() {
             <div className="tracking-result-glass form-status-error" role="status">
               <Search size={18} />
               <div>
-                <strong>{remoteState === 'error' ? `تعذّر الاتصال للتحقق من الطلب ${active}` : `لم نجد طلباً بالرقم ${active}`}</strong>
-                <p>تأكدي من الرقم كما وصل في رسالة التأكيد، أو اختاري أحد الطلبات المحفوظة على هذا الجهاز.</p>
+                <strong>{remoteState === 'error' ? t('track.remoteError').replace('{order}', active) : t('track.notFound').replace('{order}', active)}</strong>
+                <p>{t('track.notFoundHint')}</p>
               </div>
             </div>
           )}
@@ -1435,25 +1463,25 @@ export function OrderTrackingPage() {
           {!active && orders.length === 0 && (
             <section className="order-empty glass">
               <div className="empty-icon"><Search size={25} /></div>
-              <h1>لا توجد طلبات محفوظة على هذا الجهاز بعد</h1>
-              <p>عند إتمام أول طلب يُحفظ رقم الطلب على هذا الجهاز لتتبعي حالته بدون تسجيل دخول.</p>
+              <h1>{t('track.emptyTitle')}</h1>
+              <p>{t('track.emptyText')}</p>
               <div className="empty-actions">
-                <Link href="/catalog" className="button button-primary">تصفحي الأقمشة <ArrowLeft size={16} /></Link>
-                <Link href="/contact" className="button button-outline">تواصلي معنا <ArrowLeft size={16} /></Link>
+                <Link href="/catalog" className="button button-primary">{t('track.browse')} <ArrowLeft size={16} /></Link>
+                <Link href="/contact" className="button button-outline">{t('track.contact')} <ArrowLeft size={16} /></Link>
               </div>
             </section>
           )}
 
           {!active && orders.length > 0 && (
             <div className="local-orders">
-              <span>طلبات محفوظة على هذا الجهاز:</span>
+              <span>{t('track.localOrders')}</span>
               {orders.slice(0, 5).map((order) => (
                 <button type="button" key={order.orderNumber} className="chip" dir="ltr" onClick={() => { setValue(order.orderNumber); setSubmitted(order.orderNumber); setError('') }}>{order.orderNumber}</button>
               ))}
             </div>
           )}
 
-          <Link href="/contact" className="button button-outline"><MessageCircle size={16} />اسألينا عبر نموذج التواصل في الموقع</Link>
+          <Link href="/contact" className="button button-outline"><MessageCircle size={16} />{t('track.askButton')}</Link>
         </section>
       </main>
     </>

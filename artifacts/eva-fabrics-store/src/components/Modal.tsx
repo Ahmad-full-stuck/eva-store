@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react'
+import { useT } from '@/lib/i18n'
 
 interface ModalProps {
   open: boolean
@@ -14,6 +15,7 @@ export function Modal({ open, onClose, title, children, variant = 'center', clas
   const panelRef = useRef<HTMLDivElement>(null)
   const onCloseRef = useRef(onClose)
   const restoreRef = useRef<HTMLElement | null>(null)
+  const { t } = useT()
 
   useEffect(() => {
     onCloseRef.current = onClose
@@ -74,7 +76,7 @@ export function Modal({ open, onClose, title, children, variant = 'center', clas
 
   return (
     <div className={`modal-layer modal-${variant}`}>
-      <button type="button" className="modal-backdrop" onClick={onClose} aria-label={`إغلاق ${title}`} />
+      <button type="button" className="modal-backdrop" onClick={onClose} aria-label={t('core.modalClose').replace('{title}', title)} />
       <div ref={panelRef} className={`modal-panel ${className}`} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1}>
         <h2 id={titleId} className="sr-only">{title}</h2>
         {children}

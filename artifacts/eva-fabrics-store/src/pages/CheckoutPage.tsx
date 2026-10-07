@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, Naviga
 import { Link, useLocation } from 'wouter'
 import type { CartItem, CheckoutForm, CustomerProfile, OrderPayload } from '@/types'
 import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/catalog'
+import { useT } from '@/lib/i18n'
 import { apiUrl } from '@/lib/site'
 import { governorates } from '@/lib/fallback-data'
 import { useSiteContent } from '@/lib/site-content'
@@ -170,6 +171,7 @@ const glassStyles = `
 `
 
 export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
+  const { t, lang } = useT()
   const [location] = useLocation()
   const [form, setForm] = useState<CheckoutForm>(initialForm)
   const [errors, setErrors] = useState<CheckoutErrors>({})
@@ -212,9 +214,9 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         <style>{glassStyles}</style>
         <div className="glass glass-card empty-card">
           <div className="empty-icon"><Check size={25} /></div>
-          <h1>لا توجد عناصر لإتمام الطلب</h1>
-          <p>أضيفي قماشاً إلى السلة أولاً، ثم املئي مربع الطلب بخطوة واحدة.</p>
-          <Link href="/catalog" className="button button-primary">العودة إلى الأقمشة <ArrowLeft size={16} /></Link>
+          <h1>{t('co.emptyTitle')}</h1>
+          <p>{t('co.emptyText')}</p>
+          <Link href="/catalog" className="button button-primary">{t('co.backToFabrics')} <ArrowLeft size={16} /></Link>
         </div>
       </main>
     )
@@ -227,16 +229,16 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
 
   const applyValidation = (): boolean => {
     const nextErrors: CheckoutErrors = {}
-    if (form.name.trim().length < 3) nextErrors.name = 'اكتبي الاسم الكامل (3 أحرف على الأقل)'
-    if (!validPhone(form.phone)) nextErrors.phone = 'أدخلي رقم هاتف عراقي صحيحاً يبدأ بـ 07 أو +964'
-    if (!governorates.includes(form.governorate)) nextErrors.governorate = 'اختاري المحافظة من القائمة'
-    if (form.district.trim().length < 2) nextErrors.district = 'أدخلي المنطقة أو القضاء'
-    if (form.address.trim().length < 5) nextErrors.address = 'أدخلي العنوان: المحلة والشارع ورقم المنزل'
-    if (form.landmark.trim().length < 3) nextErrors.landmark = 'أدخلي أقرب نقطة دالة تساعدنا في الوصول'
-    if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) nextErrors.email = 'البريد الإلكتروني غير صحيح'
+    if (form.name.trim().length < 3) nextErrors.name = t('co.errName')
+    if (!validPhone(form.phone)) nextErrors.phone = t('co.errPhone')
+    if (!governorates.includes(form.governorate)) nextErrors.governorate = t('co.errGovernorate')
+    if (form.district.trim().length < 2) nextErrors.district = t('co.errDistrict')
+    if (form.address.trim().length < 5) nextErrors.address = t('co.errAddress')
+    if (form.landmark.trim().length < 3) nextErrors.landmark = t('co.errLandmark')
+    if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) nextErrors.email = t('co.errEmail')
     setErrors(nextErrors)
     if (!consent) {
-      setConsentError('شدّي الموافقة على شروط الاستخدام وسياسة الخصوصية لتأكيد الطلب')
+      setConsentError(t('co.errConsent'))
       const box = document.getElementById('consent')
       box?.scrollIntoView({ block: 'center', behavior: 'smooth' })
       window.setTimeout(() => box?.focus({ preventScroll: true }), 260)
@@ -249,7 +251,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
       return true
     }
     const details = invalidKeys.map((key) => nextErrors[key]).filter((value): value is string => Boolean(value))
-    setLiveMessage(`يرجى إكمال الحقول: ${details.join('، ')}`)
+    setLiveMessage(t('co.errSummary').replace('{list}', details.join(lang === 'en' ? ', ' : '، ')))
     const target = fieldOrder.find((key) => invalidKeys.includes(key))
     if (target) {
       const element = document.getElementById(target)
@@ -364,7 +366,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     saveLocalOrder(orderNumber, 'received', payload)
     notifyByEmail(payload, orderNumber)
     setSubmitState('idle')
-    setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${orderNumber}`)
+    setLiveMessage(t('co.orderSuccess').replace('{number}', orderNumber))
     onComplete(orderNumber)
   }
 
@@ -378,10 +380,10 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     })
     notifyByEmail(payload, orderNumber)
     setPendingOrderNumber(orderNumber)
-    setServerError('تأكدي من الاتصال فقط')
+    setServerError(t('co.connectionError'))
     setNotice('')
     setSubmitState('idle')
-    setLiveMessage('تأكدي من الاتصال فقط. طلبك محفوظ لدينا وسيُرسل تلقائياً عند عودة الاتصال.')
+    setLiveMessage(t('co.connectionHold'))
   }
 
   const sleep = (ms: number): Promise<void> => new Promise((resolve) => window.setTimeout(resolve, ms))
@@ -397,7 +399,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     setSubmitState('loading')
     setServerError('')
     setNotice('')
-    setLiveMessage('جارٍ إرسال الطلب إلى المتجر...')
+    setLiveMessage(t('co.sending'))
     const orderNumber = pendingOrderNumber || createLocalOrderNumber()
     const request = {
       orderNumber,
@@ -423,7 +425,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
           return
         }
         if (!response.ok) {
-          lastReason = errorMessage(body, `الخادم أعاد الرد رقم ${response.status}`)
+          lastReason = errorMessage(body, t('co.serverStatus').replace('{status}', String(response.status)))
           if (response.status < 500) {
             setServerError(lastReason)
             setSubmitState('idle')
@@ -437,16 +439,16 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         notifyByEmail(payload, serverNumber)
         setPendingOrderNumber('')
         setSubmitState('idle')
-        setLiveMessage(`تم استلام طلبك بنجاح. رقم طلبك ${serverNumber}`)
+        setLiveMessage(t('co.orderSuccess').replace('{number}', serverNumber))
         onComplete(serverNumber)
         return
       } catch (error) {
         window.clearTimeout(timer)
         lastReason = error instanceof Error && error.name === 'AbortError'
-          ? 'انتهت مهلة الاتصال'
+          ? t('co.timeout')
           : error instanceof Error
             ? error.message
-            : 'تعذر الاتصال'
+            : t('co.noConnection')
       }
       if (attempt < 3) await sleep(350 * attempt)
     }
@@ -458,21 +460,21 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     <main className="container-eva checkout-page glass-scope">
       <style>{glassStyles}</style>
       <div className="breadcrumbs">
-        <Link href="/cart">السلة</Link>
+        <Link href="/cart">{t('co.crumbCart')}</Link>
         <span>›</span>
-        <span>إتمام الطلب</span>
+        <span>{t('co.crumbCheckout')}</span>
       </div>
       <div className="checkout-top">
         <div>
-          <span className="eyebrow">مربع واحد فقط</span>
-          <h1>أكمل طلبك</h1>
+          <span className="eyebrow">{t('co.eyebrow')}</span>
+          <h1>{t('co.title')}</h1>
         </div>
-        <Link href={`/cart${location.includes('?') ? location.slice(location.indexOf('?')) : ''}`} className="underlined-link"><ArrowRight size={15} />العودة للسلة</Link>
+        <Link href={`/cart${location.includes('?') ? location.slice(location.indexOf('?')) : ''}`} className="underlined-link"><ArrowRight size={15} />{t('co.backToCart')}</Link>
       </div>
       <ul className="order-trust">
-        <li><Check size={15} />بدون تسجيل أو كلمة مرور</li>
-        <li><ShieldCheck size={15} />الدفع عند الاستلام</li>
-        <li><ShieldCheck size={15} />الطلب يُسجَّل فوراً في المتجر</li>
+        <li><Check size={15} />{t('co.trustNoAccount')}</li>
+        <li><ShieldCheck size={15} />{t('co.trustCod')}</li>
+        <li><ShieldCheck size={15} />{t('co.trustRecorded')}</li>
       </ul>
       <div className="sr-only" role="status" aria-live="polite">{liveMessage}</div>
       <form className="checkout-layout" onSubmit={submitOrder} noValidate>
@@ -480,46 +482,46 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
           <div className="order-box-head">
             <span className="order-box-icon"><MapPin size={22} /></span>
             <div>
-              <h2>معلومات التوصيل</h2>
-              <p>اسمك، عنوانك وأقرب نقطة دالة — كل ما نحتاجه في مربع واحد، ثم زر تأكيد واحد.</p>
+              <h2>{t('co.deliveryInfo')}</h2>
+              <p>{t('co.deliveryIntro')}</p>
             </div>
           </div>
           <div className="form-fields">
-            <Field label="الاسم الكامل" id="name" value={form.name} error={errors.name} onChange={(value) => update('name', value)} placeholder="مثال: سارة أحمد" autoComplete="name" icon={<UserRound size={17} />} />
-            <Field label="رقم الهاتف" id="phone" value={form.phone} error={errors.phone} onChange={(value) => update('phone', value)} placeholder="07XX XXX XXXX" type="tel" inputMode="tel" autoComplete="tel" dir="ltr" icon={<Phone size={17} />} />
+            <Field label={t('co.labelName')} id="name" value={form.name} error={errors.name} onChange={(value) => update('name', value)} placeholder={t('co.phName')} autoComplete="name" icon={<UserRound size={17} />} />
+            <Field label={t('co.labelPhone')} id="phone" value={form.phone} error={errors.phone} onChange={(value) => update('phone', value)} placeholder="07XX XXX XXXX" type="tel" inputMode="tel" autoComplete="tel" dir="ltr" icon={<Phone size={17} />} />
             <div className="field">
-              <label htmlFor="governorate">المحافظة{errors.governorate && <span className="required-mark">*</span>}</label>
+              <label htmlFor="governorate">{t('co.labelGovernorate')}{errors.governorate && <span className="required-mark">*</span>}</label>
               <div className="field-input glass-input">
                 <MapPin size={17} />
                 <select id="governorate" value={form.governorate} onChange={(event) => update('governorate', event.target.value)} aria-invalid={Boolean(errors.governorate)} aria-describedby={errors.governorate ? 'governorate-error' : undefined}>
-                  <option value="">اختاري المحافظة</option>
+                  <option value="">{t('co.phGovernorate')}</option>
                   {governorates.map((item) => <option key={item} value={item}>{item}</option>)}
                 </select>
               </div>
               {errors.governorate && <small className="field-error" id="governorate-error" aria-live="polite">{errors.governorate}</small>}
             </div>
-            <Field label="المنطقة أو القضاء" id="district" value={form.district} error={errors.district} onChange={(value) => update('district', value)} placeholder="مثال: الكرادة داخل" icon={<MapPin size={17} />} />
+            <Field label={t('co.labelDistrict')} id="district" value={form.district} error={errors.district} onChange={(value) => update('district', value)} placeholder={t('co.phDistrict')} icon={<MapPin size={17} />} />
             <div className="field field-full">
-              <label htmlFor="address">العنوان بالتفصيل{errors.address && <span className="required-mark">*</span>}</label>
-              <textarea className="glass-input" id="address" value={form.address} onChange={(event) => update('address', event.target.value)} placeholder="المحلة، الشارع، رقم المنزل والدور" rows={3} aria-invalid={Boolean(errors.address)} aria-describedby={errors.address ? 'address-error' : undefined} />
+              <label htmlFor="address">{t('co.labelAddress')}{errors.address && <span className="required-mark">*</span>}</label>
+              <textarea className="glass-input" id="address" value={form.address} onChange={(event) => update('address', event.target.value)} placeholder={t('co.phAddress')} rows={3} aria-invalid={Boolean(errors.address)} aria-describedby={errors.address ? 'address-error' : undefined} />
               {errors.address && <small className="field-error" id="address-error" aria-live="polite">{errors.address}</small>}
             </div>
             <div className="field field-full">
-              <label htmlFor="landmark">أقرب نقطة دالة{errors.landmark && <span className="required-mark">*</span>}</label>
+              <label htmlFor="landmark">{t('co.labelLandmark')}{errors.landmark && <span className="required-mark">*</span>}</label>
               <div className="field-input glass-input">
                 <Navigation size={17} />
-                <input id="landmark" type="text" value={form.landmark} onChange={(event) => update('landmark', event.target.value)} placeholder="مثال: جامع النور، صيدلية الشفاء، جسر المعلّق" aria-invalid={Boolean(errors.landmark)} aria-describedby={errors.landmark ? 'landmark-error' : 'landmark-hint'} />
+                <input id="landmark" type="text" value={form.landmark} onChange={(event) => update('landmark', event.target.value)} placeholder={t('co.phLandmark')} aria-invalid={Boolean(errors.landmark)} aria-describedby={errors.landmark ? 'landmark-error' : 'landmark-hint'} />
               </div>
               {errors.landmark
                 ? <small className="field-error" id="landmark-error" aria-live="polite">{errors.landmark}</small>
-                : <small className="field-hint" id="landmark-hint">علامة قريبة تكفي للوصول أسرع عند التوصيل.</small>}
+                : <small className="field-hint" id="landmark-hint">{t('co.hintLandmark')}</small>}
             </div>
             <div className="field field-full">
-              <label htmlFor="notes">ملاحظات للتوصيل <small>(اختياري)</small></label>
-              <textarea className="glass-input" id="notes" value={form.notes} onChange={(event) => update('notes', event.target.value)} placeholder="وقت مناسب للتوصيل أو تعليمات إضافية" rows={2} />
+              <label htmlFor="notes">{t('co.labelNotes')} <small>{t('co.optional')}</small></label>
+              <textarea className="glass-input" id="notes" value={form.notes} onChange={(event) => update('notes', event.target.value)} placeholder={t('co.phNotes')} rows={2} />
             </div>
             <div className="field field-full">
-              <label htmlFor="email">البريد الإلكتروني <small>(اختياري)</small></label>
+              <label htmlFor="email">{t('co.labelEmail')} <small>{t('co.optional')}</small></label>
               <div className="field-input glass-input">
                 <input id="email" type="email" dir="ltr" value={form.email} onChange={(event) => update('email', event.target.value)} placeholder="name@example.com" autoComplete="email" aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'email-error' : undefined} />
               </div>
@@ -529,15 +531,15 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
                     {serverError && (
             <div className="server-error glass glass-strong" role="alert" aria-live="assertive">
               <h3><CircleAlert size={18} />{serverError}</h3>
-              <p>طلبك محفوظ عندنا وسيُسجَّل تلقائياً بمجرد عودة الاتصال، ولا داعي لإعادة كتابة أي شيء.</p>
-              {pendingOrderNumber && <p>رقم طلبك المحفوظ: <strong dir="ltr">{pendingOrderNumber}</strong></p>}
+              <p>{t('co.serverErrorBody')}</p>
+              {pendingOrderNumber && <p>{t('co.savedOrderNumber')}<strong dir="ltr">{pendingOrderNumber}</strong></p>}
               <div className="contact-actions">
-                <button type="button" className="button button-primary" onClick={() => { setServerError(''); void submitOrder() }}><RefreshCw size={15} />إعادة المحاولة الآن</button>
+                <button type="button" className="button button-primary" onClick={() => { setServerError(''); void submitOrder() }}><RefreshCw size={15} />{t('co.retryNow')}</button>
               </div>
             </div>
           )}
           <div className="order-total-strip">
-            <span>الإجمالي شامل التوصيل<small>{cart.length.toLocaleString('ar-IQ')} {cart.length === 1 ? 'قطعة' : 'قطع'} · {totals.deliveryFee ? `توصيل ${formatPrice(totals.deliveryFee)}` : 'توصيل مجاني'}</small></span>
+            <span>{t('co.totalWithDelivery')}<small>{cart.length.toLocaleString(lang === 'en' ? 'en-US' : 'ar-IQ')} {cart.length === 1 ? t('co.pieceOne') : t('co.pieceMany')} · {totals.deliveryFee ? t('co.deliveryFee').replace('{price}', formatPrice(totals.deliveryFee)) : t('co.deliveryFree')}</small></span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
           <div className="consent-row">
@@ -557,21 +559,21 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
               aria-describedby={consentError ? 'consent-error' : 'consent-help'}
             />
             <label htmlFor="consent">
-              <span className="consent-title">أوافق على شروط الاستخدام وسياسة الخصوصية</span>
-              <small id="consent-help">نستخدم بياناتك لتجهيز الطلب والتواصل معك فقط، ولا نشاركها مع أي جهة أخرى.</small>
+              <span className="consent-title">{t('co.consentTitle')}</span>
+              <small id="consent-help">{t('co.consentHelp')}</small>
             </label>
             <span className="consent-links">
-              <Link href="/policies#terms">الشروط</Link>
-              <Link href="/policies#privacy">الخصوصية</Link>
+              <Link href="/policies#terms">{t('co.linkTerms')}</Link>
+              <Link href="/policies#privacy">{t('co.linkPrivacy')}</Link>
             </span>
           </div>
           {consentError && <small className="field-error" id="consent-error" role="alert">{consentError}</small>}
           <button type="submit" className="button button-primary order-submit" disabled={submitState === 'loading'}>
-            {submitState === 'loading' ? <><LoaderCircle className="spin" size={18} />جارٍ إرسال الطلب</> : <>تأكيد الطلب <ArrowLeft size={17} /></>}
+            {submitState === 'loading' ? <><LoaderCircle className="spin" size={18} />{t('co.submitLoading')}</> : <>{t('co.submit')} <ArrowLeft size={17} /></>}
           </button>
         </div>
-        <aside className="checkout-summary glass glass-strong" aria-label="ملخص طلبك">
-          <h2>ملخص طلبك</h2>
+        <aside className="checkout-summary glass glass-strong" aria-label={t('co.summary')}>
+          <h2>{t('co.summary')}</h2>
           <div className="checkout-items">
             {cart.map((item) => (
               <div className="checkout-item" key={`${item.product.slug}-${item.color.id}`}>
@@ -586,18 +588,18 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
           </div>
           <div className="glass-divider" />
           <div className="summary-line">
-            <span>المجموع الفرعي</span>
+            <span>{t('co.subtotal')}</span>
             <strong>{formatPrice(totals.subtotal)}</strong>
           </div>
           <div className="summary-line">
-            <span>التوصيل <small>(تقديري)</small></span>
-            <strong>{totals.deliveryFee ? formatPrice(totals.deliveryFee) : 'مجاناً'}</strong>
+            <span>{t('co.delivery')} <small>{t('co.estimated')}</small></span>
+            <strong>{totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('co.free')}</strong>
           </div>
           <div className="summary-total">
-            <span>الإجمالي</span>
+            <span>{t('co.total')}</span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
-          <div className="checkout-secure"><Check size={15} />لن يُرسل الطلب إلا بعد الضغط على تأكيد</div>
+          <div className="checkout-secure"><Check size={15} />{t('co.notSentNote')}</div>
         </aside>
       </form>
     </main>

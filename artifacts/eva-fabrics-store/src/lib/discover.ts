@@ -91,58 +91,58 @@ type Rule = (profile: Profile, source: string) => { points: number; why: string 
 
 const GARMENT_RULES: Record<string, Rule> = {
   'فستان يومي': (p, s) => [
-    { points: has(s, ['فستان', 'قميص', 'تنورة', 'يومي']) ? 30 : 0, why: 'مناسب للفساتين اليومية' },
-    { points: p.light ? 18 : 0, why: 'خامة خفيفة ومريحة' },
-    { points: p.opaque ? 14 : 0, why: 'غير شفافة' },
-    { points: p.stretch === 'yes' ? 12 : 0, why: 'مرنة وسهلة التفصيل' },
-    { points: p.heavy ? -10 : 0, why: 'ثقيلة قليلاً للاستخدام اليومي' },
+    { points: has(s, ['فستان', 'قميص', 'تنورة', 'يومي']) ? 30 : 0, why: 'disc.suitableDailyDresses' },
+    { points: p.light ? 18 : 0, why: 'disc.lightComfortable' },
+    { points: p.opaque ? 14 : 0, why: 'disc.notSheer' },
+    { points: p.stretch === 'yes' ? 12 : 0, why: 'disc.stretchyEasySew' },
+    { points: p.heavy ? -10 : 0, why: 'disc.heavyForDaily' },
   ],
   'فستان سهرة': (p, s) => [
-    { points: p.gloss ? 32 : 0, why: 'لمعة مناسبة للسهرة' },
-    { points: has(s, ['سهرة', 'ناعم', 'انسيابي', 'ساتان']) ? 22 : 0, why: 'انسيابية أنيقة' },
-    { points: has(s, ['فستان', 'سهرة']) ? 14 : 0, why: 'مذكور للفساتين' },
-    { points: p.opaque ? 10 : 0, why: 'تغطية مريحة' },
-    { points: p.matte && !p.gloss ? -8 : 0, why: 'مطفي بدون لمعة' },
+    { points: p.gloss ? 32 : 0, why: 'disc.eveningShine' },
+    { points: has(s, ['سهرة', 'ناعم', 'انسيابي', 'ساتان']) ? 22 : 0, why: 'disc.elegantDrape' },
+    { points: has(s, ['فستان', 'سهرة']) ? 14 : 0, why: 'disc.mentionedDresses' },
+    { points: p.opaque ? 10 : 0, why: 'disc.comfortableCoverage' },
+    { points: p.matte && !p.gloss ? -8 : 0, why: 'disc.matteNoShine' },
   ],
   'عباءة أو برنوش': (p, s) => [
-    { points: has(s, ['عباءة', 'برنوش', 'بنتوش', 'جاكيت', 'شنطة']) ? 30 : 0, why: 'مذكور للعباءات' },
-    { points: p.opaque ? 20 : 0, why: 'تغطية كاملة' },
-    { points: p.heavy ? 16 : 0, why: 'سماكة مناسبة للطبقة الخارجية' },
-    { points: p.sheer ? -18 : 0, why: 'شفافة ولا تناسب العباءة' },
-    { points: p.stretch === 'yes' ? 6 : 0, why: 'مرونة في الارتداء' },
+    { points: has(s, ['عباءة', 'برنوش', 'بنتوش', 'جاكيت', 'شنطة']) ? 30 : 0, why: 'disc.mentionedAbayas' },
+    { points: p.opaque ? 20 : 0, why: 'disc.fullCoverage' },
+    { points: p.heavy ? 16 : 0, why: 'disc.outerwearWeight' },
+    { points: p.sheer ? -18 : 0, why: 'disc.sheerNotForAbaya' },
+    { points: p.stretch === 'yes' ? 6 : 0, why: 'disc.stretchComfort' },
   ],
   'قطعة عملية': (p, s) => [
-    { points: has(s, ['جاكيت', 'قميص', 'تنورة', 'بنطلون', 'طقم', 'عملي']) ? 26 : 0, why: 'مذكور لقطع عملية' },
-    { points: p.stretch === 'yes' ? 20 : 0, why: 'مطاطية تسهل الحركة' },
-    { points: p.opaque ? 14 : 0, why: 'تغطية عملية' },
-    { points: p.light ? 8 : 0, why: 'خفيفة على الجسم' },
-    { points: p.gloss ? -6 : 0, why: 'لمعة أقل ملاءمة للاستخدام العملي' },
+    { points: has(s, ['جاكيت', 'قميص', 'تنورة', 'بنطلون', 'طقم', 'عملي']) ? 26 : 0, why: 'disc.mentionedPractical' },
+    { points: p.stretch === 'yes' ? 20 : 0, why: 'disc.stretchyMovesEasy' },
+    { points: p.opaque ? 14 : 0, why: 'disc.practicalCoverage' },
+    { points: p.light ? 8 : 0, why: 'disc.lightOnBody' },
+    { points: p.gloss ? -6 : 0, why: 'disc.lessSuitablePractical' },
   ],
 }
 
 const toneRules = (tone: string | undefined, profile: Profile): { points: number; why: string }[] => {
   if (tone === 'داكن') return [
-    { points: profile.dark ? 26 : 0, why: 'درجات داكنة' },
-    { points: profile.pale ? -18 : 0, why: 'فاتح اللون' },
+    { points: profile.dark ? 26 : 0, why: 'disc.darkShades' },
+    { points: profile.pale ? -18 : 0, why: 'disc.paleColor' },
   ]
   if (tone === 'فاتح') return [
-    { points: profile.pale ? 26 : 0, why: 'درجات فاتحة' },
-    { points: profile.dark ? -18 : 0, why: 'داكن اللون' },
+    { points: profile.pale ? 26 : 0, why: 'disc.paleShades' },
+    { points: profile.dark ? -18 : 0, why: 'disc.darkColor' },
   ]
   if (tone === 'لامع') return [
-    { points: profile.gloss ? 28 : 0, why: 'سطح لامع' },
-    { points: profile.matte && !profile.gloss ? -14 : 0, why: 'سطح مطفي' },
+    { points: profile.gloss ? 28 : 0, why: 'disc.shinySurface' },
+    { points: profile.matte && !profile.gloss ? -14 : 0, why: 'disc.matteSurface' },
   ]
   if (tone === 'محايد') return [
-    { points: !profile.gloss ? 16 : 0, why: 'لون هادئ غير لامع' },
-    { points: profile.dark || profile.pale ? 8 : 0, why: 'سهل التنسيق' },
+    { points: !profile.gloss ? 16 : 0, why: 'disc.quietColor' },
+    { points: profile.dark || profile.pale ? 8 : 0, why: 'disc.easyToMatch' },
   ]
   return []
 }
 
 const stretchRules = (stretch: string | undefined, profile: Profile): { points: number; why: string }[] => {
-  if (stretch === 'yes') return [{ points: profile.stretch === 'yes' ? 24 : -30, why: profile.stretch === 'yes' ? 'مطاطية' : 'غير مطاطية' }]
-  if (stretch === 'no') return [{ points: profile.stretch === 'no' ? 24 : -30, why: profile.stretch === 'no' ? 'غير مطاطية' : 'مطاطية' }]
+  if (stretch === 'yes') return [{ points: profile.stretch === 'yes' ? 24 : -30, why: profile.stretch === 'yes' ? 'disc.isStretchy' : 'disc.notStretchy' }]
+  if (stretch === 'no') return [{ points: profile.stretch === 'no' ? 24 : -30, why: profile.stretch === 'no' ? 'disc.notStretchy' : 'disc.isStretchy' }]
   return []
 }
 

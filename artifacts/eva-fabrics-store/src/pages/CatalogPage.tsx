@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { ArrowLeft, Check, Filter, Layers, Package, Search, SlidersHorizontal, Tag, X } from 'lucide-react'
 import { Link, useLocation, useSearch } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
+import { useT } from '@/lib/i18n'
 import { formatPrice, isSoldOut, normalizeArabic } from '@/lib/catalog'
 import { ProductCard, ProductGridSkeleton } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
@@ -19,16 +20,16 @@ type SortKey = 'featured' | 'price-asc' | 'price-desc'
 type StretchKey = 'all' | 'stretch' | 'non'
 type ParamChanges = Record<string, string | null>
 
-const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: 'featured', label: 'الترتيب الافتراضي' },
-  { value: 'price-asc', label: 'السعر: الأقل أولاً' },
-  { value: 'price-desc', label: 'السعر: الأعلى أولاً' },
+const SORT_OPTIONS: { value: SortKey; labelKey: string }[] = [
+  { value: 'featured', labelKey: 'cat.sortFeatured' },
+  { value: 'price-asc', labelKey: 'cat.sortPriceAsc' },
+  { value: 'price-desc', labelKey: 'cat.sortPriceDesc' },
 ]
 
-const STRETCH_OPTIONS: { value: StretchKey; label: string }[] = [
-  { value: 'all', label: 'الكل' },
-  { value: 'stretch', label: 'مطاطي' },
-  { value: 'non', label: 'غير مطاطي' },
+const STRETCH_OPTIONS: { value: StretchKey; labelKey: string }[] = [
+  { value: 'all', labelKey: 'cat.stretchAll' },
+  { value: 'stretch', labelKey: 'cat.stretchYes' },
+  { value: 'non', labelKey: 'cat.stretchNon' },
 ]
 
 const STOP_WORDS = new Set(['قماش', 'القماش', 'اقمشه', 'الاقمشه', 'fabric'])
@@ -167,6 +168,7 @@ const matchesQuery = (product: Product, query: string, categories: Category[]): 
 }
 
 export function CatalogPage({ products, categories, status, wishlist, onWish, onAdd }: CatalogPageProps) {
+  const { t } = useT()
   const [location, navigate] = useLocation()
   const browserSearch = useSearch()
 
@@ -254,20 +256,20 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
   const priceLabel = priceRange.min !== null && priceRange.max !== null
     ? `${formatPrice(priceRange.min)} — ${formatPrice(priceRange.max)}`
     : priceRange.min !== null
-      ? `من ${formatPrice(priceRange.min)}`
+      ? t('cat.priceFromLabel').replace('{price}', formatPrice(priceRange.min))
       : priceRange.max !== null
-        ? `حتى ${formatPrice(priceRange.max)}`
+        ? t('cat.priceUntilLabel').replace('{price}', formatPrice(priceRange.max))
         : ''
-  const statusLabel = status === 'loading' ? 'جارٍ الاتصال بالخادم' : status === 'fallback' ? 'تعذّر الاتصال — المحتوى المحفوظ يعمل' : 'متصل بالخادم — تحديث مباشر'
+  const statusLabel = status === 'loading' ? t('cat.statusLoading') : status === 'fallback' ? t('cat.statusFallback') : t('cat.statusLive')
 
   const chips = useMemo(() => [
-    { id: '', label: 'كل الخامات', count: products.length },
+    { id: '', label: t('cat.chipAll'), count: products.length },
     ...categories.map((category) => ({
       id: category.id,
       label: category.name,
       count: products.filter((product) => belongsToCategory(product, category)).length,
     })),
-  ], [categories, products])
+  ], [categories, products, t])
 
   const submitSearch = (event: FormEvent) => {
     event.preventDefault()
@@ -313,31 +315,31 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
   return (
     <main className="container-eva catalog-page">
       <div className="breadcrumbs">
-        <Link href="/">الرئيسية</Link>
+        <Link href="/">{t('cat.breadcrumbHome')}</Link>
         <span>›</span>
-        <span>الأقمشة</span>
+        <span>{t('cat.breadcrumbFabrics')}</span>
         {activeCategory && <><span>›</span><span>{activeCategory.name}</span></>}
       </div>
 
       <div className="catalog-heading">
         <div>
-          <span className="eyebrow">معرض الخامات</span>
-          <h1>{activeCategory ? activeCategory.name : 'كل الأقمشة'}</h1>
-          <p>{products.length} خامة في المعرض · {statusLabel}</p>
+          <span className="eyebrow">{t('cat.eyebrow')}</span>
+          <h1>{activeCategory ? activeCategory.name : t('cat.allFabricsTitle')}</h1>
+          <p>{t('cat.countFabrics').replace('{n}', String(products.length))} · {statusLabel}</p>
         </div>
         <div className="catalog-sort">
-          <label htmlFor="catalog-sort">ترتيب حسب</label>
+          <label htmlFor="catalog-sort">{t('cat.sortBy')}</label>
           <select
             id="catalog-sort"
             value={sort}
             onChange={(event) => updateParams({ sort: event.target.value === 'featured' ? null : event.target.value })}
           >
-            {SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+            {SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}
           </select>
         </div>
       </div>
 
-      <div className="chip-row" role="group" aria-label="تصفحي الأقمشة حسب القسم">
+      <div className="chip-row" role="group" aria-label={t('cat.chipsAria')}>
         {chips.map((chip) => {
           const active = chip.id ? chip.id === activeCategoryId : !categoryId
           return (
@@ -346,7 +348,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
               type="button"
               className={`chip ${active ? 'chip-active' : ''}`}
               aria-pressed={active}
-              aria-label={`${chip.label}، ${chip.count} خامة`}
+              aria-label={t('cat.chipAria').replace('{label}', chip.label).replace('{n}', String(chip.count))}
               onClick={() => updateParams({ category: chip.id || null })}
             >
               <span>{chip.label}</span>
@@ -361,45 +363,45 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
           type="button"
           className="filter-trigger"
           aria-haspopup="dialog"
-          aria-label={activeCount > 0 ? `فتح التصفية، ${activeCount} فلتر مفعّل` : 'فتح التصفية'}
+          aria-label={activeCount > 0 ? t('cat.filterOpenActive').replace('{n}', String(activeCount)) : t('cat.filterOpen')}
           onClick={() => setFilterOpen(true)}
         >
           <SlidersHorizontal size={16} aria-hidden="true" />
-          تصفية
+          {t('cat.filterBtn')}
           {activeCount > 0 && <b>{activeCount}</b>}
         </button>
       </div>
 
       <div className="catalog-layout">
-        <aside className="filter-sidebar" aria-label="تصفية الأقمشة">{sidePanel}</aside>
-        <section className="catalog-results" aria-label="نتائج الأقمشة">
+        <aside className="filter-sidebar" aria-label={t('cat.filterFabrics')}>{sidePanel}</aside>
+        <section className="catalog-results" aria-label={t('cat.resultsAria')}>
           <form className="catalog-search" onSubmit={submitSearch} role="search">
             <Search size={18} aria-hidden="true" />
-            <label className="sr-only" htmlFor="catalog-search">ابحثي في النتائج</label>
+            <label className="sr-only" htmlFor="catalog-search">{t('cat.searchLabel')}</label>
             <input
               id="catalog-search"
               type="search"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="ابحثي باسم القماش أو اللون أو الاستخدام"
+              placeholder={t('cat.searchPlaceholder')}
               autoComplete="off"
             />
             {searchInput && (
-              <button type="button" onClick={resetSearch} aria-label="مسح البحث">
+              <button type="button" onClick={resetSearch} aria-label={t('cat.clearSearch')}>
                 <X size={16} aria-hidden="true" />
               </button>
             )}
-            <button type="submit" className="button button-primary button-small">بحث</button>
+            <button type="submit" className="button button-primary button-small">{t('cat.searchBtn')}</button>
           </form>
 
           {activeCount > 0 && (
             <div className="active-filters">
-              <span>مرشحات:</span>
-              {search && <FilterChip label={`بحث: ${search}`} onRemove={resetSearch} />}
+              <span>{t('cat.activeFilters')}</span>
+              {search && <FilterChip label={t('cat.filterSearch').replace('{q}', search)} onRemove={resetSearch} />}
               {activeCategory && <FilterChip label={activeCategory.name} onRemove={() => updateParams({ category: null })} />}
-              {categoryId && !activeCategory && <FilterChip label={`قسم: ${categoryId}`} onRemove={() => updateParams({ category: null })} />}
-              {stretch !== 'all' && <FilterChip label={STRETCH_OPTIONS.find((item) => item.value === stretch)?.label || ''} onRemove={() => updateParams({ stretch: null })} />}
-              {inStock && <FilterChip label="متوفر فقط" onRemove={() => updateParams({ stock: null })} />}
+              {categoryId && !activeCategory && <FilterChip label={t('cat.filterCategory').replace('{name}', categoryId)} onRemove={() => updateParams({ category: null })} />}
+              {stretch !== 'all' && <FilterChip label={t(STRETCH_OPTIONS.find((item) => item.value === stretch)?.labelKey || '')} onRemove={() => updateParams({ stretch: null })} />}
+              {inStock && <FilterChip label={t('cat.inStockOnly')} onRemove={() => updateParams({ stock: null })} />}
               {priceLabel && (
                 <FilterChip
                   label={priceLabel}
@@ -410,16 +412,16 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
                   }}
                 />
               )}
-              <button type="button" className="clear-all" onClick={clearFilters}>مسح الكل</button>
+              <button type="button" className="clear-all" onClick={clearFilters}>{t('cat.clearAll')}</button>
             </div>
           )}
 
           <div className="stats-bar glass-card" role="status">
-            <span className="stat-item"><Layers size={14} aria-hidden="true" />عرض <strong>{shown.length}</strong> من {products.length} خامة</span>
+            <span className="stat-item"><Layers size={14} aria-hidden="true" />{t('cat.statShow')} <strong>{shown.length}</strong> {t('cat.statOfTotal').replace('{total}', String(products.length))}</span>
             <span className="stat-divider" aria-hidden="true" />
-            <span className="stat-item"><Tag size={14} aria-hidden="true" />متوسط السعر <strong>{shown.length ? formatPrice(averagePrice) : '—'}</strong></span>
+            <span className="stat-item"><Tag size={14} aria-hidden="true" />{t('cat.statAvgPrice')} <strong>{shown.length ? formatPrice(averagePrice) : '—'}</strong></span>
             <span className="stat-divider" aria-hidden="true" />
-            <span className="stat-item"><Package size={14} aria-hidden="true" />متوفر الآن <strong>{availableCount}</strong></span>
+            <span className="stat-item"><Package size={14} aria-hidden="true" />{t('cat.statAvailable')} <strong>{availableCount}</strong></span>
           </div>
 
           {status === 'loading' && products.length === 0
@@ -442,16 +444,16 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
         </section>
       </div>
 
-      <Modal open={filterOpen} onClose={() => setFilterOpen(false)} title="تصفية الأقمشة" variant="bottom" className="filter-drawer">
+      <Modal open={filterOpen} onClose={() => setFilterOpen(false)} title={t('cat.filterFabrics')} variant="bottom" className="filter-drawer">
         <div className="drawer-header">
-          <h2>تصفية النتائج</h2>
-          <button type="button" className="icon-button" onClick={() => setFilterOpen(false)} aria-label="إغلاق التصفية">
+          <h2>{t('cat.filterResultsTitle')}</h2>
+          <button type="button" className="icon-button" onClick={() => setFilterOpen(false)} aria-label={t('cat.closeFilter')}>
             <X size={19} aria-hidden="true" />
           </button>
         </div>
         {drawerPanel}
         <button type="button" className="button button-primary drawer-submit" onClick={() => setFilterOpen(false)}>
-          عرض النتائج ({shown.length}) <Check size={16} aria-hidden="true" />
+          {t('cat.showResults').replace('{n}', String(shown.length))} <Check size={16} aria-hidden="true" />
         </button>
       </Modal>
     </main>
@@ -489,18 +491,19 @@ function FilterPanel({
   onMax,
   onClear,
 }: FilterPanelProps) {
+  const { t } = useT()
   return (
     <div className="filter-panel">
       <div className="filter-panel-title">
-        <strong><Filter size={14} aria-hidden="true" />التصفية</strong>
-        <button type="button" onClick={onClear} disabled={!hasFilters}>مسح الكل</button>
+        <strong><Filter size={14} aria-hidden="true" />{t('cat.filterPanelTitle')}</strong>
+        <button type="button" onClick={onClear} disabled={!hasFilters}>{t('cat.clearAll')}</button>
       </div>
 
       <fieldset>
-        <legend>نوع القماش</legend>
+        <legend>{t('cat.fabricType')}</legend>
         <label className="filter-option">
           <input type="radio" name={`category-${scope}`} checked={!categoryId} onChange={() => onChange({ category: null })} />
-          <span>كل الأقسام</span>
+          <span>{t('cat.allCategories')}</span>
         </label>
         {categories.map((category) => (
           <label className="filter-option" key={`${scope}-${category.id}`}>
@@ -516,7 +519,7 @@ function FilterPanel({
       </fieldset>
 
       <fieldset>
-        <legend>المرونة</legend>
+        <legend>{t('cat.stretchLegend')}</legend>
         {STRETCH_OPTIONS.map((option) => (
           <label className="filter-option" key={`${scope}-${option.value}`}>
             <input
@@ -525,35 +528,35 @@ function FilterPanel({
               checked={stretch === option.value}
               onChange={() => onChange({ stretch: option.value === 'all' ? null : option.value === 'stretch' ? '1' : '0' })}
             />
-            <span>{option.label}</span>
+            <span>{t(option.labelKey)}</span>
           </label>
         ))}
       </fieldset>
 
       <fieldset>
-        <legend>نطاق السعر</legend>
+        <legend>{t('cat.priceRange')}</legend>
         <div className="price-fields">
           <label>
-            <span>من</span>
+            <span>{t('cat.priceFrom')}</span>
             <input
               type="text"
               inputMode="numeric"
               value={minInput}
               onChange={(event) => onMin(event.target.value)}
-              placeholder="السعر الأدنى"
-              aria-label="السعر الأدنى بالدينار العراقي"
+              placeholder={t('cat.minPricePlaceholder')}
+              aria-label={t('cat.minPriceAria')}
             />
           </label>
           <span aria-hidden="true">—</span>
           <label>
-            <span>إلى</span>
+            <span>{t('cat.priceTo')}</span>
             <input
               type="text"
               inputMode="numeric"
               value={maxInput}
               onChange={(event) => onMax(event.target.value)}
-              placeholder="السعر الأعلى"
-              aria-label="السعر الأعلى بالدينار العراقي"
+              placeholder={t('cat.maxPricePlaceholder')}
+              aria-label={t('cat.maxPriceAria')}
             />
           </label>
         </div>
@@ -561,21 +564,22 @@ function FilterPanel({
 
       <label className="filter-option filter-check">
         <input type="checkbox" checked={inStock} onChange={(event) => onChange({ stock: event.target.checked ? '1' : null })} />
-        <span>المتوفر فقط</span>
+        <span>{t('cat.stockOnly')}</span>
       </label>
 
       <button type="button" className="filter-browse" onClick={onClear} disabled={!hasFilters}>
-        عرض كل الخامات <ArrowLeft size={14} aria-hidden="true" />
+        {t('cat.showAllFabrics')} <ArrowLeft size={14} aria-hidden="true" />
       </button>
     </div>
   )
 }
 
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
+  const { t } = useT()
   return (
     <span className="filter-chip">
       {label}
-      <button type="button" onClick={onRemove} aria-label={`إزالة ${label}`}>
+      <button type="button" onClick={onRemove} aria-label={t('cat.removeFilter').replace('{label}', label)}>
         <X size={12} aria-hidden="true" />
       </button>
     </span>
@@ -583,12 +587,13 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
 }
 
 function EmptyResults({ onClear }: { onClear: () => void }) {
+  const { t } = useT()
   return (
     <div className="empty-state glass-card" role="status">
       <div className="empty-icon"><Search size={23} aria-hidden="true" /></div>
-      <h2>لم نجد خامة بهذه المواصفات</h2>
-      <p>جرّبي كلمة بحث مختلفة أو أزيلي بعض الفلاتر لتظهر لك كل الخامات المتاحة في المعرض.</p>
-      <button type="button" className="button button-primary" onClick={onClear}>عرض كل الأقمشة</button>
+      <h2>{t('cat.emptyTitle')}</h2>
+      <p>{t('cat.emptyHint')}</p>
+      <button type="button" className="button button-primary" onClick={onClear}>{t('cat.emptyAction')}</button>
     </div>
   )
 }
