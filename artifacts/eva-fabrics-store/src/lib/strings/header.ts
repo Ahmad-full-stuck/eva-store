@@ -135,10 +135,10 @@ export const headerStrings: Record<string, StringEntry> = {
   'home.stats.cashLabel': { ar: 'دفع عند الاستلام', en: 'Cash on delivery' },
   'home.stats.cashTrend': { ar: 'مريح وآمن', en: 'Easy and secure' },
   'home.stats.percent': { ar: '٪', en: '%' },
-  'home.slide.staylat': { ar: 'ستايلات', en: 'Staylat' },
-  'home.slide.tulle': { ar: 'تول مَش حياكة', en: 'Non-woven tulle' },
-  'home.slide.embroidery': { ar: 'أمبرودري', en: 'Embroidery' },
-  'home.slide.viscose': { ar: 'فيسكوز هاربد', en: 'Harbad viscose' },
+  'home.slide.colorful': { ar: 'ألوان كريب متنوعة', en: 'Vibrant crepe colors' },
+  'home.slide.sequin': { ar: 'تطريز فضي بلمعة اللؤلؤ', en: 'Silver sequin embroidery' },
+  'home.slide.pearl': { ar: 'قماش وردي وبني مع لمسة اللؤلؤ', en: 'Pink & brown with pearl beading' },
+  'home.slide.stripe': { ar: 'مخطط كحلي وعنابي', en: 'Navy & burgundy stripes' },
 }
 
 export const routeLabelsEn: Record<string, string> = {

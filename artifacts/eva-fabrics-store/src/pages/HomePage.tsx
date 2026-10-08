@@ -31,6 +31,16 @@ const discoveryQuestions = [
 
 const engineValue = (key: string): string => discoveryEngineValues[key] || ''
 
+const CATEGORY_IMAGES: Record<string, { src: string; w: number; h: number }> = {
+  style: { src: 'home/cat-style.jpg', w: 1440, h: 1920 },
+  embroidered: { src: 'home/cat-embroidered.jpg', w: 1440, h: 1440 },
+  plain: { src: 'home/cat-plain.jpg', w: 1440, h: 1440 },
+  stretch: { src: 'home/cat-stretch.jpg', w: 1440, h: 1440 },
+  sequined: { src: 'home/cat-sequined.jpg', w: 1215, h: 2160 },
+  patterned: { src: 'home/cat-patterned.jpg', w: 1440, h: 1440 },
+  harvard: { src: 'home/cat-harvard.jpg', w: 1440, h: 1440 },
+}
+
 export function HomePage({ products, categories, wishlist, onWish, onAdd }: HomePageProps) {
   const { lang, t } = useT()
   const content = useSiteContent()
@@ -77,11 +87,17 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
       <section className="container-eva section-block category-section" aria-label={t('home.categoriesAria')}>
         <SectionHeading eyebrow={content.categoriesEyebrow} title={content.categoriesTitle} linkLabel={t('home.showAllFabrics')} linkHref="/catalog" />
         <div className="category-grid">
-          {categories.map((category) => <Link key={category.id} href={`/catalog?category=${encodeURIComponent(category.id)}`} className="category-card">
-            {category.image && <SmartImage src={category.image} alt="" sizes="(max-width: 640px) 46vw, 23vw" />}
-            <span className="category-shade" />
-            <span className="category-copy"><small>{category.description}</small><strong>{category.name}</strong><b>{t('home.discover')} <ArrowLeft size={14} /></b></span>
-          </Link>)}
+          {categories.map((category) => {
+            const override = CATEGORY_IMAGES[category.id]
+            const image = override?.src ?? category.image
+            return (
+              <Link key={category.id} href={`/catalog?category=${encodeURIComponent(category.id)}`} className="category-card">
+                {image && <SmartImage src={image} alt="" sizes="(max-width: 640px) 46vw, 23vw" intrinsicWidth={override?.w} intrinsicHeight={override?.h} />}
+                <span className="category-shade" />
+                <span className="category-copy"><small>{category.description}</small><strong>{category.name}</strong><b>{t('home.discover')} <ArrowLeft size={14} /></b></span>
+              </Link>
+            )
+          })}
         </div>
       </section>
 

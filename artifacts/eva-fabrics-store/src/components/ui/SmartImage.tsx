@@ -3,7 +3,7 @@ import { IMAGE_VARIANTS } from '@/lib/image-variants'
 
 const DEFAULT_WIDTHS = [320, 640]
 
-const isLocalFabric = (src: string) => /^(fabrics\/[\w-]+|products\/[\w-]+\/[\w-]+)\.jpe?g$/i.test(src)
+const isLocalFabric = (src: string) => /^(fabrics\/[\w-]+|products\/[\w-]+\/[\w-]+|home\/[\w-]+)\.jpe?g$/i.test(src)
 
 type SmartImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'srcSet' | 'width' | 'height'> & {
   src: string

@@ -4,6 +4,17 @@
  * later from the admin panel.
  */
 export const IMAGE_VARIANTS: Record<string, number[]> = {
+  'home/cat-embroidered.jpg': [320, 640, 960],
+  'home/cat-harvard.jpg': [320, 640, 960],
+  'home/cat-patterned.jpg': [320, 640, 960],
+  'home/cat-plain.jpg': [320, 640, 960],
+  'home/cat-sequined.jpg': [320, 640, 960],
+  'home/cat-stretch.jpg': [320, 640, 960],
+  'home/cat-style.jpg': [320, 640, 960],
+  'home/hero-1.jpg': [320, 640, 960],
+  'home/hero-2.jpg': [320, 640, 960],
+  'home/hero-3.jpg': [320, 640, 960],
+  'home/hero-4.jpg': [320, 640, 960],
   'products/albsrhbkhtrmnalbajr/01.jpg': [320, 640],
   'products/alstanhaldwshyzaltwlhalsadh/01.jpg': [320, 640],
   'products/altnyldz/01.jpg': [320, 640],

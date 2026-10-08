@@ -33,10 +33,10 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
   ]
 
   const slides = [
-    { src: 'products/staylat/01.jpg', alt: t('home.slide.staylat') },
-    { src: 'products/twlmshhyakh/01.jpg', alt: t('home.slide.tulle') },
-    { src: 'products/ambrwdry/01.jpg', alt: t('home.slide.embroidery') },
-    { src: 'products/fyskwzharbd/01.jpg', alt: t('home.slide.viscose') },
+    { src: 'home/hero-1.jpg', alt: t('home.slide.colorful') },
+    { src: 'home/hero-2.jpg', alt: t('home.slide.sequin') },
+    { src: 'home/hero-3.jpg', alt: t('home.slide.pearl') },
+    { src: 'home/hero-4.jpg', alt: t('home.slide.stripe') },
   ]
   const [activeSlide, setActiveSlide] = useState(0)
   const timerRef = useRef<number | undefined>(undefined)
