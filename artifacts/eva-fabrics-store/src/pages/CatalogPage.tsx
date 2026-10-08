@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
-import { ArrowLeft, Check, Filter, Layers, Package, Search, SlidersHorizontal, Tag, X } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, Filter, Layers, Package, Search, SlidersHorizontal, Tag, X } from 'lucide-react'
 import { Link, useLocation, useSearch } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
 import { useT } from '@/lib/i18n'
@@ -33,6 +33,8 @@ const STRETCH_OPTIONS: { value: StretchKey; labelKey: string }[] = [
 ]
 
 const STOP_WORDS = new Set(['قماش', 'القماش', 'اقمشه', 'الاقمشه', 'fabric'])
+
+const PAGE_SIZE = 24
 
 const catalogStyles = `
 .chip-row {
@@ -70,6 +72,13 @@ const catalogStyles = `
 .stat-divider { width: 1px; height: 16px; background: rgba(48, 38, 42, .14); }
 .empty-state.glass-card { padding: 62px 24px; margin-top: 4px; }
 .empty-state.glass-card:hover { transform: none; box-shadow: var(--glass-shadow); }
+.pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px; margin-top: 30px; }
+.pager-btn { min-width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; padding: 0 6px; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--eva-ink); background: rgba(255, 251, 250, .78); border: 1px solid rgba(255, 255, 255, .9); border-radius: 13px; box-shadow: 0 6px 16px -12px rgba(74, 24, 43, .35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); cursor: pointer; font-variant-numeric: tabular-nums; transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+.pager-btn:hover:not(:disabled) { color: var(--eva-rose); border-color: rgba(122, 30, 60, .35); transform: translateY(-1px); }
+.pager-btn.is-active { color: #fff; background: var(--eva-rose); border-color: var(--eva-rose); box-shadow: 0 10px 22px -12px rgba(122, 30, 60, .55); }
+.pager-btn.is-active:hover { color: #fff; transform: none; }
+.pager-btn:focus-visible { outline: 2px solid var(--eva-rose); outline-offset: 2px; }
+.pager-gap { min-width: 24px; text-align: center; color: var(--eva-muted); font-size: 13px; letter-spacing: 1px; }
 .filter-panel-title strong { display: inline-flex; align-items: center; gap: 7px; }
 .filter-panel .filter-browse { width: 100%; min-height: 44px; justify-content: space-between; padding: 10px 0; border-top: 1px solid rgba(48, 38, 42, .1); }
 .filter-drawer .filter-panel { padding: 4px 24px 0; background: transparent; border: 0; border-radius: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
@@ -189,6 +198,8 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
   const [minInput, setMinInput] = useState(minRaw)
   const [maxInput, setMaxInput] = useState(maxRaw)
   const [filterOpen, setFilterOpen] = useState(false)
+  const [page, setPage] = useState(1)
+  const resultsRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => setSearchInput(search), [search])
   useEffect(() => setMinInput(minRaw), [minRaw])
@@ -196,6 +207,25 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
 
   const pathname = location.split('?')[0]
   useEffect(() => setFilterOpen(false), [pathname])
+
+  const scrollToResults = () => {
+    const el = resultsRef.current
+    if (!el) return
+    const y = el.getBoundingClientRect().top + window.scrollY - 118
+    window.scrollTo({ top: Math.max(0, y), behavior: 'auto' })
+  }
+
+  const filterSig = [categoryId, stretch, inStock, minRaw, maxRaw, sort, search].join('|')
+  const firstSigRef = useRef(true)
+  useEffect(() => {
+    if (firstSigRef.current) {
+      firstSigRef.current = false
+      return
+    }
+    setPage(1)
+    scrollToResults()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterSig])
 
   const updateParams = (changes: ParamChanges, replace = false) => {
     const next = new URLSearchParams(query)
@@ -249,6 +279,24 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
     })
     return sorted
   }, [activeCategory, categoryId, categories, inStock, priceRange, products, search, sort, stretch])
+
+  const pageCount = Math.max(1, Math.ceil(shown.length / PAGE_SIZE))
+  const safePage = Math.min(page, pageCount)
+  const paged = useMemo(() => shown.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE), [shown, safePage])
+  const pageItems = useMemo<(number | '…')[]>(() => {
+    const items: (number | '…')[] = []
+    const push = (n: number) => { if (n >= 1 && n <= pageCount && !items.includes(n)) items.push(n) }
+    push(1)
+    if (safePage > 3) items.push('…')
+    for (let n = safePage - 1; n <= safePage + 1; n += 1) push(n)
+    if (safePage < pageCount - 2) items.push('…')
+    push(pageCount)
+    return items
+  }, [pageCount, safePage])
+  const goPage = (next: number) => {
+    setPage(Math.min(Math.max(1, next), pageCount))
+    scrollToResults()
+  }
 
   const availableCount = shown.filter((product) => !isSoldOut(product)).length
   const averagePrice = shown.length ? Math.round(shown.reduce((total, product) => total + product.price, 0) / shown.length) : 0
@@ -374,7 +422,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
 
       <div className="catalog-layout">
         <aside className="filter-sidebar" aria-label={t('cat.filterFabrics')}>{sidePanel}</aside>
-        <section className="catalog-results" aria-label={t('cat.resultsAria')}>
+        <section ref={resultsRef} className="catalog-results" aria-label={t('cat.resultsAria')}>
           <form className="catalog-search" onSubmit={submitSearch} role="search">
             <Search size={18} aria-hidden="true" />
             <label className="sr-only" htmlFor="catalog-search">{t('cat.searchLabel')}</label>
@@ -422,6 +470,12 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
             <span className="stat-item"><Tag size={14} aria-hidden="true" />{t('cat.statAvgPrice')} <strong>{shown.length ? formatPrice(averagePrice) : '—'}</strong></span>
             <span className="stat-divider" aria-hidden="true" />
             <span className="stat-item"><Package size={14} aria-hidden="true" />{t('cat.statAvailable')} <strong>{availableCount}</strong></span>
+            {pageCount > 1 && (
+              <>
+                <span className="stat-divider" aria-hidden="true" />
+                <span className="stat-item">{t('cat.pageLabel').replace('{x}', String(safePage)).replace('{y}', String(pageCount))}</span>
+              </>
+            )}
           </div>
 
           {status === 'loading' && products.length === 0
@@ -429,17 +483,42 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
             : shown.length === 0
               ? <EmptyResults onClear={clearFilters} />
               : (
-                <div className="product-grid">
-                  {shown.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      wished={wishlist.includes(product.slug)}
-                      onWish={onWish}
-                      onAdd={onAdd}
-                    />
-                  ))}
-                </div>
+                <>
+                  <div className="product-grid">
+                    {paged.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        wished={wishlist.includes(product.slug)}
+                        onWish={onWish}
+                        onAdd={onAdd}
+                      />
+                    ))}
+                  </div>
+                  {pageCount > 1 && (
+                    <nav className="pager" aria-label={t('cat.pagerAria')}>
+                      <button type="button" className="pager-btn" disabled={safePage <= 1} onClick={() => goPage(safePage - 1)} aria-label={t('cat.pagePrev')}>
+                        <ChevronRight size={17} aria-hidden="true" />
+                      </button>
+                      {pageItems.map((item, index) => item === '…'
+                        ? <span key={`gap-${index}`} className="pager-gap" aria-hidden="true">…</span>
+                        : (
+                          <button
+                            key={item}
+                            type="button"
+                            className={`pager-btn${item === safePage ? ' is-active' : ''}`}
+                            aria-current={item === safePage ? 'page' : undefined}
+                            onClick={() => goPage(item)}
+                          >
+                            {item}
+                          </button>
+                        ))}
+                      <button type="button" className="pager-btn" disabled={safePage >= pageCount} onClick={() => goPage(safePage + 1)} aria-label={t('cat.pageNext')}>
+                        <ChevronLeft size={17} aria-hidden="true" />
+                      </button>
+                    </nav>
+                  )}
+                </>
               )}
         </section>
       </div>

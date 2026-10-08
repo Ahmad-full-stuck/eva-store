@@ -210,20 +210,20 @@ const toFileDataUrl = (file: File): Promise<string> =>
 
 const adminStyles = `
 .admin-layer { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom)); background: rgba(46,24,33,.58); backdrop-filter: blur(9px) saturate(130%); -webkit-backdrop-filter: blur(9px) saturate(130%); animation: adminFade .18s ease both; }
-.admin-panel { width: min(940px, 100%); max-height: min(92vh, calc(100dvh - 28px)); display: flex; flex-direction: column; overflow: hidden; background: #fffbfb; border: 1px solid rgba(255,255,255,.92); border-radius: 20px; box-shadow: 0 34px 80px -24px rgba(46,24,33,.55); animation: adminPop .22s cubic-bezier(.22,1,.36,1) both; }
+.admin-panel { width: min(940px, 100%); max-height: min(92vh, calc(100vh - 28px)); display: flex; flex-direction: column; overflow: hidden; background: #fffbfb; border: 1px solid rgba(255,255,255,.92); border-radius: 20px; box-shadow: 0 34px 80px -24px rgba(46,24,33,.55); animation: adminPop .22s cubic-bezier(.22,1,.36,1) both; }
+@supports (height: 100dvh) { .admin-panel { max-height: min(92dvh, calc(100dvh - 28px)); } }
 @keyframes adminFade { from { opacity: 0; } }
 @keyframes adminPop { from { opacity: 0; transform: translateY(14px) scale(.985); } }
-.admin-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; color: #fff6f8; background: linear-gradient(135deg, var(--eva-charcoal), var(--eva-rose-dark)); }
+.admin-head { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; color: #fff6f8; background: linear-gradient(135deg, var(--eva-charcoal), var(--eva-rose-dark)); }
 .admin-head h2 { margin: 0; font-size: 16.5px; display: flex; align-items: center; gap: 9px; }
 .admin-head small { display: block; font-size: 11px; opacity: .78; font-weight: 400; }
 .admin-head .admin-btn.ghost { min-height: 34px; padding: 6px 12px; font-size: 12px; }
-.admin-tabs { display: flex; gap: 7px; padding: 11px 14px; border-bottom: 1px solid var(--eva-line); background: #fff; overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--eva-rose-tint) transparent; }
-.admin-tabs::-webkit-scrollbar { height: 4px; }
-.admin-tabs::-webkit-scrollbar-thumb { background: var(--eva-rose-tint); border-radius: 99px; }
+.admin-tabs { flex: 0 0 auto; display: flex; gap: 7px; padding: 11px 14px; border-bottom: 1px solid var(--eva-line); background: #fff; overflow-x: auto; scrollbar-width: none; }
+.admin-tabs::-webkit-scrollbar { display: none; }
 .admin-tab { flex: 0 0 auto; min-height: 38px; padding: 8px 15px; border: 1px solid var(--eva-line); border-radius: 999px; background: #fff; color: var(--eva-muted); font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: color .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease; }
 .admin-tab:hover { color: var(--eva-rose); border-color: var(--eva-rose); }
 .admin-tab.is-active { color: #fff; background: var(--eva-rose); border-color: var(--eva-rose); box-shadow: 0 8px 18px -8px rgba(122, 30, 60, .55); }
-.admin-body { padding: 18px 18px 22px; overflow-y: auto; overflow-x: hidden; min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; word-break: break-word; }
+.admin-body { flex: 1 1 auto; padding: 18px 18px 22px; overflow-y: auto; overflow-x: hidden; min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; word-break: break-word; }
 .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
 .admin-card { border: 1px solid var(--eva-line); border-radius: 14px; overflow: hidden; background: #fff; }
 .admin-card img { width: 100%; height: 118px; object-fit: cover; display: block; background: var(--eva-rose-soft); }
@@ -290,7 +290,8 @@ const adminStyles = `
   .admin-row { grid-template-columns: 1fr; }
   .admin-body { padding: 14px 13px 20px; }
   .admin-grid { grid-template-columns: repeat(auto-fill, minmax(146px, 1fr)); gap: 9px; }
-  .admin-panel { max-height: min(96vh, calc(100dvh - 16px)); border-radius: 16px; }
+  .admin-panel { max-height: min(96vh, calc(100vh - 16px)); border-radius: 16px; }
+  @supports (height: 100dvh) { .admin-panel { max-height: min(96dvh, calc(100dvh - 16px)); } }
   .admin-head { padding: 13px 14px; }
   .admin-tabs { flex-wrap: wrap; overflow-x: visible; gap: 7px; padding: 10px; }
   .admin-tab { flex: 1 1 auto; min-height: 44px; padding: 8px 12px; text-align: center; }
