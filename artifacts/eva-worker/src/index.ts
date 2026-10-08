@@ -47,6 +47,98 @@ const publicProduct = (product: StoreProduct): StoreProduct => {
 const orderNumber = (): string =>
   `EVA-${Date.now().toString(36).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`
 
+const fmtDinar = (value: number): string =>
+  value >= 1000 && value % 1000 === 0 ? `${value / 1000} الف دينار عراقي` : `${value.toLocaleString('en-US')} دينار عراقي`
+
+const fmtMeters = (m: number): string => {
+  const s = String(m)
+  return s === '0.5' || s === '1.5' || s === '2.5' || s === '3.5' || s === '4.5' || s === '5.5' ? `${s} م` : `${s} متر`
+}
+
+interface NotifyOrder {
+  number: string
+  body: Record<string, unknown>
+}
+
+const buildOrderMessage = (order: NotifyOrder): string => {
+  const body = order.body
+  const nested = (body.customer ?? {}) as Record<string, unknown>
+  const str = (key: string): string => String(nested[key] ?? body[key] ?? '').trim()
+  const items = Array.isArray(body.items) ? (body.items as Record<string, unknown>[]) : []
+  const totals = (body.totals && typeof body.totals === 'object' ? body.totals : body) as Record<string, unknown>
+  const num = (key: string): number => Number(totals[key] ?? 0) || 0
+  const lines: string[] = []
+  lines.push(`رقم الطلب: ${order.number}`)
+  lines.push(`الاسم: ${str('name') || str('customerName')}`)
+  lines.push(`الهاتف: ${str('phone')}`)
+  if (str('email')) lines.push(`البريد الإلكتروني: ${str('email')}`)
+  if (str('governorate')) lines.push(`المحافظة: ${str('governorate')}`)
+  if (str('district')) lines.push(`القضاء/المنطقة: ${str('district')}`)
+  if (str('address')) lines.push(`العنوان: ${str('address')}`)
+  if (str('landmark')) lines.push(`معلم قريب: ${str('landmark')}`)
+  if (str('notes')) lines.push(`ملاحظات: ${str('notes')}`)
+  lines.push('')
+  lines.push('تفاصيل الطلب:')
+  for (const item of items) {
+    const name = String(item.productName ?? '')
+    const color = String(item.colorName ?? '')
+    const qty = Number(item.quantity ?? 0) || 0
+    const unit = Number(item.unitPrice ?? 0) || 0
+    const total = Number(item.totalPrice ?? 0) || 0
+    lines.push(`- ${name} (${color}) × ${fmtMeters(qty)} × ${fmtDinar(unit)} = ${fmtDinar(total)}`)
+  }
+  lines.push('')
+  lines.push(`المجموع الفرعي: ${fmtDinar(num('subtotal'))}`)
+  lines.push(`رسوم التوصيل: ${fmtDinar(num('deliveryFee'))}`)
+  lines.push(`الإجمالي: ${fmtDinar(num('total'))}`)
+  lines.push(`التاريخ: ${new Date().toLocaleString('ar-IQ', { timeZone: 'Asia/Baghdad' })}`)
+  return lines.join('\n')
+}
+
+const notifyOrderEmail = async (env: Env, order: NotifyOrder): Promise<boolean> => {
+  try {
+    let content: Record<string, unknown> = {}
+    const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'content'").first<{ value: string }>()
+    if (row?.value) {
+      try {
+        content = JSON.parse(row.value) as Record<string, unknown>
+      } catch {
+        content = {}
+      }
+    }
+    const provider = String(content.emailProvider ?? 'formsubmit')
+    if (provider !== 'formsubmit') {
+      console.log(`[notify] order=${order.number} skipped provider=${provider}`)
+      return false
+    }
+    const to = String(content.emailOrdersTo ?? '').trim() || 'wealiahmad.ali@gmail.com'
+    const action = String(content.emailFormSubmitAction ?? '').trim() || `https://formsubmit.co/${encodeURIComponent(to)}`
+    const subjectTemplate = String(content.emailSubjectOrder ?? 'طلب جديد #{orderNumber}')
+    const subject = subjectTemplate.replace('#{orderNumber}', `#${order.number}`).replace('{orderNumber}', order.number)
+    const form = new FormData()
+    form.append('_subject', subject)
+    form.append('_captcha', 'false')
+    form.append('_template', 'table')
+    form.append('orderNumber', order.number)
+    form.append('message', buildOrderMessage(order))
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 7000)
+    try {
+      const res = await fetch(action, { method: 'POST', body: form, signal: controller.signal })
+      const text = await res.text().catch(() => '')
+      const pendingActivation = /needs Activation|Activate Form/i.test(text)
+      const ok = res.ok && !pendingActivation
+      console.log(`[notify] order=${order.number} status=${res.status} activationPending=${pendingActivation}`)
+      return ok
+    } finally {
+      clearTimeout(timer)
+    }
+  } catch (error) {
+    console.log(`[notify] order=${order.number} failed ${error instanceof Error ? error.message : String(error)}`)
+    return false
+  }
+}
+
 async function handleApi(request: Request, env: Env, path: string): Promise<Response> {
   const method = request.method.toUpperCase()
   const [segment, ...rest] = path.split('/').filter(Boolean)
@@ -197,7 +289,8 @@ async function handleApi(request: Request, env: Env, path: string): Promise<Resp
           String(body.notes ?? body.note ?? ''),
         )
         .run()
-      return json({ data: { orderNumber: number, status: 'new', saved: true } }, 201)
+      const notified = await notifyOrderEmail(env, { number, body })
+      return json({ data: { orderNumber: number, status: 'new', saved: true, notified } }, 201)
     }
   }
 

@@ -436,7 +436,6 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         }
         const serverNumber = getOrderNumber(body) || orderNumber
         saveLocalOrder(serverNumber, 'received', payload)
-        notifyByEmail(payload, serverNumber)
         setPendingOrderNumber('')
         setSubmitState('idle')
         setLiveMessage(t('co.orderSuccess').replace('{number}', serverNumber))
