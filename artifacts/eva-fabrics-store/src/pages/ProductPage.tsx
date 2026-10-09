@@ -8,6 +8,7 @@ import { typeLabelsEn } from '@/lib/strings/product'
 import { ProductCard } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
 import { SmartImage } from '@/components/ui/SmartImage'
+import { prefetchImages } from '@/lib/prefetch'
 
 interface ProductPageProps {
   slug: string
@@ -96,6 +97,16 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     setLength((current) => (current > maxLength ? Math.max(0.5, Math.floor(maxLength * 2) / 2) : current))
   }, [maxLength])
   const related = useMemo(() => product ? products.filter((item) => item.slug !== product.slug && item.categoryId === product.categoryId).slice(0, 6) : [], [product, products])
+
+  useEffect(() => {
+    if (!product) return
+    prefetchImages(related.map((item) => item.image))
+    const next = gallery[1]
+    if (next && next !== product.video) {
+      prefetchImages([next.replace(/\.jpe?g$/i, '-640.webp')])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id])
   const faqItems = product?.faqs.length ? product.faqs : [{ question: t('pd.faqQ1'), answer: t('pd.faqA1') }]
 
   if (!product || !product.colors.length) return <ProductMissing />
@@ -155,7 +166,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
               controls={activeIsVideo}
               loop
               playsInline
-              preload="auto"
+              preload="metadata"
               aria-label={t('pd.videoAria').replace('{name}', product.name)}
               onPointerDown={() => { const video = videoRef.current; if (video && video.muted) unmuteVideo() }}
             />
@@ -165,7 +176,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
               <div className="gallery-stack">
                 {gallery.map((image, index) => image === product.video ? null : (
                   <div key={`${image}-${index}`} className={`gallery-layer${index === activeImage ? ' is-active' : ''}`} aria-hidden={index !== activeImage}>
-                    <SmartImage className="gallery-img" src={image} alt={t('pd.photoAlt').replace('{name}', product.name).replace('{n}', String(index + 1))} sizes="(max-width: 900px) 92vw, 46vw" priority />
+                    <SmartImage className="gallery-img" src={image} alt={t('pd.photoAlt').replace('{name}', product.name).replace('{n}', String(index + 1))} sizes="(max-width: 900px) 92vw, 46vw" priority={index === activeImage} />
                   </div>
                 ))}
               </div>
@@ -178,7 +189,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         <div className="gallery-thumbs">{gallery.map((image, index) => {
           const thumbIsVideo = image === product.video
           return <button type="button" key={`${image}-${index}`} className={index === activeImage ? 'is-active' : ''} onClick={() => goTo(index)} aria-label={thumbIsVideo ? t('pd.thumbVideo') : t('pd.thumbPhoto').replace('{n}', String(index + 1))}>
-            {thumbIsVideo ? <><SmartImage src={product.image} alt="" sizes="72px" intrinsicWidth={320} /><span className="thumb-play" aria-hidden="true">▶</span></> : <SmartImage src={image} alt="" sizes="72px" intrinsicWidth={320} />}
+            {thumbIsVideo ? <><SmartImage src={product.image} alt="" sizes="72px" /><span className="thumb-play" aria-hidden="true">▶</span></> : <SmartImage src={image} alt="" sizes="72px" />}
           </button>
         })}</div>
       </section>

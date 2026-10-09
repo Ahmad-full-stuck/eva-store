@@ -11,6 +11,7 @@ interface ProductCardProps {
   wished: boolean
   onWish: (slug: string) => void
   onAdd: (product: Product, color: ProductColor, length: number) => void
+  priority?: boolean
 }
 
 const glassStyles = `
@@ -115,7 +116,7 @@ const injectStyles = (id: string, css: string) => {
 
 injectStyles('eva-glass-styles', glassStyles)
 
-export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps) {
+export function ProductCard({ product, wished, onWish, onAdd, priority = false }: ProductCardProps) {
   const { t, lang } = useT()
   const addColor = product.colors.find((color) => color.available && color.stockMeters > 0) || product.colors[0]
   const soldOut = !addColor || isSoldOut(product)
@@ -137,7 +138,7 @@ export function ProductCard({ product, wished, onWish, onAdd }: ProductCardProps
                 sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 22vw"
                 intrinsicWidth={1024}
                 intrinsicHeight={1024}
-                priority
+                priority={priority}
                 onError={(event) => {
                   const node = event.currentTarget
                   const stack = [...new Set([product.image, ...product.images].filter(Boolean))]

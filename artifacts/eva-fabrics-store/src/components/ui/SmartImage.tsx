@@ -59,7 +59,7 @@ export function SmartImage({
   }
 
   const available = (IMAGE_VARIANTS[src] ?? DEFAULT_WIDTHS).filter((width) => width <= intrinsicWidth)
-  if (available.length < 2) {
+  if (available.length === 0) {
     return <img src={src} alt={alt} sizes={sizes} onError={onError} {...shared} />
   }
 

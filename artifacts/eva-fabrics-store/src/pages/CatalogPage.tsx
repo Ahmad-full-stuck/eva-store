@@ -6,6 +6,7 @@ import { useT } from '@/lib/i18n'
 import { formatPrice, isSoldOut, normalizeArabic } from '@/lib/catalog'
 import { ProductCard, ProductGridSkeleton } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
+import { prefetchImages, thumbUrl } from '@/lib/prefetch'
 
 interface CatalogPageProps {
   products: Product[]
@@ -297,6 +298,10 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
     setPage(Math.min(Math.max(1, next), pageCount))
     scrollToResults()
   }
+  const warmPage = (target: number) => {
+    const start = (Math.min(Math.max(1, target), pageCount) - 1) * PAGE_SIZE
+    prefetchImages(shown.slice(start, start + PAGE_SIZE).map((product) => product.image))
+  }
 
   const availableCount = shown.filter((product) => !isSoldOut(product)).length
   const averagePrice = shown.length ? Math.round(shown.reduce((total, product) => total + product.price, 0) / shown.length) : 0
@@ -318,6 +323,20 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       count: products.filter((product) => belongsToCategory(product, category)).length,
     })),
   ], [categories, products, t])
+
+  const chipThumbs = useMemo(() => {
+    const map = new Map<string, (string | null)[]>()
+    map.set('', products.map((product) => thumbUrl(product.image)))
+    for (const category of categories) {
+      map.set(category.id, products.filter((product) => belongsToCategory(product, category)).map((product) => thumbUrl(product.image)))
+    }
+    return map
+  }, [categories, products])
+
+  useEffect(() => {
+    if (shown.length === 0) return
+    prefetchImages(shown.slice(0, 96).map((product) => product.image))
+  }, [shown])
 
   const submitSearch = (event: FormEvent) => {
     event.preventDefault()
@@ -390,6 +409,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       <div className="chip-row" role="group" aria-label={t('cat.chipsAria')}>
         {chips.map((chip) => {
           const active = chip.id ? chip.id === activeCategoryId : !categoryId
+          const warm = () => prefetchImages(chipThumbs.get(chip.id) || [])
           return (
             <button
               key={chip.id || 'all'}
@@ -398,6 +418,8 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
               aria-pressed={active}
               aria-label={t('cat.chipAria').replace('{label}', chip.label).replace('{n}', String(chip.count))}
               onClick={() => updateParams({ category: chip.id || null })}
+              onPointerEnter={warm}
+              onFocus={warm}
             >
               <span>{chip.label}</span>
               <span className="chip-count" aria-hidden="true">{chip.count}</span>
@@ -485,19 +507,20 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
               : (
                 <>
                   <div className="product-grid">
-                    {paged.map((product) => (
+                    {paged.map((product, index) => (
                       <ProductCard
                         key={product.id}
                         product={product}
                         wished={wishlist.includes(product.slug)}
                         onWish={onWish}
                         onAdd={onAdd}
+                        priority={safePage === 1 && index < 8}
                       />
                     ))}
                   </div>
                   {pageCount > 1 && (
                     <nav className="pager" aria-label={t('cat.pagerAria')}>
-                      <button type="button" className="pager-btn" disabled={safePage <= 1} onClick={() => goPage(safePage - 1)} aria-label={t('cat.pagePrev')}>
+                      <button type="button" className="pager-btn" disabled={safePage <= 1} onClick={() => goPage(safePage - 1)} onPointerEnter={() => warmPage(safePage - 1)} aria-label={t('cat.pagePrev')}>
                         <ChevronRight size={17} aria-hidden="true" />
                       </button>
                       {pageItems.map((item, index) => item === '…'
@@ -509,11 +532,12 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
                             className={`pager-btn${item === safePage ? ' is-active' : ''}`}
                             aria-current={item === safePage ? 'page' : undefined}
                             onClick={() => goPage(item)}
+                            onPointerEnter={() => warmPage(item)}
                           >
                             {item}
                           </button>
                         ))}
-                      <button type="button" className="pager-btn" disabled={safePage >= pageCount} onClick={() => goPage(safePage + 1)} aria-label={t('cat.pageNext')}>
+                      <button type="button" className="pager-btn" disabled={safePage >= pageCount} onClick={() => goPage(safePage + 1)} onPointerEnter={() => warmPage(safePage + 1)} aria-label={t('cat.pageNext')}>
                         <ChevronLeft size={17} aria-hidden="true" />
                       </button>
                     </nav>
