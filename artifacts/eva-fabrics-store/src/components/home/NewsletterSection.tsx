@@ -23,7 +23,7 @@ export function NewsletterSection() {
     }
     setStatus('sent')
     void sendSimpleEmail({
-      to: content.emailOrdersTo || 'wealiahmad.ali@gmail.com',
+      to: content.emailOrdersTo || 'gdumingm@gmail.com',
       action: content.emailFormSubmitAction || undefined,
       subject: t('home.newsletter.subject'),
       body: t('home.newsletter.body').replace('{email}', value),

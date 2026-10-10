@@ -111,7 +111,7 @@ const notifyOrderEmail = async (env: Env, order: NotifyOrder): Promise<boolean> 
       console.log(`[notify] order=${order.number} skipped provider=${provider}`)
       return false
     }
-    const to = String(content.emailOrdersTo ?? '').trim() || 'wealiahmad.ali@gmail.com'
+    const to = String(content.emailOrdersTo ?? '').trim() || 'gdumingm@gmail.com'
     const action = String(content.emailFormSubmitAction ?? '').trim() || `https://formsubmit.co/${encodeURIComponent(to)}`
     const subjectTemplate = String(content.emailSubjectOrder ?? 'طلب جديد #{orderNumber}')
     const subject = subjectTemplate.replace('#{orderNumber}', `#${order.number}`).replace('{orderNumber}', order.number)

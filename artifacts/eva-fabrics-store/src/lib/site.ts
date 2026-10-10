@@ -35,7 +35,7 @@ export const siteConfig = {
   shortName: 'إيفا ستور',
   get phone() { return adminContent().phone || localPhone },
   get instagramUrl() { return adminContent().instagram || safeInstagram },
-  get contactEmail() { return adminContent().emailOrdersTo || 'wealiahmad.ali@gmail.com' },
+  get contactEmail() { return adminContent().emailOrdersTo || 'gdumingm@gmail.com' },
   emailUrl: (subject = 'استفسار من متجر إيفا', body = 'مرحباً إيفا، أريد الاستفسار عن منتجاتكم.'): string => `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
   instagramText: 'إيفا ستور على إنستغرام',
 }
