@@ -44,7 +44,12 @@ const cachedJson = async (request: Request, ttlSeconds: number, build: () => Pro
   const cache = caches.default
   const cacheKey = cacheKeyFor(request)
   const hit = await cache.match(cacheKey)
-  if (hit) return hit
+  if (hit) {
+    // Rewrite the marker so the client can tell an edge hit from a rebuild.
+    const headers = new Headers(hit.headers)
+    headers.set('X-Eva-Cache', 'HIT')
+    return new Response(hit.body, { status: hit.status, statusText: hit.statusText, headers })
+  }
   const response = await build()
   if (response.ok && ttlSeconds > 0) {
     const headers = new Headers(response.headers)
@@ -53,8 +58,10 @@ const cachedJson = async (request: Request, ttlSeconds: number, build: () => Pro
     const cacheable = new Response(response.body, { status: response.status, statusText: response.statusText, headers })
     try {
       await cache.put(cacheKey, cacheable.clone())
-    } catch {
-      /* cache full / disabled — the response is still served */
+    } catch (error) {
+      // Not fatal — the response is still served — but worth surfacing in logs
+      // because a silently-failing cache looks identical to a working one.
+      console.log(`[cache] put failed key=${cacheKey.url} error=${error instanceof Error ? error.message : String(error)}`)
     }
     return cacheable
   }
