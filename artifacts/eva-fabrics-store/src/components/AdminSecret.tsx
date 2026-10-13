@@ -6,6 +6,7 @@ import { fallbackCategories, fallbackProducts } from '@/lib/fallback-data'
 import { sanitizeCategory, sanitizeProduct, sanitizeCategories, sanitizeProducts } from '@/lib/sanitize'
 import { formatPrice } from '@/lib/catalog'
 import { adminFetch, adminLogin, adminLogout, adminWhoami, getToken, listAdmins, createAdminAccount, deleteAdminAccount, changeAdminPassword, type AdminAccount, AdminRequestError, loadServerConfig, ping, pushServerContent, pushServerSettings, getPushConfig, savePushSubscription, removePushSubscription, sendTestPush, getPushStatus } from '@/lib/api'
+import { pushSupported, registerPushWorker, urlBase64ToUint8Array } from '@/lib/push'
 
 const PRODUCTS_KEY = 'eva-admin-products'
 const REMOVED_KEY = 'eva-admin-removed'
@@ -342,19 +343,6 @@ const parseJsonField = <T,>(value: unknown, fallback: T): T => {
   }
   return fallback
 }
-
-const urlBase64ToUint8Array = (base64: string): ArrayBuffer => {
-  const padding = '='.repeat((4 - (base64.length % 4)) % 4)
-  const normalized = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/')
-  const raw = window.atob(normalized)
-  const buffer = new ArrayBuffer(raw.length)
-  const output = new Uint8Array(buffer)
-  for (let i = 0; i < raw.length; i += 1) output[i] = raw.charCodeAt(i)
-  return buffer
-}
-
-const pushSupported = (): boolean =>
-  typeof navigator !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window
 
 export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [location, navigate] = useLocation()
@@ -974,9 +962,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
         setPushMsg('لم يتم منح إذن الإشعارات')
         return
       }
-      const base = import.meta.env.BASE_URL || '/'
-      const reg = await navigator.serviceWorker.register(`${base}sw.js`, { scope: base })
-      await navigator.serviceWorker.ready
+      const reg = await registerPushWorker()
       let sub = await reg.pushManager.getSubscription()
       if (!sub) {
         sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(config.publicKey) })

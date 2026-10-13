@@ -306,7 +306,7 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
         const push = sendPushToAll(env, {
           title: 'طلب جديد • إيفا ستور',
           body: `#${number}\n${name}${governorate ? ` — ${governorate}` : ''}\n${itemLines}\nالإجمالي: ${fmtDinar(total)}`,
-          data: { orderNumber: number, url: '/admin' },
+          data: { orderNumber: number, url: '/#/admin' },
         })
         if (ctx) ctx.waitUntil(push)
         else await push

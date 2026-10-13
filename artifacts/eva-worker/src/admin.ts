@@ -472,7 +472,7 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
       const result = await sendPushToAll(env, {
         title: 'إشعار تجريبي • إيفا ستور',
         body: 'الإشعارات تعمل بنجاح ✓',
-        data: { url: '/admin' },
+        data: { url: '/#/admin' },
       })
       return json({ data: result })
     }

@@ -1241,7 +1241,32 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
   const orders = useMemo(readOrders, [])
   const stored = useMemo(() => (trimmed ? findOrder(orders, trimmed) : undefined), [orders, trimmed])
   const fallback = useMemo<StoredOrder | undefined>(() => (trimmed ? { orderNumber: trimmed, createdAt: new Date().toISOString(), status: statusSteps[0] } : undefined), [trimmed])
-  const order = stored || fallback
+  const baseOrder = stored || fallback
+  const [remoteStatus, setRemoteStatus] = useState<{ status?: string; createdAt?: string } | null>(null)
+  const order = baseOrder && remoteStatus?.status ? { ...baseOrder, status: remoteStatus.status, createdAt: remoteStatus.createdAt || baseOrder.createdAt } : baseOrder
+
+  useEffect(() => {
+    if (!trimmed) {
+      setRemoteStatus(null)
+      return undefined
+    }
+    let cancelled = false
+    const load = () => {
+      fetch(apiUrl(`/api/orders/${encodeURIComponent(trimmed)}`), { headers: { Accept: 'application/json' } })
+        .then(async (response) => {
+          if (cancelled || !response.ok) return
+          const body = (await response.json().catch(() => null)) as { data?: { status?: string; created_at?: string } } | null
+          if (body?.data?.status) setRemoteStatus({ status: body.data.status, createdAt: body.data.created_at || undefined })
+        })
+        .catch(() => undefined)
+    }
+    load()
+    const interval = window.setInterval(load, 15000)
+    return () => {
+      cancelled = true
+      window.clearInterval(interval)
+    }
+  }, [trimmed])
 
   useEffect(() => {
     if (!trimmed || stored || !fallback) return undefined
@@ -1391,6 +1416,12 @@ export function OrderTrackingPage() {
       cancelled = true
     }
   }, [active, version])
+
+  useEffect(() => {
+    if (!active) return undefined
+    const interval = window.setInterval(() => setVersion((current) => current + 1), 15000)
+    return () => window.clearInterval(interval)
+  }, [active])
 
   const displayed: StoredOrder | undefined = active
     ? remote && remote.status

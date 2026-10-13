@@ -9,6 +9,7 @@ import { addCartItem, getStoredCart, getStoredWishlist, reconcileCart, removeCar
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { AdminSecret } from '@/components/AdminSecret'
+import { AdminAlerts } from '@/components/AdminAlerts'
 import { HomePage } from '@/pages/HomePage'
 import { CatalogPage } from '@/pages/CatalogPage'
 import { ProductPage } from '@/pages/ProductPage'
@@ -178,6 +179,7 @@ function AppShell() {
       <style>{shellStyles}</style>
       <a className="skip-link" href="#main-content" onClick={skipToContent}>{t('core.skipLink')}</a>
       <SiteHeader routes={routes} products={products} cartMeters={cartMeters} wishlistCount={wishlist.length} />
+      <AdminAlerts />
       <div id="main-content" className="app-main" tabIndex={-1}>
         <Switch>
           <Route path="/" component={() => <HomePage {...pageProps} />} />
