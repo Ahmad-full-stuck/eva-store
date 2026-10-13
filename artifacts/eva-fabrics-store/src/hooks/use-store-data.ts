@@ -171,14 +171,16 @@ export const useStoreData = (): StorefrontData & { status: ApiStatus } => {
   const [status, setStatus] = useState<ApiStatus>('loading')
 
   useEffect(() => {
-    const controller = new AbortController()
-    const timeout = window.setTimeout(() => controller.abort(), 3500)
+    let disposed = false
+    let controller = new AbortController()
+    let timeout = window.setTimeout(() => controller.abort(), 3500)
     const load = async (): Promise<void> => {
       const [productsResult, categoriesResult, routesResult] = await Promise.allSettled([
         fetchList('/api/products', controller.signal, 'products'),
         fetchList('/api/categories', controller.signal, 'categories'),
         fetchList('/api/routes', controller.signal, 'routes'),
       ])
+      if (disposed) return
       const products = productsResult.status === 'fulfilled' ? productsResult.value.map(normalizeProduct).filter((item): item is Product => item !== null) : []
       const categories = categoriesResult.status === 'fulfilled' ? categoriesResult.value.map(normalizeCategory).filter((item): item is Category => item !== null) : []
       const routes = routesResult.status === 'fulfilled' ? routesResult.value.map(normalizeRoute).filter((item): item is SiteRoute => item !== null) : []
@@ -193,14 +195,27 @@ export const useStoreData = (): StorefrontData & { status: ApiStatus } => {
       setStatus(successful === 0 ? 'fallback' : 'ready')
     }
     void load()
+    // Re-merge local admin edits without a network round-trip.
     const syncAdmin = () => {
       setData((current) => ({ ...current, products: applyGlobalColors(mergeAdminProducts(current.products)), categories: mergeAdminCategories(current.categories) }))
     }
+    // Full refetch — fired after delete/restore/import so the storefront
+    // reflects the server's real product set instead of a stale snapshot.
+    const refresh = () => {
+      window.clearTimeout(timeout)
+      controller.abort()
+      controller = new AbortController()
+      timeout = window.setTimeout(() => controller.abort(), 3500)
+      void load()
+    }
     window.addEventListener('eva-admin-changed', syncAdmin)
+    window.addEventListener('eva-store-refresh', refresh)
     return () => {
+      disposed = true
       window.clearTimeout(timeout)
       controller.abort()
       window.removeEventListener('eva-admin-changed', syncAdmin)
+      window.removeEventListener('eva-store-refresh', refresh)
     }
   }, [])
 

@@ -130,6 +130,9 @@ export const mergeAdminProducts = (source: Product[]): Product[] => {
   for (const item of base) bySlug.set(item.slug, item)
   for (const item of overrides) {
     const slug = item.slug as string
+    // A slug that was deleted must stay deleted even if a stale override for
+    // it is still parked in localStorage — otherwise "delete" silently fails.
+    if (removed.has(slug)) continue
     const existing = bySlug.get(slug)
     const merged = existing ? sanitizeProduct({ ...existing, ...item }) : sanitizeProduct(item)
     if (merged) bySlug.set(slug, merged)
@@ -780,7 +783,10 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     }
     if (!removed.includes(product.slug)) persistRemoved([...removed, product.slug])
     void adminFetch(`/api/admin/products/${encodeURIComponent(product.slug)}`, { method: 'DELETE' })
-      .then(() => setToast('تم حذف المنتج'))
+      .then(() => {
+        setToast('تم حذف المنتج')
+        window.dispatchEvent(new Event('eva-store-refresh'))
+      })
       .catch(() => setToast('أُخفي المنتج من المتجر — تعذر حفظه في الخادم'))
   }
 
@@ -816,10 +822,18 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const restoreAll = async () => {
     const edited = overrides
     const restoreSlugs = removed
-    persistProducts([])
-    persistRemoved([])
-    const originalBySlug = new Map(fallbackProducts.map((item) => [item.slug, item]))
     let failed = 0
+    // Un-hide deleted products on the server FIRST so local state never
+    // diverges from the real store if the request fails.
+    if (restoreSlugs.length) {
+      try {
+        await adminFetch('/api/admin/restore', { method: 'POST', body: JSON.stringify({ slugs: restoreSlugs }) })
+      } catch {
+        failed += 1
+      }
+    }
+    // Revert locally-edited fallback products to their originals.
+    const originalBySlug = new Map(fallbackProducts.map((item) => [item.slug, item]))
     for (const item of edited) {
       const original = originalBySlug.get(item.slug)
       if (!original) continue
@@ -829,13 +843,9 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
         failed += 1
       }
     }
-    if (restoreSlugs.length) {
-      try {
-        await adminFetch('/api/admin/restore', { method: 'POST', body: JSON.stringify({ slugs: restoreSlugs }) })
-      } catch {
-        failed += 1
-      }
-    }
+    persistProducts([])
+    persistRemoved([])
+    window.dispatchEvent(new Event('eva-store-refresh'))
     setToast(failed ? 'تمت الاستعادة محلياً — تعذر الوصول للخادم' : 'تمت استعادة المنتجات الأصلية')
   }
 
