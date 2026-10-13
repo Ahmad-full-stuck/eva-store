@@ -3,6 +3,7 @@ import { toProduct, type ProductRow, type StoreProduct } from './types'
 import { requireAdmin, verifyPin, createSession, destroySession, rateLimit, orderRateLimit, ensureAuthSchema, verifyAdminUser, SESSION_TTL_MS } from './auth'
 import { handleAdmin } from './admin'
 import { runDiscovery, type DiscoveryInput } from './discover'
+import { sendPushToAll, pushConfigured } from './push'
 
 const json = (data: unknown, status = 200, extra: Record<string, string> = {}): Response =>
   new Response(JSON.stringify(data), {
@@ -139,7 +140,7 @@ const notifyOrderEmail = async (env: Env, order: NotifyOrder): Promise<boolean> 
   }
 }
 
-async function handleApi(request: Request, env: Env, path: string): Promise<Response> {
+async function handleApi(request: Request, env: Env, path: string, ctx?: ExecutionContext): Promise<Response> {
   const method = request.method.toUpperCase()
   const [segment, ...rest] = path.split('/').filter(Boolean)
 
@@ -193,6 +194,11 @@ async function handleApi(request: Request, env: Env, path: string): Promise<Resp
   }
 
   if (method !== 'GET' && method !== 'POST') return json({ error: 'طريقة غير مدعومة' }, 405)
+
+  if (segment === 'push') {
+    if (rest[0] === 'key') return json({ data: { publicKey: env.VAPID_PUBLIC_KEY || '', enabled: pushConfigured(env) } })
+    return json({ error: 'المسار غير موجود' }, 404)
+  }
 
   if (segment === 'products') {
     const slug = rest[0]
@@ -290,6 +296,21 @@ async function handleApi(request: Request, env: Env, path: string): Promise<Resp
         )
         .run()
       const notified = await notifyOrderEmail(env, { number, body })
+      if (pushConfigured(env)) {
+        const itemLines = (items as Record<string, unknown>[])
+          .slice(0, 4)
+          .map((item) => `${String(item.productName ?? '')} ×${Number(item.quantity ?? 0) || 0}`)
+          .join('، ')
+        const total = Number((totals as Record<string, unknown>).total ?? 0) || 0
+        const governorate = String(nested.governorate ?? body.governorate ?? '').trim()
+        const push = sendPushToAll(env, {
+          title: 'طلب جديد • إيفا ستور',
+          body: `#${number}\n${name}${governorate ? ` — ${governorate}` : ''}\n${itemLines}\nالإجمالي: ${fmtDinar(total)}`,
+          data: { orderNumber: number, url: '/admin' },
+        })
+        if (ctx) ctx.waitUntil(push)
+        else await push
+      }
       return json({ data: { orderNumber: number, status: 'new', saved: true, notified } }, 201)
     }
   }
@@ -298,14 +319,14 @@ async function handleApi(request: Request, env: Env, path: string): Promise<Resp
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     try {
       const url = new URL(request.url)
       if (request.method === 'OPTIONS') return withCors(new Response(null, { status: 204, headers: cors }))
 
       if (url.pathname.startsWith('/api/') || url.pathname === '/api') {
         const path = url.pathname.slice('/api'.length) || '/'
-        const response = await handleApi(request, env, path)
+        const response = await handleApi(request, env, path, ctx)
         return withCors(response)
       }
 

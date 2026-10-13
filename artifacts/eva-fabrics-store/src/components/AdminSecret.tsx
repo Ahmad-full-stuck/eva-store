@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'wouter'
-import { Check, Eye, EyeOff, Image as ImageIcon, Lock, LogOut, Plus, Save, ShieldCheck, Trash2, Upload, X, Pencil, Download, RotateCcw } from 'lucide-react'
+import { Check, Bell, Eye, EyeOff, Image as ImageIcon, Lock, LogOut, Plus, Save, ShieldCheck, Trash2, Upload, X, Pencil, Download, RotateCcw } from 'lucide-react'
 import type { Category, Product, ProductColor } from '@/types'
 import { fallbackCategories, fallbackProducts } from '@/lib/fallback-data'
 import { sanitizeCategory, sanitizeProduct, sanitizeCategories, sanitizeProducts } from '@/lib/sanitize'
 import { formatPrice } from '@/lib/catalog'
-import { adminFetch, adminLogin, adminLogout, adminWhoami, getToken, listAdmins, createAdminAccount, deleteAdminAccount, changeAdminPassword, type AdminAccount, AdminRequestError, loadServerConfig, ping, pushServerContent, pushServerSettings } from '@/lib/api'
+import { adminFetch, adminLogin, adminLogout, adminWhoami, getToken, listAdmins, createAdminAccount, deleteAdminAccount, changeAdminPassword, type AdminAccount, AdminRequestError, loadServerConfig, ping, pushServerContent, pushServerSettings, getPushConfig, savePushSubscription, removePushSubscription, sendTestPush, getPushStatus } from '@/lib/api'
 
 const PRODUCTS_KEY = 'eva-admin-products'
 const REMOVED_KEY = 'eva-admin-removed'
@@ -343,6 +343,19 @@ const parseJsonField = <T,>(value: unknown, fallback: T): T => {
   return fallback
 }
 
+const urlBase64ToUint8Array = (base64: string): ArrayBuffer => {
+  const padding = '='.repeat((4 - (base64.length % 4)) % 4)
+  const normalized = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/')
+  const raw = window.atob(normalized)
+  const buffer = new ArrayBuffer(raw.length)
+  const output = new Uint8Array(buffer)
+  for (let i = 0; i < raw.length; i += 1) output[i] = raw.charCodeAt(i)
+  return buffer
+}
+
+const pushSupported = (): boolean =>
+  typeof navigator !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window
+
 export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [location, navigate] = useLocation()
   const [open, setOpen] = useState(false)
@@ -380,6 +393,9 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [adminsBusy, setAdminsBusy] = useState(false)
   const [newAdmin, setNewAdmin] = useState({ username: '', password: '', displayName: '' })
   const fileRef = useRef<HTMLInputElement>(null)
+  const [pushState, setPushState] = useState<'unknown' | 'unsupported' | 'off' | 'on' | 'busy' | 'blocked'>('unknown')
+  const [pushInfo, setPushInfo] = useState<{ enabled: boolean; count: number } | null>(null)
+  const [pushMsg, setPushMsg] = useState('')
 
   const closePanel = () => {
     setOpen(false)
@@ -911,6 +927,95 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const setField = (key: keyof Product, value: unknown) => {
     if (!editing) return
     setEditing({ ...editing, [key]: value } as Product)
+  }
+
+  const refreshPushState = async () => {
+    if (!pushSupported()) {
+      setPushState('unsupported')
+      return
+    }
+    if (!getToken()) return
+    const info = await getPushStatus().catch(() => null)
+    if (info) setPushInfo(info)
+    try {
+      const reg = await navigator.serviceWorker.getRegistration()
+      const sub = reg ? await reg.pushManager.getSubscription() : null
+      if (Notification.permission === 'denied') setPushState('blocked')
+      else setPushState(sub ? 'on' : 'off')
+    } catch {
+      setPushState('off')
+    }
+  }
+
+  useEffect(() => {
+    if (!open || !authed || tab !== 'settings') return
+    void refreshPushState()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, authed, tab])
+
+  const enableNotifications = async () => {
+    if (!pushSupported()) {
+      setPushMsg('المتصفح لا يدعم الإشعارات')
+      setPushState('unsupported')
+      return
+    }
+    setPushState('busy')
+    setPushMsg('')
+    try {
+      const config = await getPushConfig()
+      if (!config.enabled || !config.publicKey) {
+        setPushMsg('الإشعارات غير مُهيّأة على الخادم')
+        setPushState('off')
+        return
+      }
+      const permission = await Notification.requestPermission()
+      if (permission !== 'granted') {
+        setPushState(permission === 'denied' ? 'blocked' : 'off')
+        setPushMsg('لم يتم منح إذن الإشعارات')
+        return
+      }
+      const base = import.meta.env.BASE_URL || '/'
+      const reg = await navigator.serviceWorker.register(`${base}sw.js`, { scope: base })
+      await navigator.serviceWorker.ready
+      let sub = await reg.pushManager.getSubscription()
+      if (!sub) {
+        sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(config.publicKey) })
+      }
+      await savePushSubscription(sub.toJSON())
+      setPushState('on')
+      setPushMsg('تم تفعيل الإشعارات على هذا الجهاز')
+      void refreshPushState()
+    } catch {
+      setPushState('off')
+      setPushMsg('تعذّر تفعيل الإشعارات')
+    }
+  }
+
+  const disableNotifications = async () => {
+    if (!pushSupported()) return
+    setPushState('busy')
+    try {
+      const reg = await navigator.serviceWorker.getRegistration()
+      const sub = reg ? await reg.pushManager.getSubscription() : null
+      if (sub) {
+        await removePushSubscription(sub.endpoint).catch(() => undefined)
+        await sub.unsubscribe().catch(() => undefined)
+      }
+      setPushMsg('تم إيقاف الإشعارات على هذا الجهاز')
+      setPushState('off')
+    } catch {
+      setPushState('off')
+    }
+  }
+
+  const testNotification = async () => {
+    setPushMsg('')
+    try {
+      const result = await sendTestPush()
+      setPushMsg(result.total ? `تم إرسال الإشعار إلى ${result.sent} من ${result.total} جهاز` : 'لا توجد أجهزة مُفعّلة بعد')
+    } catch {
+      setPushMsg('تعذّر إرسال الإشعار التجريبي')
+    }
   }
 
   return (
@@ -1650,6 +1755,53 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                           </button>
                           <span className="admin-chip">عدد المدراء: {admins.length}</span>
                         </div>
+                      </div>
+
+                      <div className="admin-field" style={{ marginTop: 20 }}>
+                        <label style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                          <Bell size={14} /> إشعارات الطلبات (على هذا الجهاز)
+                        </label>
+                        <small style={{ fontSize: 11, color: 'var(--eva-muted)', lineHeight: 1.7 }}>
+                          فعّليها على جوالك أو حاسبك لتصلك إشعارات فورية بكل طلب جديد دون بريد إلكتروني. عند الضغط على الإشعار تُفتح لوحة الطلبات مباشرة.
+                        </small>
+                        <div className="admin-actions" style={{ marginTop: 6 }}>
+                          {pushState === 'on' ? (
+                            <button type="button" className="admin-btn ghost" onClick={() => void disableNotifications()}>
+                              إيقاف الإشعارات
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="admin-btn success"
+                              disabled={pushState === 'busy' || pushState === 'unsupported' || pushState === 'blocked'}
+                              onClick={() => void enableNotifications()}
+                            >
+                              <Bell size={15} /> تفعيل الإشعارات
+                            </button>
+                          )}
+                          <button type="button" className="admin-btn ghost" onClick={() => void testNotification()}>
+                            إرسال إشعار تجريبي
+                          </button>
+                          <span className="admin-chip">
+                            {pushState === 'on'
+                              ? 'مُفعّلة'
+                              : pushState === 'blocked'
+                                ? 'محظورة من المتصفح'
+                                : pushState === 'unsupported'
+                                  ? 'غير مدعومة'
+                                  : pushState === 'busy'
+                                    ? 'جارٍ...'
+                                    : 'غير مُفعّلة'}
+                          </span>
+                        </div>
+                        {pushInfo ? (
+                          <small style={{ display: 'block', marginTop: 6, fontSize: 11, color: 'var(--eva-muted)' }}>
+                            عدد الأجهزة المُفعّلة على المتجر: {pushInfo.count}
+                          </small>
+                        ) : null}
+                        {pushMsg ? (
+                          <small style={{ display: 'block', marginTop: 6, color: 'var(--eva-rose)', fontSize: 12 }}>{pushMsg}</small>
+                        ) : null}
                       </div>
                     </div>
                   ) : (

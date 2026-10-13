@@ -1,6 +1,7 @@
 import type { Env, ProductRow, StoreProduct, ProductColor } from './types'
 import { toProduct } from './types'
 import { hashPin, hashPassword, ensureAuthSchema } from './auth'
+import { ensurePushSchema, saveSubscription, deleteSubscription, sendPushToAll, pushConfigured } from './push'
 
 const json = (data: unknown, status = 200): Response =>
   new Response(JSON.stringify(data), {
@@ -446,6 +447,36 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
   if (resource === 'categories' && method === 'GET') {
     const result = await env.DB.prepare('SELECT * FROM categories ORDER BY sort_order ASC, name ASC').all()
     return json({ data: result.results ?? [] })
+  }
+
+  if (resource === 'push') {
+    await ensurePushSchema(env)
+    if (method === 'GET') {
+      const count = await env.DB.prepare('SELECT COUNT(*) AS n FROM push_subscriptions').first<{ n: number }>()
+      return json({ data: { enabled: pushConfigured(env), count: count?.n ?? 0 } })
+    }
+    if (method === 'POST' && id === 'subscribe') {
+      const body = await readBody<{ subscription?: { endpoint?: string; keys?: { p256dh?: string; auth?: string } } }>(request)
+      const sub = body?.subscription
+      if (!sub?.endpoint || !sub?.keys?.p256dh || !sub?.keys?.auth) return json({ error: 'اشتراك غير صالح' }, 400)
+      await saveSubscription(env, { endpoint: sub.endpoint, keys: { p256dh: sub.keys.p256dh, auth: sub.keys.auth } }, null)
+      return json({ data: { ok: true } }, 201)
+    }
+    if (method === 'POST' && id === 'unsubscribe') {
+      const body = await readBody<{ endpoint?: string }>(request)
+      await deleteSubscription(env, text(body?.endpoint))
+      return json({ data: { ok: true } })
+    }
+    if (method === 'POST' && id === 'test') {
+      if (!pushConfigured(env)) return json({ error: 'الإشعارات غير مُهيّأة على الخادم' }, 400)
+      const result = await sendPushToAll(env, {
+        title: 'إشعار تجريبي • إيفا ستور',
+        body: 'الإشعارات تعمل بنجاح ✓',
+        data: { url: '/admin' },
+      })
+      return json({ data: result })
+    }
+    return json({ error: 'المسار غير موجود' }, 404)
   }
 
   if (resource === 'restore' && method === 'POST') {

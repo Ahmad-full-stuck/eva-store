@@ -210,6 +210,35 @@ export const changeAdminPassword = async (id: string, password: string): Promise
   await adminFetch(`/api/admin/admins/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify({ password }) })
 }
 
+export interface PushConfig {
+  publicKey: string
+  enabled: boolean
+}
+
+export const getPushConfig = async (): Promise<PushConfig> => {
+  try {
+    const response = await fetch(apiUrl('/api/push/key'), { headers: { Accept: 'application/json' } })
+    const body = (await response.json().catch(() => null)) as { data?: { publicKey?: string; enabled?: boolean } } | null
+    return { publicKey: body?.data?.publicKey || '', enabled: Boolean(body?.data?.enabled) }
+  } catch {
+    return { publicKey: '', enabled: false }
+  }
+}
+
+export const savePushSubscription = async (subscription: unknown): Promise<void> => {
+  await adminFetch('/api/admin/push/subscribe', { method: 'POST', body: JSON.stringify({ subscription }) })
+}
+
+export const removePushSubscription = async (endpoint: string): Promise<void> => {
+  await adminFetch('/api/admin/push/unsubscribe', { method: 'POST', body: JSON.stringify({ endpoint }) })
+}
+
+export const getPushStatus = async (): Promise<{ enabled: boolean; count: number }> =>
+  adminFetch('/api/admin/push')
+
+export const sendTestPush = async (): Promise<{ sent: number; total: number }> =>
+  adminFetch('/api/admin/push/test', { method: 'POST' })
+
 const PENDING_KEY = 'eva-pending-orders'
 
 /** يحفظ طلباً لم يصل إلى الخادم، ليُرسل تلقائياً عند عودة الاتصال. */
