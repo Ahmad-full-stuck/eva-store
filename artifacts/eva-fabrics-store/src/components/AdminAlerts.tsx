@@ -6,7 +6,12 @@ import { ensureSubscription, pushSupported } from '@/lib/push'
 
 const SEEN_KEY = 'eva-alerts-seen-orders'
 const PROMPT_KEY = 'eva-alerts-prompt-hidden'
-const POLL_MS = 15_000
+const PROMPT_SNOOZE_KEY = 'eva-alerts-prompt-snooze'
+// Orders are polled often enough that a new one shows up while the manager is
+// still looking at the store; focus re-polls immediately so returning to the
+// tab never shows a stale count.
+const POLL_MS = 5_000
+const SNOOZE_MS = 60 * 60 * 1000
 
 interface AdminOrderRow {
   order_number?: string
@@ -111,26 +116,6 @@ export function AdminAlerts() {
   }, [])
 
   useEffect(() => {
-    if (!pushSupported()) {
-      setPermission('unsupported')
-      return undefined
-    }
-    try {
-      setPromptHidden(window.localStorage.getItem(PROMPT_KEY) === '1')
-    } catch {
-      setPromptHidden(false)
-    }
-    setPermission(Notification.permission)
-    const onVisibility = () => setPermission(Notification.permission)
-    document.addEventListener('visibilitychange', onVisibility)
-    window.addEventListener('focus', onVisibility)
-    return () => {
-      document.removeEventListener('visibilitychange', onVisibility)
-      window.removeEventListener('focus', onVisibility)
-    }
-  }, [])
-
-  useEffect(() => {
     syncSession()
     const onChange = () => syncSession()
     window.addEventListener('eva-admin-changed', onChange)
@@ -176,18 +161,48 @@ export function AdminAlerts() {
       const newest = fresh[0]
       const customer = asRecord(newest.customer)
       const totals = asRecord(newest.totals)
+      const newestId = idOf(newest)
+      const totalValue = Number(totals.total ?? 0) || 0
       setAlert({
-        id: idOf(newest),
+        id: newestId,
         name: String(customer.name ?? customer.customerName ?? '').trim(),
-        total: Number(totals.total ?? 0) || 0,
+        total: totalValue,
         count: fresh.length,
       })
       playChime()
+      // When the tab is in the background the in-app card is invisible, so a
+      // real system notification carries the same signal.
+      if (typeof Notification !== 'undefined' && Notification.permission === 'granted' && document.visibilityState !== 'visible') {
+        try {
+          const body = [
+            fresh.length > 1 ? `${fresh.length} طلبات جديدة` : `#${newestId}`,
+            String(customer.name ?? customer.customerName ?? '').trim(),
+            totalValue ? `${totalValue.toLocaleString('en-US')} دينار` : '',
+          ]
+            .filter(Boolean)
+            .join(' — ')
+          const notification = new Notification(fresh.length > 1 ? `${fresh.length} طلبات جديدة • إيفا ستور` : 'طلب جديد • إيفا ستور', {
+            body,
+            icon: 'favicon.svg',
+            badge: 'favicon.svg',
+            tag: `eva-live-${newestId}`,
+            lang: 'ar',
+            dir: 'rtl',
+          })
+          notification.onclick = () => {
+            window.focus()
+            navigate('/admin')
+            notification.close()
+          }
+        } catch {
+          /* ignore */
+        }
+      }
       const merged = [...fresh.map(idOf), ...seenRef.current].filter(Boolean)
       seenRef.current = merged
       writeSeen(merged)
     }
-  }, [])
+  }, [navigate])
 
   useEffect(() => {
     if (!active) {
@@ -204,6 +219,34 @@ export function AdminAlerts() {
       timerRef.current = null
     }
   }, [active, poll])
+
+  useEffect(() => {
+    if (!pushSupported()) {
+      setPermission('unsupported')
+      return undefined
+    }
+    // A one-time dismiss must not disable the enable prompt forever — that is
+    // exactly how a manager ends up with notifications silently off. Snoozing
+    // only lasts an hour; after that the prompt comes back until permission
+    // is granted (or permanently refused by the browser).
+    try {
+      const snoozedUntil = Number(window.localStorage.getItem(PROMPT_SNOOZE_KEY) || 0)
+      setPromptHidden(Boolean(snoozedUntil) && Date.now() < snoozedUntil)
+    } catch {
+      setPromptHidden(false)
+    }
+    setPermission(Notification.permission)
+    const onVisibility = () => {
+      setPermission(Notification.permission)
+      if (document.visibilityState === 'visible') void poll()
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+    window.addEventListener('focus', onVisibility)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility)
+      window.removeEventListener('focus', onVisibility)
+    }
+  }, [poll])
 
   useEffect(() => {
     if (!alert) return undefined
@@ -223,9 +266,12 @@ export function AdminAlerts() {
   }
 
   const dismissPrompt = () => {
+    // Snooze rather than hide forever: the manager can put the prompt off for
+    // an hour, after which it returns until notifications are actually on.
     setPromptHidden(true)
     try {
-      window.localStorage.setItem(PROMPT_KEY, '1')
+      window.localStorage.setItem(PROMPT_SNOOZE_KEY, String(Date.now() + SNOOZE_MS))
+      window.localStorage.removeItem(PROMPT_KEY)
     } catch {
       /* ignore */
     }

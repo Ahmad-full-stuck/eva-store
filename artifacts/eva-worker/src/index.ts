@@ -24,6 +24,51 @@ const withCors = (response: Response): Response => {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers })
 }
 
+/**
+ * Cloudflare edge cache for the public catalog/content endpoints. Without this
+ * every page load / filter change hits D1 and the 127-product payload takes
+ * 1-4s to come back. Bumping CACHE_VERSION (or writing via the admin API)
+ * invalidates everything at once.
+ */
+const CACHE_VERSION = 'v2'
+const CACHE_PREFIX = `eva:${CACHE_VERSION}:`
+
+const cachedJson = async (request: Request, ttlSeconds: number, build: () => Promise<Response>): Promise<Response> => {
+  const cache = caches.default
+  const cacheKey = new Request(`${CACHE_PREFIX}${request.url}`)
+  const hit = await cache.match(cacheKey)
+  if (hit) return hit
+  const response = await build()
+  if (response.ok && ttlSeconds > 0) {
+    const headers = new Headers(response.headers)
+    headers.set('Cache-Control', `public, max-age=${ttlSeconds}, s-maxage=${ttlSeconds}, stale-while-revalidate=${ttlSeconds * 4}`)
+    headers.set('X-Eva-Cache', 'MISS')
+    const cacheable = new Response(response.body, { status: response.status, statusText: response.statusText, headers })
+    // `waitUntil` would be better but this helper has no ctx; `put` on the
+    // default cache is cheap enough to run inline for these small payloads.
+    try {
+      await cache.put(cacheKey, cacheable.clone())
+    } catch {
+      /* cache full / disabled — the response is still served */
+    }
+    return cacheable
+  }
+  return response
+}
+
+/** Drop every cached public payload (call after any admin write). */
+const purgePublicCache = async (): Promise<void> => {
+  // The default cache has no prefix enumeration, so we delete the known keys.
+  const keys = [
+    `${CACHE_PREFIX}https://www.eva-store.workers.dev/api/products`,
+    `${CACHE_PREFIX}https://www.eva-store.workers.dev/api/categories`,
+    `${CACHE_PREFIX}https://www.eva-store.workers.dev/api/routes`,
+    `${CACHE_PREFIX}https://www.eva-store.workers.dev/api/content`,
+    `${CACHE_PREFIX}https://www.eva-store.workers.dev/api/settings`,
+  ]
+  await Promise.all(keys.map((key) => caches.default.delete(new Request(key)).catch(() => false)))
+}
+
 const readBody = async <T>(request: Request): Promise<T | null> => {
   try {
     return (await request.json()) as T
@@ -32,10 +77,14 @@ const readBody = async <T>(request: Request): Promise<T | null> => {
   }
 }
 
-const listProducts = async (env: Env, includeHidden: boolean): Promise<StoreProduct[]> => {
-  const result = await env.DB.prepare(
-    `SELECT * FROM products ${includeHidden ? '' : 'WHERE hidden = 0'} ORDER BY sort_order ASC, created_at DESC, name ASC`,
-  ).all<ProductRow>()
+const listProducts = async (env: Env, includeHidden: boolean, page?: number, limit?: number): Promise<StoreProduct[]> => {
+  const base = `SELECT * FROM products ${includeHidden ? '' : 'WHERE hidden = 0'}`
+  const ordered = `${base} ORDER BY sort_order ASC, created_at DESC, name ASC`
+  if (page && limit) {
+    const result = await env.DB.prepare(`${ordered} LIMIT ?1 OFFSET ?2`).bind(limit, (page - 1) * limit).all<ProductRow>()
+    return (result.results ?? []).map(toProduct)
+  }
+  const result = await env.DB.prepare(ordered).all<ProductRow>()
   return (result.results ?? []).map(toProduct)
 }
 
@@ -190,7 +239,7 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
     if (rest[0] === 'whoami') {
       return json({ data: { ok: true } })
     }
-    return handleAdmin(request, env, rest, method)
+    return handleAdmin(request, env, rest, method, ctx)
   }
 
   if (method !== 'GET' && method !== 'POST') return json({ error: 'طريقة غير مدعومة' }, 405)
@@ -207,29 +256,50 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
       if (!row) return json({ error: 'المنتج غير موجود' }, 404)
       return json({ data: publicProduct(toProduct(row)) })
     }
-    const products = await listProducts(env, false)
-    return json({ data: products.map(publicProduct) })
+    const params = new URL(request.url).searchParams
+    const page = Math.max(1, Number(params.get('page')) || 0)
+    const limitRaw = Number(params.get('limit')) || 0
+    const limit = limitRaw > 0 ? Math.min(200, limitRaw) : 0
+    return cachedJson(request, 300, async () => {
+      const products = await listProducts(env, false, page || undefined, limit || undefined)
+      const payload = products.map(publicProduct)
+      // Paginated callers get the total so they can render page controls;
+      // the unpaginated shape is kept for the existing storefront client.
+      if (page && limit) {
+        const count = await env.DB.prepare('SELECT COUNT(*) AS n FROM products WHERE hidden = 0').first<{ n: number }>()
+        return json({ data: payload, page, limit, total: count?.n ?? payload.length })
+      }
+      return json({ data: payload })
+    })
   }
 
   if (segment === 'categories') {
-    const result = await env.DB.prepare('SELECT * FROM categories ORDER BY sort_order ASC, name ASC').all()
-    return json({ data: result.results ?? [] })
+    return cachedJson(request, 300, async () => {
+      const result = await env.DB.prepare('SELECT * FROM categories ORDER BY sort_order ASC, name ASC').all()
+      return json({ data: result.results ?? [] })
+    })
   }
 
   if (segment === 'routes') {
-    const result = await env.DB.prepare('SELECT * FROM routes ORDER BY sort_order ASC').all()
-    return json({ data: result.results ?? [] })
+    return cachedJson(request, 300, async () => {
+      const result = await env.DB.prepare('SELECT * FROM routes ORDER BY sort_order ASC').all()
+      return json({ data: result.results ?? [] })
+    })
   }
 
   if (segment === 'content') {
-    const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'content'").first<{ value: string }>()
-    return json({ data: row ? JSON.parse(row.value) : null })
+    return cachedJson(request, 300, async () => {
+      const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'content'").first<{ value: string }>()
+      return json({ data: row ? JSON.parse(row.value) : null })
+    })
   }
 
   if (segment === 'settings') {
-    const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'store'").first<{ value: string }>()
-    const stored = row ? (JSON.parse(row.value) as Record<string, unknown>) : {}
-    return json({ data: { colorsEnabled: true, freeDeliveryFrom: 50000, deliveryFee: 5000, ...stored } })
+    return cachedJson(request, 300, async () => {
+      const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'store'").first<{ value: string }>()
+      const stored = row ? (JSON.parse(row.value) as Record<string, unknown>) : {}
+      return json({ data: { colorsEnabled: true, freeDeliveryFrom: 50000, deliveryFee: 5000, ...stored } })
+    })
   }
 
   if (segment === 'contact' && method === 'POST') {
@@ -295,7 +365,13 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
           String(body.notes ?? body.note ?? ''),
         )
         .run()
-      const notified = await notifyOrderEmail(env, { number, body })
+      // Email delivery (formsubmit) can take 1-7s and is unrelated to the
+      // customer's confirmation — it must never block the 201 response.
+      const emailWork = notifyOrderEmail(env, { number, body }).catch((error) => {
+        console.log(`[notify] order=${number} deferred failure ${error instanceof Error ? error.message : String(error)}`)
+        return false
+      })
+      let pushWork: Promise<unknown> | null = null
       if (pushConfigured(env)) {
         const itemLines = (items as Record<string, unknown>[])
           .slice(0, 4)
@@ -303,15 +379,21 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
           .join('، ')
         const total = Number((totals as Record<string, unknown>).total ?? 0) || 0
         const governorate = String(nested.governorate ?? body.governorate ?? '').trim()
-        const push = sendPushToAll(env, {
+        pushWork = sendPushToAll(env, {
           title: 'طلب جديد • إيفا ستور',
           body: `#${number}\n${name}${governorate ? ` — ${governorate}` : ''}\n${itemLines}\nالإجمالي: ${fmtDinar(total)}`,
-          data: { orderNumber: number, url: '/#/admin' },
+          data: { orderNumber: number, status: 'new', url: '/#/admin' },
+        }).catch((error) => {
+          console.log(`[push] order=${number} failed ${error instanceof Error ? error.message : String(error)}`)
+          return { sent: 0, total: 0, failed: 0, removed: 0, details: [] }
         })
-        if (ctx) ctx.waitUntil(push)
-        else await push
       }
-      return json({ data: { orderNumber: number, status: 'new', saved: true, notified } }, 201)
+      if (ctx) {
+        ctx.waitUntil(Promise.all([emailWork, ...(pushWork ? [pushWork] : [])]))
+      } else {
+        await Promise.all([emailWork, ...(pushWork ? [pushWork] : [])])
+      }
+      return json({ data: { orderNumber: number, status: 'new', saved: true } }, 201)
     }
   }
 

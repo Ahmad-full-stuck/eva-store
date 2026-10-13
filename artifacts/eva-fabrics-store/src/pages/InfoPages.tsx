@@ -1261,10 +1261,15 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
         .catch(() => undefined)
     }
     load()
-    const interval = window.setInterval(load, 15000)
+    const interval = window.setInterval(load, 5000)
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') load()
+    }
+    document.addEventListener('visibilitychange', onVisible)
     return () => {
       cancelled = true
       window.clearInterval(interval)
+      document.removeEventListener('visibilitychange', onVisible)
     }
   }, [trimmed])
 
@@ -1419,7 +1424,7 @@ export function OrderTrackingPage() {
 
   useEffect(() => {
     if (!active) return undefined
-    const interval = window.setInterval(() => setVersion((current) => current + 1), 15000)
+    const interval = window.setInterval(() => setVersion((current) => current + 1), 5000)
     return () => window.clearInterval(interval)
   }, [active])
 

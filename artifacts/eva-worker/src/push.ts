@@ -51,7 +51,7 @@ async function hkdf(salt: Uint8Array, ikm: Uint8Array, info: Uint8Array, len: nu
 
 // ---------- VAPID + RFC8291 payload encryption ----------
 
-async function vapidAuthHeader(env: Env, audience: string): Promise<string> {
+export async function vapidAuthHeader(env: Env, audience: string): Promise<string> {
   const header = b64uEncode(enc.encode(JSON.stringify({ typ: 'JWT', alg: 'ES256' })))
   const payload = b64uEncode(
     enc.encode(JSON.stringify({ aud: audience, exp: Math.floor(Date.now() / 1000) + 12 * 3600, sub: env.VAPID_SUBJECT || 'mailto:admin@example.com' })),
@@ -68,7 +68,7 @@ async function vapidAuthHeader(env: Env, audience: string): Promise<string> {
   return `vapid t=${signingInput}.${b64uEncode(sig)}, k=${env.VAPID_PUBLIC_KEY}`
 }
 
-async function encryptPushPayload(subscription: { keys: { p256dh: string; auth: string } }, payloadStr: string): Promise<Uint8Array> {
+export async function encryptPushPayload(subscription: { keys: { p256dh: string; auth: string } }, payloadStr: string): Promise<Uint8Array> {
   const clientPub = b64uDecode(subscription.keys.p256dh)
   const authSecret = b64uDecode(subscription.keys.auth)
   const ephemeral = (await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveBits'])) as CryptoKeyPair
@@ -92,6 +92,9 @@ async function encryptPushPayload(subscription: { keys: { p256dh: string; auth: 
   const cipher = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: nonce }, key, plaintext))
 
   const rs = new Uint8Array([0, 0, 16, 0])
+  // RFC 8291: the aes128gcm header's keyid carries the *sender's ephemeral*
+  // public key — the recipient needs it to derive the DH shared secret. Using
+  // the client's p256dh here breaks decryption (verified against http_ece).
   const header = concat(salt, rs, new Uint8Array([serverPub.length]), serverPub)
   return concat(header, cipher)
 }
@@ -160,41 +163,71 @@ export const deleteSubscription = async (env: Env, endpoint: string): Promise<vo
   await env.DB.prepare('DELETE FROM push_subscriptions WHERE endpoint = ?1').bind(endpoint).run()
 }
 
-async function sendPush(env: Env, row: PushRow, payload: unknown): Promise<boolean> {
+export interface PushOutcome {
+  ok: boolean
+  status: number
+  endpoint: string
+  error?: string
+}
+
+async function sendPush(env: Env, row: PushRow, payload: unknown): Promise<PushOutcome> {
+  const endpoint = row.endpoint
   try {
-    const audience = new URL(row.endpoint).origin
+    const audience = new URL(endpoint).origin
     const authorization = await vapidAuthHeader(env, audience)
     const body = await encryptPushPayload({ keys: { p256dh: row.p256dh, auth: row.auth } }, JSON.stringify(payload))
-    const res = await fetch(row.endpoint, {
-      method: 'POST',
-      headers: {
-        Authorization: authorization,
-        'Content-Encoding': 'aes128gcm',
-        'Content-Type': 'application/octet-stream',
-        TTL: '86400',
-        Urgency: 'high',
-      },
-      body,
-    })
-    return res.status !== 404 && res.status !== 410
-  } catch {
-    return true
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 10000)
+    let res: Response
+    try {
+      res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          Authorization: authorization,
+          'Content-Encoding': 'aes128gcm',
+          'Content-Type': 'application/octet-stream',
+          TTL: '86400',
+          Urgency: 'high',
+        },
+        body,
+        signal: controller.signal,
+      })
+    } finally {
+      clearTimeout(timer)
+    }
+    // 404/410 = the subscription is permanently gone (user unsubscribed /
+    // browser rotated the key) — the row must be dropped. 413 = payload too
+    // large, 429 = rate limited: retryable, keep the row.
+    if (res.status === 404 || res.status === 410) return { ok: false, status: res.status, endpoint, error: 'gone' }
+    if (!res.ok) return { ok: false, status: res.status, endpoint, error: await res.text().catch(() => '') }
+    return { ok: true, status: res.status, endpoint }
+  } catch (error) {
+    // Network/DNS/timeout: keep the row (may be transient) but report failure
+    // so the caller can surface it instead of silently claiming success.
+    const message = error instanceof Error ? error.message : String(error)
+    console.log(`[push] send failed endpoint=${endpoint} error=${message}`)
+    return { ok: false, status: 0, endpoint, error: message }
   }
 }
 
 export interface PushResult {
   sent: number
   total: number
+  failed: number
+  removed: number
+  details: PushOutcome[]
 }
 
 export const sendPushToAll = async (env: Env, payload: unknown): Promise<PushResult> => {
-  if (!pushConfigured(env)) return { sent: 0, total: 0 }
+  if (!pushConfigured(env)) return { sent: 0, total: 0, failed: 0, removed: 0, details: [] }
   await ensurePushSchema(env)
   const result = await env.DB.prepare('SELECT endpoint, p256dh, auth, admin_id, user_agent, created_at FROM push_subscriptions').all<PushRow>()
   const rows = result.results ?? []
-  if (!rows.length) return { sent: 0, total: 0 }
+  if (!rows.length) return { sent: 0, total: 0, failed: 0, removed: 0, details: [] }
   const outcomes = await Promise.all(rows.map((row) => sendPush(env, row, payload)))
-  const dead = rows.filter((_, i) => !outcomes[i])
+  const dead = rows.filter((_, i) => !outcomes[i].ok && (outcomes[i].status === 404 || outcomes[i].status === 410))
   for (const row of dead) await deleteSubscription(env, row.endpoint)
-  return { sent: outcomes.filter(Boolean).length, total: rows.length }
+  const sent = outcomes.filter((o) => o.ok).length
+  console.log(`[push] total=${rows.length} sent=${sent} removed=${dead.length} failures=${outcomes.length - sent}`)
+  return { sent, total: rows.length, failed: outcomes.length - sent, removed: dead.length, details: outcomes }
 }

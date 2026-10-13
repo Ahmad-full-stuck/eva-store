@@ -3,6 +3,31 @@ import { toProduct } from './types'
 import { hashPin, hashPassword, ensureAuthSchema } from './auth'
 import { ensurePushSchema, saveSubscription, deleteSubscription, sendPushToAll, pushConfigured } from './push'
 
+/**
+ * Public catalog/content payloads are cached on Cloudflare's edge (see
+ * index.ts). Any admin write must drop those entries or the storefront keeps
+ * serving the stale copy until the TTL expires.
+ */
+const CACHE_VERSION = 'v2'
+const CACHE_PREFIX = `eva:${CACHE_VERSION}:`
+const PUBLIC_CACHE_PATHS = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings']
+
+const purgePublicCache = async (): Promise<void> => {
+  const origins = ['https://www.eva-store.workers.dev', 'https://ahmad-full-stuck.github.io', 'https://www.eva-store.com']
+  const keys: string[] = []
+  for (const origin of origins) {
+    for (const path of PUBLIC_CACHE_PATHS) keys.push(`${CACHE_PREFIX}${origin}${path}`)
+  }
+  await Promise.all(keys.map((key) => caches.default.delete(new Request(key)).catch(() => false)))
+}
+
+const STATUS_LABELS: Record<string, string> = {
+  new: 'طلب جديد',
+  contacted: 'تم التواصل',
+  shipped: 'تم الشحن',
+  done: 'مكتمل',
+}
+
 const json = (data: unknown, status = 200): Response =>
   new Response(JSON.stringify(data), {
     status,
@@ -227,7 +252,13 @@ const dataUrlToKey = (dataUrl: string, product: string): { key: string; bytes: n
   return { key, bytes: Math.floor((match[2].length * 3) / 4), type, data: match[2] }
 }
 
-export async function handleAdmin(request: Request, env: Env, rest: string[], method: string): Promise<Response> {
+export async function handleAdmin(
+  request: Request,
+  env: Env,
+  rest: string[],
+  method: string,
+  ctx?: ExecutionContext,
+): Promise<Response> {
   const [resource, id] = rest
 
   if (resource === 'products') {
@@ -241,6 +272,7 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
       const existing = await findExisting(env, [text(body.id), text(body.slug) || slugify(text(body.name))])
       const result = await persistProduct(env, body, existing, existing ? existing.origin : 'admin')
       if (!result.ok) return json({ error: result.error }, 409)
+      await purgePublicCache()
       return json({ data: { slug: result.slug } }, result.status)
     }
     if (method === 'POST' && id === 'import') {
@@ -254,6 +286,7 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
         const result = await persistProduct(env, item, existing, existing ? existing.origin : 'import')
         if (result.ok) saved += 1
       }
+      await purgePublicCache()
       return json({ data: { imported: saved } }, 201)
     }
     if (method === 'PUT' && id) {
@@ -264,6 +297,7 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
       if (!existing) return json({ error: 'المنتج غير موجود' }, 404)
       const result = await persistProduct(env, { ...body, slug: body.slug || slug }, existing, existing.origin)
       if (!result.ok) return json({ error: result.error }, 409)
+      await purgePublicCache()
       return json({ data: { slug: result.slug } })
     }
     if (method === 'DELETE' && id) {
@@ -274,6 +308,7 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
       } else {
         await env.DB.prepare('UPDATE products SET hidden = 1, updated_at = datetime(\'now\') WHERE slug = ?1').bind(slug).run()
       }
+      await purgePublicCache()
       return json({ data: { slug, deleted: true } })
     }
   }
@@ -324,6 +359,7 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
       await env.DB.prepare(
         "INSERT INTO settings (key, value, updated_at) VALUES ('content', ?1, datetime('now')) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = datetime('now')",
       ).bind(JSON.stringify(merged)).run()
+      await purgePublicCache()
       return json({ data: merged })
     }
   }
@@ -341,6 +377,7 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
       await env.DB.prepare(
         "INSERT INTO settings (key, value, updated_at) VALUES ('store', ?1, datetime('now')) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = datetime('now')",
       ).bind(JSON.stringify(merged)).run()
+      await purgePublicCache()
       return json({ data: merged })
     }
   }
@@ -417,11 +454,26 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
       const body = await readBody<{ status?: string }>(request)
       const status = text(body?.status)
       if (!ORDER_STATUSES.includes(status)) return json({ error: 'حالة غير صالحة' }, 400)
+      const orderNumber = decodeURIComponent(id)
       const result = await env.DB.prepare("UPDATE orders SET status = ?1, updated_at = datetime('now') WHERE order_number = ?2")
-        .bind(status, decodeURIComponent(id))
+        .bind(status, orderNumber)
         .run()
       if (!result.meta.changes) return json({ error: 'الطلب غير موجود' }, 404)
-      return json({ data: { orderNumber: decodeURIComponent(id), status } })
+      // Tell every signed-in device the order moved forward (and the customer
+      // picks the same change up on the tracking page, which polls this row).
+      if (pushConfigured(env)) {
+        const push = sendPushToAll(env, {
+          title: `تحديث حالة الطلب • إيفا ستور`,
+          body: `#${orderNumber}\n${STATUS_LABELS[status] || status}`,
+          data: { orderNumber, status, url: '/#/admin' },
+        }).catch((error) => {
+          console.log(`[push] order=${orderNumber} status=${status} failed ${error instanceof Error ? error.message : String(error)}`)
+          return null
+        })
+        if (ctx) ctx.waitUntil(push)
+        else await push
+      }
+      return json({ data: { orderNumber, status } })
     }
     if (method === 'DELETE' && id) {
       const result = await env.DB.prepare('DELETE FROM orders WHERE order_number = ?1')
@@ -485,6 +537,7 @@ export async function handleAdmin(request: Request, env: Env, rest: string[], me
     for (const slug of slugs) {
       await env.DB.prepare("UPDATE products SET hidden = 0, updated_at = datetime('now') WHERE slug = ?1").bind(slug).run()
     }
+    await purgePublicCache()
     return json({ data: { restored: slugs.length } })
   }
 
