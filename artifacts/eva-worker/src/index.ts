@@ -31,11 +31,18 @@ const withCors = (response: Response): Response => {
  * invalidates everything at once.
  */
 const CACHE_VERSION = 'v2'
-const CACHE_PREFIX = `eva:${CACHE_VERSION}:`
+
+const cacheKeyFor = (request: Request): Request => {
+  // The Cache API only accepts fully-qualified URLs as keys, so the version
+  // rides in a query parameter instead of a prefix.
+  const url = new URL(request.url)
+  url.searchParams.set('__eva', CACHE_VERSION)
+  return new Request(url.toString())
+}
 
 const cachedJson = async (request: Request, ttlSeconds: number, build: () => Promise<Response>): Promise<Response> => {
   const cache = caches.default
-  const cacheKey = new Request(`${CACHE_PREFIX}${request.url}`)
+  const cacheKey = cacheKeyFor(request)
   const hit = await cache.match(cacheKey)
   if (hit) return hit
   const response = await build()
@@ -44,8 +51,6 @@ const cachedJson = async (request: Request, ttlSeconds: number, build: () => Pro
     headers.set('Cache-Control', `public, max-age=${ttlSeconds}, s-maxage=${ttlSeconds}, stale-while-revalidate=${ttlSeconds * 4}`)
     headers.set('X-Eva-Cache', 'MISS')
     const cacheable = new Response(response.body, { status: response.status, statusText: response.statusText, headers })
-    // `waitUntil` would be better but this helper has no ctx; `put` on the
-    // default cache is cheap enough to run inline for these small payloads.
     try {
       await cache.put(cacheKey, cacheable.clone())
     } catch {
@@ -58,15 +63,13 @@ const cachedJson = async (request: Request, ttlSeconds: number, build: () => Pro
 
 /** Drop every cached public payload (call after any admin write). */
 const purgePublicCache = async (): Promise<void> => {
-  // The default cache has no prefix enumeration, so we delete the known keys.
-  const keys = [
-    `${CACHE_PREFIX}https://www.eva-store.workers.dev/api/products`,
-    `${CACHE_PREFIX}https://www.eva-store.workers.dev/api/categories`,
-    `${CACHE_PREFIX}https://www.eva-store.workers.dev/api/routes`,
-    `${CACHE_PREFIX}https://www.eva-store.workers.dev/api/content`,
-    `${CACHE_PREFIX}https://www.eva-store.workers.dev/api/settings`,
-  ]
-  await Promise.all(keys.map((key) => caches.default.delete(new Request(key)).catch(() => false)))
+  const cache = caches.default
+  const keys = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings'].map((path) => {
+    const url = new URL(`https://www.eva-store.workers.dev${path}`)
+    url.searchParams.set('__eva', CACHE_VERSION)
+    return new Request(url.toString())
+  })
+  await Promise.all(keys.map((key) => cache.delete(key).catch(() => false)))
 }
 
 const readBody = async <T>(request: Request): Promise<T | null> => {

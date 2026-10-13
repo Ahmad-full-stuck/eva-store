@@ -9,16 +9,20 @@ import { ensurePushSchema, saveSubscription, deleteSubscription, sendPushToAll, 
  * serving the stale copy until the TTL expires.
  */
 const CACHE_VERSION = 'v2'
-const CACHE_PREFIX = `eva:${CACHE_VERSION}:`
 const PUBLIC_CACHE_PATHS = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings']
 
 const purgePublicCache = async (): Promise<void> => {
   const origins = ['https://www.eva-store.workers.dev', 'https://ahmad-full-stuck.github.io', 'https://www.eva-store.com']
-  const keys: string[] = []
+  const keys: Request[] = []
   for (const origin of origins) {
-    for (const path of PUBLIC_CACHE_PATHS) keys.push(`${CACHE_PREFIX}${origin}${path}`)
+    for (const path of PUBLIC_CACHE_PATHS) {
+      const url = new URL(`${origin}${path}`)
+      // Cache API keys must be fully-qualified URLs — same shape as index.ts.
+      url.searchParams.set('__eva', CACHE_VERSION)
+      keys.push(new Request(url.toString()))
+    }
   }
-  await Promise.all(keys.map((key) => caches.default.delete(new Request(key)).catch(() => false)))
+  await Promise.all(keys.map((key) => caches.default.delete(key).catch(() => false)))
 }
 
 const STATUS_LABELS: Record<string, string> = {
