@@ -3,7 +3,7 @@ import { BookOpen, ChevronLeft, Heart, Home, Info, Languages, Menu, MessageCircl
 import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
 import { formatMeters } from '@/lib/catalog'
-import { useSiteContent } from '@/lib/site-content'
+import { useSiteContent, sectionVisible } from '@/lib/site-content'
 import { useT } from '@/lib/i18n'
 import { routeLabelsEn } from '@/lib/strings/header'
 import { Logo } from './Logo'
@@ -108,13 +108,15 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
 
   return (
     <>
-      <div className="announcement-bar" role="region" aria-label={t('header.announcementBar')}>
-        <span className="announcement-msg announcement-msg-right">{content.announcementRight}</span>
-        <span className="announcement-dot" />
-        <Link href="/contact">{t('header.announceContact')}</Link>
-        <span className="announcement-dot" />
-        <span className="announcement-msg announcement-msg-left">{content.announcementLeft}</span>
-      </div>
+      {sectionVisible(content, 'announcement') && (
+        <div className="announcement-bar" role="region" aria-label={t('header.announcementBar')}>
+          <span className="announcement-msg announcement-msg-right">{content.announcementRight}</span>
+          <span className="announcement-dot" />
+          <Link href="/contact">{t('header.announceContact')}</Link>
+          <span className="announcement-dot" />
+          <span className="announcement-msg announcement-msg-left">{content.announcementLeft}</span>
+        </div>
+      )}
       <header className="site-header glass">
         <div className="container-eva header-inner">
           <Logo />

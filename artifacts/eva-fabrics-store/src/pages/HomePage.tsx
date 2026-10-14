@@ -3,7 +3,7 @@ import { ArrowLeft, BadgeCheck, ChevronDown, MessageCircle, Sparkles, Truck, Wal
 import { Link } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
 import { guideQuestions, homeStory, trustItems } from '@/lib/fallback-data'
-import { contentLines, useSiteContent } from '@/lib/site-content'
+import { contentLines, useSiteContent, sectionVisible } from '@/lib/site-content'
 import { runDiscovery, type DiscoveryMatch } from '@/lib/discover'
 import { useT } from '@/lib/i18n'
 import { discoveryEngineValues, guideQuestionsEn, homeStoryEn, trustItemsEn } from '@/lib/strings/header'
@@ -78,30 +78,32 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
 
   return (
     <main>
-      <HeroSection products={products} categories={categories} />
+      {sectionVisible(content, 'hero') && <HeroSection products={products} categories={categories} />}
 
-      <PromoBar />
+      {sectionVisible(content, 'promo') && <PromoBar />}
 
-      <StepsSection />
+      {sectionVisible(content, 'steps') && <StepsSection />}
 
-      <section className="container-eva section-block category-section" aria-label={t('home.categoriesAria')}>
-        <SectionHeading eyebrow={content.categoriesEyebrow} title={content.categoriesTitle} linkLabel={t('home.showAllFabrics')} linkHref="/catalog" />
-        <div className="category-grid">
-          {categories.map((category) => {
-            const override = CATEGORY_IMAGES[category.id]
-            const image = override?.src ?? category.image
-            return (
-              <Link key={category.id} href={`/catalog?category=${encodeURIComponent(category.id)}`} className="category-card">
-                {image && <SmartImage src={image} alt="" sizes="(max-width: 640px) 46vw, 23vw" intrinsicWidth={override?.w} intrinsicHeight={override?.h} />}
-                <span className="category-shade" />
-                <span className="category-copy"><small>{category.description}</small><strong>{category.name}</strong><b>{t('home.discover')} <ArrowLeft size={14} /></b></span>
-              </Link>
-            )
-          })}
-        </div>
-      </section>
+      {sectionVisible(content, 'categories') && (
+        <section className="container-eva section-block category-section" aria-label={t('home.categoriesAria')}>
+          <SectionHeading eyebrow={content.categoriesEyebrow} title={content.categoriesTitle} linkLabel={t('home.showAllFabrics')} linkHref="/catalog" />
+          <div className="category-grid">
+            {categories.map((category) => {
+              const override = CATEGORY_IMAGES[category.id]
+              const image = override?.src ?? category.image
+              return (
+                <Link key={category.id} href={`/catalog?category=${encodeURIComponent(category.id)}`} className="category-card">
+                  {image && <SmartImage src={image} alt="" sizes="(max-width: 640px) 46vw, 23vw" intrinsicWidth={override?.w} intrinsicHeight={override?.h} />}
+                  <span className="category-shade" />
+                  <span className="category-copy"><small>{category.description}</small><strong>{category.name}</strong><b>{t('home.discover')} <ArrowLeft size={14} /></b></span>
+                </Link>
+              )
+            })}
+          </div>
+        </section>
+      )}
 
-      {recentProducts.length > 0 && (
+      {sectionVisible(content, 'newArrivals') && recentProducts.length > 0 && (
         <section className="container-eva section-block new-section" aria-label={t('home.newAria')}>
           <SectionHeading eyebrow={content.newEyebrow} title={content.newTitle} description={content.newDesc} linkLabel={t('home.seeNew')} linkHref="/catalog" />
           <div className="glass" style={{ padding: 'clamp(14px, 2.5vw, 28px)' }}>
@@ -110,6 +112,7 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
         </section>
       )}
 
+      {sectionVisible(content, 'discovery') && (
       <section className="container-eva section-block discovery-section">
         <div className="discovery-intro"><span className="eyebrow"><Sparkles size={14} />{t('home.discovery.eyebrow')}</span><h2>{t('home.discovery.title1')}<br />{t('home.discovery.title2')}</h2><p>{t('home.discovery.intro')}</p></div>
         <div className="discovery-card">
@@ -142,7 +145,9 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
           )}
         </div>
       </section>
+      )}
 
+      {sectionVisible(content, 'guide') && (
       <section className="guide-preview-section">
         <div className="container-eva guide-preview-grid">
           <div className="guide-preview-copy">
@@ -161,15 +166,20 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
           <div className="guide-faq-list glass-dark">{faqSource.slice(0, 4).map((item, index) => <div className={`guide-faq ${openFaq === index ? 'is-open' : ''}`} key={item.question}><button type="button" onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}><span>{t('home.faq.questionNumber').replace('{n}', String(index + 1))}</span><strong>{item.question}</strong><ChevronDown size={17} /></button>{openFaq === index && <p>{item.answer}</p>}</div>)}</div>
         </div>
       </section>
+      )}
 
+      {sectionVisible(content, 'story') && (
       <section className="container-eva section-block story-section" aria-label={t('home.storyEyebrow')}>
         <div className="story-visual"><SmartImage src="products/swfmytalk/01.jpg" alt={t('home.storyImageAlt')} sizes="(max-width: 820px) 92vw, 45vw" /><span>EVA<br /><strong>FABRICS</strong></span></div>
         <div className="story-copy"><span className="eyebrow">{t('home.storyEyebrow')}</span><h2>{story.title}</h2><p>{story.text}</p><p>{t('home.storyText2')}</p><Link href="/about" className="button button-outline">{t('home.storyCta')} <ArrowLeft size={16} /></Link></div>
       </section>
+      )}
 
+      {sectionVisible(content, 'trust') && (
       <section className="trust-section" aria-label={t('home.trustAria')}><div className="container-eva trust-grid">{trustSource.map((item) => <div className="trust-item" key={item.title}>{item.icon === 'truck' ? <Truck /> : item.icon === 'wallet' ? <Wallet /> : item.icon === 'message' ? <MessageCircle /> : <BadgeCheck />}<strong>{item.title}</strong><span>{item.description}</span></div>)}</div></section>
+      )}
 
-      <NewsletterSection />
+      {sectionVisible(content, 'newsletter') && <NewsletterSection />}
     </main>
   )
 }

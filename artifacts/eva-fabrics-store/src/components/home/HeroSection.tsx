@@ -4,7 +4,7 @@ import { Link } from 'wouter'
 import type { Category, Product } from '@/types'
 import { CountUp } from './CountUp'
 import { SmartImage } from '@/components/ui/SmartImage'
-import { contentLines, contentParts, useSiteContent } from '@/lib/site-content'
+import { contentLines, contentParts, useSiteContent, DEFAULT_HERO_SLIDES } from '@/lib/site-content'
 import { useT } from '@/lib/i18n'
 
 interface HeroSectionProps {
@@ -32,12 +32,9 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
     { key: 'cash', icon: <Wallet size={16} />, value: 100, prefix: '', suffix: t('home.stats.percent'), label: t('home.stats.cashLabel'), trend: t('home.stats.cashTrend') },
   ]
 
-  const slides = [
-    { src: 'home/hero-1.jpg', alt: t('home.slide.colorful') },
-    { src: 'home/hero-2.jpg', alt: t('home.slide.sequin') },
-    { src: 'home/hero-3.jpg', alt: t('home.slide.pearl') },
-    { src: 'home/hero-4.jpg', alt: t('home.slide.stripe') },
-  ]
+  // الصور تديرها الإدارة (إضافة/حذف/ترتيب). إن لم توجد صور محفوظة نرجع للافتراضية.
+  const slideSrcs = Array.isArray(content.heroSlides) && content.heroSlides.length ? content.heroSlides : DEFAULT_HERO_SLIDES
+  const slides = slideSrcs.map((src, index) => ({ src, alt: `${content.shopName || 'EVA'} — ${index + 1}` }))
   const [activeSlide, setActiveSlide] = useState(0)
   const timerRef = useRef<number | undefined>(undefined)
   const slideMs = Math.max(1200, Number(content.heroSlideMs) || 2600)

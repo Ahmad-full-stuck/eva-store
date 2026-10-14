@@ -23,7 +23,7 @@ const sha256Hex = async (value: string): Promise<string> => {
 
 export type { SiteContent as AdminContent } from '@/lib/site-content'
 export { readSiteContent as readAdminContent, CONTENT_KEY } from '@/lib/site-content'
-import { CONTENT_KEY, defaultSiteContent, readSiteContent, readStoreSettings, type SiteContent, type StoreSettings } from '@/lib/site-content'
+import { CONTENT_KEY, defaultSiteContent, readSiteContent, readStoreSettings, DEFAULT_HERO_SLIDES, HOME_SECTION_KEYS, type SiteContent, type StoreSettings, type HomeSectionKey } from '@/lib/site-content'
 
 interface TextField {
   key: keyof SiteContent
@@ -76,6 +76,35 @@ const groupFields: { title: string; fields: TextField[] }[] = [
     ],
   },
 ]
+
+/** تسميات أقسام الصفحة الرئيسية لقائمة الإخفاء/الإظهار. */
+const SECTION_LABELS: Record<HomeSectionKey, string> = {
+  announcement: 'الشريط الإعلاني العلوي',
+  hero: 'الغلاف الرئيسي + شريط الأرقام',
+  promo: 'شريط التوصيل (العروض)',
+  steps: 'خطوات الطلب',
+  categories: 'أقسام القماش',
+  newArrivals: 'وصل حديثاً',
+  discovery: 'أداة اختيار القماش',
+  guide: 'معاينة دليل الأقمشة',
+  story: 'قصة إيفا',
+  trust: 'شريط الثقة والضمانات',
+  newsletter: 'النشرة البريدية',
+}
+
+const slideIconBtn = {
+  width: 22,
+  height: 22,
+  display: 'grid',
+  placeItems: 'center',
+  border: '1px solid var(--eva-line-strong)',
+  borderRadius: 7,
+  background: '#fff',
+  color: 'var(--eva-ink)',
+  fontSize: 12,
+  cursor: 'pointer',
+  lineHeight: 1,
+}
 
 const readJson = <T,>(key: string, fallback: T): T => {
   try {
@@ -385,6 +414,8 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const [adminsBusy, setAdminsBusy] = useState(false)
   const [newAdmin, setNewAdmin] = useState({ username: '', password: '', displayName: '' })
   const fileRef = useRef<HTMLInputElement>(null)
+  const [slideUrl, setSlideUrl] = useState('')
+  const [slideBusy, setSlideBusy] = useState(false)
   const [pushState, setPushState] = useState<'unknown' | 'unsupported' | 'off' | 'on' | 'busy' | 'blocked'>('unknown')
   const [pushInfo, setPushInfo] = useState<{ enabled: boolean; count: number } | null>(null)
   const [pushMsg, setPushMsg] = useState('')
@@ -896,16 +927,20 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       }
       if (parsed.content && typeof parsed.content === 'object' && parsed.content !== null) {
         const raw = parsed.content as Record<string, unknown>
-        const clean: Partial<SiteContent> = {}
+        const clean: Record<string, unknown> = {}
         for (const key of Object.keys(defaultSiteContent) as (keyof SiteContent)[]) {
           const value = raw[key]
           if (key === 'emailProvider') {
             if (value === 'mailto' || value === 'formsubmit') clean.emailProvider = value
             continue
           }
+          if (key === 'heroSlides' || key === 'hiddenSections') {
+            if (Array.isArray(value)) clean[key] = (value as unknown[]).filter((item): item is string => typeof item === 'string').slice(0, 60)
+            continue
+          }
           if (typeof value === 'string') clean[key] = value.slice(0, 6000)
         }
-        const next = { ...content, ...clean }
+        const next = { ...content, ...clean } as SiteContent
         setContent(next)
         writeJson(CONTENT_KEY, next)
       }
@@ -913,6 +948,47 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     } catch {
       setToast('ملف غير صالح')
     }
+  }
+
+  // ---- صور الغلاف التلقائية (إضافة/حذف/ترتيب/رفع) ----
+  const heroSlides = Array.isArray(content.heroSlides) && content.heroSlides.length ? content.heroSlides : DEFAULT_HERO_SLIDES
+  const setHeroSlides = (slides: string[]) => setContent((prev) => ({ ...prev, heroSlides: slides }))
+  const addHeroSlide = (src: string) => {
+    const clean = src.trim()
+    if (!clean) return
+    setHeroSlides([...heroSlides, clean])
+    setSlideUrl('')
+  }
+  const removeHeroSlide = (index: number) => setHeroSlides(heroSlides.filter((_, i) => i !== index))
+  const moveHeroSlide = (index: number, dir: -1 | 1) => {
+    const next = [...heroSlides]
+    const target = index + dir
+    if (target < 0 || target >= next.length) return
+    const swap = next[index]
+    next[index] = next[target]
+    next[target] = swap
+    setHeroSlides(next)
+  }
+  const uploadHeroSlide = async (file: File | null) => {
+    if (!file) return
+    setSlideBusy(true)
+    try {
+      const dataUrl = await toFileDataUrl(file)
+      const result = await adminFetch<{ url?: string }>('/api/admin/upload', { method: 'POST', body: JSON.stringify({ dataUrl, product: 'hero' }) })
+      if (result?.url) addHeroSlide(result.url)
+      else setToast('تعذر رفع الصورة')
+    } catch {
+      setToast('تعذر رفع الصورة')
+    } finally {
+      setSlideBusy(false)
+    }
+  }
+
+  // ---- إخفاء/إظهار أقسام الصفحة الرئيسية ----
+  const hiddenSections = Array.isArray(content.hiddenSections) ? content.hiddenSections : []
+  const toggleSection = (key: HomeSectionKey) => {
+    const next = hiddenSections.includes(key) ? hiddenSections.filter((k) => k !== key) : [...hiddenSections, key]
+    setContent((prev) => ({ ...prev, hiddenSections: next }))
   }
 
   const saveContent = async () => {
@@ -1572,6 +1648,66 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                           <small style={{ display: 'block', marginTop: 4, color: 'var(--eva-muted)', fontSize: 11 }}>
                             المتغيرات: {'{orderNumber} {name} {phone} {email} {governorate} {district} {address} {landmark} {notes} {items} {subtotal} {delivery} {total} {date} {shop}'}
                           </small>
+                        </div>
+                      </div>
+
+                      <div style={{ marginTop: 20, padding: 14, border: '1px solid var(--eva-line-strong)', borderRadius: 12 }}>
+                        <div className="admin-note" style={{ marginBottom: 6, fontWeight: 700, color: 'var(--eva-ink, #30262a)' }}>صور الغلاف التلقائية (التي تتقليب)</div>
+                        <div className="admin-note" style={{ marginBottom: 12 }}>
+                          أضيفي/احذفي/رتّبي صور الغلاف الرئيسي. الرفع أو رابط مباشر. اضغطي «حفظ المحتوى» لتطبيق التغيير على المتجر.
+                        </div>
+                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+                          <input
+                            value={slideUrl}
+                            onChange={(event) => setSlideUrl(event.target.value)}
+                            placeholder="رابط صورة (https://...)"
+                            dir="ltr"
+                            style={{ flex: 1, minWidth: 200, padding: '9px 11px', border: '1px solid var(--eva-line-strong)', borderRadius: 10, fontFamily: 'inherit', fontSize: 13 }}
+                          />
+                          <button type="button" className="admin-btn" onClick={() => addHeroSlide(slideUrl)} disabled={!slideUrl.trim() || slideBusy}>
+                            <Plus size={14} /> إضافة رابط
+                          </button>
+                          <label className="admin-btn" style={{ cursor: 'pointer' }}>
+                            <ImageIcon size={14} /> {slideBusy ? 'جارٍ الرفع...' : 'رفع صورة'}
+                            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(event) => { void uploadHeroSlide(event.target.files?.[0] ?? null); event.target.value = '' }} />
+                          </label>
+                        </div>
+                        {heroSlides.length === 0 && <div className="admin-note">لا توجد صور — ستُستخدم الصور الافتراضية. أضيفي صورة لتظهر بدلاً عنها.</div>}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 10 }}>
+                          {heroSlides.map((src, index) => (
+                            <div key={`${src}-${index}`} style={{ border: '1px solid var(--eva-line)', borderRadius: 10, overflow: 'hidden', background: '#fff' }}>
+                              <img src={src} alt="" style={{ width: '100%', height: 84, objectFit: 'cover', display: 'block', background: 'var(--eva-rose-soft)' }} />
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4, padding: '5px 6px' }}>
+                                <span style={{ fontSize: 10.5, color: 'var(--eva-muted)' }}>#{index + 1}</span>
+                                <span style={{ display: 'flex', gap: 3 }}>
+                                  <button type="button" onClick={() => moveHeroSlide(index, -1)} disabled={index === 0} title="للأعلى" style={slideIconBtn}>↑</button>
+                                  <button type="button" onClick={() => moveHeroSlide(index, 1)} disabled={index === heroSlides.length - 1} title="للأسفل" style={slideIconBtn}>↓</button>
+                                  <button type="button" onClick={() => removeHeroSlide(index)} title="حذف" style={{ ...slideIconBtn, color: '#a3193f' }}>✕</button>
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div style={{ marginTop: 20, padding: 14, border: '1px solid var(--eva-line-strong)', borderRadius: 12 }}>
+                        <div className="admin-note" style={{ marginBottom: 6, fontWeight: 700, color: 'var(--eva-ink, #30262a)' }}>إظهار/إخفاء أقسام الصفحة الرئيسية</div>
+                        <div className="admin-note" style={{ marginBottom: 12 }}>
+                          أخفئي أي قسم دون التأثير على التصميم — يختفي فقط من الصفحة الرئيسية. اضغطي «حفظ المحتوى» لتطبيق التغيير.
+                        </div>
+                        <div style={{ display: 'grid', gap: 8 }}>
+                          {HOME_SECTION_KEYS.map((key) => {
+                            const hidden = hiddenSections.includes(key)
+                            return (
+                              <label key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '8px 10px', border: '1px solid var(--eva-line)', borderRadius: 10, background: '#fff', cursor: 'pointer' }}>
+                                <span style={{ fontSize: 13, fontWeight: 600, color: hidden ? 'var(--eva-muted)' : 'var(--eva-ink)' }}>{SECTION_LABELS[key]}</span>
+                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
+                                  <span style={{ fontSize: 11, color: 'var(--eva-muted)' }}>{hidden ? 'مخفي' : 'ظاهر'}</span>
+                                  <input type="checkbox" checked={!hidden} onChange={() => toggleSection(key)} style={{ width: 18, height: 18, accentColor: 'var(--eva-rose)' }} />
+                                </span>
+                              </label>
+                            )
+                          })}
                         </div>
                       </div>
 

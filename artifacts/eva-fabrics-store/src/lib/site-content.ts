@@ -3,6 +3,31 @@ import { readServerContent, readServerSettings } from '@/lib/api'
 
 export const CONTENT_KEY = 'eva-admin-content'
 
+/** الصور الافتراضية للغلاف — تُستخدم إن لم يحدّد الإدارة أي صور. */
+export const DEFAULT_HERO_SLIDES = ['home/hero-1.jpg', 'home/hero-2.jpg', 'home/hero-3.jpg', 'home/hero-4.jpg']
+
+/** أقسام الصفحة الرئيسية القابلة للإخفاء/الإظهار من الإدارة. */
+export const HOME_SECTION_KEYS = [
+  'announcement',
+  'hero',
+  'promo',
+  'steps',
+  'categories',
+  'newArrivals',
+  'discovery',
+  'guide',
+  'story',
+  'trust',
+  'newsletter',
+] as const
+
+export type HomeSectionKey = (typeof HOME_SECTION_KEYS)[number]
+
+/** القسم ظاهر ما لم تُدرج مفتاحه في hiddenSections. */
+export const sectionVisible = (content: SiteContent, key: HomeSectionKey): boolean =>
+  !Array.isArray(content.hiddenSections) || !content.hiddenSections.includes(key)
+
+
 export interface SiteContent {
   shopName: string
   phone: string
@@ -21,6 +46,10 @@ export interface SiteContent {
   heroNoteAlt: string
   statsTitle: string
   heroSlideMs: string
+  /** الصور التي تتقليب تلقائياً في الغلاف — قابلة للإضافة/الحذف/الترتيب من الإدارة. */
+  heroSlides: string[]
+  /** مفاتيح الأقسام المخفية في الصفحة الرئيسية (لا يغيّر التصميم — فقط إخفاء/إظهار). */
+  hiddenSections: string[]
   categoriesEyebrow: string
   categoriesTitle: string
   newEyebrow: string
@@ -63,6 +92,8 @@ export const defaultSiteContent: SiteContent = {
   heroNoteAlt: 'دفع عند استلام الطلب',
   statsTitle: 'أرقام المعرض الآن',
   heroSlideMs: '2600',
+  heroSlides: [...DEFAULT_HERO_SLIDES],
+  hiddenSections: [],
   categoriesEyebrow: 'اختاري من البداية',
   categoriesTitle: 'مساحات القماش',
   newEyebrow: 'نماذج مختارة',
