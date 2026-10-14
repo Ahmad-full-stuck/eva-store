@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { readServerContent, readServerSettings } from '@/lib/api'
+import { setTextOverrides } from '@/lib/text-overrides'
 
 export const CONTENT_KEY = 'eva-admin-content'
 
@@ -50,6 +51,8 @@ export interface SiteContent {
   heroSlides: string[]
   /** مفاتيح الأقسام المخفية في الصفحة الرئيسية (لا يغيّر التصميم — فقط إخفاء/إظهار). */
   hiddenSections: string[]
+  /** تجاوزات نصوص النظام (مفتاح الترجمة → النص المخصّص). فارغ = استخدام النص الافتراضي. */
+  texts: Record<string, string>
   categoriesEyebrow: string
   categoriesTitle: string
   newEyebrow: string
@@ -116,6 +119,7 @@ export const defaultSiteContent: SiteContent = {
   emailTemplateOrder: '',
   emailProvider: 'formsubmit',
   emailFormSubmitAction: 'https://formsubmit.co/gdumingm@gmail.com',
+  texts: {},
 }
 
 const readJson = <T,>(key: string, fallback: T): T => {
@@ -129,11 +133,15 @@ const readJson = <T,>(key: string, fallback: T): T => {
   }
 }
 
-export const readSiteContent = (): SiteContent => ({
-  ...defaultSiteContent,
-  ...(readServerContent<Partial<SiteContent>>() || {}),
-  ...readJson<Partial<SiteContent>>(CONTENT_KEY, {}),
-})
+export const readSiteContent = (): SiteContent => {
+  const merged: SiteContent = {
+    ...defaultSiteContent,
+    ...(readServerContent<Partial<SiteContent>>() || {}),
+    ...readJson<Partial<SiteContent>>(CONTENT_KEY, {}),
+  }
+  setTextOverrides(merged.texts)
+  return merged
+}
 
 export interface StoreSettings {
   colorsEnabled: boolean

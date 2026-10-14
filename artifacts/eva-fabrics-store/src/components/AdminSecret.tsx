@@ -24,9 +24,12 @@ const sha256Hex = async (value: string): Promise<string> => {
 export type { SiteContent as AdminContent } from '@/lib/site-content'
 export { readSiteContent as readAdminContent, CONTENT_KEY } from '@/lib/site-content'
 import { CONTENT_KEY, defaultSiteContent, readSiteContent, readStoreSettings, DEFAULT_HERO_SLIDES, HOME_SECTION_KEYS, type SiteContent, type StoreSettings, type HomeSectionKey } from '@/lib/site-content'
+import { allStrings, type StringInfo } from '@/lib/i18n'
+
+type ContentTextKey = { [K in keyof SiteContent]: SiteContent[K] extends string ? K : never }[keyof SiteContent]
 
 interface TextField {
-  key: keyof SiteContent
+  key: ContentTextKey
   label: string
   area?: boolean
   hint?: string
@@ -91,6 +94,34 @@ const SECTION_LABELS: Record<HomeSectionKey, string> = {
   trust: 'شريط الثقة والضمانات',
   newsletter: 'النشرة البريدية',
 }
+
+/** كل نصوص النظام + مجموعاتها (لعرضها في لوحة التخصيص). */
+const ALL_STRINGS: StringInfo[] = allStrings()
+
+const TEXT_GROUP_LABELS: Record<string, string> = {
+  core: 'عام / التنبيهات',
+  header: 'الترويسة والقائمة',
+  home: 'الصفحة الرئيسية',
+  cat: 'صفحات الأقسام',
+  pd: 'صفحة المنتج',
+  card: 'بطاقة المنتج',
+  search: 'البحث',
+  cart: 'السلة',
+  co: 'إتمام الطلب',
+  confirm: 'تأكيد الطلب',
+  fav: 'المفضلة',
+  track: 'تتبع الطلب',
+  about: 'من نحن',
+  contact: 'اتصلي بنا',
+  guide: 'دليل الأقمشة',
+  policies: 'السياسات',
+  disc: 'خصائص القماش',
+  foot: 'التذييل',
+  nf: 'صفحة غير موجودة',
+}
+
+const TEXT_GROUPS = Array.from(new Set(ALL_STRINGS.map((item) => item.group)))
+const TEXT_GROUP_LABEL = (group: string): string => TEXT_GROUP_LABELS[group] ?? group
 
 const slideIconBtn = {
   width: 22,
@@ -416,6 +447,8 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const fileRef = useRef<HTMLInputElement>(null)
   const [slideUrl, setSlideUrl] = useState('')
   const [slideBusy, setSlideBusy] = useState(false)
+  const [textQuery, setTextQuery] = useState('')
+  const [expandedTextGroups, setExpandedTextGroups] = useState<string[]>([])
   const [pushState, setPushState] = useState<'unknown' | 'unsupported' | 'off' | 'on' | 'busy' | 'blocked'>('unknown')
   const [pushInfo, setPushInfo] = useState<{ enabled: boolean; count: number } | null>(null)
   const [pushMsg, setPushMsg] = useState('')
@@ -938,6 +971,13 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
             if (Array.isArray(value)) clean[key] = (value as unknown[]).filter((item): item is string => typeof item === 'string').slice(0, 60)
             continue
           }
+          if (key === 'texts') {
+            if (value && typeof value === 'object') {
+              const entries = Object.entries(value as Record<string, unknown>).filter(([, item]) => typeof item === 'string')
+              clean[key] = Object.fromEntries(entries)
+            }
+            continue
+          }
           if (typeof value === 'string') clean[key] = value.slice(0, 6000)
         }
         const next = { ...content, ...clean } as SiteContent
@@ -989,6 +1029,48 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const toggleSection = (key: HomeSectionKey) => {
     const next = hiddenSections.includes(key) ? hiddenSections.filter((k) => k !== key) : [...hiddenSections, key]
     setContent((prev) => ({ ...prev, hiddenSections: next }))
+  }
+
+  // ---- تخصيص نصوص النظام ----
+  const setTextValue = (key: string, value: string) => {
+    setContent((prev) => ({ ...prev, texts: { ...(prev.texts ?? {}), [key]: value } }))
+  }
+  const resetText = (key: string) => {
+    setContent((prev) => {
+      const nextTexts = { ...(prev.texts ?? {}) }
+      delete nextTexts[key]
+      return { ...prev, texts: nextTexts }
+    })
+  }
+  const toggleTextGroup = (group: string) => {
+    setExpandedTextGroups((prev) => (prev.includes(group) ? prev.filter((item) => item !== group) : [...prev, group]))
+  }
+  const query = textQuery.trim().toLowerCase()
+  const matchedStrings = query
+    ? ALL_STRINGS.filter((item) => item.ar.toLowerCase().includes(query) || item.key.toLowerCase().includes(query))
+    : []
+
+  const renderTextField = (item: StringInfo) => {
+    const modified = content.texts?.[item.key] !== undefined
+    const value = content.texts?.[item.key] ?? item.ar
+    return (
+      <div key={item.key}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 3 }}>
+          <code dir="ltr" style={{ fontSize: 10.5, color: 'var(--eva-muted)' }}>{item.key}</code>
+          {modified && (
+            <button type="button" onClick={() => resetText(item.key)} style={{ ...slideIconBtn, width: 'auto', padding: '0 8px', height: 20, fontSize: 10.5, color: '#a3193f' }}>
+              الافتراضي
+            </button>
+          )}
+        </div>
+        <textarea
+          value={value}
+          onChange={(event) => setTextValue(item.key, event.target.value)}
+          rows={Math.min(6, Math.max(1, Math.ceil(value.length / 70)))}
+          style={{ width: '100%', padding: '8px 10px', border: `1px solid ${modified ? 'var(--eva-rose, #c98d9d)' : 'var(--eva-line-strong)'}`, borderRadius: 9, fontFamily: 'inherit', fontSize: 13, lineHeight: 1.7, resize: 'vertical', background: '#fff' }}
+        />
+      </div>
+    )
   }
 
   const saveContent = async () => {
@@ -1709,6 +1791,45 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                             )
                           })}
                         </div>
+                      </div>
+
+                      <div style={{ marginTop: 20, padding: 14, border: '1px solid var(--eva-line-strong)', borderRadius: 12 }}>
+                        <div className="admin-note" style={{ marginBottom: 6, fontWeight: 700, color: 'var(--eva-ink, #30262a)' }}>تخصيص نصوص النظام (كل نص في الموقع)</div>
+                        <div className="admin-note" style={{ marginBottom: 10 }}>
+                          عدّلي أي نص في المتجر من هنا. اضغطي «الافتراضي» لإرجاع النص الأصلي. ثم «حفظ المحتوى» للتطبيق على الزائرين.
+                        </div>
+                        <input
+                          value={textQuery}
+                          onChange={(event) => setTextQuery(event.target.value)}
+                          placeholder="ابحثي بنص عربي أو برمز المفتاح (مثال: cart)..."
+                          style={{ width: '100%', padding: '9px 11px', border: '1px solid var(--eva-line-strong)', borderRadius: 10, fontFamily: 'inherit', fontSize: 13, marginBottom: 12 }}
+                        />
+                        {query ? (
+                          <div style={{ display: 'grid', gap: 10 }}>
+                            {matchedStrings.map(renderTextField)}
+                            {matchedStrings.length === 0 && <div className="admin-note">لا توجد نتائج مطابقة.</div>}
+                          </div>
+                        ) : (
+                          <div style={{ display: 'grid', gap: 8 }}>
+                            {TEXT_GROUPS.map((group) => {
+                              const open = expandedTextGroups.includes(group)
+                              const items = ALL_STRINGS.filter((item) => item.group === group)
+                              return (
+                                <div key={group} style={{ border: '1px solid var(--eva-line)', borderRadius: 10, overflow: 'hidden', background: '#fff' }}>
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleTextGroup(group)}
+                                    style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, padding: '10px 12px', background: 'var(--eva-rose-soft, #faf3f5)', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13.5, fontWeight: 700, color: 'var(--eva-ink)' }}
+                                  >
+                                    <span>{TEXT_GROUP_LABEL(group)} <span style={{ fontWeight: 400, color: 'var(--eva-muted)', fontSize: 11.5 }}>({items.length})</span></span>
+                                    <span style={{ color: 'var(--eva-muted)' }}>{open ? '▲' : '▼'}</span>
+                                  </button>
+                                  {open && <div style={{ display: 'grid', gap: 10, padding: 12 }}>{items.map(renderTextField)}</div>}
+                                </div>
+                              )
+                            })}
+                          </div>
+                        )}
                       </div>
 
                       <div className="admin-actions">

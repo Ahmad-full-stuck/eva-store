@@ -4,6 +4,7 @@ import { headerStrings } from '@/lib/strings/header'
 import { catalogStrings } from '@/lib/strings/catalog'
 import { productStrings } from '@/lib/strings/product'
 import { infoStrings } from '@/lib/strings/info'
+import { getTextOverride } from '@/lib/text-overrides'
 
 export type Lang = 'ar' | 'en'
 export type StringEntry = { ar: string; en: string }
@@ -37,10 +38,25 @@ export const getCurrentLang = (): Lang => currentLang
 
 /** Non-React translation using the current language (for non-component code). */
 export const tr = (key: string): string => {
+  const override = getTextOverride(key)
+  if (override !== undefined) return override
   const entry = DICT[key]
   if (!entry) return key
   return entry[currentLang] || entry.ar || key
 }
+
+export interface StringInfo {
+  key: string
+  ar: string
+  en: string
+  group: string
+}
+
+/** كل نصوص النظام مع قيمتها العربية الافتراضية — لعرضها في لوحة التخصيص. */
+export const allStrings = (): StringInfo[] =>
+  Object.keys(DICT)
+    .sort((a, b) => a.localeCompare(b))
+    .map((key) => ({ key, ar: DICT[key].ar, en: DICT[key].en, group: key.split('.')[0] }))
 
 interface LangContextValue {
   lang: Lang
@@ -52,6 +68,7 @@ const LangContext = createContext<LangContextValue | null>(null)
 
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => readStoredLang())
+  const [revision, setRevision] = useState(0)
 
   useEffect(() => {
     currentLang = lang
@@ -64,17 +81,26 @@ export function LangProvider({ children }: { children: ReactNode }) {
     }
   }, [lang])
 
+  useEffect(() => {
+    const sync = () => setRevision((value) => value + 1)
+    window.addEventListener('eva-admin-changed', sync)
+    return () => window.removeEventListener('eva-admin-changed', sync)
+  }, [])
+
   const setLang = useCallback((next: Lang) => setLangState(next === 'en' ? 'en' : 'ar'), [])
 
   const value = useMemo<LangContextValue>(() => ({
     lang,
     setLang,
     t: (key: string) => {
+      const override = getTextOverride(key)
+      if (override !== undefined) return override
       const entry = DICT[key]
       if (!entry) return key
       return entry[lang] || entry.ar || key
     },
-  }), [lang, setLang])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [lang, setLang, revision])
 
   return <LangContext.Provider value={value}>{children}</LangContext.Provider>
 }
