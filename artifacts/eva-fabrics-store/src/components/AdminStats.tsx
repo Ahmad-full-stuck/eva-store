@@ -227,7 +227,7 @@ function StatusDonut({ slices, total, completionRate }: { slices: StatsStatusSli
       </svg>
       <div className="ast-donut-center">
         <strong>{fmtNum(completionRate)}%</strong>
-        <span>إتمام</span>
+        <span>تسليم</span>
       </div>
       <ul className="ast-legend">
         {slices.map((s) => (
@@ -433,10 +433,10 @@ export function AdminStats() {
         <div className={`ast-live${refreshing ? ' is-refreshing' : ''}`}>
           <div className="ast-kpis">
             <KpiCard label="طلبات الشهر" value={fmtNum(sel.total)} sub={sel.label} />
-            <KpiCard label="نسبة الإتمام" value={`${fmtNum(sel.completionRate)}%`} sub={`${fmtNum(sel.completed)} من ${fmtNum(sel.total)} مكتمل`} tone={GREEN} />
+            <KpiCard label="نسبة الإتمام" value={`${fmtNum(sel.completionRate)}%`} sub={`${fmtNum(sel.completed)} من ${fmtNum(sel.total)} شحن أو إتمام`} tone={GREEN} />
             <KpiCard label="مبيعات الشهر" value={fmtMoney(sel.revenue)} sub="دينار عراقي" tone={ROSE} />
             <KpiCard label="متوسط الطلب" value={fmtMoney(sel.avgOrder)} sub="دينار عراقي" tone={ORANGE} />
-            <KpiCard label="الإجمالي الكلي" value={fmtNum(data?.allTime.total ?? 0)} sub={`${fmtNum(data?.allTime.completionRate ?? 0)}% إتمام`} />
+            <KpiCard label="الإجمالي الكلي" value={fmtNum(data?.allTime.total ?? 0)} sub={`${fmtNum(data?.allTime.completionRate ?? 0)}% شحن أو إتمام`} />
           </div>
 
           <div className="ast-grid-2">

@@ -67,6 +67,11 @@ const parseJsonField = <T,>(value: unknown, fallback: T): T => {
 
 const ORDER_STATUSES = ['new', 'contacted', 'shipped', 'done']
 
+// An order counts toward the success rate as soon as it is out for delivery
+// (shipped) or fully done — i.e. "shipped and above", not only "done".
+const SUCCESS_STATUSES = new Set(['shipped', 'done'])
+const isSuccessStatus = (status: string): boolean => SUCCESS_STATUSES.has(status)
+
 const CHANNEL_LABELS: Record<string, string> = {
   web: 'الموقع',
   whatsapp: 'واتساب',
@@ -587,7 +592,7 @@ export async function handleAdmin(
       const b = monthlyAgg.get(s.month)
       if (!b) continue
       b.orders += 1
-      if (s.status === 'done') b.completed += 1
+      if (isSuccessStatus(s.status)) b.completed += 1
       b.revenue += s.revenue
     }
     const monthly = monthKeys.map((key) => {
@@ -600,7 +605,7 @@ export async function handleAdmin(
     const inMonth = parsed.filter((s) => s.month === activeMonth)
 
     const total = inMonth.length
-    const completed = inMonth.filter((s) => s.status === 'done').length
+    const completed = inMonth.filter((s) => isSuccessStatus(s.status)).length
     const revenue = inMonth.reduce((sum, s) => sum + s.revenue, 0)
 
     const statusMap = new Map<string, number>()
@@ -649,7 +654,7 @@ export async function handleAdmin(
       return { day, date, orders: b?.orders ?? 0, revenue: b?.revenue ?? 0 }
     })
 
-    const allCompleted = parsed.filter((s) => s.status === 'done').length
+    const allCompleted = parsed.filter((s) => isSuccessStatus(s.status)).length
     const allTime = {
       total: parsed.length,
       completed: allCompleted,
