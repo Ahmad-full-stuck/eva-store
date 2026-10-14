@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BarChart3, RefreshCw, TrendingUp } from 'lucide-react'
 import { adminFetch } from '@/lib/api'
 
@@ -288,32 +288,94 @@ function KpiCard({ label, value, sub, tone }: { label: string; value: string; su
 export function AdminStats() {
   const [month, setMonth] = useState('')
   const [data, setData] = useState<StatsResponse | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [initial, setInitial] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState('')
+  const [updatedAt, setUpdatedAt] = useState(0)
+  const [tick, setTick] = useState(0)
 
-  const load = useCallback(async (target: string) => {
-    setLoading(true)
+  // Mirror the selected month into a ref so the interval/event listeners can
+  // re-fetch the same month without being re-created on every month change.
+  const monthRef = useRef('')
+  const busyRef = useRef(false)
+  const pendingRef = useRef(false)
+
+  const fetchStats = useCallback(async (target: string, background = false) => {
+    // Collapse bursts (e.g. several rapid status taps) into one request plus
+    // a single trailing re-fetch so the last change is never dropped.
+    if (busyRef.current) {
+      pendingRef.current = true
+      return
+    }
+    busyRef.current = true
+    if (background) setRefreshing(true)
+    else setInitial(true)
     setError('')
     try {
       const query = target ? `?month=${encodeURIComponent(target)}` : ''
       const result = await adminFetch<StatsResponse>(`/api/admin/stats${query}`)
       setData(result)
-      if (!target && result?.selected?.month) setMonth(result.selected.month)
+      setUpdatedAt(Date.now())
+      if (!target && result?.selected?.month) {
+        monthRef.current = result.selected.month
+        setMonth(result.selected.month)
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'تعذر تحميل الإحصائيات')
+      if (!background) setError(err instanceof Error ? err.message : 'تعذر تحميل الإحصائيات')
     } finally {
-      setLoading(false)
+      busyRef.current = false
+      setRefreshing(false)
+      setInitial(false)
+      if (pendingRef.current) {
+        pendingRef.current = false
+        void fetchStats(monthRef.current || target, true)
+      }
     }
   }, [])
 
+  // Initial load when the tab opens.
   useEffect(() => {
-    void load('')
-  }, [load])
+    void fetchStats('', false)
+  }, [fetchStats])
+
+  // Live refresh while the panel is open: every 12s, and immediately whenever
+  // an order is created/deleted/status-changed elsewhere in the admin panel.
+  useEffect(() => {
+    const refresh = () => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return
+      void fetchStats(monthRef.current, true)
+    }
+    const interval = window.setInterval(refresh, 12_000)
+    window.addEventListener('eva-orders-changed', refresh)
+    window.addEventListener('focus', refresh)
+    document.addEventListener('visibilitychange', refresh)
+    // Relative-time ticker so "آخر تحديث قبل X" stays honest between fetches.
+    const ticker = window.setInterval(() => setTick(Date.now()), 5_000)
+    return () => {
+      window.clearInterval(interval)
+      window.clearInterval(ticker)
+      window.removeEventListener('eva-orders-changed', refresh)
+      window.removeEventListener('focus', refresh)
+      document.removeEventListener('visibilitychange', refresh)
+    }
+  }, [fetchStats])
 
   const changeMonth = (next: string) => {
     setMonth(next)
-    void load(next)
+    monthRef.current = next
+    void fetchStats(next, true)
   }
+
+  const relTime = useMemo(() => {
+    if (!updatedAt) return '—'
+    void tick
+    const secs = Math.max(0, Math.round((Date.now() - updatedAt) / 1000))
+    if (secs < 5) return 'الآن'
+    if (secs < 60) return `قبل ${fmtNum(secs)} ثانية`
+    const mins = Math.round(secs / 60)
+    if (mins < 60) return `قبل ${fmtNum(mins)} دقيقة`
+    return new Date(updatedAt).toLocaleTimeString('ar-IQ')
+  }, [updatedAt, tick])
 
   // Month options: the 12 charted months plus any older month that has orders.
   const monthOptions = useMemo(() => {
@@ -340,16 +402,16 @@ export function AdminStats() {
 
       <div className="ast-head">
         <div className="ast-title">
-          <BarChart3 size={18} />
+          {refreshing ? <RefreshCw size={18} className="ast-spin" /> : <BarChart3 size={18} />}
           <div>
             <h3>الإحصائيات</h3>
-            <small>نظرة دقيقة على الطلبات والمبيعات</small>
+            <small>مباشر · آخر تحديث {relTime}</small>
           </div>
         </div>
         <div className="ast-controls">
           <label className="ast-month">
             <span>الشهر</span>
-            <select value={month} onChange={(e) => changeMonth(e.target.value)} disabled={loading || !monthOptions.length}>
+            <select value={month} onChange={(e) => changeMonth(e.target.value)} disabled={!monthOptions.length}>
               {monthOptions.map((m) => (
                 <option key={m.value} value={m.value}>
                   {m.label}
@@ -357,18 +419,18 @@ export function AdminStats() {
               ))}
             </select>
           </label>
-          <button type="button" className="ast-refresh" onClick={() => void load(month)} disabled={loading} title="تحديث">
-            <RefreshCw size={15} className={loading ? 'ast-spin' : ''} />
+          <button type="button" className="ast-refresh" onClick={() => void fetchStats(monthRef.current || month, true)} disabled={refreshing} title="تحديث الآن">
+            <RefreshCw size={15} className={refreshing ? 'ast-spin' : ''} />
           </button>
         </div>
       </div>
 
-      {loading && !data ? (
+      {initial && !data ? (
         <div className="ast-loading">جارٍ تحميل الإحصائيات…</div>
       ) : error ? (
         <div className="ast-error">{error}</div>
       ) : sel ? (
-        <>
+        <div className={`ast-live${refreshing ? ' is-refreshing' : ''}`}>
           <div className="ast-kpis">
             <KpiCard label="طلبات الشهر" value={fmtNum(sel.total)} sub={sel.label} />
             <KpiCard label="نسبة الإتمام" value={`${fmtNum(sel.completionRate)}%`} sub={`${fmtNum(sel.completed)} من ${fmtNum(sel.total)} مكتمل`} tone={GREEN} />
@@ -427,8 +489,8 @@ export function AdminStats() {
             <HorizontalBars items={regionItems} total={sel.total} />
           </section>
 
-          <p className="ast-foot">آخر تحديث: {data ? new Date(data.generatedAt).toLocaleString('ar-IQ') : '—'}</p>
-        </>
+          <p className="ast-foot">تتحدّث تلقائياً · وقت الخادم: {data ? new Date(data.generatedAt).toLocaleString('ar-IQ') : '—'}</p>
+        </div>
       ) : (
         <div className="ast-loading">لا توجد بيانات</div>
       )}
@@ -438,6 +500,8 @@ export function AdminStats() {
 
 const AST_CSS = `
 .ast { display: grid; gap: 14px; }
+.ast-live { display: grid; gap: 14px; transition: opacity .18s ease; }
+.ast-live.is-refreshing { opacity: .68; }
 .ast-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .ast-title { display: flex; align-items: center; gap: 9px; color: var(--eva-ink); }
 .ast-title > svg { color: var(--eva-rose); }

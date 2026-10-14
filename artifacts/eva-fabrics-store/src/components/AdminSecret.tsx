@@ -702,12 +702,31 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   const setOrderStatus = async (number: string, status: string) => {
     const previous = orders
     setOrders((current) => current.map((row) => ((row.order_number || row.orderNumber) === number ? { ...row, status } : row)))
+    // Tell the statistics panel right away so the numbers move the instant
+    // the admin taps a status (not on the next tab visit).
+    window.dispatchEvent(new Event('eva-orders-changed'))
     try {
       await adminFetch(`/api/admin/orders/${encodeURIComponent(number)}`, { method: 'PATCH', body: JSON.stringify({ status }) })
       setToast('تم تحديث حالة الطلب')
     } catch {
       setOrders(previous)
+      window.dispatchEvent(new Event('eva-orders-changed'))
       setToast('تعذر التحديث على الخادم')
+    }
+  }
+
+  const deleteOrder = async (number: string) => {
+    if (!window.confirm(`حذف الطلب #${number} نهائياً؟`)) return
+    const previous = orders
+    setOrders((current) => current.filter((row) => (row.order_number || row.orderNumber) !== number))
+    window.dispatchEvent(new Event('eva-orders-changed'))
+    try {
+      await adminFetch(`/api/admin/orders/${encodeURIComponent(number)}`, { method: 'DELETE' })
+      setToast('تم حذف الطلب')
+    } catch {
+      setOrders(previous)
+      window.dispatchEvent(new Event('eva-orders-changed'))
+      setToast('تعذر حذف الطلب من الخادم')
     }
   }
 
@@ -1610,6 +1629,15 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                                     {status.label}
                                   </button>
                                 ))}
+                                <button
+                                  type="button"
+                                  className="admin-btn ghost"
+                                  style={{ padding: '6px 10px', fontSize: 11.5, color: '#a3193f', borderColor: '#f0c9d4' }}
+                                  onClick={() => void deleteOrder(number)}
+                                  title="حذف الطلب"
+                                >
+                                  <Trash2 size={13} /> حذف
+                                </button>
                               </div>
                             </div>
                           )
