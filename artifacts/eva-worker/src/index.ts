@@ -347,11 +347,22 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
       if (!body || typeof body !== 'object') return json({ error: 'تعذّر قراءة الطلب' }, 400)
       const items = Array.isArray(body.items) ? body.items : []
       const nested = (body.customer ?? {}) as Record<string, unknown>
+      const shipping = (body.shippingAddress ?? {}) as Record<string, unknown>
       const name = String(nested.name ?? body.customerName ?? '').trim()
       const phone = String(nested.phone ?? body.phone ?? '').trim()
       if (!items.length) return json({ error: 'السلة فارغة' }, 400)
       if (!phone) return json({ error: 'رقم الهاتف مطلوب لتأكيد الطلب' }, 400)
-      const customer = { ...nested, name, phone }
+      // Persist the delivery region so the admin statistics can break orders
+      // down by governorate. Checkout sends it under shippingAddress.
+      const governorate = String(shipping.governorate ?? nested.governorate ?? body.governorate ?? '').trim()
+      const district = String(shipping.district ?? nested.district ?? body.district ?? '').trim()
+      const customer = {
+        ...nested,
+        name,
+        phone,
+        ...(governorate ? { governorate } : {}),
+        ...(district ? { district } : {}),
+      }
       const totals =
         body.totals && typeof body.totals === 'object'
           ? body.totals

@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'wouter'
-import { Check, Bell, Eye, EyeOff, Image as ImageIcon, Lock, LogOut, Plus, Save, ShieldCheck, Trash2, Upload, X, Pencil, Download, RotateCcw } from 'lucide-react'
+import { Check, Bell, Eye, EyeOff, Image as ImageIcon, Lock, LogOut, Plus, Save, ShieldCheck, Trash2, Upload, X, Pencil, Download, RotateCcw, BarChart3 } from 'lucide-react'
 import type { Category, Product, ProductColor } from '@/types'
 import { fallbackCategories, fallbackProducts } from '@/lib/fallback-data'
 import { sanitizeCategory, sanitizeProduct, sanitizeCategories, sanitizeProducts } from '@/lib/sanitize'
 import { formatPrice } from '@/lib/catalog'
 import { adminFetch, adminLogin, adminLogout, adminWhoami, getToken, listAdmins, createAdminAccount, deleteAdminAccount, changeAdminPassword, type AdminAccount, AdminRequestError, loadServerConfig, ping, pushServerContent, pushServerSettings, getPushConfig, savePushSubscription, removePushSubscription, sendTestPush, getPushStatus } from '@/lib/api'
 import { pushSupported, registerPushWorker, urlBase64ToUint8Array } from '@/lib/push'
+import { AdminStats } from '@/components/AdminStats'
 
 const PRODUCTS_KEY = 'eva-admin-products'
 const REMOVED_KEY = 'eva-admin-removed'
@@ -314,7 +315,7 @@ interface AdminSecretProps {
   categories: Category[]
 }
 
-type Tab = 'products' | 'orders' | 'content' | 'settings' | 'backup'
+type Tab = 'products' | 'orders' | 'stats' | 'content' | 'settings' | 'backup'
 
 interface AdminOrder {
   order_number?: string
@@ -1107,6 +1108,10 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                   <button type="button" className={`admin-tab${tab === 'orders' ? ' is-active' : ''}`} onClick={() => { setTab('orders'); void loadOrders() }} role="tab">
                     الطلبات
                   </button>
+                  <button type="button" className={`admin-tab${tab === 'stats' ? ' is-active' : ''}`} onClick={() => setTab('stats')} role="tab">
+                    <BarChart3 size={13} style={{ verticalAlign: '-2px', marginInlineEnd: 5 }} />
+                    الإحصائيات
+                  </button>
                   <button type="button" className={`admin-tab${tab === 'content' ? ' is-active' : ''}`} onClick={() => setTab('content')} role="tab">
                     المحتوى
                   </button>
@@ -1560,6 +1565,8 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                         </button>
                       </div>
                     </div>
+                  ) : tab === 'stats' ? (
+                    <AdminStats />
                   ) : tab === 'orders' ? (
                     <div>
                       <div className="admin-actions" style={{ marginTop: 0, marginBottom: 14 }}>

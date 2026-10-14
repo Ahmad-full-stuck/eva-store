@@ -52,7 +52,56 @@ const num = (value: unknown, fallback = 0): number => {
 
 const flag = (value: unknown, fallback = false): boolean => (typeof value === 'boolean' ? value : fallback)
 
+const parseJsonField = <T,>(value: unknown, fallback: T): T => {
+  if (value === null || value === undefined) return fallback
+  if (typeof value === 'object') return value as T
+  if (typeof value === 'string') {
+    try {
+      return JSON.parse(value) as T
+    } catch {
+      return fallback
+    }
+  }
+  return fallback
+}
+
 const ORDER_STATUSES = ['new', 'contacted', 'shipped', 'done']
+
+const CHANNEL_LABELS: Record<string, string> = {
+  web: 'الموقع',
+  whatsapp: 'واتساب',
+  phone: 'هاتف',
+  instagram: 'إنستغرام',
+  facebook: 'فيسبوك',
+  telegram: 'تيليجرام',
+}
+
+const AR_MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+const AR_MONTHS_SHORT = ['ينا', 'فبر', 'مار', 'أبر', 'ماي', 'يون', 'يول', 'أغس', 'سبت', 'أكت', 'نوف', 'ديس']
+
+// SQLite stores created_at as "YYYY-MM-DD HH:MM:SS" in UTC with no zone suffix,
+// so append "Z" and read with the getUTC* accessors to stay timezone-proof.
+const orderDateKeys = (value: unknown): { month: string; day: string } | null => {
+  const raw = text(value)
+  if (!raw) return null
+  const base = raw.includes('T') ? raw : raw.replace(' ', 'T')
+  const iso = /[zZ]|[+-]\d{2}:?\d{2}$/.test(base) ? base : `${base}Z`
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return null
+  const pad = (n: number) => String(n).padStart(2, '0')
+  const month = `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}`
+  return { month, day: `${month}-${pad(d.getUTCDate())}` }
+}
+
+const monthLabel = (key: string, short = false): string => {
+  const [y, m] = key.split('-')
+  const idx = Number(m) - 1
+  const name = (short ? AR_MONTHS_SHORT : AR_MONTHS)[idx] ?? m
+  return `${name} ${y}`
+}
+
+// Rounded to one decimal so percentages read cleanly (e.g. 33.3 instead of 33.3333).
+const pctOf = (part: number, whole: number): number => (whole ? Math.round((part / whole) * 1000) / 10 : 0)
 
 const slugify = (value: string): string => {
   const cleaned = value
@@ -486,6 +535,149 @@ export async function handleAdmin(
       if (!result.meta.changes) return json({ error: 'الطلب غير موجود' }, 404)
       return json({ data: { orderNumber: decodeURIComponent(id), deleted: true } })
     }
+  }
+
+  if (resource === 'stats' && method === 'GET') {
+    const url = new URL(request.url)
+    const requestedMonth = text(url.searchParams.get('month'))
+    const result = await env.DB.prepare(
+      'SELECT status, customer, totals, channel, created_at FROM orders ORDER BY created_at DESC LIMIT 5000',
+    ).all()
+    const rows = (result.results ?? []) as Record<string, unknown>[]
+
+    interface Stat {
+      month: string
+      day: string
+      status: string
+      channel: string
+      region: string
+      revenue: number
+    }
+
+    const parsed: Stat[] = []
+    const monthSet = new Set<string>()
+    for (const row of rows) {
+      const keys = orderDateKeys(row.created_at)
+      if (!keys) continue
+      const customer = parseJsonField<Record<string, unknown>>(row.customer, {})
+      const totals = parseJsonField<Record<string, number>>(row.totals, {})
+      const revenue = num(totals.total ?? 0)
+      parsed.push({
+        month: keys.month,
+        day: keys.day,
+        status: text(row.status, 'new'),
+        channel: text(row.channel, 'web'),
+        region: text(customer.governorate) || text(customer.region),
+        revenue,
+      })
+      monthSet.add(keys.month)
+    }
+
+    // Last 12 calendar months (UTC), oldest -> newest, for the monthly chart.
+    const now = new Date()
+    const monthKeys: string[] = []
+    for (let i = 11; i >= 0; i -= 1) {
+      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1))
+      monthKeys.push(`${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`)
+    }
+
+    const monthlyAgg = new Map<string, { orders: number; completed: number; revenue: number }>()
+    for (const key of monthKeys) monthlyAgg.set(key, { orders: 0, completed: 0, revenue: 0 })
+    for (const s of parsed) {
+      const b = monthlyAgg.get(s.month)
+      if (!b) continue
+      b.orders += 1
+      if (s.status === 'done') b.completed += 1
+      b.revenue += s.revenue
+    }
+    const monthly = monthKeys.map((key) => {
+      const b = monthlyAgg.get(key) ?? { orders: 0, completed: 0, revenue: 0 }
+      return { month: key, label: monthLabel(key, true), orders: b.orders, completed: b.completed, revenue: b.revenue }
+    })
+
+    const defaultMonth = [...monthSet].sort().pop() ?? monthKeys[monthKeys.length - 1]
+    const activeMonth = requestedMonth && (monthSet.has(requestedMonth) || monthKeys.includes(requestedMonth)) ? requestedMonth : defaultMonth
+    const inMonth = parsed.filter((s) => s.month === activeMonth)
+
+    const total = inMonth.length
+    const completed = inMonth.filter((s) => s.status === 'done').length
+    const revenue = inMonth.reduce((sum, s) => sum + s.revenue, 0)
+
+    const statusMap = new Map<string, number>()
+    for (const s of inMonth) statusMap.set(s.status, (statusMap.get(s.status) ?? 0) + 1)
+    const statusBreakdown = ORDER_STATUSES.map((status) => {
+      const count = statusMap.get(status) ?? 0
+      return { status, label: STATUS_LABELS[status] ?? status, count, pct: pctOf(count, total) }
+    }).filter((row) => row.count > 0)
+
+    const regionMap = new Map<string, { count: number; revenue: number }>()
+    for (const s of inMonth) {
+      const key = s.region || 'غير محدد'
+      const b = regionMap.get(key) ?? { count: 0, revenue: 0 }
+      b.count += 1
+      b.revenue += s.revenue
+      regionMap.set(key, b)
+    }
+    const sortedRegions = [...regionMap.entries()]
+      .map(([region, b]) => ({ region, count: b.count, revenue: b.revenue, pct: pctOf(b.count, total) }))
+      .sort((a, b) => b.count - a.count || b.revenue - a.revenue)
+    const topRegions = sortedRegions.slice(0, 8)
+    const otherCount = sortedRegions.slice(8).reduce((sum, r) => sum + r.count, 0)
+    const regions = otherCount
+      ? [...topRegions, { region: 'أخرى', count: otherCount, revenue: 0, pct: pctOf(otherCount, total) }]
+      : topRegions
+
+    const channelMap = new Map<string, number>()
+    for (const s of inMonth) channelMap.set(s.channel, (channelMap.get(s.channel) ?? 0) + 1)
+    const sources = [...channelMap.entries()]
+      .map(([channel, count]) => ({ channel, label: CHANNEL_LABELS[channel] ?? channel, count, pct: pctOf(count, total) }))
+      .sort((a, b) => b.count - a.count)
+
+    const [selY, selM] = activeMonth.split('-').map(Number)
+    const daysInMonth = new Date(Date.UTC(selY, selM, 0)).getUTCDate()
+    const dailyMap = new Map<string, { orders: number; revenue: number }>()
+    for (const s of inMonth) {
+      const b = dailyMap.get(s.day) ?? { orders: 0, revenue: 0 }
+      b.orders += 1
+      b.revenue += s.revenue
+      dailyMap.set(s.day, b)
+    }
+    const daily = Array.from({ length: daysInMonth }, (_, index) => {
+      const day = index + 1
+      const date = `${activeMonth}-${String(day).padStart(2, '0')}`
+      const b = dailyMap.get(date)
+      return { day, date, orders: b?.orders ?? 0, revenue: b?.revenue ?? 0 }
+    })
+
+    const allCompleted = parsed.filter((s) => s.status === 'done').length
+    const allTime = {
+      total: parsed.length,
+      completed: allCompleted,
+      revenue: parsed.reduce((sum, s) => sum + s.revenue, 0),
+      completionRate: pctOf(allCompleted, parsed.length),
+    }
+
+    return json({
+      data: {
+        generatedAt: new Date().toISOString(),
+        allTime,
+        months: [...monthSet].sort().reverse(),
+        monthly,
+        selected: {
+          month: activeMonth,
+          label: monthLabel(activeMonth),
+          total,
+          completed,
+          completionRate: pctOf(completed, total),
+          revenue,
+          avgOrder: total ? Math.round(revenue / total) : 0,
+          statusBreakdown,
+          regions,
+          sources,
+          daily,
+        },
+      },
+    })
   }
 
   if (resource === 'contacts') {
