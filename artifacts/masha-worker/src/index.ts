@@ -30,7 +30,7 @@ const withCors = (response: Response): Response => {
  * 1-4s to come back. Bumping CACHE_VERSION (or writing via the admin API)
  * invalidates everything at once.
  */
-const CACHE_VERSION = 'v2'
+const CACHE_VERSION = 'v3'
 
 const cacheKeyFor = (request: Request): Request => {
   // The Cache API only accepts fully-qualified URLs as keys, so the version

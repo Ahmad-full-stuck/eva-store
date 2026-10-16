@@ -8,7 +8,7 @@ import { ensurePushSchema, saveSubscription, deleteSubscription, sendPushToAll, 
  * index.ts). Any admin write must drop those entries or the storefront keeps
  * serving the stale copy until the TTL expires.
  */
-const CACHE_VERSION = 'v2'
+const CACHE_VERSION = 'v3'
 const PUBLIC_CACHE_PATHS = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings']
 
 const purgePublicCache = async (): Promise<void> => {
