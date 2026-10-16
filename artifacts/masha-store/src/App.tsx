@@ -192,24 +192,44 @@ export default function App(){
   if(!customer.name.trim()||!customer.phone.trim()||!customer.governorate||!customer.address.trim()||!cart.length){setNotice('أكمل الاسم والهاتف والمحافظة والعنوان وأضف قطعة');window.setTimeout(()=>setNotice(''),3000);return}
   const phoneInput=customer.phone.trim().replace(/[\s()-]/g,'')
   if(!/^(?:07\d{9}|9647\d{9}|\+9647\d{9})$/.test(phoneInput)){setNotice('تحقق من رقم الهاتف العراقي: 07xxxxxxxxx أو 9647xxxxxxxxx');window.setTimeout(()=>setNotice(''),4500);return}
-  const reference='MSH-'+Date.now().toString(36).slice(-6).toUpperCase()
-  const order:LocalOrder={reference,createdAt:new Date().toISOString(),status:'pending_store_confirmation',total,itemCount:count,customer:{...customer},items:cart.map(x=>({name:x.product.name,size:x.size,color:x.color,quantity:x.quantity,unitPrice:x.product.price}))}
+  if(cart.some(line=>line.product.active===false||line.product.stock===0)){setNotice('تحتوي الحقيبة على قطعة غير متوفرة. احذفها قبل إرسال الطلب.');return}
+  let reference='MSH-'+Date.now().toString(36).slice(-6).toUpperCase()
+  let serverSaved=false
+  if(mashaApiEnabled){
+   setNotice('جارٍ تسجيل الطلب في نظام ماشا...')
+   try{
+    const result=await createMashaOrder({
+     orderNumber:reference,
+     customer:{name:customer.name,phone:phoneInput,governorate:customer.governorate,address:customer.address,notes:customer.notes},
+     shippingAddress:{governorate:customer.governorate,address:customer.address,district:customer.address},
+     items:cart.map(x=>({productId:x.product.id,productName:x.product.name,size:x.size,color:x.color,quantity:x.quantity,unitPrice:x.product.price})),
+     totals:{subtotal:total,deliveryFee:0,total},
+     notes:customer.notes,
+    })
+    if(!result?.saved||!result.orderNumber)throw new Error('لم يؤكد الخادم حفظ الطلب.')
+    reference=result.orderNumber;serverSaved=true
+   }catch(error){
+    setNotice('لم يُسجّل الطلب على الخادم: '+(error instanceof Error?error.message:'خطأ اتصال')+'. بقيت الحقيبة كما هي؛ حاول مرة أخرى.')
+    return
+   }
+  }
+  const order:LocalOrder={reference,createdAt:new Date().toISOString(),status:'pending_store_confirmation',total,itemCount:count,customer:{...customer,phone:phoneInput},items:cart.map(x=>({name:x.product.name,size:x.size,color:x.color,quantity:x.quantity,unitPrice:x.product.price}))}
   const text=orderText()+'\nرقم مرجع الطلب: '+reference+'\nالحالة: بانتظار تأكيد المتجر'
-  const whatsapp=storeWhatsapp.replace(/[^0-9]/g,'')
-  let handoffReady=false
-  if(whatsapp){
-   window.open('https://wa.me/'+whatsapp+'?text='+encodeURIComponent(text),'_blank','noopener,noreferrer')
+  const phone=storeWhatsapp.replace(/[^0-9]/g,'')
+  let handoffReady=serverSaved
+  if(phone){
+   window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(text),'_blank','noopener,noreferrer')
    handoffReady=true
-   setNotice('فُتح رابط واتساب مع تفاصيل الطلب؛ أرسل الرسالة داخل واتساب لتصل للمتجر.')
+   setNotice('تم تسجيل الطلب'+(serverSaved?' في النظام':'')+' وفتح رابط واتساب. أرسل الرسالة داخل واتساب لتصل للمتجر.')
   }else{
    window.open(IG,'_blank','noopener,noreferrer')
-   try{await navigator.clipboard.writeText(text);handoffReady=true;setNotice('نُسخ ملخص الطلب. الصقه في محادثة إنستغرام المفتوحة ثم أرسله.')}
-   catch{setNotice('لم نستطع نسخ التفاصيل؛ بقيت الحقيبة كما هي. انسخها أو أضف رقم واتساب في إعدادات المعاينة.');window.setTimeout(()=>setNotice(''),5000)}
+   try{await navigator.clipboard.writeText(text);handoffReady=true;setNotice('تم '+(serverSaved?'تسجيل الطلب في النظام و':'')+'نسخ ملخص الطلب. الصقه في محادثة إنستغرام المفتوحة ثم أرسله.')}
+   catch{setNotice(serverSaved?'تم تسجيل الطلب في النظام، لكن تعذّر نسخ الرسالة. رقم المرجع: '+reference:'تعذّر نسخ تفاصيل الطلب. بقيت الحقيبة كما هي.')}
   }
   if(!handoffReady)return
   const nextOrders=[order,...orders].slice(0,100)
   setOrders(nextOrders)
-  try{localStorage.setItem(ORDERS_KEY,JSON.stringify(nextOrders))}catch{}
+  if(!serverSaved){try{localStorage.setItem(ORDERS_KEY,JSON.stringify(nextOrders))}catch{}}
   save([]);setCheckout(false);setCartOpen(false);setCurrentOrderRef(reference);setPage('confirmation');window.scrollTo({top:0,behavior:'smooth'});window.setTimeout(()=>setNotice(''),5000)
  }
  const video=embed(selected?.instagramVideoUrl)
