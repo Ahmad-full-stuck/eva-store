@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { ArrowLeft, Baby, Check, Heart, Instagram, Menu, Minus, Play, Plus, Search, ShoppingBag, Sparkles, Star, Truck, X } from 'lucide-react'
-import './masha.css'
 
 type Category = 'الكل' | 'بناتي' | 'ولادي' | 'مواليد' | 'أطقم'
 type Product = {id:string;name:string;category:Exclude<Category,'الكل'>;price:number;oldPrice?:number;image:string;badge?:string;age:string;sizes:string[];colors:string[];description:string;instagramVideoUrl?:string}
