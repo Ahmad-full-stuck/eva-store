@@ -180,3 +180,22 @@ export async function createMashaOrder(payload: JsonRecord) {
 export async function trackMashaOrder(reference: string) {
   return mashaRequest<JsonRecord>('/api/orders/' + encodeURIComponent(reference))
 }
+
+
+export async function uploadMashaImage(file: File, productName: string, token: string): Promise<string> {
+  if (!mashaApiEnabled) throw new Error('خدمة ماشا غير متاحة في هذا البناء.')
+  if (!file.type.startsWith('image/')) throw new Error('اختر ملف صورة صالحاً.')
+  if (file.size > 1700000) throw new Error('حجم الصورة يجب أن يكون أقل من 1.7 ميجابايت.')
+  const dataUrl = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = () => reject(new Error('تعذّر قراءة ملف الصورة.'))
+    reader.onload = () => typeof reader.result === 'string' ? resolve(reader.result) : reject(new Error('صيغة الصورة غير صالحة.'))
+    reader.readAsDataURL(file)
+  })
+  const result = await mashaRequest<{url: string; key: string}>('/api/admin/upload', {
+    method: 'POST',
+    body: JSON.stringify({ dataUrl, product: productName }),
+  }, token)
+  if (!result?.url) throw new Error('لم يستلم الموقع رابط الصورة بعد رفعها.')
+  return /^https?:\/\//i.test(result.url) ? result.url : mashaApiBase + (result.url.startsWith('/') ? result.url : '/' + result.url)
+}
