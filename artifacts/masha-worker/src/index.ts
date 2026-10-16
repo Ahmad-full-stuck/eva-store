@@ -413,7 +413,8 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
         .run()
       // Email delivery (formsubmit) can take 1-7s and is unrelated to the
       // customer's confirmation — it must never block the 201 response.
-      const emailWork = notifyOrderEmail(env, { number, body }).catch((error) => {
+      const trustedBody = { ...body, customer, items: safeItems, totals, notes: String(body.notes ?? body.note ?? '') }
+      const emailWork = notifyOrderEmail(env, { number, body: trustedBody }).catch((error) => {
         console.log(`[notify] order=${number} deferred failure ${error instanceof Error ? error.message : String(error)}`)
         return false
       })
