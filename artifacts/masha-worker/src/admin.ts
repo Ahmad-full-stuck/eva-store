@@ -12,13 +12,13 @@ const CACHE_VERSION = 'v2'
 const PUBLIC_CACHE_PATHS = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings']
 
 const purgePublicCache = async (): Promise<void> => {
-  const origins = ['https://www.eva-store.workers.dev', 'https://ahmad-full-stuck.github.io', 'https://www.eva-store.com']
+  const origins = ['https://masha-store.eva-store.workers.dev', 'https://ahmad-full-stuck.github.io', 'https://masha-store.eva-store.workers.dev']
   const keys: Request[] = []
   for (const origin of origins) {
     for (const path of PUBLIC_CACHE_PATHS) {
       const url = new URL(`${origin}${path}`)
       // Cache API keys must be fully-qualified URLs — same shape as index.ts.
-      url.searchParams.set('__eva', CACHE_VERSION)
+      url.searchParams.set('__masha', CACHE_VERSION)
       keys.push(new Request(url.toString()))
     }
   }
@@ -521,7 +521,7 @@ export async function handleAdmin(
       // picks the same change up on the tracking page, which polls this row).
       if (pushConfigured(env)) {
         const push = sendPushToAll(env, {
-          title: `تحديث حالة الطلب • إيفا ستور`,
+          title: `تحديث حالة الطلب • ماشا`,
           body: `#${orderNumber}\n${STATUS_LABELS[status] || status}`,
           data: { orderNumber, status, url: '/#/admin' },
         }).catch((error) => {
@@ -723,7 +723,7 @@ export async function handleAdmin(
     if (method === 'POST' && id === 'test') {
       if (!pushConfigured(env)) return json({ error: 'الإشعارات غير مُهيّأة على الخادم' }, 400)
       const result = await sendPushToAll(env, {
-        title: 'إشعار تجريبي • إيفا ستور',
+        title: 'إشعار تجريبي • ماشا',
         body: 'الإشعارات تعمل بنجاح ✓',
         data: { url: '/#/admin' },
       })
