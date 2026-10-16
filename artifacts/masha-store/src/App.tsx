@@ -63,19 +63,26 @@ export default function App(){
  const orderText=()=>['طلب جديد من متجر ماشا',...cart.map(x=>'• '+x.product.name+' — المقاس '+x.size+(x.color?' — اللون '+x.color:'')+' × '+x.quantity+' = '+money(x.product.price*x.quantity)),'المجموع: '+money(total),'الاسم: '+customer.name,'الهاتف: '+customer.phone,'المحافظة: '+customer.governorate,'العنوان: '+customer.address,customer.notes?'ملاحظات: '+customer.notes:''].filter(Boolean).join('\n')
  const submit=async()=>{
   if(!customer.name.trim()||!customer.phone.trim()||!customer.governorate||!customer.address.trim()||!cart.length){setNotice('أكمل الاسم والهاتف والمحافظة والعنوان وأضف قطعة');window.setTimeout(()=>setNotice(''),3000);return}
+  const phoneInput=customer.phone.trim().replace(/[\s()-]/g,'')
+  if(!/^(?:07\d{9}|9647\d{9}|\+9647\d{9})$/.test(phoneInput)){setNotice('تحقق من رقم الهاتف العراقي: 07xxxxxxxxx أو 9647xxxxxxxxx');window.setTimeout(()=>setNotice(''),4500);return}
   const reference='MSH-'+Date.now().toString(36).slice(-6).toUpperCase()
   const order:LocalOrder={reference,createdAt:new Date().toISOString(),status:'pending_store_confirmation',total,itemCount:count,customer:{...customer},items:cart.map(x=>({name:x.product.name,size:x.size,color:x.color,quantity:x.quantity,unitPrice:x.product.price}))}
-  const nextOrders=[order,...orders].slice(0,100)
-  try{localStorage.setItem(ORDERS_KEY,JSON.stringify(nextOrders))}catch{}
-  setOrders(nextOrders);setTrackingRef(reference);setTrackingSearched(false)
   const text=orderText()+'\nرقم مرجع الطلب: '+reference+'\nالحالة: بانتظار تأكيد المتجر'
-  const phone=storeWhatsapp.replace(/[^0-9]/g,'')
-  if(phone){window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(text),'_blank','noopener,noreferrer');setNotice('تم تجهيز الطلب وفتح واتساب؛ أرسل الرسالة لتصل للمتجر.')}
-  else{
-    window.open(IG,'_blank','noopener,noreferrer')
-    try{await navigator.clipboard.writeText(text);setNotice('نُسخ ملخص الطلب. الصقه في محادثة إنستغرام المفتوحة.')}
-    catch{setNotice('انسخ رقم المرجع '+reference+' وأرسل تفاصيل الطلب للمتجر عبر إنستغرام.')}
+  const whatsapp=storeWhatsapp.replace(/[^0-9]/g,'')
+  let handoffReady=false
+  if(whatsapp){
+   window.open('https://wa.me/'+whatsapp+'?text='+encodeURIComponent(text),'_blank','noopener,noreferrer')
+   handoffReady=true
+   setNotice('فُتح رابط واتساب مع تفاصيل الطلب؛ أرسل الرسالة داخل واتساب لتصل للمتجر.')
+  }else{
+   window.open(IG,'_blank','noopener,noreferrer')
+   try{await navigator.clipboard.writeText(text);handoffReady=true;setNotice('نُسخ ملخص الطلب. الصقه في محادثة إنستغرام المفتوحة ثم أرسله.')}
+   catch{setNotice('لم نستطع نسخ التفاصيل؛ بقيت الحقيبة كما هي. انسخها أو أضف رقم واتساب في إعدادات المعاينة.');window.setTimeout(()=>setNotice(''),5000)}
   }
+  if(!handoffReady)return
+  const nextOrders=[order,...orders].slice(0,100)
+  setOrders(nextOrders)
+  try{localStorage.setItem(ORDERS_KEY,JSON.stringify(nextOrders))}catch{}
   save([]);setCheckout(false);setCartOpen(false);setCurrentOrderRef(reference);setPage('confirmation');window.scrollTo({top:0,behavior:'smooth'});window.setTimeout(()=>setNotice(''),5000)
  }
  const video=embed(selected?.instagramVideoUrl)
