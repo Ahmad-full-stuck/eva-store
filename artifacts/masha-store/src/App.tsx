@@ -40,7 +40,23 @@ export default function App(){
  const add=(p:Product,s:string)=>{if(!s){setNotice('اختَر المقاس أولاً');return}const key=p.id+':'+s,old=cart.find(x=>x.key===key);save(old?cart.map(x=>x.key===key?{...x,quantity:x.quantity+1}:x):[...cart,{key,product:p,size:s,quantity:1}]);setSelected(null);setCartOpen(true);setNotice('أُضيفت القطعة إلى الحقيبة');window.setTimeout(()=>setNotice(''),2500)}
  const qty=(key:string,d:number)=>save(cart.map(x=>x.key===key?{...x,quantity:x.quantity+d}:x).filter(x=>x.quantity>0))
  const orderText=()=>['طلب جديد من متجر ماشا',...cart.map(x=>'• '+x.product.name+' — المقاس '+x.size+' × '+x.quantity+' = '+money(x.product.price*x.quantity)),'المجموع: '+money(total),'الاسم: '+customer.name,'الهاتف: '+customer.phone,'العنوان: '+customer.address,customer.notes?'ملاحظات: '+customer.notes:''].filter(Boolean).join('\n')
- const submit=async()=>{if(!customer.name.trim()||!customer.phone.trim()||!customer.address.trim()||!cart.length){setNotice('أكمل الاسم والهاتف والعنوان وأضف قطعة');window.setTimeout(()=>setNotice(''),3000);return}const text=orderText(),phone=(import.meta.env.VITE_WHATSAPP_NUMBER||'').replace(/\D/g,'');if(phone)window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(text),'_blank','noopener,noreferrer');else{try{await navigator.clipboard.writeText(text);setNotice('نُسخ ملخص الطلب. أرسله للمتجر عبر إنستغرام.')}catch{setNotice('أرسل تفاصيل الطلب للمتجر عبر إنستغرام.')}window.open(IG,'_blank','noopener,noreferrer');window.setTimeout(()=>setNotice(''),3500)}save([]);setCheckout(false);setCartOpen(false)}
+ const submit=async()=>{
+  if(!customer.name.trim()||!customer.phone.trim()||!customer.address.trim()||!cart.length){setNotice('أكمل الاسم والهاتف والعنوان وأضف قطعة');window.setTimeout(()=>setNotice(''),3000);return}
+  const reference='MSH-'+Date.now().toString(36).slice(-6).toUpperCase()
+  const order:LocalOrder={reference,createdAt:new Date().toISOString(),status:'pending_store_confirmation',total,itemCount:count,items:cart.map(x=>({name:x.product.name,size:x.size,quantity:x.quantity,unitPrice:x.product.price}))}
+  const nextOrders=[order,...orders].slice(0,100)
+  try{localStorage.setItem(ORDERS_KEY,JSON.stringify(nextOrders))}catch{}
+  setOrders(nextOrders);setTrackingRef(reference);setTrackingSearched(false)
+  const text=orderText()+'\nرقم مرجع الطلب: '+reference+'\nالحالة: بانتظار تأكيد المتجر'
+  const phone=(import.meta.env.VITE_WHATSAPP_NUMBER||'').replace(/[^0-9]/g,'')
+  if(phone){window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(text),'_blank','noopener,noreferrer');setNotice('تم تجهيز الطلب وفتح واتساب؛ أرسل الرسالة لتصل للمتجر.')}
+  else{
+    window.open(IG,'_blank','noopener,noreferrer')
+    try{await navigator.clipboard.writeText(text);setNotice('نُسخ ملخص الطلب. الصقه في محادثة إنستغرام المفتوحة.')}
+    catch{setNotice('انسخ رقم المرجع '+reference+' وأرسل تفاصيل الطلب للمتجر عبر إنستغرام.')}
+  }
+  save([]);setCheckout(false);setCartOpen(false);setCurrentOrderRef(reference);setPage('confirmation');window.scrollTo({top:0,behavior:'smooth'});window.setTimeout(()=>setNotice(''),5000)
+ }
  const video=embed(selected?.instagramVideoUrl)
  return <div className="masha" id="top" dir="rtl">
   <div className="m-announcement"><span><Sparkles size={14}/> اختيارات صغيرة، ذكريات كبيرة</span><span>اسألونا عن المقاس قبل الطلب <ArrowLeft size={14}/></span></div>
