@@ -253,7 +253,7 @@ export default function App(){
     if(!result?.saved||!result.orderNumber)throw new Error('لم يؤكد الخادم حفظ الطلب.')
     reference=result.orderNumber;serverSaved=true
    }catch(error){
-    if(error instanceof TypeError){
+    if(error instanceof TypeError||(error instanceof Error&&/(?:فشل الاتصال بالخادم \((?:404|408|502|503|504)\)|Failed to fetch|Load failed|NetworkError|fetch failed)/i.test(error.message))){
      serverUnavailable=true
      setNotice('خدمة الطلبات غير متاحة الآن. يمكنك إرسال التفاصيل للمتجر يدوياً، لكن لن يُسجَّل الطلب في قاعدة ماشا.')
     }else{
