@@ -1,16 +1,18 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, Baby, Check, Heart, Instagram, Menu, Minus, Play, Plus, Search, ShoppingBag, Sparkles, Star, Truck, X } from 'lucide-react'
 
 type Category = 'الكل' | 'بناتي' | 'ولادي' | 'مواليد' | 'أطقم'
-type Product = {id:string;name:string;category:Exclude<Category,'الكل'>;price:number;oldPrice?:number;image:string;badge?:string;age:string;sizes:string[];colors:string[];description:string;instagramVideoUrl?:string;stock?:number;active?:boolean}
+type Product = {id:string;name:string;category:Exclude<Category,'الكل'>;price:number;oldPrice?:number;image:string;images?:string[];badge?:string;age:string;sizes:string[];colors:string[];description:string;material?:string;care?:string;sku?:string;instagramVideoUrl?:string;stock?:number;active?:boolean}
 type Line = {key:string;product:Product;size:string;color:string;quantity:number}
 type StorePage = 'home' | 'catalog' | 'favorites' | 'tracking' | 'size-guide' | 'about' | 'contact' | 'policies' | 'confirmation' | 'admin'
 type OrderStatus = 'pending_store_confirmation' | 'confirmed' | 'preparing' | 'shipped' | 'delivered' | 'cancelled'
-type LocalOrder = {reference:string;createdAt:string;status:OrderStatus;total:number;itemCount:number;customer:{name:string;phone:string;address:string;notes:string};items:{name:string;size:string;color?:string;quantity:number;unitPrice:number}[]}
+type LocalOrder = {reference:string;createdAt:string;status:OrderStatus;total:number;itemCount:number;customer:{name:string;phone:string;governorate:string;address:string;notes:string};items:{name:string;size:string;color?:string;quantity:number;unitPrice:number}[]}
 const ORDERS_KEY = 'masha-orders-v1'
 function readLocalOrders():LocalOrder[]{try{const value=JSON.parse(localStorage.getItem(ORDERS_KEY)||'[]');return Array.isArray(value)?value:[]}catch{return []}}
 const IG='https://www.instagram.com/1masha.store/'
 const cats:Category[]=['الكل','بناتي','ولادي','مواليد','أطقم']
+const governorates=['بغداد','البصرة','نينوى','أربيل','النجف','كربلاء','كركوك','السليمانية','دهوك','الأنبار','ديالى','واسط','ميسان','ذي قار','المثنى','القادسية','بابل','صلاح الدين']
+const normalizeSearch=(v:string)=>v.toLowerCase().normalize('NFD').replace(/[\u064B-\u065F\u0670]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').trim()
 import rawProducts from './lib/products.json'
 const defaultProducts=rawProducts as Product[]
 const money=(n:number)=>new Intl.NumberFormat('ar-IQ').format(n)+' د.ع'
@@ -19,7 +21,7 @@ function Logo(){return <a className="m-logo" href="#top" aria-label="ماشا ا
 function ProductCard({p,open,wished,wish}:{p:Product;open:(p:Product)=>void;wished:boolean;wish:(id:string)=>void}){return <article className="m-card"><button className="m-card-photo" onClick={()=>open(p)} aria-label={'عرض '+p.name}><img src={p.image} alt={p.name} loading="lazy"/>{p.stock===0?<small>نفدت الكمية</small>:typeof p.stock==='number'&&p.stock>0&&p.stock<=3?<small>بقي {p.stock} فقط</small>:p.badge&&<small>{p.badge}</small>}</button><button className={'m-heart '+(wished?'active':'')} onClick={()=>wish(p.id)} aria-label="المفضلة"><Heart size={17} fill={wished?'currentColor':'none'}/></button><div className="m-card-copy"><small>{p.category} · {p.age}</small><button onClick={()=>open(p)}>{p.name}</button><div><strong>{money(p.price)}</strong>{p.oldPrice&&<del>{money(p.oldPrice)}</del>}<button className="m-plus" onClick={()=>open(p)} aria-label="اختيار المقاس"><Plus size={17}/></button></div></div></article>}
 export default function App(){
  const [page,setPage]=useState<StorePage>('home')
- const [category,setCategory]=useState<Category>('الكل'),[search,setSearch]=useState(''),[selected,setSelected]=useState<Product|null>(null),[size,setSize]=useState(''),[color,setColor]=useState(''),[videoOpen,setVideoOpen]=useState(false)
+ const [category,setCategory]=useState<Category>('الكل'),[search,setSearch]=useState(''),[selected,setSelected]=useState<Product|null>(null),[size,setSize]=useState(''),[color,setColor]=useState(''),[galleryIndex,setGalleryIndex]=useState(0),[videoOpen,setVideoOpen]=useState(false)
  const [sortOrder,setSortOrder]=useState<'featured'|'price-asc'|'price-desc'|'name'>('featured')
  const [products,setProducts]=useState<Product[]>(()=>{try{const value=JSON.parse(localStorage.getItem('masha-products-v1')||'null');return Array.isArray(value)?value as Product[]:defaultProducts}catch{return defaultProducts}})
  const [adminTab,setAdminTab]=useState<'products'|'orders'|'settings'>('products')
@@ -32,13 +34,13 @@ export default function App(){
  const [cart,setCart]=useState<Line[]>(()=>{try{return JSON.parse(localStorage.getItem('masha-cart-v1')||'[]')}catch{return []}})
  const [favorites,setFavorites]=useState<string[]>(()=>{try{return JSON.parse(localStorage.getItem('masha-favorites-v1')||'[]')}catch{return []}})
  const [cartOpen,setCartOpen]=useState(false),[checkout,setCheckout]=useState(false),[mobile,setMobile]=useState(false),[favsOnly,setFavsOnly]=useState(false),[notice,setNotice]=useState('')
- const [customer,setCustomer]=useState({name:'',phone:'',address:'',notes:''})
+ const [customer,setCustomer]=useState({name:'',phone:'',governorate:'بغداد',address:'',notes:''})
  const [orders,setOrders]=useState<LocalOrder[]>(readLocalOrders)
  const [trackingRef,setTrackingRef]=useState('')
  const [trackingSearched,setTrackingSearched]=useState(false)
  const [currentOrderRef,setCurrentOrderRef]=useState('')
  const [contactForm,setContactForm]=useState({name:'',phone:'',message:''})
- const visible=useMemo(()=>products.filter(p=>p.active!==false&&(category==='الكل'||p.category===category)&&(!favsOnly||favorites.includes(p.id))&&(!search.trim()||(p.name+' '+p.category+' '+p.age).toLowerCase().includes(search.trim().toLowerCase()))),[products,category,favsOnly,favorites,search])
+ const visible=useMemo(()=>products.filter(p=>p.active!==false&&(category==='الكل'||p.category===category)&&(!favsOnly||favorites.includes(p.id))&&(!search.trim()||normalizeSearch(p.name+' '+p.category+' '+p.age).includes(normalizeSearch(search)))),[products,category,favsOnly,favorites,search])
  const count=cart.reduce((n,l)=>n+l.quantity,0),total=cart.reduce((n,l)=>n+l.product.price*l.quantity,0)
  const goPage=(next:StorePage)=>{setPage(next);setMobile(false);setFavsOnly(next==='favorites');if(next!=='catalog'&&next!=='favorites'){setCategory('الكل');setSearch('')}window.scrollTo({top:0,behavior:'smooth'})}
  const trackedOrder=trackingSearched?orders.find(o=>o.reference.toLowerCase()===trackingRef.trim().toLowerCase()):undefined
@@ -55,12 +57,12 @@ export default function App(){
  const exportProducts=()=>{const blob=new Blob([JSON.stringify(products,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='masha-products-backup.json';a.click();URL.revokeObjectURL(url)}
  const importProducts=async(file?:File)=>{if(!file)return;try{const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed)||!parsed.every(p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&typeof p.price==='number'&&typeof p.image==='string'&&Array.isArray(p.sizes)&&Array.isArray(p.colors))){throw new Error('تنسيق ملف المنتجات غير صحيح.')}saveProducts(parsed as Product[]);resetProductDraft();setImportError('تم استيراد كتالوج المنتجات لهذا المتصفح.')}catch(e){setImportError(e instanceof Error?e.message:'تعذّر استيراد الملف.')}}
  const wish=(id:string)=>{const v=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];setFavorites(v);localStorage.setItem('masha-favorites-v1',JSON.stringify(v))}
- const open=(p:Product)=>{setSelected(p);setSize(p.sizes[0]||'');setColor(p.colors[0]||'');setVideoOpen(false)}
+ const open=(p:Product)=>{setSelected(p);setSize(p.sizes[0]||'');setColor(p.colors[0]||'');setGalleryIndex(0);setVideoOpen(false)}
  const add=(p:Product,s:string,c:string)=>{if(!s){setNotice('اختَر المقاس أولاً');return}if(p.active===false||p.stock===0){setNotice('هذه القطعة غير متوفرة حالياً');return}const productQuantity=cart.filter(x=>x.product.id===p.id).reduce((n,x)=>n+x.quantity,0);if(p.stock!==undefined&&productQuantity>=p.stock){setNotice('وصلت إلى الحد المتوفر من هذه القطعة');return}const key=p.id+':'+s+':'+c,old=cart.find(x=>x.key===key);save(old?cart.map(x=>x.key===key?{...x,quantity:x.quantity+1}:x):[...cart,{key,product:p,size:s,color:c,quantity:1}]);setSelected(null);setCartOpen(true);setNotice('أُضيفت القطعة إلى الحقيبة');window.setTimeout(()=>setNotice(''),2500)}
  const qty=(key:string,d:number)=>{const line=cart.find(x=>x.key===key);if(!line)return;if(d>0&&line.product.stock!==undefined&&cart.filter(x=>x.product.id===line.product.id).reduce((n,x)=>n+x.quantity,0)>=line.product.stock){setNotice('لا توجد كمية إضافية متاحة');return}save(cart.map(x=>x.key===key?{...x,quantity:x.quantity+d}:x).filter(x=>x.quantity>0))}
- const orderText=()=>['طلب جديد من متجر ماشا',...cart.map(x=>'• '+x.product.name+' — المقاس '+x.size+(x.color?' — اللون '+x.color:'')+' × '+x.quantity+' = '+money(x.product.price*x.quantity)),'المجموع: '+money(total),'الاسم: '+customer.name,'الهاتف: '+customer.phone,'العنوان: '+customer.address,customer.notes?'ملاحظات: '+customer.notes:''].filter(Boolean).join('\n')
+ const orderText=()=>['طلب جديد من متجر ماشا',...cart.map(x=>'• '+x.product.name+' — المقاس '+x.size+(x.color?' — اللون '+x.color:'')+' × '+x.quantity+' = '+money(x.product.price*x.quantity)),'المجموع: '+money(total),'الاسم: '+customer.name,'الهاتف: '+customer.phone,'المحافظة: '+customer.governorate,'العنوان: '+customer.address,customer.notes?'ملاحظات: '+customer.notes:''].filter(Boolean).join('\n')
  const submit=async()=>{
-  if(!customer.name.trim()||!customer.phone.trim()||!customer.address.trim()||!cart.length){setNotice('أكمل الاسم والهاتف والعنوان وأضف قطعة');window.setTimeout(()=>setNotice(''),3000);return}
+  if(!customer.name.trim()||!customer.phone.trim()||!customer.governorate||!customer.address.trim()||!cart.length){setNotice('أكمل الاسم والهاتف والمحافظة والعنوان وأضف قطعة');window.setTimeout(()=>setNotice(''),3000);return}
   const reference='MSH-'+Date.now().toString(36).slice(-6).toUpperCase()
   const order:LocalOrder={reference,createdAt:new Date().toISOString(),status:'pending_store_confirmation',total,itemCount:count,customer:{...customer},items:cart.map(x=>({name:x.product.name,size:x.size,color:x.color,quantity:x.quantity,unitPrice:x.product.price}))}
   const nextOrders=[order,...orders].slice(0,100)
