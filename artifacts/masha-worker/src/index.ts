@@ -105,7 +105,7 @@ const publicProduct = (product: StoreProduct): StoreProduct => {
 }
 
 const orderNumber = (): string =>
-  `EVA-${Date.now().toString(36).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`
+  `MSH-${Date.now().toString(36).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`
 
 const fmtDinar = (value: number): string =>
   value >= 1000 && value % 1000 === 0 ? `${value / 1000} الف دينار عراقي` : `${value.toLocaleString('en-US')} دينار عراقي`
@@ -345,28 +345,53 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
       if (!orderRateLimit(request)) return json({ error: 'حاولي إرسال الطلب بعد قليل' }, 429)
       const body = await readBody<Record<string, unknown>>(request)
       if (!body || typeof body !== 'object') return json({ error: 'تعذّر قراءة الطلب' }, 400)
-      const items = Array.isArray(body.items) ? body.items : []
+      const submittedItems = Array.isArray(body.items) ? body.items : []
       const nested = (body.customer ?? {}) as Record<string, unknown>
       const shipping = (body.shippingAddress ?? {}) as Record<string, unknown>
       const name = String(nested.name ?? body.customerName ?? '').trim()
       const phone = String(nested.phone ?? body.phone ?? '').trim()
-      if (!items.length) return json({ error: 'السلة فارغة' }, 400)
-      if (!phone) return json({ error: 'رقم الهاتف مطلوب لتأكيد الطلب' }, 400)
-      // Persist the delivery region so the admin statistics can break orders
-      // down by governorate. Checkout sends it under shippingAddress.
+      if (!submittedItems.length) return json({ error: 'السلة فارغة' }, 400)
+      if (name.length < 2) return json({ error: 'اسم المستلم مطلوب' }, 400)
+      if (!/^(?:07\d{9}|9647\d{9}|\+9647\d{9})$/.test(phone.replace(/[\s()-]/g, ''))) {
+        return json({ error: 'رقم الهاتف العراقي غير صالح' }, 400)
+      }
       const governorate = String(shipping.governorate ?? nested.governorate ?? body.governorate ?? '').trim()
       const district = String(shipping.district ?? nested.district ?? body.district ?? '').trim()
-      const customer = {
-        ...nested,
-        name,
-        phone,
-        ...(governorate ? { governorate } : {}),
-        ...(district ? { district } : {}),
+      const address = String(shipping.address ?? nested.address ?? body.address ?? '').trim()
+      if (!governorate || address.length < 4) return json({ error: 'المحافظة والعنوان التفصيلي مطلوبان' }, 400)
+      const customer = { ...nested, name, phone, governorate, ...(district ? { district } : {}), address }
+      const safeItems: Record<string, unknown>[] = []
+      let subtotal = 0
+      if (submittedItems.length > 50) return json({ error: 'عدد القطع في الطلب يتجاوز الحد المسموح' }, 400)
+      for (const rawItem of submittedItems) {
+        if (!rawItem || typeof rawItem !== 'object') return json({ error: 'عنصر طلب غير صالح' }, 400)
+        const item = rawItem as Record<string, unknown>
+        const productId = String(item.productId ?? item.productSlug ?? item.id ?? '').trim()
+        if (!productId) return json({ error: 'معرّف المنتج مطلوب في كل قطعة' }, 400)
+        const product = await env.DB.prepare(
+          'SELECT id, slug, name, price, stock_meters FROM products WHERE (id = ?1 OR slug = ?1) AND hidden = 0 LIMIT 1',
+        ).bind(productId).first<{ id: string; slug: string; name: string; price: number; stock_meters: number }>()
+        if (!product) return json({ error: 'أحد المنتجات لم يعد متاحاً في المتجر' }, 409)
+        const quantity = Number(item.quantity)
+        if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
+          return json({ error: 'الكمية المطلوبة غير صالحة' }, 400)
+        }
+        if (quantity > product.stock_meters) {
+          return json({ error: 'الكمية المطلوبة غير متوفرة حالياً: ' + product.name }, 409)
+        }
+        const unitPrice = Math.max(0, Number(product.price) || 0)
+        subtotal += unitPrice * quantity
+        safeItems.push({
+          productId: product.id,
+          productName: product.name,
+          size: String(item.size ?? '').slice(0, 40),
+          color: String(item.color ?? '').slice(0, 80),
+          quantity,
+          unitPrice,
+          lineTotal: unitPrice * quantity,
+        })
       }
-      const totals =
-        body.totals && typeof body.totals === 'object'
-          ? body.totals
-          : { subtotal: body.subtotal ?? 0, deliveryFee: body.deliveryFee ?? 0, total: body.total ?? 0 }
+      const totals = { subtotal, deliveryFee: 0, total: subtotal }
       const requested = String(body.orderNumber ?? '').trim()
       const number = requested || orderNumber()
       if (requested) {
@@ -381,7 +406,7 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
           number,
           number,
           JSON.stringify(customer),
-          JSON.stringify(items),
+          JSON.stringify(safeItems),
           JSON.stringify(totals),
           String(body.notes ?? body.note ?? ''),
         )
@@ -394,7 +419,7 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
       })
       let pushWork: Promise<unknown> | null = null
       if (pushConfigured(env)) {
-        const itemLines = (items as Record<string, unknown>[])
+        const itemLines = safeItems
           .slice(0, 4)
           .map((item) => `${String(item.productName ?? '')} ×${Number(item.quantity ?? 0) || 0}`)
           .join('، ')
