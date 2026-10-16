@@ -844,7 +844,8 @@ body{background:var(--mc)!important;color:var(--mi)!important;font-family:'Reade
   .m-hero h1 { font-size: 31px; }
   .m-hero-buttons .m-btn { font-size: 9px; padding-inline: 7px; }
   .m-hero-visual { grid-template-columns: minmax(0,1fr); }
-  .m-float.top, .m-float.bottom { grid-column: 1; }
+  .m-float.top { grid-column: 1; grid-row: 2; }
+  .m-float.bottom { grid-column: 1; grid-row: 3; }
   .m-float.bottom b { font-size: 17px; }
   .m-benefits { width: calc(100% - 16px); padding-inline: 7px; gap: 10px 5px; }
   .m-benefits > div > svg { width: 26px; height: 26px; flex-basis: 26px; padding: 5px; }
