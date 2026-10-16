@@ -391,7 +391,17 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
           lineTotal: unitPrice * quantity,
         })
       }
-      const totals = { subtotal, deliveryFee: 0, total: subtotal }
+      let storeSettings: Record<string, unknown> = {}
+      try {
+        const settingRow = await env.DB.prepare("SELECT value FROM settings WHERE key = 'store'").first<{ value: string }>()
+        if (settingRow?.value) storeSettings = JSON.parse(settingRow.value) as Record<string, unknown>
+      } catch {
+        storeSettings = {}
+      }
+      const configuredFee = Math.max(0, Number(storeSettings.deliveryFee) || 0)
+      const freeDeliveryFrom = Math.max(0, Number(storeSettings.freeDeliveryFrom) || 0)
+      const deliveryFee = freeDeliveryFrom > 0 && subtotal >= freeDeliveryFrom ? 0 : configuredFee
+      const totals = { subtotal, deliveryFee, total: subtotal + deliveryFee }
       const requested = String(body.orderNumber ?? '').trim()
       const number = requested || orderNumber()
       if (requested) {
