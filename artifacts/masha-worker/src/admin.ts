@@ -520,6 +520,7 @@ export async function handleAdmin(
         .bind(status, orderNumber)
         .run()
       if (!result.meta.changes) return json({ error: 'الطلب غير موجود' }, 404)
+      await purgePublicCache().catch(() => {})
       // Tell every signed-in device the order moved forward (and the customer
       // picks the same change up on the tracking page, which polls this row).
       if (pushConfigured(env)) {
