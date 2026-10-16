@@ -408,19 +408,24 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
         const existing = await env.DB.prepare('SELECT order_number FROM orders WHERE order_number = ?1').bind(number).first()
         if (existing) return json({ data: { orderNumber: number, status: 'new', saved: true } }, 200)
       }
-      await env.DB.prepare(
-        `INSERT INTO orders (id, order_number, status, customer, items, totals, note, channel, created_at, updated_at)
-         VALUES (?1, ?2, 'new', ?3, ?4, ?5, ?6, 'web', datetime('now'), datetime('now'))`,
-      )
-        .bind(
-          number,
-          number,
-          JSON.stringify(customer),
-          JSON.stringify(safeItems),
-          JSON.stringify(totals),
-          String(body.notes ?? body.note ?? ''),
+      try {
+        await env.DB.prepare(
+          "INSERT INTO orders (id, order_number, status, customer, items, totals, note, channel, created_at, updated_at) VALUES (?1, ?2, 'new', ?3, ?4, ?5, ?6, 'web', datetime('now'), datetime('now'))",
         )
-        .run()
+          .bind(
+            number,
+            number,
+            JSON.stringify(customer),
+            JSON.stringify(safeItems),
+            JSON.stringify(totals),
+            String(body.notes ?? body.note ?? ''),
+          )
+          .run()
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        if (message.includes('insufficient_stock')) return json({ error: 'تغيّرت الكمية المتاحة لواحدة من القطع؛ حدّثوا السلة وحاولوا مرة أخرى.' }, 409)
+        throw error
+      }
       // Email delivery (formsubmit) can take 1-7s and is unrelated to the
       // customer's confirmation — it must never block the 201 response.
       const trustedBody = { ...body, customer, items: safeItems, totals, notes: String(body.notes ?? body.note ?? '') }
