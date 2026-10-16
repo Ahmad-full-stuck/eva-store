@@ -155,6 +155,7 @@ interface ProductInput {
   hidden?: boolean
   stockMeters?: number | string
   sourceUrl?: string
+  video?: string
   createdAt?: string
   sort_order?: number
 }
@@ -206,6 +207,7 @@ const buildProduct = (input: ProductInput, existing?: ProductRow) => {
     hidden: (input.hidden === undefined ? existing?.hidden === 1 : input.hidden) ? 1 : 0,
     stock: stock,
     sourceUrl: text(input.sourceUrl, existing ? existing.source_url : ''),
+    video: text(input.video, existing ? existing.video || '' : ''),
     createdAt: text(input.createdAt, existing ? existing.created_at : new Date().toISOString().slice(0, 10)),
     sortOrder: num(input.sort_order, existing ? existing.sort_order : 0),
   }
@@ -214,8 +216,8 @@ const buildProduct = (input: ProductInput, existing?: ProductRow) => {
 const UPSERT_SQL = `INSERT INTO products
   (id, slug, name, type, category_id, description, price, compare_at_price, image, images_json, colors_json,
    specs_json, faqs_json, colors_enabled, is_new, is_featured, hidden, stock_meters, source_url, origin,
-   sort_order, created_at, updated_at)
-  VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, datetime('now'))
+   sort_order, video, created_at, updated_at)
+  VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, datetime('now'))
   ON CONFLICT(slug) DO UPDATE SET
     name = excluded.name, type = excluded.type, category_id = excluded.category_id,
     description = excluded.description, price = excluded.price, compare_at_price = excluded.compare_at_price,
@@ -223,7 +225,7 @@ const UPSERT_SQL = `INSERT INTO products
     specs_json = excluded.specs_json, faqs_json = excluded.faqs_json, colors_enabled = excluded.colors_enabled,
     is_new = excluded.is_new, is_featured = excluded.is_featured, hidden = excluded.hidden,
     stock_meters = excluded.stock_meters, source_url = excluded.source_url, sort_order = excluded.sort_order,
-    updated_at = datetime('now')`
+    video = excluded.video, updated_at = datetime('now')`
 
 const bindProduct = (value: ReturnType<typeof buildProduct>, origin: string) => [
   value.id,
@@ -247,6 +249,7 @@ const bindProduct = (value: ReturnType<typeof buildProduct>, origin: string) => 
   value.sourceUrl,
   origin,
   value.sortOrder,
+  value.video,
   value.createdAt,
 ]
 
@@ -262,9 +265,9 @@ const UPDATE_SQL = `UPDATE products SET
   id = ?1, slug = ?2, name = ?3, type = ?4, category_id = ?5, description = ?6, price = ?7,
   compare_at_price = ?8, image = ?9, images_json = ?10, colors_json = ?11, specs_json = ?12,
   faqs_json = ?13, colors_enabled = ?14, is_new = ?15, is_featured = ?16, hidden = ?17,
-  stock_meters = ?18, source_url = ?19, origin = ?20, sort_order = ?21, created_at = ?22,
+  stock_meters = ?18, source_url = ?19, origin = ?20, sort_order = ?21, video = ?22, created_at = ?23,
   updated_at = datetime('now')
-WHERE id = ?23`
+WHERE id = ?24`
 
 const findExisting = async (env: Env, keys: string[]): Promise<ProductRow | null> => {
   const unique = [...new Set(keys.map((key) => key.trim()).filter(Boolean))]
