@@ -25,7 +25,9 @@ export default function App(){
  const [adminTab,setAdminTab]=useState<'products'|'orders'|'settings'>('products')
  const [adminSearch,setAdminSearch]=useState('')
  const [editingProductId,setEditingProductId]=useState<string|null>(null)
- const [productDraft,setProductDraft]=useState<Product>({id:'',name:'',category:'بناتي',price:0,image:'',age:'',sizes:['2Y','3Y','4Y'],colors:['#e9d8c7'],description:'',active:true,stock:0})
+ const [productDraft,setProductDraft]=useState<Product>({id:'',name:'',category:'بناتي',price:0,image:'',age:'2–6 سنوات',sizes:['2Y','3Y','4Y'],colors:['#e9d8c7'],description:'',active:true,stock:10})
+ const [storeWhatsapp,setStoreWhatsapp]=useState(()=>{try{return localStorage.getItem('masha-whatsapp-v1')||import.meta.env.VITE_WHATSAPP_NUMBER||''}catch{return import.meta.env.VITE_WHATSAPP_NUMBER||''}})
+ const [storeAnnouncement,setStoreAnnouncement]=useState(()=>{try{return localStorage.getItem('masha-announcement-v1')||'اختيارات صغيرة، ذكريات كبيرة'}catch{return 'اختيارات صغيرة، ذكريات كبيرة'}})
  const [importError,setImportError]=useState('')
  const [cart,setCart]=useState<Line[]>(()=>{try{return JSON.parse(localStorage.getItem('masha-cart-v1')||'[]')}catch{return []}})
  const [favorites,setFavorites]=useState<string[]>(()=>{try{return JSON.parse(localStorage.getItem('masha-favorites-v1')||'[]')}catch{return []}})
@@ -43,11 +45,13 @@ export default function App(){
  const orderedProducts=useMemo(()=>[...visible].sort((a,b)=>sortOrder==='price-asc'?a.price-b.price:sortOrder==='price-desc'?b.price-a.price:sortOrder==='name'?a.name.localeCompare(b.name,'ar'):0),[visible,sortOrder])
  const save=(v:Line[])=>{setCart(v);try{localStorage.setItem('masha-cart-v1',JSON.stringify(v))}catch{setNotice('تعذّر حفظ الحقيبة في هذا المتصفح')}}
  const saveProducts=(v:Product[])=>{setProducts(v);try{localStorage.setItem('masha-products-v1',JSON.stringify(v));setNotice('حُفظت التعديلات على هذا الجهاز فقط')}catch{setNotice('تعذّر الحفظ في المتصفح')}}
- const resetProductDraft=()=>{setEditingProductId(null);setProductDraft({id:'',name:'',category:'بناتي',price:0,image:'',age:'',sizes:['2Y','3Y','4Y'],colors:['#e9d8c7'],description:'',active:true,stock:0});setImportError('')}
+ const resetProductDraft=()=>{setEditingProductId(null);setProductDraft({id:'',name:'',category:'بناتي',price:0,image:'',age:'2–6 سنوات',sizes:['2Y','3Y','4Y'],colors:['#e9d8c7'],description:'',active:true,stock:10});setImportError('')}
  const editProduct=(p:Product)=>{setEditingProductId(p.id);setProductDraft({...p,sizes:[...p.sizes],colors:[...p.colors]});setAdminTab('products');window.scrollTo({top:0,behavior:'smooth'})}
  const persistProduct=()=>{const name=productDraft.name.trim(),image=productDraft.image.trim();if(!name||!image||!Number.isFinite(productDraft.price)||productDraft.price<0){setImportError('أدخل اسم المنتج وصورة صالحة وسعراً غير سالب.');return}const item={...productDraft,id:editingProductId||productDraft.id.trim()||'m-'+Date.now().toString(36),sizes:productDraft.sizes.map(x=>x.trim()).filter(Boolean),colors:productDraft.colors.filter(Boolean),description:productDraft.description.trim(),active:productDraft.active!==false};const next=editingProductId?products.map(p=>p.id===editingProductId?item:p):[item,...products];saveProducts(next);resetProductDraft()}
  const deleteProduct=(id:string)=>{if(!window.confirm('حذف هذه القطعة من كتالوج هذا المتصفح؟'))return;saveProducts(products.filter(p=>p.id!==id));if(editingProductId===id)resetProductDraft()}
  const updateOrderStatus=(reference:string,status:OrderStatus)=>{const next=orders.map(o=>o.reference===reference?{...o,status}:o);setOrders(next);try{localStorage.setItem(ORDERS_KEY,JSON.stringify(next))}catch{}setNotice('تم تحديث الحالة محلياً لهذا الجهاز')}
+ const saveStoreSettings=()=>{try{localStorage.setItem('masha-whatsapp-v1',storeWhatsapp);localStorage.setItem('masha-announcement-v1',storeAnnouncement);setNotice('حُفظت إعدادات المعاينة محلياً')}catch{setNotice('تعذّر حفظ الإعدادات')}}
+ const orderStatusLabel=(status:OrderStatus)=>({'pending_store_confirmation':'بانتظار تأكيد المتجر','confirmed':'تم التأكيد','preparing':'قيد التجهيز','shipped':'تم الشحن','delivered':'تم التسليم','cancelled':'ملغي'} as Record<OrderStatus,string>)[status]
  const exportProducts=()=>{const blob=new Blob([JSON.stringify(products,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='masha-products-backup.json';a.click();URL.revokeObjectURL(url)}
  const importProducts=async(file?:File)=>{if(!file)return;try{const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed)||!parsed.every(p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&typeof p.price==='number'&&typeof p.image==='string'&&Array.isArray(p.sizes)&&Array.isArray(p.colors))){throw new Error('تنسيق ملف المنتجات غير صحيح.')}saveProducts(parsed as Product[]);resetProductDraft();setImportError('تم استيراد كتالوج المنتجات لهذا المتصفح.')}catch(e){setImportError(e instanceof Error?e.message:'تعذّر استيراد الملف.')}}
  const wish=(id:string)=>{const v=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];setFavorites(v);localStorage.setItem('masha-favorites-v1',JSON.stringify(v))}
@@ -63,7 +67,7 @@ export default function App(){
   try{localStorage.setItem(ORDERS_KEY,JSON.stringify(nextOrders))}catch{}
   setOrders(nextOrders);setTrackingRef(reference);setTrackingSearched(false)
   const text=orderText()+'\nرقم مرجع الطلب: '+reference+'\nالحالة: بانتظار تأكيد المتجر'
-  const phone=(import.meta.env.VITE_WHATSAPP_NUMBER||'').replace(/[^0-9]/g,'')
+  const phone=storeWhatsapp.replace(/[^0-9]/g,'')
   if(phone){window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(text),'_blank','noopener,noreferrer');setNotice('تم تجهيز الطلب وفتح واتساب؛ أرسل الرسالة لتصل للمتجر.')}
   else{
     window.open(IG,'_blank','noopener,noreferrer')
@@ -74,7 +78,7 @@ export default function App(){
  }
  const video=embed(selected?.instagramVideoUrl)
  return <div className="masha" id="top" dir="rtl">
-  <div className="m-announcement"><span><Sparkles size={14}/> اختيارات صغيرة، ذكريات كبيرة</span><span>اسألونا عن المقاس قبل الطلب <ArrowLeft size={14}/></span></div>
+  <div className="m-announcement"><span><Sparkles size={14}/> {storeAnnouncement}</span><span>اسألونا عن المقاس قبل الطلب <ArrowLeft size={14}/></span></div>
   <header className="m-header"><div className="m-header-inner"><button className="m-menu" onClick={()=>setMobile(!mobile)} aria-label="القائمة">{mobile?<X/>:<Menu/>}</button><Logo/><nav className={mobile?'open':''}><a href="#top" onClick={e=>{e.preventDefault();goPage('home')}}>الرئيسية</a><a href="#catalog" onClick={e=>{e.preventDefault();goPage('catalog')}}>تسوّقوا</a><a href="#guide" onClick={e=>{e.preventDefault();goPage('size-guide')}}>دليل المقاسات</a><a href="#contact" onClick={e=>{e.preventDefault();goPage('contact')}}>تواصلوا ويانا</a></nav><div className="m-actions"><button className="m-icon" onClick={()=>goPage(page==='favorites'?'catalog':'favorites')} aria-label="المفضلة"><Heart size={18}/><i>{favorites.length}</i></button><button className="m-cart-button" onClick={()=>setCartOpen(true)}><ShoppingBag size={17}/><span>الحقيبة</span><b>{count}</b></button></div></div></header>
   <main>
    {page==='home'&&<>
