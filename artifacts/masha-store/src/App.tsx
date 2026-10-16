@@ -18,6 +18,22 @@ const governorates=['بغداد','البصرة','نينوى','أربيل','ال�
 const normalizeSearch=(v:string)=>v.toLowerCase().normalize('NFD').replace(/[\u064B-\u065F\u0670]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').trim()
 import rawProducts from './lib/products.json'
 const defaultProducts=rawProducts as Product[]
+
+const legacyDemoImageFixes:Record<string,{old:string;next:string}>={
+ m02:{old:'photo-1518831959646',next:'https://images.unsplash.com/photo-1566454544259-f4b94c3d758c?auto=format&fit=crop&w=900&q=85'},
+ m04:{old:'photo-1519689680058',next:'https://images.unsplash.com/photo-1777397660834-67c6d0eabe15?auto=format&fit=crop&w=900&q=85'},
+ m07:{old:'photo-1519238263530',next:'https://images.unsplash.com/photo-1682802739047-24fa5d983e71?auto=format&fit=crop&w=900&q=85'},
+ m08:{old:'photo-1519689680058',next:'https://images.unsplash.com/photo-1560859259-fcf2b952aed8?auto=format&fit=crop&w=900&q=85'}
+}
+const normalizeProductImage=(product:Product):Product=>{
+ const fix=legacyDemoImageFixes[product?.id]
+ if(!fix||typeof product.image!=='string'||!product.image.includes(fix.old))return product
+ const images=(product.images||[]).filter(src=>!src.includes(fix.old))
+ return {...product,image:fix.next,images:Array.from(new Set([fix.next,...images]))}
+}
+const normalizeProductList=(value:unknown):Product[]=>Array.isArray(value)?value.filter((item:any)=>item&&typeof item.id==='string').map((item:Product)=>normalizeProductImage(item)):defaultProducts
+const normalizeCartLines=(value:unknown):Line[]=>Array.isArray(value)?value.filter((line:any)=>line&&line.product&&typeof line.product.id==='string').map((line:Line)=>({...line,product:normalizeProductImage(line.product)})):[]
+
 const money=(n:number)=>new Intl.NumberFormat('ar-IQ').format(n)+' د.ع'
 const showImageFallback=(event:SyntheticEvent<HTMLImageElement>)=>{const img=event.currentTarget;if(img.getAttribute('src')===productImageFallback)return;img.src=productImageFallback}
 const embed=(url?:string)=>{if(!url)return null;try{const u=new URL(url);if(!/(^|\.)instagram\.com$/i.test(u.hostname))return null;const m=u.pathname.match(/^\/(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/);if(!m)return null;return 'https://www.instagram.com/'+(m[1]==='reels'?'reel':m[1])+'/'+m[2]+'/embed'}catch{return null}}
@@ -27,7 +43,7 @@ export default function App(){
  const [page,setPage]=useState<StorePage>('home')
  const [category,setCategory]=useState<Category>('الكل'),[search,setSearch]=useState(''),[selected,setSelected]=useState<Product|null>(null),[size,setSize]=useState(''),[color,setColor]=useState(''),[galleryIndex,setGalleryIndex]=useState(0),[videoOpen,setVideoOpen]=useState(false)
  const [sortOrder,setSortOrder]=useState<'featured'|'price-asc'|'price-desc'|'name'>('featured')
- const [products,setProducts]=useState<Product[]>(()=>{try{const value=JSON.parse(localStorage.getItem('masha-products-v1')||'null');return Array.isArray(value)?value as Product[]:defaultProducts}catch{return defaultProducts}})
+ const [products,setProducts]=useState<Product[]>(()=>{try{const value=JSON.parse(localStorage.getItem('masha-products-v1')||'null');return normalizeProductList(value)}catch{return defaultProducts}})
  const [adminTab,setAdminTab]=useState<'products'|'orders'|'contacts'|'settings'>('products')
  const [adminSearch,setAdminSearch]=useState('')
  const [adminPin,setAdminPin]=useState('')
@@ -45,7 +61,7 @@ export default function App(){
  const [storeDeliveryFee,setStoreDeliveryFee]=useState(()=>{try{return Math.max(0,Number(localStorage.getItem('masha-delivery-fee-v1'))||0)}catch{return 0}})
  const [storeFreeDeliveryFrom,setStoreFreeDeliveryFrom]=useState(()=>{try{return Math.max(0,Number(localStorage.getItem('masha-free-delivery-from-v1'))||0)}catch{return 0}})
  const [importError,setImportError]=useState('')
- const [cart,setCart]=useState<Line[]>(()=>{try{return JSON.parse(localStorage.getItem('masha-cart-v1')||'[]')}catch{return []}})
+ const [cart,setCart]=useState<Line[]>(()=>{try{return normalizeCartLines(JSON.parse(localStorage.getItem('masha-cart-v1')||'[]'))}catch{return []}})
  const [favorites,setFavorites]=useState<string[]>(()=>{try{return JSON.parse(localStorage.getItem('masha-favorites-v1')||'[]')}catch{return []}})
  const [cartOpen,setCartOpen]=useState(false),[checkout,setCheckout]=useState(false),[mobile,setMobile]=useState(false),[favsOnly,setFavsOnly]=useState(false),[notice,setNotice]=useState('')
  const [customer,setCustomer]=useState({name:'',phone:'',governorate:'بغداد',address:'',notes:''})
