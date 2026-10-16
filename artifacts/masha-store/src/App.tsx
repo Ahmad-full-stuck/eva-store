@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, Baby, Check, Heart, Instagram, Menu, Minus, Play, Plus, Search, ShoppingBag, Sparkles, Star, Truck, X } from 'lucide-react'
-import { mashaAdminConfigured, mashaApiEnabled, fetchMashaAdminOrders, fetchMashaAdminProducts, fetchMashaProducts, loginMashaAdmin, verifyMashaAdmin, saveMashaAdminProduct, deleteMashaAdminProduct, importMashaAdminProducts, updateMashaOrderStatus, createMashaOrder, trackMashaOrder, fetchMashaPublicSettings, saveMashaStoreSettings, uploadMashaImage } from './lib/masha-api'
+import { mashaAdminConfigured, mashaApiEnabled, fetchMashaAdminOrders, fetchMashaAdminProducts, fetchMashaProducts, loginMashaAdmin, verifyMashaAdmin, saveMashaAdminProduct, deleteMashaAdminProduct, importMashaAdminProducts, updateMashaOrderStatus, createMashaOrder, trackMashaOrder, fetchMashaPublicSettings, saveMashaStoreSettings, uploadMashaImage, createMashaContactMessage, fetchMashaAdminContacts, deleteMashaAdminContact } from './lib/masha-api'
 
 type Category = 'الكل' | 'بناتي' | 'ولادي' | 'مواليد' | 'أطقم'
 type Product = {id:string;name:string;category:Exclude<Category,'الكل'>;price:number;oldPrice?:number;image:string;images?:string[];badge?:string;age:string;sizes:string[];colors:string[];description:string;material?:string;care?:string;sku?:string;instagramVideoUrl?:string;stock?:number;active?:boolean}
 type Line = {key:string;product:Product;size:string;color:string;quantity:number}
 type StorePage = 'home' | 'catalog' | 'favorites' | 'tracking' | 'size-guide' | 'about' | 'contact' | 'policies' | 'confirmation' | 'admin'
 type OrderStatus = 'pending_store_confirmation' | 'confirmed' | 'preparing' | 'shipped' | 'delivered' | 'cancelled'
+type ContactMessage = {id:string;name:string;phone:string;message:string;createdAt:string}
 type LocalOrder = {reference:string;createdAt:string;status:OrderStatus;total:number;itemCount:number;customer:{name:string;phone:string;governorate:string;address:string;notes:string};items:{name:string;size:string;color?:string;quantity:number;unitPrice:number}[]}
 const ORDERS_KEY = 'masha-orders-v1'
 function readLocalOrders():LocalOrder[]{try{const value=JSON.parse(localStorage.getItem(ORDERS_KEY)||'[]');return Array.isArray(value)?value:[]}catch{return []}}
@@ -25,7 +26,7 @@ export default function App(){
  const [category,setCategory]=useState<Category>('الكل'),[search,setSearch]=useState(''),[selected,setSelected]=useState<Product|null>(null),[size,setSize]=useState(''),[color,setColor]=useState(''),[galleryIndex,setGalleryIndex]=useState(0),[videoOpen,setVideoOpen]=useState(false)
  const [sortOrder,setSortOrder]=useState<'featured'|'price-asc'|'price-desc'|'name'>('featured')
  const [products,setProducts]=useState<Product[]>(()=>{try{const value=JSON.parse(localStorage.getItem('masha-products-v1')||'null');return Array.isArray(value)?value as Product[]:defaultProducts}catch{return defaultProducts}})
- const [adminTab,setAdminTab]=useState<'products'|'orders'|'settings'>('products')
+ const [adminTab,setAdminTab]=useState<'products'|'orders'|'contacts'|'settings'>('products')
  const [adminSearch,setAdminSearch]=useState('')
  const [adminPin,setAdminPin]=useState('')
  const [adminToken,setAdminToken]=useState(()=>{try{return sessionStorage.getItem('masha-admin-token-v1')||''}catch{return ''}})
@@ -45,6 +46,7 @@ export default function App(){
  const [cartOpen,setCartOpen]=useState(false),[checkout,setCheckout]=useState(false),[mobile,setMobile]=useState(false),[favsOnly,setFavsOnly]=useState(false),[notice,setNotice]=useState('')
  const [customer,setCustomer]=useState({name:'',phone:'',governorate:'بغداد',address:'',notes:''})
  const [orders,setOrders]=useState<LocalOrder[]>(readLocalOrders)
+ const [contacts,setContacts]=useState<ContactMessage[]>(()=>{try{const value=JSON.parse(localStorage.getItem('masha-contact-messages-v1')||'[]');return Array.isArray(value)?value:[]}catch{return []}})
  const [trackingRef,setTrackingRef]=useState('')
  const [trackingSearched,setTrackingSearched]=useState(false)
  const [currentOrderRef,setCurrentOrderRef]=useState('')
@@ -73,11 +75,12 @@ export default function App(){
   if(!adminToken||!mashaApiEnabled||!mashaAdminConfigured)return
   let live=true
   setAdminApiLoading(true);setAdminError('')
-  Promise.all([verifyMashaAdmin(adminToken),fetchMashaAdminProducts(adminToken),fetchMashaAdminOrders(adminToken)]).then(([identity,serverProducts,serverOrders])=>{
+  Promise.all([verifyMashaAdmin(adminToken),fetchMashaAdminProducts(adminToken),fetchMashaAdminOrders(adminToken),fetchMashaAdminContacts(adminToken)]).then(([identity,serverProducts,serverOrders,serverContacts])=>{
    if(!live)return
    if(!identity?.ok)throw new Error('تعذّر التحقق من جلسة الإدارة.')
    setProducts(serverProducts as Product[])
    setOrders(serverOrders as LocalOrder[])
+   setContacts(serverContacts.map(c=>({id:String(c.id),name:String(c.name||''),phone:String(c.phone||''),message:String(c.message||''),createdAt:String(c.created_at||'')})))
    setApiStatus('connected')
    setAdminApiLoading(false)
   }).catch(error=>{
