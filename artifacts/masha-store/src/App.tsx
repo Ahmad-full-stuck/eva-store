@@ -2,16 +2,17 @@ import { useMemo, useState } from 'react'
 import { ArrowLeft, Baby, Check, Heart, Instagram, Menu, Minus, Play, Plus, Search, ShoppingBag, Sparkles, Star, Truck, X } from 'lucide-react'
 
 type Category = 'الكل' | 'بناتي' | 'ولادي' | 'مواليد' | 'أطقم'
-type Product = {id:string;name:string;category:Exclude<Category,'الكل'>;price:number;oldPrice?:number;image:string;badge?:string;age:string;sizes:string[];colors:string[];description:string;instagramVideoUrl?:string}
+type Product = {id:string;name:string;category:Exclude<Category,'الكل'>;price:number;oldPrice?:number;image:string;badge?:string;age:string;sizes:string[];colors:string[];description:string;instagramVideoUrl?:string;stock?:number;active?:boolean}
 type Line = {key:string;product:Product;size:string;quantity:number}
-type StorePage = 'home' | 'catalog' | 'favorites' | 'tracking' | 'size-guide' | 'about' | 'contact' | 'policies' | 'confirmation'
-type LocalOrder = {reference:string;createdAt:string;status:'pending_store_confirmation';total:number;itemCount:number;items:{name:string;size:string;quantity:number;unitPrice:number}[]}
+type StorePage = 'home' | 'catalog' | 'favorites' | 'tracking' | 'size-guide' | 'about' | 'contact' | 'policies' | 'confirmation' | 'admin'
+type OrderStatus = 'pending_store_confirmation' | 'confirmed' | 'preparing' | 'shipped' | 'delivered' | 'cancelled'
+type LocalOrder = {reference:string;createdAt:string;status:OrderStatus;total:number;itemCount:number;items:{name:string;size:string;color?:string;quantity:number;unitPrice:number}[]}
 const ORDERS_KEY = 'masha-orders-v1'
 function readLocalOrders():LocalOrder[]{try{const value=JSON.parse(localStorage.getItem(ORDERS_KEY)||'[]');return Array.isArray(value)?value:[]}catch{return []}}
 const IG='https://www.instagram.com/1masha.store/'
 const cats:Category[]=['الكل','بناتي','ولادي','مواليد','أطقم']
 import rawProducts from './lib/products.json'
-const products=rawProducts as Product[]
+const defaultProducts=rawProducts as Product[]
 const money=(n:number)=>new Intl.NumberFormat('ar-IQ').format(n)+' د.ع'
 const embed=(url?:string)=>{if(!url)return null;try{const u=new URL(url);if(!/(^|\.)instagram\.com$/i.test(u.hostname))return null;const m=u.pathname.match(/^\/(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/);if(!m)return null;return 'https://www.instagram.com/'+(m[1]==='reels'?'reel':m[1])+'/'+m[2]+'/embed'}catch{return null}}
 function Logo(){return <a className="m-logo" href="#top" aria-label="ماشا الرئيسية"><span><Baby size={22}/></span><strong>ماشا<small>صغارنا، عالمنا</small></strong></a>}
@@ -20,6 +21,12 @@ export default function App(){
  const [page,setPage]=useState<StorePage>('home')
  const [category,setCategory]=useState<Category>('الكل'),[search,setSearch]=useState(''),[selected,setSelected]=useState<Product|null>(null),[size,setSize]=useState(''),[videoOpen,setVideoOpen]=useState(false)
  const [sortOrder,setSortOrder]=useState<'featured'|'price-asc'|'price-desc'|'name'>('featured')
+ const [products,setProducts]=useState<Product[]>(()=>{try{const value=JSON.parse(localStorage.getItem('masha-products-v1')||'null');return Array.isArray(value)&&value.length?value as Product[]:defaultProducts}catch{return defaultProducts}})
+ const [adminTab,setAdminTab]=useState<'products'|'orders'|'settings'>('products')
+ const [adminSearch,setAdminSearch]=useState('')
+ const [editingProductId,setEditingProductId]=useState<string|null>(null)
+ const [productDraft,setProductDraft]=useState<Product>({id:'',name:'',category:'بناتي',price:0,image:'',age:'',sizes:['2Y','3Y','4Y'],colors:['#e9d8c7'],description:'',active:true,stock:0})
+ const [importError,setImportError]=useState('')
  const [cart,setCart]=useState<Line[]>(()=>{try{return JSON.parse(localStorage.getItem('masha-cart-v1')||'[]')}catch{return []}})
  const [favorites,setFavorites]=useState<string[]>(()=>{try{return JSON.parse(localStorage.getItem('masha-favorites-v1')||'[]')}catch{return []}})
  const [cartOpen,setCartOpen]=useState(false),[checkout,setCheckout]=useState(false),[mobile,setMobile]=useState(false),[favsOnly,setFavsOnly]=useState(false),[notice,setNotice]=useState('')
@@ -29,12 +36,20 @@ export default function App(){
  const [trackingSearched,setTrackingSearched]=useState(false)
  const [currentOrderRef,setCurrentOrderRef]=useState('')
  const [contactForm,setContactForm]=useState({name:'',phone:'',message:''})
- const visible=useMemo(()=>products.filter(p=>(category==='الكل'||p.category===category)&&(!favsOnly||favorites.includes(p.id))&&(!search.trim()||(p.name+' '+p.category+' '+p.age).toLowerCase().includes(search.trim().toLowerCase()))),[category,favsOnly,favorites,search])
+ const visible=useMemo(()=>products.filter(p=>p.active!==false&&(category==='الكل'||p.category===category)&&(!favsOnly||favorites.includes(p.id))&&(!search.trim()||(p.name+' '+p.category+' '+p.age).toLowerCase().includes(search.trim().toLowerCase()))),[products,category,favsOnly,favorites,search])
  const count=cart.reduce((n,l)=>n+l.quantity,0),total=cart.reduce((n,l)=>n+l.product.price*l.quantity,0)
  const goPage=(next:StorePage)=>{setPage(next);setMobile(false);setFavsOnly(next==='favorites');if(next!=='catalog'&&next!=='favorites'){setCategory('الكل');setSearch('')}window.scrollTo({top:0,behavior:'smooth'})}
  const trackedOrder=trackingSearched?orders.find(o=>o.reference.toLowerCase()===trackingRef.trim().toLowerCase()):undefined
  const orderedProducts=useMemo(()=>[...visible].sort((a,b)=>sortOrder==='price-asc'?a.price-b.price:sortOrder==='price-desc'?b.price-a.price:sortOrder==='name'?a.name.localeCompare(b.name,'ar'):0),[visible,sortOrder])
- const save=(v:Line[])=>{setCart(v);localStorage.setItem('masha-cart-v1',JSON.stringify(v))}
+ const save=(v:Line[])=>{setCart(v);try{localStorage.setItem('masha-cart-v1',JSON.stringify(v))}catch{setNotice('تعذّر حفظ الحقيبة في هذا المتصفح')}}
+ const saveProducts=(v:Product[])=>{setProducts(v);try{localStorage.setItem('masha-products-v1',JSON.stringify(v));setNotice('حُفظت التعديلات على هذا الجهاز فقط')}catch{setNotice('تعذّر الحفظ في المتصفح')}}
+ const resetProductDraft=()=>{setEditingProductId(null);setProductDraft({id:'',name:'',category:'بناتي',price:0,image:'',age:'',sizes:['2Y','3Y','4Y'],colors:['#e9d8c7'],description:'',active:true,stock:0});setImportError('')}
+ const editProduct=(p:Product)=>{setEditingProductId(p.id);setProductDraft({...p,sizes:[...p.sizes],colors:[...p.colors]});setAdminTab('products');window.scrollTo({top:0,behavior:'smooth'})}
+ const persistProduct=()=>{const name=productDraft.name.trim(),image=productDraft.image.trim();if(!name||!image||!Number.isFinite(productDraft.price)||productDraft.price<0){setImportError('أدخل اسم المنتج وصورة صالحة وسعراً غير سالب.');return}const item={...productDraft,id:editingProductId||productDraft.id.trim()||'m-'+Date.now().toString(36),sizes:productDraft.sizes.map(x=>x.trim()).filter(Boolean),colors:productDraft.colors.filter(Boolean),description:productDraft.description.trim(),active:productDraft.active!==false};const next=editingProductId?products.map(p=>p.id===editingProductId?item:p):[item,...products];saveProducts(next);resetProductDraft()}
+ const deleteProduct=(id:string)=>{if(!window.confirm('حذف هذه القطعة من كتالوج هذا المتصفح؟'))return;saveProducts(products.filter(p=>p.id!==id));if(editingProductId===id)resetProductDraft()}
+ const updateOrderStatus=(reference:string,status:OrderStatus)=>{const next=orders.map(o=>o.reference===reference?{...o,status}:o);setOrders(next);try{localStorage.setItem(ORDERS_KEY,JSON.stringify(next))}catch{}setNotice('تم تحديث الحالة محلياً لهذا الجهاز')}
+ const exportProducts=()=>{const blob=new Blob([JSON.stringify(products,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='masha-products-backup.json';a.click();URL.revokeObjectURL(url)}
+ const importProducts=async(file?:File)=>{if(!file)return;try{const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed)||!parsed.every(p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&typeof p.price==='number'&&typeof p.image==='string'&&Array.isArray(p.sizes)&&Array.isArray(p.colors))){throw new Error('تنسيق ملف المنتجات غير صحيح.')}saveProducts(parsed as Product[]);resetProductDraft();setImportError('تم استيراد كتالوج المنتجات لهذا المتصفح.')}catch(e){setImportError(e instanceof Error?e.message:'تعذّر استيراد الملف.')}}
  const wish=(id:string)=>{const v=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];setFavorites(v);localStorage.setItem('masha-favorites-v1',JSON.stringify(v))}
  const open=(p:Product)=>{setSelected(p);setSize(p.sizes[0]||'');setVideoOpen(false)}
  const add=(p:Product,s:string)=>{if(!s){setNotice('اختَر المقاس أولاً');return}const key=p.id+':'+s,old=cart.find(x=>x.key===key);save(old?cart.map(x=>x.key===key?{...x,quantity:x.quantity+1}:x):[...cart,{key,product:p,size:s,quantity:1}]);setSelected(null);setCartOpen(true);setNotice('أُضيفت القطعة إلى الحقيبة');window.setTimeout(()=>setNotice(''),2500)}
