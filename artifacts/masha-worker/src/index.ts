@@ -47,14 +47,14 @@ const cachedJson = async (request: Request, ttlSeconds: number, build: () => Pro
   if (hit) {
     // Rewrite the marker so the client can tell an edge hit from a rebuild.
     const headers = new Headers(hit.headers)
-    headers.set('X-Eva-Cache', 'HIT')
+    headers.set('X-Masha-Cache', 'HIT')
     return new Response(hit.body, { status: hit.status, statusText: hit.statusText, headers })
   }
   const response = await build()
   if (response.ok && ttlSeconds > 0) {
     const headers = new Headers(response.headers)
     headers.set('Cache-Control', `public, max-age=${ttlSeconds}, s-maxage=${ttlSeconds}, stale-while-revalidate=${ttlSeconds * 4}`)
-    headers.set('X-Eva-Cache', 'MISS')
+    headers.set('X-Masha-Cache', 'MISS')
     const cacheable = new Response(response.body, { status: response.status, statusText: response.statusText, headers })
     try {
       await cache.put(cacheKey, cacheable.clone())
@@ -426,6 +426,8 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
         if (message.includes('insufficient_stock')) return json({ error: 'تغيّرت الكمية المتاحة لواحدة من القطع؛ حدّثوا السلة وحاولوا مرة أخرى.' }, 409)
         throw error
       }
+      // Stock changes after the order INSERT trigger; invalidate cached catalog/settings now.
+      await purgePublicCache().catch(() => {})
       // Email delivery (formsubmit) can take 1-7s and is unrelated to the
       // customer's confirmation — it must never block the 201 response.
       const trustedBody = { ...body, customer, items: safeItems, totals, notes: String(body.notes ?? body.note ?? '') }
