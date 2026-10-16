@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, Baby, Check, Heart, Instagram, Menu, Minus, Play, Plus, Search, ShoppingBag, Sparkles, Star, Truck, X } from 'lucide-react'
-import { mashaAdminConfigured, mashaApiEnabled, fetchMashaAdminOrders, fetchMashaAdminProducts, fetchMashaProducts, loginMashaAdmin, verifyMashaAdmin, saveMashaAdminProduct, deleteMashaAdminProduct, importMashaAdminProducts, updateMashaOrderStatus, createMashaOrder, trackMashaOrder, fetchMashaPublicSettings, saveMashaStoreSettings } from './lib/masha-api'
+import { mashaAdminConfigured, mashaApiEnabled, fetchMashaAdminOrders, fetchMashaAdminProducts, fetchMashaProducts, loginMashaAdmin, verifyMashaAdmin, saveMashaAdminProduct, deleteMashaAdminProduct, importMashaAdminProducts, updateMashaOrderStatus, createMashaOrder, trackMashaOrder, fetchMashaPublicSettings, saveMashaStoreSettings, uploadMashaImage } from './lib/masha-api'
 
 type Category = 'الكل' | 'بناتي' | 'ولادي' | 'مواليد' | 'أطقم'
 type Product = {id:string;name:string;category:Exclude<Category,'الكل'>;price:number;oldPrice?:number;image:string;images?:string[];badge?:string;age:string;sizes:string[];colors:string[];description:string;material?:string;care?:string;sku?:string;instagramVideoUrl?:string;stock?:number;active?:boolean}
@@ -31,6 +31,7 @@ export default function App(){
  const [adminToken,setAdminToken]=useState(()=>{try{return sessionStorage.getItem('masha-admin-token-v1')||''}catch{return ''}})
  const [adminError,setAdminError]=useState('')
  const [adminApiLoading,setAdminApiLoading]=useState(false)
+ const [imageUploading,setImageUploading]=useState(false)
  const [apiStatus,setApiStatus]=useState<'loading'|'connected'|'fallback'|'disabled'>('loading')
  const [serverTrackedOrder,setServerTrackedOrder]=useState<Record<string,any>|null>(null)
  const [serverTrackLoading,setServerTrackLoading]=useState(false)
@@ -118,6 +119,17 @@ export default function App(){
  const saveProducts=(v:Product[])=>{setProducts(v);try{localStorage.setItem('masha-products-v1',JSON.stringify(v));setNotice('حُفظت التعديلات على هذا الجهاز فقط')}catch{setNotice('تعذّر الحفظ في المتصفح')}}
  const resetProductDraft=()=>{setEditingProductId(null);setProductDraft({id:'',name:'',category:'بناتي',price:0,image:'',age:'2–6 سنوات',sizes:['2Y','3Y','4Y'],colors:['#e9d8c7'],description:'',active:true,stock:10});setImportError('')}
  const editProduct=(p:Product)=>{setEditingProductId(p.id);setProductDraft({...p,sizes:[...p.sizes],colors:[...p.colors]});setAdminTab('products');window.scrollTo({top:0,behavior:'smooth'})}
+ const uploadProductImage=async(file?:File)=>{
+  if(!file)return
+  if(!adminToken||!mashaApiEnabled||!mashaAdminConfigured){setImportError('رفع الصور إلى الخادم يتطلب تسجيل الدخول إلى إدارة ماشا.');return}
+  setImageUploading(true);setImportError('')
+  try{
+   const url=await uploadMashaImage(file,productDraft.name||productDraft.id||'masha-product',adminToken)
+   setProductDraft(current=>({...current,image:url,images:Array.from(new Set([...(current.images||[]),url]))}))
+   setImportError('رُفعت الصورة إلى خادم ماشا. احفظ المنتج حتى تثبت الصورة في الكتالوج.')
+  }catch(error){setImportError(error instanceof Error?error.message:'تعذّر رفع الصورة.')}
+  finally{setImageUploading(false)}
+ }
  const persistProduct=async()=>{
   const name=productDraft.name.trim(),image=productDraft.image.trim()
   if(!name||!image||!Number.isFinite(productDraft.price)||productDraft.price<0){setImportError('أدخل اسم المنتج وصورة صالحة وسعراً غير سالب.');return}
@@ -297,7 +309,7 @@ export default function App(){
        <label>الفئة<select value={productDraft.category} onChange={e=>setProductDraft({...productDraft,category:e.target.value as Product['category']})}><option>بناتي</option><option>ولادي</option><option>مواليد</option><option>أطقم</option></select></label>
        <label>السعر بالدينار العراقي<input type="number" required min="0" step="250" value={productDraft.price} onChange={e=>setProductDraft({...productDraft,price:Number(e.target.value)})}/></label>
        <label>السعر السابق (اختياري)<input type="number" min="0" step="250" value={productDraft.oldPrice??''} onChange={e=>setProductDraft({...productDraft,oldPrice:e.target.value===''?undefined:Number(e.target.value)})}/></label>
-       <label className="m-admin-wide">رابط صورة المنتج<input type="url" required value={productDraft.image} onChange={e=>setProductDraft({...productDraft,image:e.target.value})} placeholder="https://..."/></label>
+       <label className="m-admin-wide">رابط صورة المنتج<input type="url" required value={productDraft.image} onChange={e=>setProductDraft({...productDraft,image:e.target.value})} placeholder="https://..."/></label>{adminToken&&mashaApiEnabled&&mashaAdminConfigured&&<label className="m-admin-wide m-upload-field">رفع صورة إلى خادم ماشا<input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" disabled={imageUploading} onChange={e=>{void uploadProductImage(e.target.files?.[0]);e.currentTarget.value=''}}/>{imageUploading&&<small>جارٍ رفع الصورة…</small>}<small>حد أقصى 1.7 ميجابايت؛ الصور المرفوعة محفوظة في قاعدة بيانات ماشا المنفصلة.</small></label>}
        <label>الأعمار المناسبة<input required value={productDraft.age} onChange={e=>setProductDraft({...productDraft,age:e.target.value})} placeholder="2–6 سنوات"/></label>
        <label>المخزون المتاح<input type="number" required min="0" step="1" value={productDraft.stock??0} onChange={e=>setProductDraft({...productDraft,stock:Math.max(0,Number(e.target.value))})}/></label>
        <label>المقاسات (افصل بينها بفاصلة)<input value={productDraft.sizes.join(', ')} onChange={e=>setProductDraft({...productDraft,sizes:e.target.value.split(',').map(v=>v.trim()).filter(Boolean)})} placeholder="2Y, 3Y, 4Y"/></label>
