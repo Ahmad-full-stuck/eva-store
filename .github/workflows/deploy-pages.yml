@@ -37,6 +37,8 @@ jobs:
         env:
           PORT: 4175
           BASE_PATH: /${{ github.event.repository.name }}/masha/
+          VITE_MASHA_API_BASE_URL: "https://masha-store.eva-store.workers.dev"
+          VITE_MASHA_ADMIN_CONFIGURED: ${{ secrets.MASHA_ADMIN_PIN != '' }}
       - name: Include Masha at the /masha path without replacing Eva
         run: |
           mkdir -p artifacts/eva-fabrics-store/dist/public/masha
