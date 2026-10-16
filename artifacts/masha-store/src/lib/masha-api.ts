@@ -199,3 +199,17 @@ export async function uploadMashaImage(file: File, productName: string, token: s
   if (!result?.url) throw new Error('لم يستلم الموقع رابط الصورة بعد رفعها.')
   return /^https?:\/\//i.test(result.url) ? result.url : mashaApiBase + (result.url.startsWith('/') ? result.url : '/' + result.url)
 }
+
+
+export async function createMashaContactMessage(input: {name: string; phone: string; message: string}) {
+  return mashaRequest<{saved?: boolean}>('/api/contact', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  })
+}
+export async function fetchMashaAdminContacts(token: string) {
+  return mashaRequest<Array<{id: number | string; name: string; phone: string; message: string; created_at: string}>>('/api/admin/contacts', {}, token)
+}
+export async function deleteMashaAdminContact(id: number | string, token: string) {
+  return mashaRequest('/api/admin/contacts/' + encodeURIComponent(String(id)), { method: 'DELETE' }, token)
+}
