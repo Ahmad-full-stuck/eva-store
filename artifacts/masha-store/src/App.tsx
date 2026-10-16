@@ -52,6 +52,7 @@ export default function App(){
  const [trackingRef,setTrackingRef]=useState('')
  const [trackingSearched,setTrackingSearched]=useState(false)
  const [currentOrderRef,setCurrentOrderRef]=useState('')
+ const [lastOrderLocalOnly,setLastOrderLocalOnly]=useState(false)
  const [contactForm,setContactForm]=useState({name:'',phone:'',message:''})
  const visible=useMemo(()=>products.filter(p=>p.active!==false&&(category==='الكل'||p.category===category)&&(!favsOnly||favorites.includes(p.id))&&(!search.trim()||normalizeSearch(p.name+' '+p.category+' '+p.age).includes(normalizeSearch(search)))),[products,category,favsOnly,favorites,search])
  const count=cart.reduce((n,l)=>n+l.quantity,0),total=cart.reduce((n,l)=>n+l.product.price*l.quantity,0)
@@ -237,7 +238,7 @@ export default function App(){
   if(!/^(?:07\d{9}|9647\d{9}|\+9647\d{9})$/.test(phoneInput)){setNotice('تحقق من رقم الهاتف العراقي: 07xxxxxxxxx أو 9647xxxxxxxxx');window.setTimeout(()=>setNotice(''),4500);return}
   if(cart.some(line=>line.product.active===false||line.product.stock===0)){setNotice('تحتوي الحقيبة على قطعة غير متوفرة. احذفها قبل إرسال الطلب.');return}
   let reference='MSH-'+Date.now().toString(36).slice(-6).toUpperCase()
-  let serverSaved=false
+  let serverSaved=false,serverUnavailable=false
   if(mashaApiEnabled){
    setNotice('جارٍ تسجيل الطلب في نظام ماشا...')
    try{
@@ -252,26 +253,38 @@ export default function App(){
     if(!result?.saved||!result.orderNumber)throw new Error('لم يؤكد الخادم حفظ الطلب.')
     reference=result.orderNumber;serverSaved=true
    }catch(error){
-    setNotice('لم يُسجّل الطلب على الخادم: '+(error instanceof Error?error.message:'خطأ اتصال')+'. بقيت الحقيبة كما هي؛ حاول مرة أخرى.')
-    return
+    if(error instanceof TypeError){
+     serverUnavailable=true
+     setNotice('خدمة الطلبات غير متاحة الآن. يمكنك إرسال التفاصيل للمتجر يدوياً، لكن لن يُسجَّل الطلب في قاعدة ماشا.')
+    }else{
+     setNotice('رفض الخادم الطلب: '+(error instanceof Error?error.message:'خطأ اتصال')+'. بقيت الحقيبة كما هي؛ صحّح التفاصيل أو حدّث المخزون ثم حاول مجدداً.')
+     return
+    }
    }
   }
   const order:LocalOrder={reference,createdAt:new Date().toISOString(),status:'pending_store_confirmation',total:orderTotal,itemCount:count,customer:{...customer,phone:phoneInput},items:cart.map(x=>({name:x.product.name,size:x.size,color:x.color,quantity:x.quantity,unitPrice:x.product.price}))}
-  const text=orderText()+'\nرقم مرجع الطلب: '+reference+'\nالحالة: بانتظار تأكيد المتجر'
+  const text=orderText()+'\nرقم مرجع الطلب: '+reference+'\nالحالة: '+(serverSaved?'مسجّل في نظام ماشا':'بانتظار تسجيله يدوياً من المتجر')
   const phone=storeWhatsapp.replace(/[^0-9]/g,'')
   let handoffReady=serverSaved
   if(phone){
    window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(text),'_blank','noopener,noreferrer')
    handoffReady=true
-   setNotice('تم تسجيل الطلب'+(serverSaved?' في النظام':'')+' وفتح رابط واتساب. أرسل الرسالة داخل واتساب لتصل للمتجر.')
+   setNotice(serverSaved?'تم تسجيل الطلب في نظام ماشا وفتح واتساب. أرسل الرسالة لتصل للمتجر.':'لم يُسجّل الطلب مركزياً. فُتح واتساب بالتفاصيل؛ أرسل الرسالة ليُسجّلها المتجر يدوياً.')
   }else{
    window.open(IG,'_blank','noopener,noreferrer')
-   try{await navigator.clipboard.writeText(text);handoffReady=true;setNotice('تم '+(serverSaved?'تسجيل الطلب في النظام و':'')+'نسخ ملخص الطلب. الصقه في محادثة إنستغرام المفتوحة ثم أرسله.')}
-   catch{setNotice(serverSaved?'تم تسجيل الطلب في النظام، لكن تعذّر نسخ الرسالة. رقم المرجع: '+reference:'تعذّر نسخ تفاصيل الطلب. بقيت الحقيبة كما هي.')}
+   try{
+    await navigator.clipboard.writeText(text)
+    handoffReady=true
+    setNotice(serverSaved?'تم تسجيل الطلب في النظام ونسخ الرسالة. الصقها في محادثة إنستغرام وأرسلها.':'لم يُسجّل الطلب مركزياً. نُسخت التفاصيل؛ الصقها في محادثة إنستغرام وأرسلها للمتجر.')
+   }catch{
+    if(serverSaved){handoffReady=true;setNotice('تم تسجيل الطلب في نظام ماشا، لكن تعذّر نسخ الرسالة. رقم المرجع: '+reference)}
+    else{setNotice('تعذّر الاتصال والنسخ؛ بقيت الحقيبة كما هي. أعد المحاولة لاحقاً أو اتصل بالمتجر مباشرة.');return}
+   }
   }
   if(!handoffReady)return
   const nextOrders=[order,...orders].slice(0,100)
   setOrders(nextOrders)
+  setLastOrderLocalOnly(!serverSaved)
   if(!serverSaved){try{localStorage.setItem(ORDERS_KEY,JSON.stringify(nextOrders))}catch{}}
   save([]);setCheckout(false);setCartOpen(false);setCurrentOrderRef(reference);setPage('confirmation');window.scrollTo({top:0,behavior:'smooth'});window.setTimeout(()=>setNotice(''),5000)
  }
@@ -311,7 +324,7 @@ export default function App(){
     <p className="m-info-note">{mashaApiEnabled?'التتبع المركزي يقرأ حالة الطلب من خادم ماشا. بيانات تفاصيل الطلب تظهر فقط في أدوات الإدارة المصرح بها.':'تنبيه: التتبع هنا لا يستعلم من خادم مركزي؛ الطلبات المحلية لا تظهر على جهاز آخر.'}</p>
    </section>}
    {page==='confirmation'&&<section className="m-section m-page-panel m-info-page m-confirm-page">
-    <span className="m-confirm-mark"><Check size={26}/></span><span className="m-eyebrow">مرجع محفوظ للمتابعة المحلية</span><h2>تم تجهيز <em>تفاصيل طلبكم.</em></h2><p>مرجع الطلب الخاص بكم:</p><strong className="m-reference">{currentOrderRef||trackingRef}</strong><p>حالة الطلب الآن: بانتظار تأكيد المتجر. فتح واتساب أو إنستغرام لا يعني أن الرسالة أُرسلت تلقائياً؛ تأكدوا من إرسالها داخل التطبيق.</p><button className="m-btn dark" onClick={()=>goPage('tracking')}>متابعة الطلب <ArrowLeft size={15}/></button><button className="m-btn outline" onClick={()=>goPage('catalog')}>العودة للتسوق</button>
+    <span className="m-confirm-mark"><Check size={26}/></span><span className="m-eyebrow">مرجع محفوظ للمتابعة المحلية</span><h2>تم تجهيز <em>تفاصيل طلبكم.</em></h2><p>مرجع الطلب الخاص بكم:</p><strong className="m-reference">{currentOrderRef||trackingRef}</strong><p>{lastOrderLocalOnly?'لم نتمكن من تسجيل الطلب في قاعدة ماشا بسبب تعذّر الاتصال؛ هذا المرجع محفوظ على هذا المتصفح فقط. أرسلوا الرسالة التي جهّزها الموقع ليُسجّل المتجر الطلب يدوياً.':'حالة الطلب الآن: بانتظار تأكيد المتجر. فتح واتساب أو إنستغرام لا يعني أن الرسالة أُرسلت تلقائياً؛ تأكدوا من إرسالها داخل التطبيق.'}</p><button className="m-btn dark" onClick={()=>goPage('tracking')}>متابعة الطلب <ArrowLeft size={15}/></button><button className="m-btn outline" onClick={()=>goPage('catalog')}>العودة للتسوق</button>
    </section>}
    {page==='size-guide'&&<section className="m-section m-page-panel m-info-page" id="guide">
     <span className="m-eyebrow">دليل قبل الطلب</span><h2>اختيار المقاس <em>بثقة.</em></h2><p>الأعمار الموجودة على البطاقات تقريبية وليست قياساً مضموناً. الأفضل مطابقة القياسات الفعلية للقطعة قبل الطلب.</p><div className="m-info-grid"><article><strong>01 · راجعوا بطاقة المنتج</strong><p>افتحوا تفاصيل القطعة وتأكدوا من الأعمار والمقاسات المتاحة فعلياً.</p></article><article><strong>02 · قارنوا بقياس الطفل</strong><p>اسألوا المتجر عن طول القطعة وعرض الصدر والخصر عند عدم توفر جدول قياسات.</p></article><article><strong>03 · تأكدوا من اللون والتوفر</strong><p>صور الألوان في الشاشة قد تختلف؛ اطلبوا تأكيد اللون والمخزون قبل الدفع.</p></article></div><button className="m-btn dark" onClick={()=>goPage('contact')}>اسألونا عن المقاس <ArrowLeft size={15}/></button></section>}
