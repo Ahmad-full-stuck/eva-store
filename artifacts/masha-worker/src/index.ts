@@ -36,7 +36,7 @@ const cacheKeyFor = (request: Request): Request => {
   // The Cache API only accepts fully-qualified URLs as keys, so the version
   // rides in a query parameter instead of a prefix.
   const url = new URL(request.url)
-  url.searchParams.set('__eva', CACHE_VERSION)
+  url.searchParams.set('__masha', CACHE_VERSION)
   return new Request(url.toString())
 }
 
@@ -72,8 +72,8 @@ const cachedJson = async (request: Request, ttlSeconds: number, build: () => Pro
 const purgePublicCache = async (): Promise<void> => {
   const cache = caches.default
   const keys = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings'].map((path) => {
-    const url = new URL(`https://www.eva-store.workers.dev${path}`)
-    url.searchParams.set('__eva', CACHE_VERSION)
+    const url = new URL(`https://masha-store.eva-store.workers.dev${path}`)
+    url.searchParams.set('__masha', CACHE_VERSION)
     return new Request(url.toString())
   })
   await Promise.all(keys.map((key) => cache.delete(key).catch(() => false)))
@@ -401,7 +401,7 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
         const total = Number((totals as Record<string, unknown>).total ?? 0) || 0
         const governorate = String(nested.governorate ?? body.governorate ?? '').trim()
         pushWork = sendPushToAll(env, {
-          title: 'طلب جديد • إيفا ستور',
+          title: 'طلب جديد • ماشا',
           body: `#${number}\n${name}${governorate ? ` — ${governorate}` : ''}\n${itemLines}\nالإجمالي: ${fmtDinar(total)}`,
           data: { orderNumber: number, status: 'new', url: '/#/admin' },
         }).catch((error) => {
