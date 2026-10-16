@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, Baby, Check, Heart, Instagram, Menu, Minus, Play, Plus, Search, ShoppingBag, Sparkles, Star, Truck, X } from 'lucide-react'
+import { mashaAdminConfigured, mashaApiEnabled, fetchMashaAdminOrders, fetchMashaAdminProducts, fetchMashaProducts, loginMashaAdmin, verifyMashaAdmin, saveMashaAdminProduct, deleteMashaAdminProduct, importMashaAdminProducts, updateMashaOrderStatus, createMashaOrder, trackMashaOrder, fetchMashaPublicSettings, saveMashaStoreSettings } from './lib/masha-api'
 
 type Category = 'الكل' | 'بناتي' | 'ولادي' | 'مواليد' | 'أطقم'
 type Product = {id:string;name:string;category:Exclude<Category,'الكل'>;price:number;oldPrice?:number;image:string;images?:string[];badge?:string;age:string;sizes:string[];colors:string[];description:string;material?:string;care?:string;sku?:string;instagramVideoUrl?:string;stock?:number;active?:boolean}
@@ -26,6 +27,13 @@ export default function App(){
  const [products,setProducts]=useState<Product[]>(()=>{try{const value=JSON.parse(localStorage.getItem('masha-products-v1')||'null');return Array.isArray(value)?value as Product[]:defaultProducts}catch{return defaultProducts}})
  const [adminTab,setAdminTab]=useState<'products'|'orders'|'settings'>('products')
  const [adminSearch,setAdminSearch]=useState('')
+ const [adminPin,setAdminPin]=useState('')
+ const [adminToken,setAdminToken]=useState(()=>{try{return sessionStorage.getItem('masha-admin-token-v1')||''}catch{return ''}})
+ const [adminError,setAdminError]=useState('')
+ const [adminApiLoading,setAdminApiLoading]=useState(false)
+ const [apiStatus,setApiStatus]=useState<'loading'|'connected'|'fallback'|'disabled'>('loading')
+ const [serverTrackedOrder,setServerTrackedOrder]=useState<Record<string,any>|null>(null)
+ const [serverTrackLoading,setServerTrackLoading]=useState(false)
  const [editingProductId,setEditingProductId]=useState<string|null>(null)
  const [productDraft,setProductDraft]=useState<Product>({id:'',name:'',category:'بناتي',price:0,image:'',age:'2–6 سنوات',sizes:['2Y','3Y','4Y'],colors:['#e9d8c7'],description:'',active:true,stock:10})
  const [storeWhatsapp,setStoreWhatsapp]=useState(()=>{try{return localStorage.getItem('masha-whatsapp-v1')||import.meta.env.VITE_WHATSAPP_NUMBER||''}catch{return import.meta.env.VITE_WHATSAPP_NUMBER||''}})
@@ -44,6 +52,62 @@ export default function App(){
  const count=cart.reduce((n,l)=>n+l.quantity,0),total=cart.reduce((n,l)=>n+l.product.price*l.quantity,0)
  const goPage=(next:StorePage)=>{setPage(next);setMobile(false);setFavsOnly(next==='favorites');if(next!=='catalog'&&next!=='favorites'){setCategory('الكل');setSearch('')}window.scrollTo({top:0,behavior:'smooth'})}
  const trackedOrder=trackingSearched?orders.find(o=>o.reference.toLowerCase()===trackingRef.trim().toLowerCase()):undefined
+ useEffect(()=>{
+  if(!mashaApiEnabled){setApiStatus('disabled');return}
+  let live=true
+  setApiStatus('loading')
+  fetchMashaProducts().then(serverProducts=>{
+   if(!live)return
+   if(serverProducts.length){setProducts(serverProducts as Product[]);try{localStorage.setItem('masha-products-v1',JSON.stringify(serverProducts))}catch{}}
+   setApiStatus(serverProducts.length?'connected':'fallback')
+  }).catch(()=>{if(live)setApiStatus('fallback')})
+  return()=>{live=false}
+ },[])
+ useEffect(()=>{
+  if(!adminToken||!mashaApiEnabled||!mashaAdminConfigured)return
+  let live=true
+  setAdminApiLoading(true);setAdminError('')
+  Promise.all([verifyMashaAdmin(adminToken),fetchMashaAdminProducts(adminToken),fetchMashaAdminOrders(adminToken)]).then(([identity,serverProducts,serverOrders])=>{
+   if(!live)return
+   if(!identity?.ok)throw new Error('تعذّر التحقق من جلسة الإدارة.')
+   setProducts(serverProducts as Product[])
+   setOrders(serverOrders as LocalOrder[])
+   setApiStatus('connected')
+   setAdminApiLoading(false)
+  }).catch(error=>{
+   if(!live)return
+   try{sessionStorage.removeItem('masha-admin-token-v1')}catch{}
+   setAdminToken('')
+   setAdminError(error instanceof Error?error.message:'تعذّر الاتصال بالإدارة.')
+   setAdminApiLoading(false)
+  })
+  return()=>{live=false}
+ },[adminToken])
+ useEffect(()=>{
+  if(!trackingSearched||!trackingRef.trim()||!mashaApiEnabled)return
+  if(orders.some(order=>order.reference.toLowerCase()===trackingRef.trim().toLowerCase())){setServerTrackedOrder(null);return}
+  let live=true
+  setServerTrackLoading(true)
+  trackMashaOrder(trackingRef.trim()).then(order=>{if(live)setServerTrackedOrder(order)}).catch(()=>{if(live)setServerTrackedOrder(null)}).finally(()=>{if(live)setServerTrackLoading(false)})
+  return()=>{live=false}
+ },[trackingSearched,trackingRef,orders])
+ const signInAdmin=async()=>{
+  setAdminError('')
+  if(!adminPin.trim()){setAdminError('أدخل رمز الإدارة الذي تم ضبطه بأمان.');return}
+  setAdminApiLoading(true)
+  try{
+   const result=await loginMashaAdmin(adminPin.trim())
+   if(!result?.token)throw new Error('لم يستلم المتجر جلسة إدارة صالحة.')
+   sessionStorage.setItem('masha-admin-token-v1',result.token)
+   setAdminPin('');setAdminToken(result.token);setNotice('تم تسجيل الدخول إلى إدارة ماشا.')
+  }catch(error){setAdminError(error instanceof Error?error.message:'تعذّر تسجيل الدخول.')}
+  finally{setAdminApiLoading(false)}
+ }
+ const signOutAdmin=()=>{
+  try{sessionStorage.removeItem('masha-admin-token-v1')}catch{}
+  setAdminToken('');setAdminError('');setAdminTab('products')
+  setNotice('تم تسجيل الخروج من الإدارة؛ وضع المعاينة يبقى محلياً.')
+ }
  const orderedProducts=useMemo(()=>[...visible].sort((a,b)=>sortOrder==='price-asc'?a.price-b.price:sortOrder==='price-desc'?b.price-a.price:sortOrder==='name'?a.name.localeCompare(b.name,'ar'):0),[visible,sortOrder])
  const save=(v:Line[])=>{setCart(v);try{localStorage.setItem('masha-cart-v1',JSON.stringify(v))}catch{setNotice('تعذّر حفظ الحقيبة في هذا المتصفح')}}
  const saveProducts=(v:Product[])=>{setProducts(v);try{localStorage.setItem('masha-products-v1',JSON.stringify(v));setNotice('حُفظت التعديلات على هذا الجهاز فقط')}catch{setNotice('تعذّر الحفظ في المتصفح')}}
