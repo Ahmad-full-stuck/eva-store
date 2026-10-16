@@ -51,7 +51,7 @@ export default function App(){
  const visible=useMemo(()=>products.filter(p=>p.active!==false&&(category==='الكل'||p.category===category)&&(!favsOnly||favorites.includes(p.id))&&(!search.trim()||normalizeSearch(p.name+' '+p.category+' '+p.age).includes(normalizeSearch(search)))),[products,category,favsOnly,favorites,search])
  const count=cart.reduce((n,l)=>n+l.quantity,0),total=cart.reduce((n,l)=>n+l.product.price*l.quantity,0)
  const goPage=(next:StorePage)=>{setPage(next);setMobile(false);setFavsOnly(next==='favorites');if(next!=='catalog'&&next!=='favorites'){setCategory('الكل');setSearch('')}window.scrollTo({top:0,behavior:'smooth'})}
- const trackedOrder=trackingSearched?orders.find(o=>o.reference.toLowerCase()===trackingRef.trim().toLowerCase()):undefined
+ const trackedOrder=trackingSearched&&!mashaApiEnabled?orders.find(o=>o.reference.toLowerCase()===trackingRef.trim().toLowerCase()):undefined
  useEffect(()=>{
   if(!mashaApiEnabled){setApiStatus('disabled');return}
   let live=true
@@ -90,7 +90,7 @@ export default function App(){
  },[adminToken])
  useEffect(()=>{
   if(!trackingSearched||!trackingRef.trim()||!mashaApiEnabled)return
-  if(orders.some(order=>order.reference.toLowerCase()===trackingRef.trim().toLowerCase())){setServerTrackedOrder(null);return}
+  if(!mashaApiEnabled&&orders.some(order=>order.reference.toLowerCase()===trackingRef.trim().toLowerCase())){setServerTrackedOrder(null);return}
   let live=true
   setServerTrackLoading(true)
   trackMashaOrder(trackingRef.trim()).then(order=>{if(live)setServerTrackedOrder(order)}).catch(()=>{if(live)setServerTrackedOrder(null)}).finally(()=>{if(live)setServerTrackLoading(false)})
