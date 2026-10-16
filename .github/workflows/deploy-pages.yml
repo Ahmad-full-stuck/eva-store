@@ -1,8 +1,8 @@
-name: Deploy to GitHub Pages
+name: Deploy Eva + Masha to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, masha-store]
   workflow_dispatch:
 
 permissions:
@@ -27,10 +27,20 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @workspace/eva-fabrics-store run build
+      - name: Build Eva storefront
+        run: pnpm --filter @workspace/eva-fabrics-store run build
         env:
           PORT: 4174
           BASE_PATH: /${{ github.event.repository.name }}/
+      - name: Build Masha storefront
+        run: pnpm --filter @workspace/masha-store run build
+        env:
+          PORT: 4175
+          BASE_PATH: /${{ github.event.repository.name }}/masha/
+      - name: Include Masha at the /masha path without replacing Eva
+        run: |
+          mkdir -p artifacts/eva-fabrics-store/dist/public/masha
+          cp -a artifacts/masha-store/dist/public/. artifacts/eva-fabrics-store/dist/public/masha/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -1,0 +1,172 @@
+[
+  {
+    "id": "m01",
+    "name": "طقم يومي بلون العاج",
+    "category": "أطقم",
+    "price": 25000,
+    "oldPrice": 30000,
+    "image": "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=900&q=85",
+    "badge": "اختيارنا",
+    "age": "2–6 سنوات",
+    "sizes": [
+      "2Y",
+      "3Y",
+      "4Y",
+      "5Y",
+      "6Y"
+    ],
+    "colors": [
+      "#eee2cf",
+      "#b9c7b0",
+      "#d6aaa4"
+    ],
+    "description": "قطعة أنيقة للاستخدام اليومي بألوان هادئة. أضف وصف الخامة والعناية بعد تأكيد بيانات المنتج."
+  },
+  {
+    "id": "m02",
+    "name": "فستان وردي بتفاصيل ناعمة",
+    "category": "بناتي",
+    "price": 28000,
+    "image": "https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=900&q=85",
+    "badge": "وصل حديثاً",
+    "age": "1–5 سنوات",
+    "sizes": [
+      "1Y",
+      "2Y",
+      "3Y",
+      "4Y",
+      "5Y"
+    ],
+    "colors": [
+      "#d9a8ae",
+      "#f0e3d5"
+    ],
+    "description": "تصميم طفولي ناعم للمناسبات والزيارات. استبدل الوصف النموذجي بالمعلومات المؤكدة من المتجر."
+  },
+  {
+    "id": "m03",
+    "name": "لوك صغير للمغامرات",
+    "category": "ولادي",
+    "price": 22000,
+    "image": "https://images.unsplash.com/photo-1503919005314-30d93d07d823?auto=format&fit=crop&w=900&q=85",
+    "age": "2–7 سنوات",
+    "sizes": [
+      "2Y",
+      "3Y",
+      "4Y",
+      "5Y",
+      "6Y",
+      "7Y"
+    ],
+    "colors": [
+      "#657c68",
+      "#d8c7ad",
+      "#e7e1d7"
+    ],
+    "description": "قطعة عملية للحركة واللعب بتنسيق سهل. تفاصيل المقاس والخامة بحاجة إلى تأكيد."
+  },
+  {
+    "id": "m04",
+    "name": "طقم مواليد ناعم",
+    "category": "مواليد",
+    "price": 18000,
+    "image": "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=85",
+    "badge": "للصغار جداً",
+    "age": "0–12 شهراً",
+    "sizes": [
+      "0–3M",
+      "3–6M",
+      "6–9M",
+      "9–12M"
+    ],
+    "colors": [
+      "#e9dfd0",
+      "#c7d2c0"
+    ],
+    "description": "تصميم هادئ للصغار، مع ضرورة إضافة تفاصيل النسيج وتعليمات الغسل الدقيقة."
+  },
+  {
+    "id": "m05",
+    "name": "طقم كاجوال بلون الزيتون",
+    "category": "أطقم",
+    "price": 26000,
+    "image": "https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=900&q=85",
+    "age": "3–8 سنوات",
+    "sizes": [
+      "3Y",
+      "4Y",
+      "5Y",
+      "6Y",
+      "7Y",
+      "8Y"
+    ],
+    "colors": [
+      "#71836d",
+      "#cbbca4"
+    ],
+    "description": "إطلالة متناسقة بألوان طبيعية تناسب الأيام العادية. البيانات الحالية نموذجية."
+  },
+  {
+    "id": "m06",
+    "name": "قطعة احتفالية بلون اللؤلؤ",
+    "category": "بناتي",
+    "price": 32000,
+    "oldPrice": 36000,
+    "image": "https://images.unsplash.com/photo-1566206091558-7f218b696731?auto=format&fit=crop&w=900&q=85",
+    "badge": "مناسبات",
+    "age": "2–6 سنوات",
+    "sizes": [
+      "2Y",
+      "3Y",
+      "4Y",
+      "5Y",
+      "6Y"
+    ],
+    "colors": [
+      "#eee6d8",
+      "#d8b8ad"
+    ],
+    "description": "اختيار أنيق للمناسبات العائلية. أضف القياسات الحقيقية وصور ماشا قبل الإطلاق."
+  },
+  {
+    "id": "m07",
+    "name": "قميص خفيف للأيام المشمسة",
+    "category": "ولادي",
+    "price": 16000,
+    "image": "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=900&q=85",
+    "age": "2–8 سنوات",
+    "sizes": [
+      "2Y",
+      "3Y",
+      "4Y",
+      "5Y",
+      "6Y",
+      "7Y",
+      "8Y"
+    ],
+    "colors": [
+      "#f0e8da",
+      "#9eaf9d"
+    ],
+    "description": "قطعة سهلة التنسيق بألوان مريحة. استبدل السعر والمخزون ببيانات المتجر المؤكدة."
+  },
+  {
+    "id": "m08",
+    "name": "طقم استقبال صغير",
+    "category": "مواليد",
+    "price": 21000,
+    "image": "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=85",
+    "badge": "هدية لطيفة",
+    "age": "0–9 أشهر",
+    "sizes": [
+      "0–3M",
+      "3–6M",
+      "6–9M"
+    ],
+    "colors": [
+      "#d9c6b0",
+      "#e7dfe0"
+    ],
+    "description": "فكرة هدية بسيطة للمواليد. تأكد من محتويات الطقم الفعلية قبل عرض السعر."
+  }
+]
