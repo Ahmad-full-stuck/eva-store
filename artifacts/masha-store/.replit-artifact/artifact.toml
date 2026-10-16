@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "إيفا ستور للأقمشة"
+description = "نموذج متجر عربي RTL للأقمشة يساعد العميلات في اكتشاف الخامات ومقارنة خصائصها واستكشاف رحلة الشراء من الجوال أو الحاسوب."
+version = "1.0.0"
+id = "artifacts/eva-fabrics-store"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21874
+
+[services.development]
+run = "pnpm --filter @workspace/eva-fabrics-store run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/eva-fabrics-store", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/eva-fabrics-store/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21874"
+BASE_PATH = "/"
