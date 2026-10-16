@@ -22,6 +22,7 @@ jobs:
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      MASHA_ADMIN_PIN: ${{ secrets.MASHA_ADMIN_PIN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,10 +55,38 @@ jobs:
       - name: Build storefront
         run: pnpm --filter @workspace/eva-fabrics-store build
 
+      - name: Build Masha storefront for its isolated Worker
+        run: pnpm --filter @workspace/masha-store build
+        env:
+          PORT: "5174"
+          BASE_PATH: "/"
+          VITE_MASHA_API_BASE_URL: "https://masha-store.eva-store.workers.dev"
+
+      - name: Provision the dedicated Masha D1 database
+        working-directory: artifacts/masha-worker
+        run: node scripts/ensure-db.mjs
+
+      - name: Apply Masha database migrations and seed its demo catalog
+        working-directory: artifacts/masha-worker
+        run: pnpm exec wrangler d1 migrations apply masha-store-db --remote --config wrangler.jsonc
+
+      - name: Configure the Masha admin PIN secret when supplied
+        if: env.MASHA_ADMIN_PIN != ''
+        working-directory: artifacts/masha-worker
+        run: printf '%s' "$MASHA_ADMIN_PIN" | pnpm exec wrangler secret put ADMIN_PIN --config wrangler.jsonc
+
       - name: Deploy Worker
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: artifacts/eva-worker
+          command: deploy
+
+      - name: Deploy Masha Worker with its own D1 database
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: \${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: \${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: artifacts/masha-worker
           command: deploy
