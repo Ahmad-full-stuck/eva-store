@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap');
 :root{--mc:#f8f5ef;--mp:#fffdf9;--mi:#26382f;--mm:#7a827a;--mg:#345747;--md:#203b30;--ms:#dfe6d8;--mb:#e9c6c2;--ml:#e9e3d9}
 body{background:var(--mc)!important;color:var(--mi)!important;font-family:'Readex Pro',sans-serif!important}body::before,body::after{display:none!important}
 .masha{position:relative;z-index:1;min-height:100vh;overflow:clip;background:var(--mc);color:var(--mi);font:14px/1.8 'Readex Pro',sans-serif}.masha *{box-sizing:border-box}.masha button,.masha input,.masha textarea{font:inherit}.masha button{cursor:pointer}.masha a{color:inherit;text-decoration:none}.masha img{display:block;max-width:100%}.masha h1,.masha h2,.masha p{margin:0}.masha button:focus-visible,.masha a:focus-visible,.masha input:focus-visible,.masha textarea:focus-visible{outline:3px solid #c8a96c;outline-offset:3px}
