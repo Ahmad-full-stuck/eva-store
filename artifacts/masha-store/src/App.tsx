@@ -4,6 +4,10 @@ import { ArrowLeft, Baby, Check, Heart, Instagram, Menu, Minus, Play, Plus, Sear
 type Category = 'الكل' | 'بناتي' | 'ولادي' | 'مواليد' | 'أطقم'
 type Product = {id:string;name:string;category:Exclude<Category,'الكل'>;price:number;oldPrice?:number;image:string;badge?:string;age:string;sizes:string[];colors:string[];description:string;instagramVideoUrl?:string}
 type Line = {key:string;product:Product;size:string;quantity:number}
+type StorePage = 'home' | 'catalog' | 'favorites' | 'tracking' | 'size-guide' | 'about' | 'contact' | 'policies' | 'confirmation'
+type LocalOrder = {reference:string;createdAt:string;status:'pending_store_confirmation';total:number;itemCount:number;items:{name:string;size:string;quantity:number;unitPrice:number}[]}
+const ORDERS_KEY = 'masha-orders-v1'
+function readLocalOrders():LocalOrder[]{try{const value=JSON.parse(localStorage.getItem(ORDERS_KEY)||'[]');return Array.isArray(value)?value:[]}catch{return []}}
 const IG='https://www.instagram.com/1masha.store/'
 const cats:Category[]=['الكل','بناتي','ولادي','مواليد','أطقم']
 import rawProducts from './lib/products.json'
@@ -13,13 +17,23 @@ const embed=(url?:string)=>{if(!url)return null;try{const u=new URL(url);if(!/(^
 function Logo(){return <a className="m-logo" href="#top" aria-label="ماشا الرئيسية"><span><Baby size={22}/></span><strong>ماشا<small>صغارنا، عالمنا</small></strong></a>}
 function ProductCard({p,open,wished,wish}:{p:Product;open:(p:Product)=>void;wished:boolean;wish:(id:string)=>void}){return <article className="m-card"><button className="m-card-photo" onClick={()=>open(p)} aria-label={'عرض '+p.name}><img src={p.image} alt={p.name} loading="lazy"/>{p.badge&&<small>{p.badge}</small>}</button><button className={'m-heart '+(wished?'active':'')} onClick={()=>wish(p.id)} aria-label="المفضلة"><Heart size={17} fill={wished?'currentColor':'none'}/></button><div className="m-card-copy"><small>{p.category} · {p.age}</small><button onClick={()=>open(p)}>{p.name}</button><div><strong>{money(p.price)}</strong>{p.oldPrice&&<del>{money(p.oldPrice)}</del>}<button className="m-plus" onClick={()=>open(p)} aria-label="اختيار المقاس"><Plus size={17}/></button></div></div></article>}
 export default function App(){
+ const [page,setPage]=useState<StorePage>('home')
  const [category,setCategory]=useState<Category>('الكل'),[search,setSearch]=useState(''),[selected,setSelected]=useState<Product|null>(null),[size,setSize]=useState(''),[videoOpen,setVideoOpen]=useState(false)
+ const [sortOrder,setSortOrder]=useState<'featured'|'price-asc'|'price-desc'|'name'>('featured')
  const [cart,setCart]=useState<Line[]>(()=>{try{return JSON.parse(localStorage.getItem('masha-cart-v1')||'[]')}catch{return []}})
  const [favorites,setFavorites]=useState<string[]>(()=>{try{return JSON.parse(localStorage.getItem('masha-favorites-v1')||'[]')}catch{return []}})
  const [cartOpen,setCartOpen]=useState(false),[checkout,setCheckout]=useState(false),[mobile,setMobile]=useState(false),[favsOnly,setFavsOnly]=useState(false),[notice,setNotice]=useState('')
  const [customer,setCustomer]=useState({name:'',phone:'',address:'',notes:''})
+ const [orders,setOrders]=useState<LocalOrder[]>(readLocalOrders)
+ const [trackingRef,setTrackingRef]=useState('')
+ const [trackingSearched,setTrackingSearched]=useState(false)
+ const [currentOrderRef,setCurrentOrderRef]=useState('')
+ const [contactForm,setContactForm]=useState({name:'',phone:'',message:''})
  const visible=useMemo(()=>products.filter(p=>(category==='الكل'||p.category===category)&&(!favsOnly||favorites.includes(p.id))&&(!search.trim()||(p.name+' '+p.category+' '+p.age).toLowerCase().includes(search.trim().toLowerCase()))),[category,favsOnly,favorites,search])
  const count=cart.reduce((n,l)=>n+l.quantity,0),total=cart.reduce((n,l)=>n+l.product.price*l.quantity,0)
+ const goPage=(next:StorePage)=>{setPage(next);setMobile(false);setFavsOnly(next==='favorites');if(next!=='catalog'&&next!=='favorites'){setCategory('الكل');setSearch('')}window.scrollTo({top:0,behavior:'smooth'})}
+ const trackedOrder=trackingSearched?orders.find(o=>o.reference.toLowerCase()===trackingRef.trim().toLowerCase()):undefined
+ const orderedProducts=useMemo(()=>[...visible].sort((a,b)=>sortOrder==='price-asc'?a.price-b.price:sortOrder==='price-desc'?b.price-a.price:sortOrder==='name'?a.name.localeCompare(b.name,'ar'):0),[visible,sortOrder])
  const save=(v:Line[])=>{setCart(v);localStorage.setItem('masha-cart-v1',JSON.stringify(v))}
  const wish=(id:string)=>{const v=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];setFavorites(v);localStorage.setItem('masha-favorites-v1',JSON.stringify(v))}
  const open=(p:Product)=>{setSelected(p);setSize(p.sizes[0]||'');setVideoOpen(false)}
