@@ -113,13 +113,76 @@ export default function App(){
  const saveProducts=(v:Product[])=>{setProducts(v);try{localStorage.setItem('masha-products-v1',JSON.stringify(v));setNotice('حُفظت التعديلات على هذا الجهاز فقط')}catch{setNotice('تعذّر الحفظ في المتصفح')}}
  const resetProductDraft=()=>{setEditingProductId(null);setProductDraft({id:'',name:'',category:'بناتي',price:0,image:'',age:'2–6 سنوات',sizes:['2Y','3Y','4Y'],colors:['#e9d8c7'],description:'',active:true,stock:10});setImportError('')}
  const editProduct=(p:Product)=>{setEditingProductId(p.id);setProductDraft({...p,sizes:[...p.sizes],colors:[...p.colors]});setAdminTab('products');window.scrollTo({top:0,behavior:'smooth'})}
- const persistProduct=()=>{const name=productDraft.name.trim(),image=productDraft.image.trim();if(!name||!image||!Number.isFinite(productDraft.price)||productDraft.price<0){setImportError('أدخل اسم المنتج وصورة صالحة وسعراً غير سالب.');return}const item={...productDraft,id:editingProductId||productDraft.id.trim()||'m-'+Date.now().toString(36),sizes:productDraft.sizes.map(x=>x.trim()).filter(Boolean),colors:productDraft.colors.filter(Boolean),description:productDraft.description.trim(),active:productDraft.active!==false};const next=editingProductId?products.map(p=>p.id===editingProductId?item:p):[item,...products];saveProducts(next);resetProductDraft()}
- const deleteProduct=(id:string)=>{if(!window.confirm('حذف هذه القطعة من كتالوج هذا المتصفح؟'))return;saveProducts(products.filter(p=>p.id!==id));if(editingProductId===id)resetProductDraft()}
- const updateOrderStatus=(reference:string,status:OrderStatus)=>{const next=orders.map(o=>o.reference===reference?{...o,status}:o);setOrders(next);try{localStorage.setItem(ORDERS_KEY,JSON.stringify(next))}catch{}setNotice('تم تحديث الحالة محلياً لهذا الجهاز')}
- const saveStoreSettings=()=>{try{localStorage.setItem('masha-whatsapp-v1',storeWhatsapp);localStorage.setItem('masha-announcement-v1',storeAnnouncement);setNotice('حُفظت إعدادات المعاينة محلياً')}catch{setNotice('تعذّر حفظ الإعدادات')}}
+ const persistProduct=async()=>{
+  const name=productDraft.name.trim(),image=productDraft.image.trim()
+  if(!name||!image||!Number.isFinite(productDraft.price)||productDraft.price<0){setImportError('أدخل اسم المنتج وصورة صالحة وسعراً غير سالب.');return}
+  if(productDraft.oldPrice!==undefined&&productDraft.oldPrice<productDraft.price){setImportError('السعر السابق يجب ألا يقل عن السعر الحالي.');return}
+  if(productDraft.colors.some(c=>!/^#[0-9a-f]{3,8}$/i.test(c))){setImportError('الألوان يجب أن تكون بصيغة HEX مثل #e9d8c7.');return}
+  const item={...productDraft,id:editingProductId||productDraft.id.trim()||'m-'+Date.now().toString(36),sizes:productDraft.sizes.map(x=>x.trim()).filter(Boolean),colors:productDraft.colors.filter(Boolean),description:productDraft.description.trim(),active:productDraft.active!==false}
+  if(adminToken&&mashaApiEnabled&&mashaAdminConfigured){
+   try{
+    await saveMashaAdminProduct(item,adminToken,editingProductId)
+    const [serverProducts,serverOrders]=await Promise.all([fetchMashaAdminProducts(adminToken),fetchMashaAdminOrders(adminToken)])
+    setProducts(serverProducts as Product[]);setOrders(serverOrders as LocalOrder[])
+    setNotice('حُفظ المنتج في قاعدة بيانات ماشا');setImportError('');resetProductDraft()
+   }catch(error){setImportError(error instanceof Error?error.message:'تعذّر حفظ المنتج في الخادم.');}
+   return
+  }
+  const next=editingProductId?products.map(p=>p.id===editingProductId?item:p):[item,...products]
+  saveProducts(next);resetProductDraft()
+ }
+ const deleteProduct=async(id:string)=>{
+  if(!window.confirm(adminToken&&mashaApiEnabled&&mashaAdminConfigured?'إخفاء هذه القطعة من كتالوج ماشا على الخادم؟':'حذف هذه القطعة من كتالوج هذا المتصفح؟'))return
+  if(adminToken&&mashaApiEnabled&&mashaAdminConfigured){
+   try{await deleteMashaAdminProduct(id,adminToken);const fresh=await fetchMashaAdminProducts(adminToken);setProducts(fresh as Product[]);setNotice('أُخفي المنتج من الكتالوج العام.');if(editingProductId===id)resetProductDraft()}
+   catch(error){setNotice(error instanceof Error?error.message:'تعذّر حذف المنتج من الخادم.')}
+   return
+  }
+  saveProducts(products.filter(p=>p.id!==id));if(editingProductId===id)resetProductDraft()
+ }
+ const toggleProductActive=async(p:Product)=>{
+  const nextActive=p.active===false
+  if(adminToken&&mashaApiEnabled&&mashaAdminConfigured){
+   try{await saveMashaAdminProduct({...p,active:nextActive},adminToken,p.id);setProducts((await fetchMashaAdminProducts(adminToken)) as Product[]);setNotice(nextActive?'تم إظهار المنتج على ماشا':'تم إخفاء المنتج من ماشا')}
+   catch(error){setNotice(error instanceof Error?error.message:'تعذّر تحديث حالة المنتج.')}
+   return
+  }
+  saveProducts(products.map(x=>x.id===p.id?{...x,active:nextActive}:x))
+ }
+ const updateOrderStatus=async(reference:string,status:OrderStatus)=>{
+  if(adminToken&&mashaApiEnabled&&mashaAdminConfigured){
+   try{await updateMashaOrderStatus(reference,status,adminToken);setOrders((await fetchMashaAdminOrders(adminToken)) as LocalOrder[]);setNotice('تم تحديث حالة الطلب في قاعدة ماشا.')}
+   catch(error){setNotice(error instanceof Error?error.message:'تعذّر تحديث حالة الطلب.')}
+   return
+  }
+  const next=orders.map(o=>o.reference===reference?{...o,status}:o);setOrders(next);try{localStorage.setItem(ORDERS_KEY,JSON.stringify(next))}catch{}setNotice('تم تحديث الحالة محلياً لهذا الجهاز')
+ }
+ const saveStoreSettings=async()=>{
+  if(adminToken&&mashaApiEnabled&&mashaAdminConfigured){
+   try{
+    const previous=await fetchMashaPublicSettings().catch(()=>({}))
+    await saveMashaStoreSettings({...previous,mashaWhatsapp:storeWhatsapp,mashaAnnouncement:storeAnnouncement},adminToken)
+    setNotice('تم حفظ إعدادات المتجر في قاعدة ماشا.')
+   }catch(error){setNotice(error instanceof Error?error.message:'تعذّر حفظ إعدادات الخادم.');}
+   return
+  }
+  try{localStorage.setItem('masha-whatsapp-v1',storeWhatsapp);localStorage.setItem('masha-announcement-v1',storeAnnouncement);setNotice('حُفظت إعدادات المعاينة محلياً')}catch{setNotice('تعذّر حفظ الإعدادات')}
+ }
  const orderStatusLabel=(status:OrderStatus)=>({'pending_store_confirmation':'بانتظار تأكيد المتجر','confirmed':'تم التأكيد','preparing':'قيد التجهيز','shipped':'تم الشحن','delivered':'تم التسليم','cancelled':'ملغي'} as Record<OrderStatus,string>)[status]
  const exportProducts=()=>{const blob=new Blob([JSON.stringify(products,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='masha-products-backup.json';a.click();URL.revokeObjectURL(url)}
- const importProducts=async(file?:File)=>{if(!file)return;try{const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed)||!parsed.every(p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&typeof p.price==='number'&&typeof p.image==='string'&&Array.isArray(p.sizes)&&Array.isArray(p.colors))){throw new Error('تنسيق ملف المنتجات غير صحيح.')}saveProducts(parsed as Product[]);resetProductDraft();setImportError('تم استيراد كتالوج المنتجات لهذا المتصفح.')}catch(e){setImportError(e instanceof Error?e.message:'تعذّر استيراد الملف.')}}
+ const importProducts=async(file?:File)=>{
+  if(!file)return
+  try{
+   const parsed=JSON.parse(await file.text())
+   if(!Array.isArray(parsed)||!parsed.every(p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&typeof p.price==='number'&&typeof p.image==='string'&&Array.isArray(p.sizes)&&Array.isArray(p.colors)))throw new Error('تنسيق ملف المنتجات غير صحيح.')
+   if(adminToken&&mashaApiEnabled&&mashaAdminConfigured){
+    const result=await importMashaAdminProducts(parsed as Product[],adminToken)
+    const fresh=await fetchMashaAdminProducts(adminToken)
+    setProducts(fresh as Product[]);setImportError('تم استيراد '+result.imported+' منتج إلى قاعدة ماشا.');return
+   }
+   saveProducts(parsed as Product[]);resetProductDraft();setImportError('تم استيراد كتالوج المنتجات لهذا المتصفح.')
+  }catch(e){setImportError(e instanceof Error?e.message:'تعذّر استيراد الملف.')}
+ }
  const wish=(id:string)=>{const v=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];setFavorites(v);localStorage.setItem('masha-favorites-v1',JSON.stringify(v))}
  const open=(p:Product)=>{setSelected(p);setSize(p.sizes[0]||'');setColor(p.colors[0]||'');setGalleryIndex(0);setVideoOpen(false)}
  const add=(p:Product,s:string,c:string)=>{if(!s){setNotice('اختَر المقاس أولاً');return}if(p.active===false||p.stock===0){setNotice('هذه القطعة غير متوفرة حالياً');return}const productQuantity=cart.filter(x=>x.product.id===p.id).reduce((n,x)=>n+x.quantity,0);if(p.stock!==undefined&&productQuantity>=p.stock){setNotice('وصلت إلى الحد المتوفر من هذه القطعة');return}const key=p.id+':'+s+':'+c,old=cart.find(x=>x.key===key);save(old?cart.map(x=>x.key===key?{...x,quantity:x.quantity+1}:x):[...cart,{key,product:p,size:s,color:c,quantity:1}]);setSelected(null);setCartOpen(true);setNotice('أُضيفت القطعة إلى الحقيبة');window.setTimeout(()=>setNotice(''),2500)}
