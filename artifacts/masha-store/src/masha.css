@@ -181,3 +181,8 @@ body{background:var(--mc)!important;color:var(--mi)!important;font-family:'Reade
  .m-admin-session{align-items:flex-start;flex-direction:column}
  .m-admin-session .m-btn{width:100%}
 }
+
+
+.m-upload-field{padding:15px;background:#f7f4ed;border:1px dashed #d8cfbd;border-radius:11px}
+.m-upload-field input[type=file]{min-height:40px;padding:7px;background:#fffdf9;border:1px solid var(--ml);border-radius:8px;font:inherit;font-size:10px}
+.m-upload-field small{color:var(--mm);font-size:9px;line-height:1.8}
