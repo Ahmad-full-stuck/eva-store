@@ -1,11 +1,8 @@
 import type { Env } from './types'
 
-const DEFAULT_PIN = '2468'
 export const SESSION_TTL_MS = 45 * 24 * 60 * 60 * 1000
 const PBKDF2_ITERATIONS = 100_000
 
-export const DEFAULT_ADMIN_USERNAME = 'admin'
-export const DEFAULT_ADMIN_PASSWORD = 'EvaStore2026'
 
 const sha256 = async (value: string): Promise<string> => {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))
@@ -61,7 +58,7 @@ export const verifyPin = async (env: Env, pin: string): Promise<boolean> => {
   if (!pin) return false
   if (env.ADMIN_PIN) return pin === env.ADMIN_PIN
   const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'admin_pin'").first<{ value: string }>()
-  if (!row?.value) return pin === DEFAULT_PIN
+  if (!row?.value) return false
   if (row.value.startsWith('sha256:')) {
     const hash = await sha256(pin)
     return hash === row.value.slice('sha256:'.length)
@@ -94,17 +91,7 @@ export const ensureAuthSchema = async (env: Env): Promise<void> => {
   } catch {
     /* exists */
   }
-  try {
-    const count = await env.DB.prepare('SELECT COUNT(*) AS n FROM admins').first<{ n: number }>()
-    if (!count?.n) {
-      const hash = await hashPassword(DEFAULT_ADMIN_PASSWORD)
-      await env.DB.prepare('INSERT INTO admins (id, username, password_hash, display_name) VALUES (?1, ?2, ?3, ?4)')
-        .bind('owner', DEFAULT_ADMIN_USERNAME, hash, 'المدير الرئيسي')
-        .run()
-    }
-  } catch {
-    /* ignore */
-  }
+  // No hard-coded default account: create admin access only after a deployment PIN is configured.
   schemaReady = true
 }
 
