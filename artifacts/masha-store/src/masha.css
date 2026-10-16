@@ -186,3 +186,14 @@ body{background:var(--mc)!important;color:var(--mi)!important;font-family:'Reade
 .m-upload-field{padding:15px;background:#f7f4ed;border:1px dashed #d8cfbd;border-radius:11px}
 .m-upload-field input[type=file]{min-height:40px;padding:7px;background:#fffdf9;border:1px solid var(--ml);border-radius:8px;font:inherit;font-size:10px}
 .m-upload-field small{color:var(--mm);font-size:9px;line-height:1.8}
+
+
+.m-admin-contact{padding:18px;background:#fffdf9;border:1px solid var(--ml);border-radius:14px}
+.m-admin-contact-head,.m-admin-contact-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.m-admin-contact-head strong{font-size:12px}
+.m-admin-contact-head small{color:var(--mm);font-size:9px}
+.m-admin-contact>p{margin:13px 0;color:var(--mi);font-size:11px;line-height:2.1;white-space:pre-wrap;overflow-wrap:anywhere}
+.m-admin-contact-bottom{padding-top:12px;border-top:1px solid var(--ml)}
+.m-admin-contact-bottom>a{color:var(--mg);font-size:10px}
+.m-admin-contact-bottom .m-delete{flex:0 0 auto}
+@media(max-width:760px){.m-admin-contact{padding:14px}.m-admin-contact-head{align-items:flex-start;flex-direction:column;gap:4px}}
