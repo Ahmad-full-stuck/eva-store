@@ -25,11 +25,14 @@ const server = http.createServer((req, res) => {
   await new Promise(resolve => server.listen(4173, '127.0.0.1', resolve));
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  page.setDefaultTimeout(12000);
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
+  await page.addInitScript(() => { window.__openedUrls=[]; window.open=(url)=>{ window.__openedUrls.push(String(url)); return { closed:false, close(){} }; }; });
   await page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
   assert.equal(await page.title(), 'زيتون كروب | متجر الأداء الرياضي');
+  console.log('PASS initial render and product catalogue');
   assert.equal(await page.locator('#productGrid .product').count(), 5);
 
   const viewports = [
@@ -64,15 +67,17 @@ const server = http.createServer((req, res) => {
   assert.equal(await page.locator('#menuBtn').getAttribute('aria-expanded'),'false');
 
   await page.evaluate(() => document.querySelectorAll('img').forEach(img => { if (img.getAttribute('src')) img.loading='eager'; }));
-  await page.waitForFunction(() => Array.from(document.images).filter(img=>img.getAttribute('src')).every(img=>img.complete || img.dataset.imageFallback==='true'),null,{timeout:45000});
-  await page.waitForTimeout(500);
+  await page.waitForFunction(() => Array.from(document.images).filter(img=>img.getAttribute('src')).every(img=>img.complete || img.dataset.imageFallback==='true'),null,{timeout:20000});
+  await page.waitForTimeout(300);
   const imageReport = await page.evaluate(() => Array.from(document.images).filter(img=>img.getAttribute('src')).map(img=>({alt:img.alt,src:img.currentSrc,width:img.naturalWidth,height:img.naturalHeight,fallback:img.dataset.imageFallback==='true'})));
   assert.ok(imageReport.length>=7,'expected hero, story, and five product images');
   const broken = imageReport.filter(img=>!img.width||img.fallback);
   assert.equal(broken.length,0,'bad image(s): '+JSON.stringify(broken));
+  console.log('PASS image loading ('+imageReport.length+' images)');
 
   await page.locator('#themeToggle').click();
   assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+  console.log('PASS mobile menu and responsive layout');
   assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).colorScheme),'dark');
   await page.screenshot({path:path.join(artifactDir,'phone-dark.png'),fullPage:true});
   await page.reload({waitUntil:'domcontentloaded'});
@@ -80,6 +85,7 @@ const server = http.createServer((req, res) => {
   await page.locator('#themeToggle').click();
   assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
 
+  console.log('PASS light/dark theme persistence');
   await page.locator('#filters [data-filter="gainer"]').click();
   assert.equal(await page.locator('#productGrid .product').count(),2);
   await page.locator('#filters [data-filter="all"]').click();
@@ -88,6 +94,7 @@ const server = http.createServer((req, res) => {
   await page.locator('#productSearch').fill('');
   assert.equal(await page.locator('#productGrid .product').count(),5);
 
+  console.log('PASS product filtering and search');
   await page.locator('#productGrid [data-product="mass-pro"].product-photo').click();
   assert.ok(await page.locator('#productModal').evaluate(n=>n.classList.contains('open')));
   assert.equal(await page.locator('#productModal').getAttribute('aria-hidden'),'false');
@@ -100,12 +107,11 @@ const server = http.createServer((req, res) => {
   await page.locator('#customerName').fill('اختبار واجهة');
   await page.locator('#customerPhone').fill('07800000000');
   await page.locator('#customerArea').selectOption({label:'ديالى — بعقوبة'});
-  const popupPromise=page.waitForEvent('popup',{timeout:8000});
   await page.locator('#checkoutForm button[type="submit"]').click();
-  const popup=await popupPromise;
-  assert.ok(popup.url().includes('wa.me/9647723098099'),'wrong branch routing: '+popup.url());
-  assert.ok(decodeURIComponent(popup.url()).includes('كومبلكس ماس برو'),'WhatsApp message is missing selected product');
-  await popup.close();
+  const openedUrl=await page.evaluate(()=>window.__openedUrls[window.__openedUrls.length-1]);
+  assert.ok(openedUrl&&openedUrl.includes('wa.me/9647723098099'),'wrong branch routing: '+openedUrl);
+  assert.ok(decodeURIComponent(openedUrl).includes('كومبلكس ماس برو'),'WhatsApp message is missing selected product');
+  console.log('PASS product modal, quantity, cart and WhatsApp routing');
 
   assert.deepEqual(errors,[],'browser JS errors: '+errors.join(' | '));
   console.log('PASS responsive widths: '+viewports.map(v=>v.width).join(', ')+'px');
