@@ -1,0 +1,50 @@
+name: Zaytoun storefront browser audit
+on:
+  push:
+    branches:
+      - zaytoun-demo
+    paths:
+      - 'zaytoun-demo/**'
+      - '.github/workflows/zaytoun-ui-audit.yml'
+  pull_request:
+    paths:
+      - 'zaytoun-demo/**'
+      - '.github/workflows/zaytoun-ui-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zaytoun-ui-audit
+  cancel-in-progress: true
+
+jobs:
+  browser-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out the demo branch
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Chromium and Playwright
+        run: |
+          mkdir -p /tmp/zaytoun-audit
+          npm install --prefix /tmp/zaytoun-audit --no-audit --no-fund playwright
+          /tmp/zaytoun-audit/node_modules/.bin/playwright install --with-deps chromium
+      - name: Run responsive, theme, image and ordering checks
+        env:
+          NODE_PATH: /tmp/zaytoun-audit/node_modules
+          AUDIT_ARTIFACTS: /tmp/zaytoun-audit-artifacts
+        run: node zaytoun-demo/tests/browser-audit.cjs
+      - name: Keep responsive screenshots for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zaytoun-ui-audit-screenshots
+          path: /tmp/zaytoun-audit-artifacts/
+          if-no-files-found: ignore
+          retention-days: 7
