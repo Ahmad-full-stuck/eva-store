@@ -4,15 +4,37 @@ const http = require('node:http');
 const path = require('node:path');
 const os = require('node:os');
 const { chromium } = require('playwright');
+let workerModule;
 
 const root = path.resolve(__dirname, '..');
 const baseUrl = 'http://127.0.0.1:4173/';
 const artifactDir = process.env.AUDIT_ARTIFACTS || path.join(os.tmpdir(), 'zaytoun-ui-audit');
 fs.mkdirSync(artifactDir, { recursive: true });
 const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp' };
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url, baseUrl).pathname); } catch (_) { res.writeHead(400); return res.end('Bad request'); }
+
+  if (pathname.startsWith('/api/')) {
+    try {
+      const chunks = [];
+      for await (const chunk of req) chunks.push(chunk);
+      const body = Buffer.concat(chunks);
+      const init = { method: req.method, headers: req.headers };
+      if (req.method !== 'GET' && req.method !== 'HEAD') init.body = body;
+      const request = new Request(new URL(req.url, baseUrl), init);
+      const response = await workerModule.default.fetch(request, {
+        ASSETS: { fetch: async () => new Response('Not found', { status: 404 }) }
+      });
+      res.writeHead(response.status, Object.fromEntries(response.headers.entries()));
+      res.end(Buffer.from(await response.arrayBuffer()));
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ ok: false, error: 'Local Worker handler failed' }));
+    }
+    return;
+  }
+
   const requested = path.resolve(root, pathname === '/' ? 'index.html' : '.' + pathname);
   if (!requested.startsWith(root + path.sep) && requested !== path.join(root, 'index.html')) { res.writeHead(403); return res.end('Forbidden'); }
   fs.readFile(requested, (err, data) => {
@@ -22,6 +44,23 @@ const server = http.createServer((req, res) => {
   });
 });
 (async () => {
+  workerModule = await import(path.resolve(__dirname, '../../artifacts/zaytoun-worker/src/index.mjs'));
+  const workerEnv = { ASSETS: { fetch: async () => new Response('static asset passthrough') } };
+  const health = await workerModule.default.fetch(new Request('https://demo.test/api/health'), workerEnv);
+  assert.equal(health.status, 200);
+  assert.deepEqual(await health.json(), { ok: true, service: 'zaytoun-demo-api', mode: 'demo', durableStorage: false });
+  const validPayload = { customer: { name: 'اختبار', phone: '07800000000', area: 'ديالى — بعقوبة', note: '' }, items: [{ id: 'mass-pro', flavor: 'حسب المتوفر', qty: 1 }] };
+  const accepted = await workerModule.default.fetch(new Request('https://demo.test/api/orders', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(validPayload) }), workerEnv);
+  assert.equal(accepted.status, 201);
+  const acceptedBody = await accepted.json();
+  assert.equal(acceptedBody.ok, true);
+  assert.equal(acceptedBody.mode, 'demo');
+  assert.equal(acceptedBody.persisted, false);
+  assert.match(acceptedBody.orderId, /^ZG-DEMO-/);
+  const invalid = await workerModule.default.fetch(new Request('https://demo.test/api/orders', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ customer: {}, items: [] }) }), workerEnv);
+  assert.equal(invalid.status, 400, 'Invalid orders must be rejected server-side');
+  const wrongMethod = await workerModule.default.fetch(new Request('https://demo.test/api/orders'), workerEnv);
+  assert.equal(wrongMethod.status, 405, 'Order endpoint must require POST');
   await new Promise(resolve => server.listen(4173, '127.0.0.1', resolve));
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
@@ -32,6 +71,7 @@ const server = http.createServer((req, res) => {
   await page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
   assert.equal(await page.title(), 'زيتون كروب | متجر الأداء الرياضي');
+  console.log('PASS server Worker API: health, validated demo order, invalid payload rejection and POST-only endpoint');
   console.log('PASS initial render and product catalogue');
   assert.equal(await page.locator('#productGrid .product').count(), 5);
 
@@ -107,22 +147,39 @@ const server = http.createServer((req, res) => {
   await page.locator('#modalAdd').click();
   assert.equal(await page.locator('#cartCount').innerText(),'2');
   assert.ok(await page.locator('#cartDrawer').evaluate(n=>n.classList.contains('open')));
+  let submittedPayload = null;
+  page.on('request', request => { if (request.url().endsWith('/api/orders') && request.method() === 'POST') submittedPayload = request.postDataJSON(); });
   await page.locator('#checkoutBtn').click();
   assert.ok(await page.locator('#checkoutModal').evaluate(n=>n.classList.contains('open')));
+  const formColors = await page.evaluate(() => ({
+    label: getComputedStyle(document.querySelector('.form-field label')).color,
+    inputBackground: getComputedStyle(document.querySelector('#customerName')).backgroundColor,
+    inputColor: getComputedStyle(document.querySelector('#customerName')).color
+  }));
+  assert.notEqual(formColors.label, 'rgb(219, 227, 216)', 'Checkout label still uses a hard-coded pale-dark theme color');
+  assert.notEqual(formColors.inputBackground, 'rgb(8, 15, 11)', 'Checkout input still has a hard-coded dark background in light mode');
   await page.locator('#customerName').fill('اختبار واجهة');
   await page.locator('#customerPhone').fill('07800000000');
   await page.locator('#customerArea').selectOption({label:'ديالى — بعقوبة'});
   await page.locator('#checkoutForm button[type="submit"]').click();
-  const openedUrl=await page.evaluate(()=>window.__openedUrls[window.__openedUrls.length-1]);
-  assert.ok(openedUrl&&openedUrl.includes('wa.me/9647723098099'),'wrong branch routing: '+openedUrl);
-  assert.ok(decodeURIComponent(openedUrl).includes('كومبلكس ماس برو'),'WhatsApp message is missing selected product');
-  console.log('PASS product modal, image zoom, quantity, cart and WhatsApp routing');
+  await page.waitForFunction(() => document.querySelector('#checkoutStatus').classList.contains('success') && !document.querySelector('#checkoutStatus').hidden);
+  assert.ok(submittedPayload, 'Browser did not POST the order to the server endpoint');
+  assert.equal(submittedPayload.source, 'zaytoun-demo');
+  assert.equal(submittedPayload.customer.name, 'اختبار واجهة');
+  assert.equal(submittedPayload.customer.area, 'ديالى — بعقوبة');
+  assert.deepEqual(submittedPayload.items, [{ id:'mass-pro', flavor:'شوكولاتة', qty:2 }]);
+  const statusText = await page.locator('#checkoutStatus').innerText();
+  assert.match(statusText, /ZG-DEMO-/);
+  assert.match(statusText, /غير محفوظ في قاعدة بيانات دائمة/);
+  assert.equal(await page.locator('#cartCount').innerText(), '0');
+  assert.equal(await page.evaluate(()=>window.__openedUrls.length), 0, 'Order checkout must not redirect to WhatsApp');
+  console.log('PASS product modal, image zoom, quantity, server POST, demo receipt and checkout colors');
 
   assert.deepEqual(errors,[],'browser JS errors: '+errors.join(' | '));
   console.log('PASS responsive widths: '+viewports.map(v=>v.width).join(', ')+'px');
   console.log('PASS day-first default, dark toggle, and theme persistence');
   console.log('PASS images: '+imageReport.length+' loaded with no fallback');
-  console.log('PASS nav, filter, search, product modal, quantity, cart, and WhatsApp routing');
+  console.log('PASS nav, filter, search, product modal, quantity, cart and server order API');
   console.log('SCREENSHOTS '+artifactDir);
   console.log('IMAGE_REPORT '+JSON.stringify(imageReport));
   await browser.close();

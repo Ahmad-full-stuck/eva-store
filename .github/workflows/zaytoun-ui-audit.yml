@@ -5,6 +5,7 @@ on:
       - zaytoun-demo
     paths:
       - 'zaytoun-demo/**'
+      - 'artifacts/zaytoun-worker/**'
       - '.github/workflows/zaytoun-ui-audit.yml'
   pull_request:
     paths:

@@ -36,26 +36,36 @@ jobs:
           mkdir -p artifacts/zaytoun-worker/public
           cp zaytoun-demo/index.html artifacts/zaytoun-worker/public/index.html
           test -s artifacts/zaytoun-worker/public/index.html
-          echo "Staged storefront HTML ($(wc -c < artifacts/zaytoun-worker/public/index.html) bytes)."
+          test -s artifacts/zaytoun-worker/src/index.mjs
+          echo "Staged storefront and demo API."
       - name: Deploy static assets with current Wrangler
         working-directory: artifacts/zaytoun-worker
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: npx --yes wrangler@latest deploy
-      - name: Verify the public storefront response
+      - name: Verify storefront and server-side demo order API
         shell: bash
         run: |
           set -euo pipefail
-          URL="https://zaytoun-group-storefront-demo-2026.eva-store.workers.dev/"
+          URL="https://zaytoun-group-storefront-demo-2026.eva-store.workers.dev"
           for attempt in 1 2 3 4 5 6 7 8; do
-            status="$(curl --silent --show-error --location --max-time 20 --output /tmp/zaytoun-public.html --write-out '%{http_code}' "$URL" || true)"
+            status="$(curl --silent --show-error --location --max-time 20 --output /tmp/zaytoun-public.html --write-out '%{http_code}' "$URL/" || true)"
             if [ "$status" = "200" ] && grep -Fq '<title>زيتون كروب | متجر الأداء الرياضي</title>' /tmp/zaytoun-public.html; then
-              echo "Live URL returned HTTP 200 and the expected Zaytoun storefront title: $URL"
-              exit 0
+              break
             fi
-            echo "Attempt $attempt did not yet confirm the expected page (HTTP $status)."
+            echo "Attempt $attempt did not yet confirm the storefront (HTTP $status)."
             sleep 4
           done
-          echo "::error::The Worker deployed, but the public URL did not return the expected storefront HTML."
-          exit 1
+          test "${status:-}" = "200" || { echo "::error::Storefront did not return HTTP 200."; exit 1; }
+
+          curl --fail --silent --show-error --max-time 20 "$URL/api/health" -o /tmp/zaytoun-health.json
+          node -e 'const x=require("/tmp/zaytoun-health.json");if(!x.ok||x.mode!=="demo"||x.durableStorage!==false)process.exit(1);console.log("Demo API health verified.")'
+
+          response="$(curl --silent --show-error --max-time 20 -H 'Content-Type: application/json' -o /tmp/zaytoun-order-response.json -w '%{http_code}' -X POST "$URL/api/orders" --data '{"source":"deploy-smoke-test","customer":{"name":"اختبار نشر","phone":"07800000000","area":"ديالى — بعقوبة","note":"رسالة اختبار آلية لا تتضمن بيانات عميل حقيقي"},"items":[{"id":"mass-pro","flavor":"حسب المتوفر","qty":1}]}")"
+          if [ "$response" != "201" ]; then
+            echo "::error::Demo order API expected HTTP 201, got $response."
+            cat /tmp/zaytoun-order-response.json
+            exit 1
+          fi
+          node -e 'const x=require("/tmp/zaytoun-order-response.json");if(!x.ok||x.mode!=="demo"||x.persisted!==false||!x.orderId.startsWith("ZG-DEMO-"))process.exit(1);console.log("Server received and validated a demo order: "+x.orderId+" (not persisted).")'
