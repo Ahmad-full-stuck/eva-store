@@ -98,6 +98,11 @@ const server = http.createServer((req, res) => {
   await page.locator('#productGrid [data-product="mass-pro"].product-photo').click();
   assert.ok(await page.locator('#productModal').evaluate(n=>n.classList.contains('open')));
   assert.equal(await page.locator('#productModal').getAttribute('aria-hidden'),'false');
+  await page.locator('#modalImage').click();
+  assert.ok(await page.locator('#imageZoom').evaluate(n=>n.classList.contains('open')),'image zoom should open');
+  assert.equal(await page.locator('#imageZoom').getAttribute('aria-hidden'),'false');
+  await page.locator('#closeImageZoom').click();
+  assert.equal(await page.locator('#imageZoom').getAttribute('aria-hidden'),'true','image zoom should close');
   await page.locator('#qtyChoices [data-qty="2"]').click();
   await page.locator('#modalAdd').click();
   assert.equal(await page.locator('#cartCount').innerText(),'2');
@@ -111,7 +116,7 @@ const server = http.createServer((req, res) => {
   const openedUrl=await page.evaluate(()=>window.__openedUrls[window.__openedUrls.length-1]);
   assert.ok(openedUrl&&openedUrl.includes('wa.me/9647723098099'),'wrong branch routing: '+openedUrl);
   assert.ok(decodeURIComponent(openedUrl).includes('كومبلكس ماس برو'),'WhatsApp message is missing selected product');
-  console.log('PASS product modal, quantity, cart and WhatsApp routing');
+  console.log('PASS product modal, image zoom, quantity, cart and WhatsApp routing');
 
   assert.deepEqual(errors,[],'browser JS errors: '+errors.join(' | '));
   console.log('PASS responsive widths: '+viewports.map(v=>v.width).join(', ')+'px');
