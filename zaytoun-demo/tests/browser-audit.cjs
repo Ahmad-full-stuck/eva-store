@@ -20,7 +20,11 @@ const server = http.createServer(async (req, res) => {
       const chunks = [];
       for await (const chunk of req) chunks.push(chunk);
       const body = Buffer.concat(chunks);
-      const init = { method: req.method, headers: req.headers };
+      const requestHeaders = new Headers();
+      for (const key of ['content-type', 'accept']) {
+        if (req.headers[key]) requestHeaders.set(key, Array.isArray(req.headers[key]) ? req.headers[key].join(', ') : req.headers[key]);
+      }
+      const init = { method: req.method, headers: requestHeaders };
       if (req.method !== 'GET' && req.method !== 'HEAD') init.body = body;
       const request = new Request(new URL(req.url, baseUrl), init);
       const response = await workerModule.default.fetch(request, {

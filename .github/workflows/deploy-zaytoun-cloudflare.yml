@@ -62,7 +62,19 @@ jobs:
           curl --fail --silent --show-error --max-time 20 "$URL/api/health" -o /tmp/zaytoun-health.json
           node -e 'const x=require("/tmp/zaytoun-health.json");if(!x.ok||x.mode!=="demo"||x.durableStorage!==false)process.exit(1);console.log("Demo API health verified.")'
 
-          response="$(curl --silent --show-error --max-time 20 -H 'Content-Type: application/json' -o /tmp/zaytoun-order-response.json -w '%{http_code}' -X POST "$URL/api/orders" --data '{"source":"deploy-smoke-test","customer":{"name":"اختبار نشر","phone":"07800000000","area":"ديالى — بعقوبة","note":"رسالة اختبار آلية لا تتضمن بيانات عميل حقيقي"},"items":[{"id":"mass-pro","flavor":"حسب المتوفر","qty":1}]}")"
+          cat > /tmp/zaytoun-smoke-order.json <<'JSON'
+          {
+            "source": "deploy-smoke-test",
+            "customer": {
+              "name": "اختبار نشر",
+              "phone": "07800000000",
+              "area": "ديالى — بعقوبة",
+              "note": "رسالة اختبار آلية لا تتضمن بيانات عميل حقيقي"
+            },
+            "items": [{ "id": "mass-pro", "flavor": "حسب المتوفر", "qty": 1 }]
+          }
+          JSON
+          response="$(curl --silent --show-error --max-time 20 -H 'Content-Type: application/json' -o /tmp/zaytoun-order-response.json -w '%{http_code}' -X POST "$URL/api/orders" --data-binary @/tmp/zaytoun-smoke-order.json)"
           if [ "$response" != "201" ]; then
             echo "::error::Demo order API expected HTTP 201, got $response."
             cat /tmp/zaytoun-order-response.json
