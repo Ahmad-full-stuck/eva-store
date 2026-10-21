@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/wrangler",
+  "name": "zaytoun-group-storefront-demo-2026",
+  "compatibility_date": "2026-10-21",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "404-page"
+  }
+}
