@@ -9,12 +9,12 @@ import { adminFetch, adminLogin, adminLogout, adminWhoami, getToken, listAdmins,
 import { pushSupported, registerPushWorker, urlBase64ToUint8Array } from '@/lib/push'
 import { AdminStats } from '@/components/AdminStats'
 
-const PRODUCTS_KEY = 'eva-admin-products'
-const REMOVED_KEY = 'eva-admin-removed'
-const CATEGORIES_KEY = 'eva-admin-categories'
-const PIN_KEY = 'eva-admin-pin'
-const SESSION_KEY = 'eva-admin-session'
-const DEFAULT_PIN_HASH = 'a1fb4e703a9ef1fa4936801721ff285a97ac85330856674412e054892afe6972'
+const PRODUCTS_KEY = 'ritaj-admin-products'
+const REMOVED_KEY = 'ritaj-admin-removed'
+const CATEGORIES_KEY = 'ritaj-admin-categories'
+const PIN_KEY = 'ritaj-admin-pin'
+const SESSION_KEY = 'ritaj-admin-session'
+const DEFAULT_PIN_HASH = ''
 
 const sha256Hex = async (value: string): Promise<string> => {
   const digest = await window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))
@@ -51,8 +51,8 @@ const groupFields: { title: string; fields: TextField[] }[] = [
   {
     title: 'أقسام الصفحة الرئيسية',
     fields: [
-      { key: 'categoriesEyebrow', label: 'عنوان صغير - الأقسام' },
-      { key: 'categoriesTitle', label: 'عنوان قسم الأقسام' },
+      { key: 'categoriesEyebrow', label: 'عنوان صغير - أقسام الأجهزة' },
+      { key: 'categoriesTitle', label: 'عنوان قسم الأجهزة' },
       { key: 'newEyebrow', label: 'عنوان صغير - وصل حديثاً' },
       { key: 'newTitle', label: 'عنوان قسم وصل حديثاً' },
       { key: 'newDesc', label: 'وصف قسم وصل حديثاً', area: true },
@@ -62,7 +62,7 @@ const groupFields: { title: string; fields: TextField[] }[] = [
     ],
   },
   {
-    title: 'قسم دليل الأقمشة في الرئيسية',
+    title: 'قسم دليل اختيار الأجهزة في الرئيسية',
     fields: [
       { key: 'guideEyebrow', label: 'العنوان الصغير' },
       { key: 'guideTitle', label: 'عنوان القسم', area: true, hint: 'افصلي السطور بـ |' },
@@ -71,7 +71,7 @@ const groupFields: { title: string; fields: TextField[] }[] = [
     ],
   },
   {
-    title: 'النشرة (اشتراك بالبريد)',
+    title: 'قسم تواصل الشركة',
     fields: [
       { key: 'newsletterEyebrow', label: 'العنوان الصغير' },
       { key: 'newsletterTitle', label: 'عنوان النشرة', area: true },
@@ -86,11 +86,11 @@ const SECTION_LABELS: Record<HomeSectionKey, string> = {
   hero: 'الغلاف الرئيسي + شريط الأرقام',
   promo: 'شريط التوصيل (العروض)',
   steps: 'خطوات الطلب',
-  categories: 'أقسام القماش',
+  categories: 'أقسام الأجهزة',
   newArrivals: 'وصل حديثاً',
-  discovery: 'أداة اختيار القماش',
-  guide: 'معاينة دليل الأقمشة',
-  story: 'قصة إيفا',
+  discovery: 'أداة اكتشاف الأجهزة',
+  guide: 'معاينة دليل الأجهزة',
+  story: 'قصة رتاج العربي',
   trust: 'شريط الثقة والضمانات',
   newsletter: 'النشرة البريدية',
 }
@@ -113,9 +113,9 @@ const TEXT_GROUP_LABELS: Record<string, string> = {
   track: 'تتبع الطلب',
   about: 'من نحن',
   contact: 'اتصلي بنا',
-  guide: 'دليل الأقمشة',
+  guide: 'دليل الأجهزة',
   policies: 'السياسات',
-  disc: 'خصائص القماش',
+  disc: 'مواصفات الأجهزة',
   foot: 'التذييل',
   nf: 'صفحة غير موجودة',
 }
@@ -155,7 +155,7 @@ const writeJson = (key: string, value: unknown): void => {
     /* quota */
   }
   try {
-    window.dispatchEvent(new Event('eva-admin-changed'))
+    window.dispatchEvent(new Event('ritaj-admin-changed'))
   } catch {
     /* ignore */
   }
@@ -220,22 +220,22 @@ const emptyProduct = (): Product => ({
   slug: `custom-${Date.now()}`,
   name: '',
   type: '',
-  categoryId: 'plain',
+  categoryId: 'iphone',
   description: '',
   price: 0,
   image: '',
   images: [],
-  colors: [{ id: 'color-1', name: 'أساسي', hex: '#8e6e7d', available: true, stockMeters: 10 }],
+  colors: [{ id: 'color-1', name: 'أسود', hex: '#252a31', available: true, stockMeters: 10 }],
   specs: {
-    composition: 'خامة غير محددة',
-    width: 'غير محددة',
-    weight: 'غير محددة',
-    stretch: 'غير محدد',
+    composition: 'المعالج غير محدد',
+    width: 'السعة غير محددة',
+    weight: 'RAM غير محددة',
+    stretch: 'دعم 5G حسب النسخة',
     isStretch: false,
-    opacity: 'غير محددة',
-    finish: 'غير محدد',
-    care: 'اتباع تعليمات العناية على البطاقة',
-    use: 'حسب تصميم القطعة',
+    opacity: 'الكاميرا حسب النسخة',
+    finish: 'البطارية والشحن حسب النسخة',
+    care: 'نظام التشغيل حسب النسخة',
+    use: 'حسب استخدام الجهاز',
   },
   faqs: [],
   isNew: true,
@@ -476,7 +476,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   useEffect(() => {
     if (!getToken()) return
     void adminWhoami().catch(() => {
-      /* 401 يُطلق حدث eva-admin-expired ويغلق الجلسة */
+      /* 401 يُطلق حدث ritaj-admin-expired ويغلق الجلسة */
     })
   }, [])
 
@@ -496,8 +496,8 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       }
       setToast('انتهت الجلسة، سجّلي الدخول من جديد')
     }
-    window.addEventListener('eva-admin-expired', onExpired)
-    return () => window.removeEventListener('eva-admin-expired', onExpired)
+    window.addEventListener('ritaj-admin-expired', onExpired)
+    return () => window.removeEventListener('ritaj-admin-expired', onExpired)
   }, [])
 
   useEffect(() => {
@@ -768,13 +768,13 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     setOrders((current) => current.map((row) => ((row.order_number || row.orderNumber) === number ? { ...row, status } : row)))
     // Tell the statistics panel right away so the numbers move the instant
     // the admin taps a status (not on the next tab visit).
-    window.dispatchEvent(new Event('eva-orders-changed'))
+    window.dispatchEvent(new Event('ritaj-orders-changed'))
     try {
       await adminFetch(`/api/admin/orders/${encodeURIComponent(number)}`, { method: 'PATCH', body: JSON.stringify({ status }) })
       setToast('تم تحديث حالة الطلب')
     } catch {
       setOrders(previous)
-      window.dispatchEvent(new Event('eva-orders-changed'))
+      window.dispatchEvent(new Event('ritaj-orders-changed'))
       setToast('تعذر التحديث على الخادم')
     }
   }
@@ -783,13 +783,13 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     if (!window.confirm(`حذف الطلب #${number} نهائياً؟`)) return
     const previous = orders
     setOrders((current) => current.filter((row) => (row.order_number || row.orderNumber) !== number))
-    window.dispatchEvent(new Event('eva-orders-changed'))
+    window.dispatchEvent(new Event('ritaj-orders-changed'))
     try {
       await adminFetch(`/api/admin/orders/${encodeURIComponent(number)}`, { method: 'DELETE' })
       setToast('تم حذف الطلب')
     } catch {
       setOrders(previous)
-      window.dispatchEvent(new Event('eva-orders-changed'))
+      window.dispatchEvent(new Event('ritaj-orders-changed'))
       setToast('تعذر حذف الطلب من الخادم')
     }
   }
@@ -869,7 +869,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     void adminFetch(`/api/admin/products/${encodeURIComponent(product.slug)}`, { method: 'DELETE' })
       .then(() => {
         setToast('تم حذف المنتج')
-        window.dispatchEvent(new Event('eva-store-refresh'))
+        window.dispatchEvent(new Event('ritaj-store-refresh'))
       })
       .catch(() => setToast('أُخفي المنتج من المتجر — تعذر حفظه في الخادم'))
   }
@@ -929,7 +929,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     }
     persistProducts([])
     persistRemoved([])
-    window.dispatchEvent(new Event('eva-store-refresh'))
+    window.dispatchEvent(new Event('ritaj-store-refresh'))
     setToast(failed ? 'تمت الاستعادة محلياً — تعذر الوصول للخادم' : 'تمت استعادة المنتجات الأصلية')
   }
 
@@ -1332,11 +1332,11 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                       <div className="admin-row">
                         <div className="admin-field">
                           <label>اسم المنتج *</label>
-                          <input value={editing.name} onChange={(event) => setField('name', event.target.value)} placeholder="مثال: قماش كتان" />
+                          <input value={editing.name} onChange={(event) => setField('name', event.target.value)} placeholder="مثال: iPhone 17 Pro Max" />
                         </div>
                         <div className="admin-field">
                           <label>الرابط (slug)</label>
-                          <input value={editing.slug} onChange={(event) => setField('slug', event.target.value)} dir="ltr" placeholder="cotton-fabric" />
+                          <input value={editing.slug} onChange={(event) => setField('slug', event.target.value)} dir="ltr" placeholder="iphone-17-pro-max" />
                         </div>
                       </div>
 
@@ -1346,7 +1346,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                           <input type="number" min={0} value={editing.price} onChange={(event) => setField('price', Number(event.target.value))} dir="ltr" />
                         </div>
                         <div className="admin-field">
-                          <label>المخزون (متر)</label>
+                          <label>الكمية المتاحة (جهاز)</label>
                           <input type="number" min={0} value={editing.stockMeters} onChange={(event) => setField('stockMeters', Number(event.target.value))} dir="ltr" />
                         </div>
                       </div>
