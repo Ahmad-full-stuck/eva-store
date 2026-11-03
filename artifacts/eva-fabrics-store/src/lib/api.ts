@@ -1,8 +1,8 @@
 import { apiUrl } from '@/lib/site'
 
-const TOKEN_KEY = 'eva-admin-token'
-const SERVER_CONTENT_KEY = 'eva-server-content'
-const SERVER_SETTINGS_KEY = 'eva-server-settings'
+const TOKEN_KEY = 'ritaj-admin-token'
+const SERVER_CONTENT_KEY = 'ritaj-server-content'
+const SERVER_SETTINGS_KEY = 'ritaj-server-settings'
 
 export const getToken = (): string => {
   try {
@@ -239,7 +239,7 @@ export const getPushStatus = async (): Promise<{ enabled: boolean; count: number
 export const sendTestPush = async (): Promise<{ sent: number; total: number }> =>
   adminFetch('/api/admin/push/test', { method: 'POST' })
 
-const PENDING_KEY = 'eva-pending-orders'
+const PENDING_KEY = 'ritaj-pending-orders'
 
 /** يحفظ طلباً لم يصل إلى الخادم، ليُرسل تلقائياً عند عودة الاتصال. */
 export const queuePendingOrder = (order: unknown): void => {
