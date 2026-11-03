@@ -108,7 +108,7 @@ function AppShell() {
       : undefined
     const fallback = pathname.startsWith('/order-confirmation') ? seo['/order-confirmation'] : undefined
     const entry = product
-      ? { title: `${product.name} | ${lang === 'en' ? 'Eva Store' : 'إيفا ستور'}`, desc: product.description || seo['/catalog'].desc }
+      ? { title: `${product.name} | ${lang === 'en' ? 'Ritaj Al Arabi' : 'رتاج العربي'}`, desc: product.description || seo['/catalog'].desc }
       : seo[pathname] ?? fallback
     document.title = entry?.title ?? seo['/'].title
     if (entry?.desc) document.querySelector('meta[name="description"]')?.setAttribute('content', entry.desc)
@@ -189,7 +189,6 @@ function AppShell() {
           <Route path="/favorites" component={() => <FavoritesPage {...pageProps} />} />
           <Route path="/about" component={AboutPage} />
           <Route path="/device-guide" component={FabricGuidePage} />
-          <Route path="/fabric-guide" component={FabricGuidePage} />
           <Route path="/contact" component={ContactPage} />
           <Route path="/policies" component={PoliciesPage} />
           <Route path="/order-tracking" component={OrderTrackingPage} />
