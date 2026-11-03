@@ -24,7 +24,7 @@ type CheckoutErrors = Partial<Record<keyof CheckoutForm, string>>
 interface StoredOrderItem {
   productName: string
   colorName: string
-  meters: number
+  quantity: number
   unitPrice: number
   total: number
 }
