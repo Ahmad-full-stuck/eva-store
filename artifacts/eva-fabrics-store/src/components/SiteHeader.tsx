@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BookOpen, ChevronLeft, Heart, Home, Info, Languages, Menu, MessageCircle, PackageSearch, Search, ShieldCheck, ShoppingBag, Shirt, X } from 'lucide-react'
+import { BookOpen, ChevronLeft, Heart, Home, Info, Languages, Menu, MessageCircle, PackageSearch, Search, ShieldCheck, ShoppingBag, Smartphone, X } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
 import { formatMeters } from '@/lib/catalog'
@@ -38,7 +38,7 @@ interface IconNavItem extends NavItem {
 
 const quickNav: IconNavItem[] = [
   { id: 'home', label: 'header.nav.home', path: '/', Icon: Home },
-  { id: 'catalog', label: 'header.nav.catalog', path: '/catalog', Icon: Shirt },
+  { id: 'catalog', label: 'header.nav.catalog', path: '/catalog', Icon: Smartphone },
   { id: 'favorites', label: 'header.nav.favorites', path: '/favorites', Icon: Heart },
   { id: 'guide', label: 'header.nav.guide', path: '/fabric-guide', Icon: BookOpen },
   { id: 'tracking', label: 'header.nav.tracking', path: '/order-tracking', Icon: PackageSearch },
@@ -52,7 +52,7 @@ const drawerGroups: { label: string; items: IconNavItem[] }[] = [
     label: 'header.group.shopping',
     items: [
       { id: 'home', label: 'header.nav.home', path: '/', Icon: Home },
-      { id: 'catalog', label: 'header.nav.allFabrics', path: '/catalog', Icon: Shirt },
+      { id: 'catalog', label: 'header.nav.allFabrics', path: '/catalog', Icon: Smartphone },
       { id: 'favorites', label: 'header.nav.favorites', path: '/favorites', Icon: Heart },
       { id: 'cart', label: 'header.nav.cart', path: '/cart', Icon: ShoppingBag },
     ],
