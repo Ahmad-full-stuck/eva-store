@@ -57,31 +57,30 @@ const shellStyles = `
 `
 
 const PAGE_SEO: Record<string, { title: string; desc: string }> = {
-  '/': { title: 'إيفا ستور للأقمشة | خامات مختارة تصنع الفرق', desc: 'متجر إيفا ستور للأقمشة: تعرفي على الخامة والمرونة والشفافية واللون، اختاري ما يناسب قطعك، واطلبي بنصف متر مع توصيل إلى جميع محافظات العراق.' },
-  '/catalog': { title: 'كل الأقمشة | إيفا ستور', desc: 'تصفحي أقمشة إيفا ستور: قطن، كريب، ساتان وأكثر — مع المرونة واللون والسعر لكل متر.' },
-  '/cart': { title: 'سلة المشتريات | إيفا ستور', desc: 'راجعي قماشك المختار وعدد الأمتار قبل إتمام الطلب.' },
-  '/checkout': { title: 'إتمام الطلب | إيفا ستور', desc: 'أدخلي بياناتك وعدد الأمتار لتأكيد طلب الأقمشة مع التوصيل إلى جميع محافظات العراق.' },
-  '/favorites': { title: 'المفضلة | إيفا ستور', desc: 'الأقمشة التي حفظتيها للرجوع إليها لاحقاً.' },
-  '/about': { title: 'من نحن | إيفا ستور', desc: 'قصة إيفا ستور وخامة تصنع الفرق.' },
-  '/device-guide': { title: 'دليل الأقمشة | إيفا ستور', desc: 'كيف تفرقي بين أنواع الأقمشة؟ دليل عملي بالأسئلة الشائعة عن المرونة والكثافة والعناية.' },
-  '/contact': { title: 'تواصلي معنا | إيفا ستور', desc: 'أرسلي رسالتك عبر نموذج التواصل في موقع إيفا ستور للاستفسار عن الأقمشة والتوصيل وتتبّع الطلبات.' },
-  '/policies': { title: 'السياسات والخصوصية | إيفا ستور', desc: 'سياسات الشحن والإرجاع والخصوصية الخاصة بمتجر إيفا ستور.' },
-  '/order-tracking': { title: 'تتبع الطلب | إيفا ستور', desc: 'تتبعي حالة طلبك برقم الطلب الخاص بك.' },
-  '/order-confirmation': { title: 'تم تسجيل طلبك | إيفا ستور', desc: 'تم تسجيل طلبك بنجاح، سنتواصل معك قريباً لتأكيد التفاصيل.' },
+  '/': { title: 'شركة رتاج العربي | الهواتف الذكية والأجهزة', desc: 'تصفح الهواتف الذكية والأجهزة والإكسسوارات من رتاج العربي، قارن المواصفات وجهّز طلبك لتأكيد السعر والتوفر والضمان.' },
+  '/catalog': { title: 'كتالوج الأجهزة | رتاج العربي', desc: 'تصفح أجهزة آيفون وسامسونج وأندرويد والأجهزة اللوحية والإكسسوارات.' },
+  '/cart': { title: 'سلة الطلب | رتاج العربي', desc: 'راجع الأجهزة والكميات والألوان التي اخترتها قبل إرسال طلبك.' },
+  '/checkout': { title: 'إرسال الطلب | رتاج العربي', desc: 'أدخل بياناتك لإرسال طلب الأجهزة ومراجعة تفاصيله مع الشركة.' },
+  '/favorites': { title: 'المفضلة | رتاج العربي', desc: 'الأجهزة التي حفظتها للرجوع إليها لاحقاً.' },
+  '/about': { title: 'عن رتاج العربي', desc: 'شركة رتاج العربي في عالم الهواتف الذكية والأجهزة والإكسسوارات.' },
+  '/device-guide': { title: 'دليل اختيار الأجهزة | رتاج العربي', desc: 'دليل لمقارنة المعالج والسعة والذاكرة والكاميرا والبطارية والضمان.' },
+  '/contact': { title: 'تواصل مع رتاج العربي', desc: 'تواصل مع شركة رتاج العربي للاستفسار عن الأجهزة والموديلات والتوفر.' },
+  '/policies': { title: 'السياسات والخصوصية | رتاج العربي', desc: 'معلومات الطلب والخصوصية والتواصل الخاصة بمتجر رتاج العربي.' },
+  '/order-tracking': { title: 'متابعة الطلب | رتاج العربي', desc: 'تابع حالة طلبك باستخدام رقم الطلب.' },
+  '/order-confirmation': { title: 'طلبك | رتاج العربي', desc: 'تم تجهيز طلبك لمراجعته وتأكيده مع الشركة.' },
 }
-
 const PAGE_SEO_EN: Record<string, { title: string; desc: string }> = {
-  '/': { title: 'Eva Store Fabrics | Fabrics that make the difference', desc: 'Eva Store fabrics: learn about texture, stretch, opacity and color, choose what fits your piece, and order by the half meter with delivery across Iraq.' },
-  '/catalog': { title: 'All fabrics | Eva Store', desc: 'Browse Eva Store fabrics: cotton, crepe, satin and more — with stretch, color and price per meter.' },
-  '/cart': { title: 'Shopping cart | Eva Store', desc: 'Review your chosen fabric and meters before placing your order.' },
-  '/checkout': { title: 'Checkout | Eva Store', desc: 'Enter your details and meters to confirm your fabric order with delivery across Iraq.' },
-  '/favorites': { title: 'Favorites | Eva Store', desc: 'The fabrics you saved to come back to later.' },
-  '/about': { title: 'About us | Eva Store', desc: 'The story of Eva Store and a fabric that makes the difference.' },
-  '/device-guide': { title: 'Fabric guide | Eva Store', desc: 'How to tell fabric types apart? A practical guide with FAQs on stretch, density and care.' },
-  '/contact': { title: 'Contact us | Eva Store', desc: 'Send us a message through the Eva Store contact form about fabrics, delivery and order tracking.' },
-  '/policies': { title: 'Policies & privacy | Eva Store', desc: 'Shipping, returns and privacy policies for Eva Store.' },
-  '/order-tracking': { title: 'Track order | Eva Store', desc: 'Track your order status using your order number.' },
-  '/order-confirmation': { title: 'Order received | Eva Store', desc: 'Your order was registered successfully — we will contact you shortly to confirm the details.' },
+  '/': { title: 'Ritaj Al Arabi | Smartphones and Devices', desc: 'Explore smartphones, devices and accessories from Ritaj Al Arabi. Compare specifications and prepare a request to confirm price and availability.' },
+  '/catalog': { title: 'Device Catalogue | Ritaj Al Arabi', desc: 'Browse iPhone, Samsung, Android phones, tablets and accessories.' },
+  '/cart': { title: 'Request Cart | Ritaj Al Arabi', desc: 'Review selected devices, quantities and colours before sending your request.' },
+  '/checkout': { title: 'Send Request | Ritaj Al Arabi', desc: 'Enter your details to send a device request for confirmation.' },
+  '/favorites': { title: 'Favorites | Ritaj Al Arabi', desc: 'Devices you saved for later.' },
+  '/about': { title: 'About Ritaj Al Arabi', desc: 'Ritaj Al Arabi in smartphones, devices and accessories.' },
+  '/device-guide': { title: 'Device Buying Guide | Ritaj Al Arabi', desc: 'Compare processor, storage, memory, camera, battery and warranty.' },
+  '/contact': { title: 'Contact Ritaj Al Arabi', desc: 'Contact the company about devices, models and availability.' },
+  '/policies': { title: 'Policies and Privacy | Ritaj Al Arabi', desc: 'Request, privacy and contact information for Ritaj Al Arabi.' },
+  '/order-tracking': { title: 'Track Request | Ritaj Al Arabi', desc: 'Track your request using its order number.' },
+  '/order-confirmation': { title: 'Your Request | Ritaj Al Arabi', desc: 'Your request has been prepared for confirmation with the company.' },
 }
 
 const safeDecode = (value: string): string => {
