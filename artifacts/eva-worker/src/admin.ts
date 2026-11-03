@@ -12,7 +12,7 @@ const CACHE_VERSION = 'v2'
 const PUBLIC_CACHE_PATHS = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings']
 
 const purgePublicCache = async (): Promise<void> => {
-  const origins = ['https://ritaj-al-arabi-store.eva-store.workers.dev', 'https://ahmad-full-stuck.github.io', 'https://www.eva-store.com']
+  const origins = ['https://ritaj-al-arabi-store.eva-store.workers.dev']
   const keys: Request[] = []
   for (const origin of origins) {
     for (const path of PUBLIC_CACHE_PATHS) {
@@ -175,7 +175,7 @@ const buildProduct = (input: ProductInput, existing?: ProductRow) => {
     ? (input.images as unknown[]).filter((item): item is string => typeof item === 'string' && item.length > 0)
     : null
   const stock = Math.max(0, num(input.stockMeters, existing ? existing.stock_meters : 10))
-  const image = text(input.image, (images && images[0]) || (existing ? existing.image : 'fabrics/hero.jpg'))
+  const image = text(input.image, (images && images[0]) || (existing ? existing.image : 'https://media.ldlc.com/r1600/ld/products/00/06/27/53/LD0006275321.jpg'))
   const imagesJson = images
     ? jsonColumn(images.length ? images : [image], existing ? existing.images_json : '[]')
     : existing
@@ -189,7 +189,7 @@ const buildProduct = (input: ProductInput, existing?: ProductRow) => {
     id: slug,
     slug,
     name,
-    type: text(input.type, existing ? existing.type : 'قماش'),
+    type: text(input.type, existing ? existing.type : 'هاتف'),
     categoryId: text(input.categoryId, existing ? existing.category_id : 'plain'),
     description: text(input.description, existing ? existing.description : ''),
     price: Math.max(0, num(input.price, existing ? existing.price : 0)),
