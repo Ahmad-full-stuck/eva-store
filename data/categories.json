@@ -1,65 +1,50 @@
 [
- {
-  "id": "style",
-  "slug": "style",
-  "name": "ستايلات جاهزة",
-  "description": "عروض جاهزة تجمع أكثر من خامة في منتج واحد مثل ستان وأوركانزا ودوشيس",
-  "image": "products/ederadaespaaforladies/01.jpg",
-  "accent": "#7a5a6b",
-  "sort_order": 1
- },
- {
-  "id": "embroidered",
-  "slug": "embroidered",
-  "name": "مطرز",
-  "description": "خامات بتطريز أمبرودري فوق لينن وبلك ودانتيل",
-  "image": "products/linenembroideryanaqhtbdamnalqmash/01.jpg",
-  "accent": "#8f4766",
-  "sort_order": 2
- },
- {
-  "id": "plain",
-  "slug": "plain",
-  "name": "سادة",
-  "description": "خامات سادة بلا نقوش مثل ستان وتول وكريب وشيفون",
-  "image": "products/wooltweed/01.jpg",
-  "accent": "#42647b",
-  "sort_order": 3
- },
- {
-  "id": "stretch",
-  "slug": "stretch",
-  "name": "مطاطي",
-  "description": "خامات فيها سباندكس أو ليكرا تمنح مرونة وتمدداً",
-  "image": "products/barbysbandksmatfthmwry/01.jpg",
-  "accent": "#34715e",
-  "sort_order": 4
- },
- {
-  "id": "sequined",
-  "slug": "sequined",
-  "name": "ترتر ولمّاع",
-  "description": "تول مشغول بحجارة الزركون والكريستال وخامات ميتالك بلمعة",
-  "image": "products/twlmshhjrzarkwn/01.jpg",
-  "accent": "#8d2b4f",
-  "sort_order": 5
- },
- {
-  "id": "patterned",
-  "slug": "patterned",
-  "name": "مزخرف",
-  "description": "نقوش جاكار وبروكارد ومطبوع ونمنم على تول وبلك",
-  "image": "products/tfthdbljakar/01.jpg",
-  "accent": "#8c5c82",
-  "sort_order": 6
- },
- {
-  "id": "harvard",
-  "slug": "harvard",
-  "name": "هارفرد",
-  "description": "فيسكوز هاربد بعرض 153 سم لخامة السترات الرسمية والبدلات",
-  "image": "products/fyskwzharbd/01.jpg",
-  "accent": "#5f6b7a",
-  "sort_order": 7
- }
+  {
+    "id": "iphone",
+    "slug": "iphone",
+    "name": "هواتف آيفون",
+    "description": "مجموعة هواتف Apple",
+    "image": "https://media.ldlc.com/r1600/ld/products/00/06/27/53/LD0006275321.jpg",
+    "accent": "#2563eb"
+  },
+  {
+    "id": "samsung",
+    "slug": "samsung",
+    "name": "هواتف سامسونج",
+    "description": "هواتف Samsung Galaxy",
+    "image": "https://ddfndelma2gpn.cloudfront.net/color/3387/Cobalt_Violet.webp",
+    "accent": "#38bdf8"
+  },
+  {
+    "id": "android",
+    "slug": "android",
+    "name": "هواتف أندرويد",
+    "description": "خيارات من أبرز علامات أندرويد",
+    "image": "https://cdn.etoren.com/upload/images/0.99641000_1772525373_xiaomi-17-ultra-5g-dual-sim-1tb-black-16gb-ram-global-version.png",
+    "accent": "#0ea5e9"
+  },
+  {
+    "id": "tablets",
+    "slug": "tablets",
+    "name": "الأجهزة اللوحية",
+    "description": "أجهزة لوحية للعمل والترفيه",
+    "image": "https://www.maccenter.vn/App_Images/iPadPro-13inch-M5-Black-A.jpg",
+    "accent": "#64748b"
+  },
+  {
+    "id": "wearables",
+    "slug": "wearables",
+    "name": "الساعات الذكية",
+    "description": "ساعات وأجهزة قابلة للارتداء",
+    "image": "https://multimedia.bbycastatic.ca/multimedia/products/1500x1500/194/19451/19451651.jpg",
+    "accent": "#1d4ed8"
+  },
+  {
+    "id": "accessories",
+    "slug": "accessories",
+    "name": "الإكسسوارات",
+    "description": "ملحقات وشواحن وصوتيات",
+    "image": "https://accessories.three.co.uk/cdn/shop/files/E71033095AppleAirPodsPro3MFHP4ZM_A.png?v=1758181825",
+    "accent": "#0f766e"
+  }
 ]
