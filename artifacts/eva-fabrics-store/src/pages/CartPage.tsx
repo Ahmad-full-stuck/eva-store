@@ -123,8 +123,6 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   }
 
   const meters = cart.reduce((sum, item) => sum + item.length, 0)
-  const remaining = Math.max(0, freeFrom - totals.subtotal)
-  const progress = freeFrom ? Math.min(100, Math.round((totals.subtotal / freeFrom) * 100)) : 100
 
   return (
     <main className="container-eva cart-page glass-scope">
