@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft, BadgeCheck, ChevronDown, MessageCircle, Sparkles } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, ChevronDown, MessageCircle, Sparkles, Truck, Wallet } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
 import { guideQuestions, homeStory, trustItems } from '@/lib/fallback-data'
