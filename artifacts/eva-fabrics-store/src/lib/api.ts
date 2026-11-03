@@ -80,7 +80,7 @@ export const loadServerConfig = async (): Promise<void> => {
       writeServerSettings(settings.data)
       changed = true
     }
-    if (changed) window.dispatchEvent(new Event('eva-admin-changed'))
+    if (changed) window.dispatchEvent(new Event('ritaj-admin-changed'))
   } catch {
     /* offline — the cached copy keeps working */
   }
@@ -158,7 +158,7 @@ export const adminFetch = async <T,>(path: string, init: RequestInit = {}): Prom
       if (token) {
         setToken('')
         try {
-          window.dispatchEvent(new Event('eva-admin-expired'))
+          window.dispatchEvent(new Event('ritaj-admin-expired'))
         } catch {
           /* ignore */
         }
