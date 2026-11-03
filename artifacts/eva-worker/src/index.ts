@@ -320,7 +320,7 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
     return cachedJson(request, 300, async () => {
       const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'store'").first<{ value: string }>()
       const stored = row ? (JSON.parse(row.value) as Record<string, unknown>) : {}
-      return json({ data: { colorsEnabled: true, freeDeliveryFrom: 50000, deliveryFee: 5000, ...stored } })
+      return json({ data: { colorsEnabled: true, freeDeliveryFrom: 0, deliveryFee: 0, ...stored } })
     })
   }
 
@@ -413,7 +413,7 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
         const total = Number((totals as Record<string, unknown>).total ?? 0) || 0
         const governorate = String(nested.governorate ?? body.governorate ?? '').trim()
         pushWork = sendPushToAll(env, {
-          title: 'طلب جديد • إيفا ستور',
+          title: 'طلب جديد • رتاج العربي',
           body: `#${number}\n${name}${governorate ? ` — ${governorate}` : ''}\n${itemLines}\nالإجمالي: ${fmtDinar(total)}`,
           data: { orderNumber: number, status: 'new', url: '/#/admin' },
         }).catch((error) => {
@@ -462,7 +462,7 @@ export default {
         return new Response(bytes, { headers })
       }
 
-      return new Response('EVA STORE API', { status: 404 })
+      return new Response('RITAJ AL ARABI API', { status: 404 })
     } catch (error) {
       const message = error instanceof Error ? error.message : 'خطأ غير متوقع'
       return withCors(json({ error: message }, 500))
