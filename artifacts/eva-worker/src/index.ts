@@ -5,7 +5,7 @@ import { handleAdmin } from './admin'
 import { runDiscovery, type DiscoveryInput } from './discover'
 import { sendPushToAll, pushConfigured } from './push'
 
-const MAINTENANCE_MODE: boolean = Boolean('temporary-maintenance')
+const MAINTENANCE_MODE = false
 const MAINTENANCE_PAGE = "<!doctype html>\n<html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta name=\"theme-color\" content=\"#f5f4f1\"><meta name=\"robots\" content=\"noindex,nofollow\"><title>Temporarily Unavailable</title>\n<style>\n:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,\"Segoe UI\",Arial,sans-serif;color-scheme:light}*{box-sizing:border-box}html,body{width:100%;min-height:100%;margin:0}body{min-height:100vh;display:grid;place-items:center;padding:28px 18px;color:#222b35;background:radial-gradient(ellipse at 50% 0%,rgba(222,190,141,.19),transparent 48%),linear-gradient(145deg,#f7f6f2,#efeee9)}main{width:min(100%,680px);padding:clamp(30px,6vw,58px);text-align:center;background:rgba(255,255,255,.91);border:1px solid rgba(39,48,59,.09);border-radius:24px;box-shadow:0 24px 80px rgba(25,32,42,.09)}.mark{width:64px;height:64px;margin:0 auto 26px;display:grid;place-items:center;border-radius:20px;color:#8e6634;background:#f7f0e5;border:1px solid #eadcc7}.eyebrow{margin:0 0 13px;color:#967345;font-size:11px;font-weight:700;letter-spacing:.19em}h1{margin:0;font-size:clamp(30px,6vw,43px);letter-spacing:-.04em;line-height:1.15;color:#202833}.lead{margin:21px auto 0;max-width:510px;color:#58616b;font-size:16px;line-height:1.8}.rule{height:1px;margin:29px 0;background:#e9e7e1}.rtl{direction:rtl;font-family:\"Segoe UI\",Tahoma,Arial,sans-serif}.rtl h2{margin:0 0 10px;color:#303945;font-size:20px}.rtl p{margin:0 auto;max-width:520px;color:#65707b;font-size:15px;line-height:1.9}.owner{margin:24px 0 0;padding:17px 19px;border-radius:14px;background:#f8f7f4;color:#616a74;font-size:13px;line-height:1.8}.owner strong{color:#343e49}footer{margin-top:26px;color:#9299a1;font-size:11px;line-height:1.7}@media(max-width:480px){body{padding:16px}main{border-radius:19px}.mark{width:58px;height:58px;border-radius:18px}}\n</style></head><body><main>\n<div class=\"mark\" aria-hidden=\"true\"><svg width=\"31\" height=\"31\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M12 8v4.6m0 3.4h.01M10.3 3.9 2.8 17a2 2 0 0 0 1.7 3h15a2 2 0 0 0 1.7-3l-7.5-13.1a2 2 0 0 0-3.4 0Z\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></div>\n<p class=\"eyebrow\">SERVICE NOTICE · 503</p><h1>Temporarily Unavailable</h1>\n<p class=\"lead\">This website is temporarily unavailable while a pending hosting or domain renewal payment is being resolved.</p><div class=\"rule\"></div>\n<section class=\"rtl\" lang=\"ar\" dir=\"rtl\"><h2>الموقع غير متاح مؤقتاً</h2><p>تم إيقاف الخدمة مؤقتاً لحين استكمال تجديد الاستضافة أو النطاق وتسوية الدفعة المعلّقة.</p></section>\n<div class=\"owner\"><strong>If you own this website:</strong> please review your hosting provider's billing details and complete any outstanding payment or renewal to restore service.<div class=\"rtl\" lang=\"ar\" dir=\"rtl\" style=\"margin-top:8px\">إذا كنت مالك الموقع، يرجى مراجعة الفوترة لدى مزوّد الاستضافة وإكمال أي دفعة أو تجديد مستحق لإعادة الخدمة.</div></div>\n<footer>This is a temporary notice. It does not delete or modify the website's project files or stored data.<div class=\"rtl\" lang=\"ar\" dir=\"rtl\">هذا إشعار مؤقت ولا يحذف ملفات المشروع أو البيانات المخزّنة ولا يغيّرها.</div></footer>\n</main></body></html>"
 const MAINTENANCE_HEADERS = {
   'Content-Type': 'text/html; charset=utf-8',
@@ -44,7 +44,7 @@ const cacheKeyFor = (request: Request): Request => {
   // The Cache API only accepts fully-qualified URLs as keys, so the version
   // rides in a query parameter instead of a prefix.
   const url = new URL(request.url)
-  url.searchParams.set('__eva', CACHE_VERSION)
+  url.searchParams.set('__ritaj', CACHE_VERSION)
   return new Request(url.toString())
 }
 
@@ -55,7 +55,7 @@ const cachedJson = async (request: Request, ttlSeconds: number, build: () => Pro
   if (hit) {
     // Rewrite the marker so the client can tell an edge hit from a rebuild.
     const headers = new Headers(hit.headers)
-    headers.set('X-Eva-Cache', 'HIT')
+    headers.set('X-Ritaj-Cache', 'HIT')
     return new Response(hit.body, { status: hit.status, statusText: hit.statusText, headers })
   }
   const response = await build()
@@ -80,7 +80,7 @@ const cachedJson = async (request: Request, ttlSeconds: number, build: () => Pro
 const purgePublicCache = async (): Promise<void> => {
   const cache = caches.default
   const keys = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings'].map((path) => {
-    const url = new URL(`https://www.eva-store.workers.dev${path}`)
+    const url = new URL(`https://ritaj-al-arabi-store.eva-store.workers.dev${path}`)
     url.searchParams.set('__eva', CACHE_VERSION)
     return new Request(url.toString())
   })
@@ -113,14 +113,14 @@ const publicProduct = (product: StoreProduct): StoreProduct => {
 }
 
 const orderNumber = (): string =>
-  `EVA-${Date.now().toString(36).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`
+  `RTA-${Date.now().toString(36).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`
 
 const fmtDinar = (value: number): string =>
   value >= 1000 && value % 1000 === 0 ? `${value / 1000} الف دينار عراقي` : `${value.toLocaleString('en-US')} دينار عراقي`
 
 const fmtMeters = (m: number): string => {
-  const s = String(m)
-  return s === '0.5' || s === '1.5' || s === '2.5' || s === '3.5' || s === '4.5' || s === '5.5' ? `${s} م` : `${s} متر`
+  const quantity = Math.max(0, Math.floor(m))
+  return quantity === 1 ? 'جهاز واحد' : `${quantity} أجهزة`
 }
 
 interface NotifyOrder {
@@ -146,7 +146,7 @@ const buildOrderMessage = (order: NotifyOrder): string => {
   if (str('landmark')) lines.push(`معلم قريب: ${str('landmark')}`)
   if (str('notes')) lines.push(`ملاحظات: ${str('notes')}`)
   lines.push('')
-  lines.push('تفاصيل الطلب:')
+  lines.push('تفاصيل الأجهزة:')
   for (const item of items) {
     const name = String(item.productName ?? '')
     const color = String(item.colorName ?? '')
@@ -179,8 +179,12 @@ const notifyOrderEmail = async (env: Env, order: NotifyOrder): Promise<boolean> 
       console.log(`[notify] order=${order.number} skipped provider=${provider}`)
       return false
     }
-    const to = String(content.emailOrdersTo ?? '').trim() || 'gdumingm@gmail.com'
-    const action = String(content.emailFormSubmitAction ?? '').trim() || `https://formsubmit.co/${encodeURIComponent(to)}`
+    const to = String(content.emailOrdersTo ?? '').trim()
+    const action = String(content.emailFormSubmitAction ?? '').trim()
+    if (!to || !action || content.emailProvider !== 'formsubmit') {
+      console.log(`[notify] order=${order.number} stored; no Ritaj email channel configured`)
+      return false
+    }
     const subjectTemplate = String(content.emailSubjectOrder ?? 'طلب جديد #{orderNumber}')
     const subject = subjectTemplate.replace('#{orderNumber}', `#${order.number}`).replace('{orderNumber}', order.number)
     const form = new FormData()
