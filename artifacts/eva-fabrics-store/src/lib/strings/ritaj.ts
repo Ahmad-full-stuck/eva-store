@@ -19,13 +19,10 @@ export const ritajStrings: Record<string, StringEntry> = {
   "home.newAria": { "ar": "نماذج الأجهزة", "en": "Device previews" },
   "home.trustAria": { "ar": "مزايا تجربة المتجر", "en": "Store experience" },
   "header.favoritesAria": { "ar": "المفضلة، {count} منتجات", "en": "Favorites, {count} products" },
-  "header.cartAria": { "ar": "سلة الطلب، {meters}", "en": "Request cart, {meters}" },
   "foot.colInfo": { "ar": "معلومات", "en": "Information" },
   "foot.colContact": { "ar": "تواصل", "en": "Contact" },
   "foot.contactForm": { "ar": "تواصل مع الشركة", "en": "Contact the company" },
   "foot.colServiceArea": { "ar": "الحساب الرسمي", "en": "Official account" },
-  "foot.deliveryRange": { "ar": "تابع أخبار المنتجات والعروض عبر حساب رتاج العربي الرسمي.", "en": "Follow product updates and announcements through Ritaj Al Arabi's official account." },
-  "foot.deliveryFee": { "ar": "Instagram @alrtag_2", "en": "Instagram @alrtag_2" },
   "contact.method1Title": { "ar": "راسلنا مباشرة", "en": "Message us directly" },
   "contact.method1Text": { "ar": "عبر إنستغرام رتاج العربي", "en": "Through Ritaj Al Arabi on Instagram" },
   "contact.method1Aria": { "ar": "فتح حساب رتاج العربي على إنستغرام", "en": "Open Ritaj Al Arabi on Instagram" },
@@ -101,30 +98,25 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "جهاز",
     "en": "devices"
   },
-  "header.nav.catalog": {
     "ar": "الأجهزة",
     "en": "Devices"
   },
-  "header.nav.guide": {
     "ar": "دليل اختيار الجهاز",
     "en": "Device guide"
   },
-  "header.nav.allFabrics": {
     "ar": "جميع الأجهزة",
     "en": "All devices"
   },
-  "header.openSearch": {
     "ar": "البحث عن هاتف أو جهاز أو إكسسوار",
     "en": "Search phones, devices or accessories"
   },
+  "header.cartAria": {
     "ar": "سلة الطلب، {meters}",
     "en": "Request cart, {meters}"
   },
-  "header.announcementBar": {
     "ar": "إعلان المتجر",
     "en": "Store announcement"
   },
-  "header.announceContact": {
     "ar": "تواصل مع رتاج العربي",
     "en": "Contact Ritaj Al Arabi"
   },
@@ -152,7 +144,6 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "السياسات",
     "en": "Policies"
   },
-  "header.nav.favorites": {
     "ar": "المفضلة",
     "en": "Favorites"
   },
@@ -160,19 +151,15 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "سلة الطلب",
     "en": "Request cart"
   },
-  "header.nav.about": {
     "ar": "عن رتاج العربي",
     "en": "About Ritaj Al Arabi"
   },
-  "foot.tagline": {
     "ar": "شركة رتاج العربي — عالم الهواتف الذكية والأجهزة والإكسسوارات. تصفّح الخيارات وأرسل طلبك لتأكيد التفاصيل.",
     "en": "Ritaj Al Arabi — smartphones, devices and accessories. Explore the range and send a request to confirm details."
   },
-  "foot.colFabrics": {
     "ar": "الأجهزة",
     "en": "Devices"
   },
-  "foot.allFabrics": {
     "ar": "تصفح جميع الأجهزة",
     "en": "Browse all devices"
   },
@@ -186,11 +173,9 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "تفاصيل الاستلام والتوصيل عند تأكيد الطلب",
     "en": "Collection and delivery details are confirmed with your order."
   },
-  "foot.pricesNote": {
     "ar": "الأسعار والتوفر والضمان تُؤكد من الشركة قبل تثبيت الطلب.",
     "en": "Prices, availability and warranty are confirmed by the company before an order is finalized."
   },
-  "home.hero.browse": {
     "ar": "تصفّح الأجهزة",
     "en": "Browse devices"
   },
@@ -198,15 +183,12 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "عرض جميع الأجهزة",
     "en": "View all devices"
   },
-  "home.stats.fabricsLabel": {
     "ar": "جهازاً في المعاينة",
     "en": "devices in preview"
   },
-  "home.stats.fabricsTrend": {
     "ar": "تشكيلة استرشادية",
     "en": "Preview selection"
   },
-  "home.stats.categoriesTrend": {
     "ar": "أقسام متنوعة",
     "en": "Multiple categories"
   },
@@ -678,7 +660,6 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "{meters} في سلة الطلب",
     "en": "{meters} in request cart"
   },
-  "cart.perMeter": {
     "ar": "وحدة",
     "en": "unit"
   },
@@ -710,7 +691,6 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "أدخل العنوان بالتفصيل",
     "en": "Enter your full address"
   },
-  "about.chipOrder": {
     "ar": "اختيار الجهاز المناسب",
     "en": "Choose the right device"
   },
@@ -718,11 +698,9 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "تعرّف على دليل الأجهزة",
     "en": "Read the device guide"
   },
-  "guide.crumbCurrent": {
     "ar": "دليل الأجهزة",
     "en": "Device guide"
   },
-  "guide.heroTitle": {
     "ar": "دليل اختيار الهاتف",
     "en": "Phone buying guide"
   },
@@ -734,27 +712,21 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "قارن المواصفات الأساسية قبل اتخاذ القرار: المعالج والسعة والذاكرة والكاميرات والبطارية والضمان.",
     "en": "Compare the essentials before choosing: processor, storage, memory, cameras, battery and warranty."
   },
-  "guide.step2Title": {
     "ar": "قارن المواصفات",
     "en": "Compare specifications"
   },
-  "guide.step2Text": {
     "ar": "لا تعتمد على اسم الموديل فقط. راجع السعة والذاكرة وإصدار الجهاز والمنطقة.",
     "en": "Do not rely on the model name alone. Check storage, memory, device variant and region."
   },
-  "guide.tipsTitle": {
     "ar": "ما الذي ينبغي مراجعته؟",
     "en": "What should you check?"
   },
-  "guide.tipsText": {
     "ar": "قائمة مختصرة تساعدك على مقارنة الأجهزة قبل إرسال الطلب.",
     "en": "A quick checklist for comparing devices before sending a request."
   },
-  "guide.thUse": {
     "ar": "الاستخدام",
     "en": "Use case"
   },
-  "guide.thFabric": {
     "ar": "المواصفة",
     "en": "Specification"
   },
@@ -854,7 +826,6 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "اطلب توضيح الحالة والضمان والملحقات قبل التأكيد.",
     "en": "Confirm condition, warranty and included accessories."
   },
-  "contact.messagePlaceholder": {
     "ar": "اكتب استفسارك عن الجهاز الذي تبحث عنه",
     "en": "Ask about the device you are looking for"
   },
@@ -862,7 +833,6 @@ export const ritajStrings: Record<string, StringEntry> = {
     "ar": "تصفح الأجهزة",
     "en": "Browse devices"
   },
-  "track.browse": {
     "ar": "تصفح الأجهزة",
     "en": "Browse devices"
   },
@@ -888,8 +858,8 @@ export const ritajStrings: Record<string, StringEntry> = {
   }
   "about.crumbCurrent": { ar: "عن رتاج العربي", en: "About Ritaj Al Arabi" },
   "about.eyebrow": { ar: "شركة في عالم الهواتف الذكية", en: "A company in the world of smartphones" },
+  "about.chipOrder": { ar: "اختيار الجهاز المناسب", en: "Choose the right device" },
   "about.chipSpecs": { ar: "تفاصيل ومواصفات", en: "Specifications and details" },
-  "about.chipDelivery": { ar: "تواصل مباشر مع الشركة", en: "Direct company contact" },
   "about.point1Num": { ar: "٠١", en: "01" },
   "about.point1Title": { ar: "كتالوج منظم", en: "Organized catalogue" },
   "about.point1Text": { ar: "تصفح الهواتف والأجهزة والإكسسوارات ضمن فئات واضحة.", en: "Browse phones, devices and accessories in clear categories." },
@@ -921,7 +891,9 @@ export const ritajStrings: Record<string, StringEntry> = {
   "about.ctaText": { ar: "استكشف المعاينة، ثم تواصل مع رتاج العربي لتأكيد المنتج والسعر والتوفر.", en: "Explore the preview, then contact Ritaj Al Arabi to confirm the product, price and availability." },
   "about.ctaBrowse": { ar: "تصفح الأجهزة", en: "Browse devices" },
   "about.ctaAsk": { ar: "تواصل مع رتاج", en: "Contact Ritaj" },
+  "guide.crumbCurrent": { ar: "دليل الأجهزة", en: "Device guide" },
   "guide.heroEyebrow": { ar: "دليل الشراء", en: "Buying guide" },
+  "guide.heroTitle": { ar: "اختر جهازك على أساس المواصفات", en: "Choose your device by its specifications" },
   "guide.heroText": { ar: "قارن المعالج والسعة والذاكرة والكاميرا والبطارية، وتحقق من رقم الموديل وحالة الجهاز والضمان قبل إرسال الطلب.", en: "Compare the processor, storage, memory, camera and battery. Confirm model number, device condition and warranty before requesting." },
   "guide.quickEyebrow": { ar: "أسئلة سريعة", en: "Quick questions" },
   "guide.quickTitle": { ar: "قبل أن تختار", en: "Before you choose" },
@@ -932,6 +904,8 @@ export const ritajStrings: Record<string, StringEntry> = {
   "guide.step1Title": { ar: "حدد احتياجك", en: "Define your needs" },
   "guide.step1Text": { ar: "هل تحتاج الجهاز للتصوير أو الألعاب أو العمل أو الاستخدام اليومي؟ ابدأ من احتياجك.", en: "Do you need it for photography, gaming, work or everyday use? Start with your needs." },
   "guide.stepChip2": { ar: "الخطوة الثانية", en: "Step two" },
+  "guide.step2Title": { ar: "قارن النسخ", en: "Compare variants" },
+  "guide.step2Text": { ar: "تأكد من سعة التخزين والذاكرة ورقم الموديل ودعم الشبكات.", en: "Check storage, RAM, model number and network support." },
   "guide.stepChip3": { ar: "الخطوة الثالثة", en: "Step three" },
   "guide.step3Title": { ar: "أكد التفاصيل", en: "Confirm the details" },
   "guide.step3Text": { ar: "اسأل عن حالة الجهاز والملحقات والضمان والسعر والتوفر النهائي.", en: "Ask about condition, accessories, warranty, final price and availability." },
@@ -941,9 +915,13 @@ export const ritajStrings: Record<string, StringEntry> = {
   "guide.faqLink": { ar: "اسأل رتاج العربي", en: "Ask Ritaj Al Arabi" },
   "guide.faqPad": { ar: "تختلف المواصفات حسب النسخة", en: "Specifications vary by variant" },
   "guide.tipsEyebrow": { ar: "مقارنة عملية", en: "Practical comparison" },
+  "guide.tipsTitle": { ar: "قارن حسب استخدامك", en: "Compare by your use" },
+  "guide.tipsText": { ar: "لا توجد مواصفة واحدة تناسب الجميع؛ قارن مجموعة العوامل التي تهمك.", en: "No single specification suits everyone; compare the factors that matter to you." },
   "guide.tipsChip": { ar: "دليل مختصر", en: "Quick guide" },
   "guide.tipsAria": { ar: "جدول مقارنة الأجهزة", en: "Device comparison table" },
   "guide.tipsCaption": { ar: "معايير استرشادية لمقارنة الأجهزة قبل تأكيد الطلب.", en: "Suggested criteria for comparing devices before confirming an order." },
+  "guide.thUse": { ar: "الاستخدام", en: "Use case" },
+  "guide.thFabric": { ar: "المواصفة", en: "Specification" },
   "guide.thWeight": { ar: "ما الذي تراجعه؟", en: "What to review" },
   "guide.thTip": { ar: "نصيحة", en: "Tip" },
   "guide.tableHint": { ar: "مرّر الجدول أفقياً على الهاتف لعرض بقية الأعمدة.", en: "Scroll horizontally on mobile to see the remaining columns." },
@@ -979,6 +957,7 @@ export const ritajStrings: Record<string, StringEntry> = {
   "contact.namePlaceholder": { ar: "اكتب اسمك", en: "Enter your name" },
   "contact.phoneLabel": { ar: "رقم الهاتف", en: "Phone number" },
   "contact.messageLabel": { ar: "رسالتك", en: "Your message" },
+  "contact.messagePlaceholder": { ar: "اكتب اسم الجهاز أو الموديل وسؤالك", en: "Enter the device or model and your question" },
   "contact.sending": { ar: "جارٍ تجهيز الرسالة", en: "Preparing message" },
   "contact.send": { ar: "نسخ الرسالة وفتح إنستغرام", en: "Copy message and open Instagram" },
   "contact.sent": { ar: "تم تجهيز رسالتك ونسخها. افتح حساب رتاج العربي والصقها في المحادثة ثم أرسلها.", en: "Your message is ready and copied. Open Ritaj Al Arabi on Instagram, paste it into the chat and send it." },
@@ -994,6 +973,7 @@ export const ritajStrings: Record<string, StringEntry> = {
   "track.inputLabel": { ar: "رقم الطلب", en: "Request number" },
   "track.placeholder": { ar: "مثال RTA-...", en: "Example RTA-..." },
   "track.submit": { ar: "بحث عن الطلب", en: "Find request" },
+  "track.browse": { ar: "تصفح الأجهزة", en: "Browse devices" },
   "track.contact": { ar: "تواصل مع الشركة", en: "Contact the company" },
   "track.emptyTitle": { ar: "لا توجد طلبات محفوظة هنا", en: "No requests saved here" },
   "track.emptyText": { ar: "ستظهر الطلبات المسجلة من هذا المتصفح بعد إرسالها إلى النظام.", en: "Requests saved from this browser appear here after they are submitted to the system." },
@@ -1020,9 +1000,29 @@ export const ritajStrings: Record<string, StringEntry> = {
   "co.free": { ar: "يحدد عند التأكيد", en: "Confirmed later" },
   "co.pieceOne": { ar: "جهاز", en: "device" },
   "co.pieceMany": { ar: "أجهزة", en: "devices" },
+  "cart.perMeter": { ar: "للوحدة", en: "per unit" },
   "home.stats.categoriesLabel": { ar: "أقسام رئيسية", en: "Main categories" },
+  "home.stats.fabricsLabel": { ar: "منتجات في المعاينة", en: "Preview products" },
+  "home.stats.fabricsTrend": { ar: "نماذج قابلة للتحديث", en: "Sample listings" },
+  "home.stats.categoriesTrend": { ar: "هواتف وأجهزة وإكسسوارات", en: "Phones, devices and accessories" },
   "home.hero.discoverNew": { ar: "اكتشف أحدث الأجهزة", en: "Discover featured devices" },
+  "home.hero.browse": { ar: "تصفح الأجهزة", en: "Browse devices" },
   "home.stats.percent": { ar: "", en: "" },
   "header.nav.home": { ar: "الرئيسية", en: "Home" },
+  "header.nav.catalog": { ar: "الأجهزة", en: "Devices" },
+  "header.nav.guide": { ar: "دليل الأجهزة", en: "Device guide" },
+  "header.nav.favorites": { ar: "المفضلة", en: "Favorites" },
+  "header.nav.about": { ar: "عن رتاج العربي", en: "About Ritaj Al Arabi" },
   "header.nav.contact": { ar: "تواصل معنا", en: "Contact us" },
+  "header.nav.allFabrics": { ar: "كل الأجهزة", en: "All devices" },
+  "header.openSearch": { ar: "ابحث عن هاتف أو جهاز", en: "Search phones or devices" },
+  "header.announcementBar": { ar: "إعلان المتجر", en: "Store announcement" },
+  "header.announceContact": { ar: "تواصل مع رتاج العربي", en: "Contact Ritaj Al Arabi" },
+  "foot.colFabrics": { ar: "الأجهزة", en: "Devices" },
+  "foot.allFabrics": { ar: "تصفح جميع الأجهزة", en: "Browse all devices" },
+  "foot.tagline": { ar: "رتاج العربي للهواتف الذكية والأجهزة والإكسسوارات. تصفح الخيارات وراجع المواصفات وجهّز طلبك لتأكيد التفاصيل.", en: "Ritaj Al Arabi smartphones, devices and accessories. Explore the catalogue, compare specifications and prepare a request for confirmation." },
+  "foot.deliveryRange": { ar: "تابع أخبار المنتجات والتحديثات عبر حساب رتاج العربي الرسمي.", en: "Follow product updates through Ritaj Al Arabi's official account." },
+  "foot.deliveryFee": { ar: "إنستغرام @alrtag_2", en: "Instagram @alrtag_2" },
+  "foot.pricesNote": { ar: "الأسعار والتوفر والضمان تُؤكد من الشركة قبل تثبيت الطلب.", en: "Prices, availability and warranty are confirmed by the company before an order is finalized." },
+  "about.chipDelivery": { ar: "تواصل مباشر مع الشركة", en: "Direct contact with the company" },
 }
