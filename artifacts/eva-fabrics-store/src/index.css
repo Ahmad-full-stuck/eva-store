@@ -5,7 +5,7 @@
   --eva-ink: #14283d;
   --eva-muted: #60748a;
   --eva-line: #d9e4ef;
-  --eva-line-strong: #dcc7c8;
+  --eva-line-strong: #c4d2e2;
   --eva-rose: #1d4ed8;
   --eva-rose-dark: #15375b;
   --eva-rose-soft: #eaf3ff;
@@ -20,10 +20,10 @@
   --eva-radius: 18px;
   --eva-font: 'Readex Pro', Tahoma, sans-serif;
   --eva-font-display: 'Readex Pro', Tahoma, sans-serif;
-  --glass-fill: linear-gradient(150deg, rgba(255, 255, 255, .82), rgba(255, 250, 250, .52));
-  --glass-bg: rgba(255, 251, 250, .7);
-  --glass-bg-strong: rgba(255, 253, 252, .9);
-  --glass-bg-soft: rgba(255, 251, 250, .46);
+  --glass-fill: linear-gradient(150deg, rgba(255, 255, 255, .86), rgba(235, 244, 253, .60));
+  --glass-bg: rgba(245, 249, 255, .76);
+  --glass-bg-strong: rgba(255, 255, 255, .94);
+  --glass-bg-soft: rgba(237, 245, 253, .58);
   --glass-surface: rgba(255, 255, 255, .74);
   --glass-border: rgba(255, 255, 255, .88);
   --glass-border-soft: rgba(255, 255, 255, .55);
@@ -31,7 +31,7 @@
   --glass-blur-strong: blur(19px) saturate(170%);
   --glass-shadow: 0 16px 38px -18px rgba(16, 38, 61, .26), 0 4px 12px -6px rgba(16, 38, 61, .10), inset 0 1px 0 rgba(255, 255, 255, .9), inset 0 0 0 1px rgba(255, 255, 255, .3);
   --glass-shadow-hover: 0 24px 52px -20px rgba(16, 38, 61, .32), 0 6px 16px -8px rgba(16, 38, 61, .12), inset 0 1px 0 rgba(255, 255, 255, .95), inset 0 0 0 1px rgba(255, 255, 255, .34);
-  --glass-dark-bg: rgba(46, 24, 33, .88);
+  --glass-dark-bg: rgba(13, 34, 56, .94);
   --glass-dark-border: rgba(255, 255, 255, .16);
   --glass-radius: 18px;
   --glass-radius-lg: 22px;
@@ -115,16 +115,16 @@ legend { padding: 0; }
 .site-header { position: sticky; top: 0; z-index: 30; background: linear-gradient(180deg, rgba(255, 250, 250, .82), rgba(255, 250, 250, .62)); border-bottom: 1px solid rgba(255, 255, 255, .7); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); box-shadow: 0 12px 32px rgba(16, 38, 61, .07); }
 .header-inner { min-height: 82px; display: flex; align-items: center; gap: 35px; }
 .logo { display: inline-flex; align-items: center; gap: 9px; flex: 0 0 auto; }
-.logo-symbol { width: 34px; height: 38px; position: relative; display: inline-block; border: 1.5px solid var(--eva-ink); border-radius: 50% 50% 44% 44%; transform: rotate(10deg); }
-.logo-symbol:before { content: ''; position: absolute; width: 10px; height: 21px; top: 7px; right: 11px; border: 1.4px solid var(--eva-ink); border-radius: 50%; }
-.logo-symbol:after { content: ''; position: absolute; width: 23px; height: 1px; right: 5px; bottom: 9px; background: var(--eva-ink); transform: rotate(-57deg); }
-.logo-symbol span { position: absolute; width: 4px; height: 4px; right: 7px; top: 4px; border-radius: 50%; background: var(--eva-rose); }
+.logo-symbol { width: 38px; height: 38px; position: relative; display: inline-grid; place-items: center; border: 1px solid rgba(21, 55, 91, .18); border-radius: 12px; background: linear-gradient(145deg, #163b60, #0b2037); transform: none; box-shadow: 0 7px 18px rgba(21, 55, 91, .2), inset 0 1px 0 rgba(255,255,255,.18); }
+.logo-symbol:before { content: 'ر'; position: absolute; inset: 0; display: grid; place-items: center; width: auto; height: auto; top: 0; right: 0; border: 0; border-radius: 0; color: #fff; font-size: 26px; font-weight: 700; line-height: 1; }
+.logo-symbol:after { display: none; }
+.logo-symbol span { display: none; }
 .logo-copy { display: grid; line-height: 1.15; }
 .logo-copy strong { font-size: 16px; letter-spacing: -.03em; }
 .logo-copy small { margin-top: 4px; color: var(--eva-muted); font-size: 11.5px; }
-.logo-light .logo-symbol { border-color: #fff6ee; }
-.logo-light .logo-symbol:before { border-color: #fff6ee; }
-.logo-light .logo-symbol:after { background: #fff6ee; }
+.logo-light .logo-symbol { border-color: rgba(255,255,255,.22); background: linear-gradient(145deg, #2c75b6, #0b2037); }
+.logo-light .logo-symbol:before { color: #fff; }
+.logo-light .logo-symbol:after { display: none; }
 .logo-light .logo-copy strong, .logo-light .logo-copy small { color: #fff6ee; }
 .desktop-nav { display: flex; align-items: center; gap: 25px; margin-inline: auto; }
 .desktop-nav a { position: relative; color: var(--eva-muted); font-size: 12px; font-weight: 500; transition: color .2s ease; }
