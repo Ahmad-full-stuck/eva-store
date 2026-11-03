@@ -1,6 +1,6 @@
 const adminContent = (): Record<string, string> => {
   try {
-    const raw = window.localStorage.getItem('eva-admin-content')
+    const raw = window.localStorage.getItem('ritaj-admin-content')
     if (!raw) return {}
     const parsed: unknown = JSON.parse(raw)
     return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Record<string, string>) : {}
@@ -9,8 +9,8 @@ const adminContent = (): Record<string, string> => {
   }
 }
 
-const rawWhatsApp = import.meta.env.VITE_WHATSAPP_NUMBER || '9647727282001'
-const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/x__illc/'
+const rawWhatsApp = import.meta.env.VITE_WHATSAPP_NUMBER || ''
+const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/alrtag_2/'
 const apiBase = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '')
 
 const digits = (value: string): string => value.replace(/[^0-9]/g, '')
@@ -20,7 +20,7 @@ const internationalWhatsApp = (() => {
   if (value.startsWith('00')) value = value.slice(2)
   if (value.startsWith('0')) value = `964${value.slice(1)}`
   if (!value.startsWith('964') && value.length > 0) value = `964${value}`
-  return value || '9647727282001'
+  return value
 })()
 
 const localPhone = (() => {
@@ -31,13 +31,13 @@ const localPhone = (() => {
 const safeInstagram = /^https?:\/\//i.test(rawInstagram) ? rawInstagram : `https://${rawInstagram.replace(/^\/+/, '')}`
 
 export const siteConfig = {
-  get name() { return adminContent().shopName || 'إيفا ستور للأقمشة' },
-  shortName: 'إيفا ستور',
+  get name() { return adminContent().shopName || 'شركة رتاج العربي' },
+  shortName: 'رتاج العربي',
   get phone() { return adminContent().phone || localPhone },
   get instagramUrl() { return adminContent().instagram || safeInstagram },
-  get contactEmail() { return adminContent().emailOrdersTo || 'gdumingm@gmail.com' },
-  emailUrl: (subject = 'استفسار من متجر إيفا', body = 'مرحباً إيفا، أريد الاستفسار عن منتجاتكم.'): string => `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
-  instagramText: 'إيفا ستور على إنستغرام',
+  get contactEmail() { return adminContent().emailOrdersTo || '' },
+  emailUrl: (subject = 'استفسار من متجر رتاج العربي', body = 'مرحباً، أريد الاستفسار عن أحد المنتجات.'): string => `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+  instagramText: 'رتاج العربي على إنستغرام',
 }
 
 export const apiUrl = (path: string): string => `${apiBase}${path.startsWith('/') ? path : `/${path}`}`
