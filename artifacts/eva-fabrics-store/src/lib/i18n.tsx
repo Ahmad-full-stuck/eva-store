@@ -144,7 +144,7 @@ export interface StringInfo {
 export const allStrings = (): StringInfo[] =>
   Object.keys(DICT)
     .sort((a, b) => a.localeCompare(b))
-    .map((key) => ({ key, ar: DICT[key].ar, en: DICT[key].en, group: key.split('.')[0] }))
+    .map((key) => ({ key, ar: brandCopy(DICT[key].ar, 'ar'), en: brandCopy(DICT[key].en, 'en'), group: key.split('.')[0] }))
 
 interface LangContextValue {
   lang: Lang
