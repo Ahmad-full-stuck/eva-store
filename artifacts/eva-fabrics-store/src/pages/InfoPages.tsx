@@ -494,7 +494,7 @@ const extraGuideQuestions = (t: (key: string) => string): ProductFaq[] => [
   { question: t('guide.extraQ5Question'), answer: t('guide.extraQ5Answer') },
 ]
 
-const fabricTips = [
+const deviceTips = [
   { use: 'guide.tip1Use', fabric: 'guide.tip1Fabric', weight: 'guide.tip1Weight', tip: 'guide.tip1Tip' },
   { use: 'guide.tip2Use', fabric: 'guide.tip2Fabric', weight: 'guide.tip2Weight', tip: 'guide.tip2Tip' },
   { use: 'guide.tip3Use', fabric: 'guide.tip3Fabric', weight: 'guide.tip3Weight', tip: 'guide.tip3Tip' },
@@ -512,7 +512,7 @@ const qualityChecks = [
   'guide.check6',
 ]
 
-export function FabricGuidePage() {
+export function DeviceGuidePage() {
   const { t, lang } = useT()
   const questions: ProductFaq[] = [...(lang === 'en' ? ritajGuideQuestionsEn : guideQuestions), ...extraGuideQuestions(t)]
   const quickAnswers = lang === 'en' ? ritajQuickGuideAnswersEn : quickGuideAnswers
@@ -618,7 +618,7 @@ export function FabricGuidePage() {
                 </tr>
               </thead>
               <tbody>
-                {fabricTips.map((row) => (
+                {deviceTips.map((row) => (
                   <tr key={row.use}>
                     <th scope="row">{t(row.use)}</th>
                     <td>{t(row.fabric)}</td>
