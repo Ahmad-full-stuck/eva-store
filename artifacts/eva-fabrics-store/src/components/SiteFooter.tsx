@@ -13,7 +13,7 @@ interface SiteFooterProps {
 
 const infoItems = [
   { path: '/about', label: 'foot.nav.about' },
-  { path: '/fabric-guide', label: 'foot.nav.guide' },
+  { path: '/device-guide', label: 'foot.nav.guide' },
   { path: '/order-tracking', label: 'foot.nav.tracking' },
   { path: '/contact', label: 'foot.nav.contact' },
   { path: '/policies', label: 'foot.nav.policies' },
