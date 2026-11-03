@@ -1124,11 +1124,11 @@ const readOrders = (): StoredOrder[] => {
 const rememberOrder = (order: StoredOrder): void => {
   if (typeof window === 'undefined') return
   try {
-    const raw = window.localStorage.getItem('eva-orders')
+    const raw = window.localStorage.getItem('ritaj-orders')
     const existing: StoredOrder[] = []
     if (raw) collectOrders(JSON.parse(raw), existing)
     const next = [order, ...existing.filter((item) => item.orderNumber.toLowerCase() !== order.orderNumber.toLowerCase())].slice(0, 12)
-    window.localStorage.setItem('eva-orders', JSON.stringify(next))
+    window.localStorage.setItem('ritaj-orders', JSON.stringify(next))
   } catch {
     return
   }
