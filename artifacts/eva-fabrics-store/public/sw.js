@@ -1,4 +1,4 @@
-/* Service worker لإشعارات الطلبات في إيفا ستور */
+/* Service worker لإشعارات الطلبات في رتاج العربي */
 self.addEventListener('install', () => self.skipWaiting())
 
 self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()))
@@ -10,7 +10,7 @@ self.addEventListener('push', (event) => {
   } catch (error) {
     data = {}
   }
-  const title = (data && data.title) || 'إيفا ستور'
+  const title = (data && data.title) || 'رتاج العربي'
   const info = (data && data.data) || {}
   const options = {
     body: (data && data.body) || 'لديك إشعار جديد',
@@ -18,7 +18,7 @@ self.addEventListener('push', (event) => {
     badge: 'favicon.svg',
     dir: 'rtl',
     lang: 'ar',
-    tag: info.orderNumber ? `eva-order-${info.orderNumber}` : undefined,
+    tag: info.orderNumber ? `ritaj-order-${info.orderNumber}` : undefined,
     data: info,
   }
   event.waitUntil(self.registration.showNotification(title, options))
