@@ -155,36 +155,37 @@ export const routeLabelsEn: Record<string, string> = {
 }
 
 export const discoveryEngineValues: Record<string, string> = {
-  'home.discovery.q1.dress': 'فستان يومي',
-  'home.discovery.q1.evening': 'فستان سهرة',
-  'home.discovery.q1.abaya': 'عباءة أو برنوش',
-  'home.discovery.q1.practical': 'قطعة عملية',
-  'home.discovery.q2.yes': 'نعم، مطاطي',
-  'home.discovery.q2.no': 'لا، غير مطاطي',
-  'home.discovery.q3.dark': 'داكن',
-  'home.discovery.q3.light': 'فاتح',
-  'home.discovery.q3.shiny': 'لامع',
-  'home.discovery.q3.neutral': 'محايد',
+  'home.discovery.q1.dress': 'Apple',
+  'home.discovery.q1.evening': 'Samsung',
+  'home.discovery.q1.abaya': 'Android',
+  'home.discovery.q1.practical': '',
+  'home.discovery.q2.yes': '5G',
+  'home.discovery.q2.no': '',
+  'home.discovery.q2.either': '',
+  'home.discovery.q3.dark': 'تصوير',
+  'home.discovery.q3.light': 'أداء',
+  'home.discovery.q3.shiny': 'بطارية',
+  'home.discovery.q3.neutral': 'استخدام يومي',
 }
 
 export const trustItemsEn: { title: string; description: string; icon: string }[] = [
-  { title: 'Delivery across Iraq', description: 'All governorates', icon: 'truck' },
-  { title: 'Delivery 5,000 dinars', description: 'Fixed fee', icon: 'wallet' },
-  { title: 'Support on the site', description: 'Before and after you order', icon: 'message' },
-  { title: 'A confident choice', description: 'Clear specifications', icon: 'check' },
+  { title: 'Clear specifications', description: 'Details for every device', icon: 'check' },
+  { title: 'Multiple categories', description: 'Phones, devices and accessories', icon: 'layers' },
+  { title: 'Organized request', description: 'Your choices in one place', icon: 'shopping-bag' },
+  { title: 'Direct contact', description: 'Through the official account', icon: 'message' },
 ]
 
 export const homeStoryEn = {
-  title: 'Fabrics worth choosing with confidence',
-  text: 'Eva Store is an Iraqi space that brings together a varied range with a clear explanation of feel, stretch and colour, so your decision is easier before you order by the meter.',
+  title: 'Technology worth choosing with confidence',
+  text: 'Ritaj Al Arabi brings smartphones, devices and accessories into one organized digital experience, with clear details to help you compare before sending a request.',
 }
 
-export const guideQuestionsEn: { question: string; answer: string }[] = [
-  { question: 'How do I pick the right fabric?', answer: 'Start with the occasion: everyday fabric should be light and comfortable, while special events may call for weight, structure and shine. Check the stretch, opacity and width before you buy.' },
-  { question: 'What is the difference between stretchy and non-stretchy?', answer: 'Stretchy fabric contains elastane or spandex, so it stretches and returns to shape. Non-stretchy fabric holds its structure better and suits clearly tailored pieces. Labels in the store follow the actual stretch of the design.' },
-  { question: 'How do I know the right width?', answer: 'Width is the measurement from edge to edge, and it is listed in every product spec. The wider the fabric, the less you need for a single piece.' },
-  { question: 'How much fabric do I need?', answer: 'A simple piece usually needs between 2 and 2.5 meters, and an abaya between 3 and 4 meters. Add a small margin for cutting and sewing, and half-meter orders are welcome.' },
-  { question: 'How do I read the colour description?', answer: 'The photos are a visual sample of the material. Compare the colour with the lighting around you and with similar pieces, and contact us if the shade is critical to your project.' },
+export const guideQuestionsEn = [
+  { question: 'How do I choose the right phone?', answer: 'Start with your usage and budget, then compare processor, storage, RAM, camera and battery.' },
+  { question: 'How much storage do I need?', answer: 'Choose storage based on the apps, photos, videos and files you keep.' },
+  { question: 'Why does RAM matter?', answer: 'RAM supports multitasking and app switching. The right amount depends on how you use the device.' },
+  { question: 'Does every version support 5G?', answer: 'Network support can vary by model and region. Confirm the exact model number before ordering.' },
+  { question: 'What should I check before ordering?', answer: 'Confirm storage, colour, device condition, accessories, warranty and final price.' },
 ]
 
 export const governoratesEn: string[] = [
