@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft, BadgeCheck, ChevronDown, MessageCircle, Sparkles, Truck, Wallet } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, ChevronDown, MessageCircle, Sparkles } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
 import { guideQuestions, homeStory, trustItems } from '@/lib/fallback-data'
@@ -56,7 +56,6 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
   const discoveryHref = (() => {
     const params = new URLSearchParams()
     if (answers[1] === 'home.discovery.q2.yes') params.set('stretch', '1')
-    if (answers[1] === 'home.discovery.q2.no') params.set('stretch', '0')
     const query = params.toString()
     return `/catalog${query ? `?${query}` : ''}`
   })()
@@ -70,7 +69,7 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
     }
     setSuggestions(runDiscovery(products, {
       garment: engineValue(next[0]),
-      stretch: next[1] === 'home.discovery.q2.yes' ? 'yes' : next[1] === 'home.discovery.q2.no' ? 'no' : '',
+      stretch: next[1] === 'home.discovery.q2.yes' ? 'yes' : '',
       tone: engineValue(next[2]),
       limit: 3,
     }))
@@ -170,7 +169,7 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
 
       {sectionVisible(content, 'story') && (
       <section className="container-eva section-block story-section" aria-label={t('home.storyEyebrow')}>
-        <div className="story-visual"><SmartImage src="products/swfmytalk/01.jpg" alt={t('home.storyImageAlt')} sizes="(max-width: 820px) 92vw, 45vw" /><span>EVA<br /><strong>FABRICS</strong></span></div>
+        <div className="story-visual"><SmartImage src="https://ddfndelma2gpn.cloudfront.net/color/3387/Cobalt_Violet.webp" alt="أجهزة الهواتف الذكية من رتاج العربي" sizes="(max-width: 820px) 92vw, 45vw" /><span>RITAJ<br /><strong>AL ARABI</strong></span></div>
         <div className="story-copy"><span className="eyebrow">{t('home.storyEyebrow')}</span><h2>{story.title}</h2><p>{story.text}</p><p>{t('home.storyText2')}</p><Link href="/about" className="button button-outline">{t('home.storyCta')} <ArrowLeft size={16} /></Link></div>
       </section>
       )}
