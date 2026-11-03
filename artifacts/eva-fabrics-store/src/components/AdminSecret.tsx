@@ -1370,6 +1370,42 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                         <label>الوصف</label>
                         <textarea value={editing.description} onChange={(event) => setField('description', event.target.value)} />
                       </div>
+                      <section className="admin-note" style={{ marginTop: 14, marginBottom: 10 }}>
+                        <strong>المواصفات التقنية للجهاز</strong>
+                        <p style={{ margin: '4px 0 0' }}>أدخل بيانات النسخة المعروضة بدقة حتى تظهر للزبون في صفحة المنتج.</p>
+                      </section>
+                      <div className="admin-row">
+                        {([
+                          ['composition', 'المعالج'],
+                          ['width', 'السعة التخزينية'],
+                          ['weight', 'الذاكرة العشوائية RAM'],
+                          ['stretch', 'دعم شبكات 5G'],
+                        ] as const).map(([key, label]) => (
+                          <div className="admin-field" key={key}>
+                            <label>{label}</label>
+                            <input value={editing.specs[key]} onChange={(event) => setField('specs', { ...editing.specs, [key]: event.target.value })} />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="admin-row">
+                        {([
+                          ['opacity', 'الكاميرات'],
+                          ['finish', 'البطارية والشحن'],
+                          ['care', 'نظام التشغيل'],
+                          ['use', 'الاتصال والميزات'],
+                        ] as const).map(([key, label]) => (
+                          <div className="admin-field" key={key}>
+                            <label>{label}</label>
+                            <input value={editing.specs[key]} onChange={(event) => setField('specs', { ...editing.specs, [key]: event.target.value })} />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="admin-field">
+                        <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                          <input type="checkbox" checked={editing.specs.isStretch} onChange={(event) => setField('specs', { ...editing.specs, isStretch: event.target.checked })} style={{ width: 16, height: 16 }} />
+                          يدعم شبكات 5G
+                        </label>
+                      </div>
 
                       <div className="admin-row">
                         <div className="admin-field">
