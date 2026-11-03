@@ -4,7 +4,7 @@ import { useT } from '@/lib/i18n'
 import {
   AboutPage,
   ContactPage,
-  FabricGuidePage,
+  DeviceGuidePage,
   GlassStyles,
   OrderTrackingPage,
   PoliciesPage,
@@ -19,7 +19,7 @@ export default function NotFound() {
   if (fragmentIndex > 0) {
     const base = location.slice(0, fragmentIndex)
     if (base === '/about') return <AboutPage />
-    if (base === '/fabric-guide') return <FabricGuidePage />
+    if (base === '/device-guide') return <DeviceGuidePage />
     if (base === '/contact') return <ContactPage />
     if (base === '/policies') return <PoliciesPage />
     if (base === '/order-tracking') return <OrderTrackingPage />
@@ -39,7 +39,7 @@ export default function NotFound() {
             <Link href="/catalog" className="button button-outline">{t('nf.browse')} <ArrowLeft size={16} /></Link>
           </div>
           <div className="not-found-links">
-            <Link href="/fabric-guide" className="chip">{t('nf.guide')}</Link>
+            <Link href="/device-guide" className="chip">{t('nf.guide')}</Link>
             <Link href="/about" className="chip">{t('nf.about')}</Link>
             <Link href="/contact" className="chip">{t('nf.contact')}</Link>
             <Link href="/order-tracking" className="chip">{t('nf.tracking')}</Link>
