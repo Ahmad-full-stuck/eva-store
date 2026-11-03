@@ -939,7 +939,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `eva-store-backup-${new Date().toISOString().slice(0, 10)}.json`
+    a.download = `ritaj-store-backup-${new Date().toISOString().slice(0, 10)}.json`
     a.click()
     URL.revokeObjectURL(url)
     setToast('تم تنزيل النسخة الاحتياطية')
