@@ -1,8 +1,8 @@
 import type { CartItem, Product, ProductColor } from '@/types'
 import { availableMeters, normalizeHalfMeters, orderKey } from './catalog'
 
-const CART_KEY = 'eva-fabrics-cart-v1'
-const WISHLIST_KEY = 'eva-fabrics-wishlist-v1'
+const CART_KEY = 'ritaj-cart-v1'
+const WISHLIST_KEY = 'ritaj-wishlist-v1'
 
 const readArray = (key: string): unknown[] => {
   if (typeof window === 'undefined') return []
@@ -22,7 +22,7 @@ const readStoredCart = (): unknown[] => {
   if (typeof window === 'undefined') return []
   const current = readArray(CART_KEY)
   if (current.length) return current
-  return readArray('eva-cart')
+  return []
 }
 
 const findProduct = (products: Product[], slug: string): Product | undefined => products.find((product) => product.slug === slug)
