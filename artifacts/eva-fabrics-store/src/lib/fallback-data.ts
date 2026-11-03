@@ -16,7 +16,7 @@ export const fallbackRoutes: SiteRoute[] = [
   { id: 'new', label: 'وصل حديثاً', path: '/catalog', header: true },
   { id: 'favorites', label: 'المفضلة', path: '/favorites', header: false },
   { id: 'about', label: 'من نحن', path: '/about', header: true },
-  { id: 'guide', label: 'دليل الأجهزة', path: '/fabric-guide', header: true },
+  { id: 'guide', label: 'دليل الأجهزة', path: '/device-guide', header: true },
   { id: 'contact', label: 'تواصلي معنا', path: '/contact', header: false },
   { id: 'tracking', label: 'تتبع الطلب', path: '/order-tracking', header: false },
   { id: 'policies', label: 'السياسات', path: '/policies', header: false },
