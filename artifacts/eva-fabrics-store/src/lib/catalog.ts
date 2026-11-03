@@ -27,8 +27,8 @@ export const matchesProductSearch = (product: Product, query: string): boolean =
     product.specs.finish,
     ...product.colors.map((item) => item.name),
   ].join(' '))
-  const asksForNonStretch = cleanQuery.includes('غير مطاطي')
-  const asksForStretch = cleanQuery.includes('مطاطي') && !asksForNonStretch
+  const asksForNonStretch = cleanQuery.includes('لا يشترط 5g') || cleanQuery.includes('بدون 5g')
+  const asksForStretch = cleanQuery.includes('5g') && !asksForNonStretch
   if (asksForNonStretch && product.specs.isStretch) return false
   if (asksForStretch && !product.specs.isStretch) return false
   return cleanQuery.split(' ').every((word) => text.includes(word))
@@ -59,16 +59,17 @@ export const formatDinar = (value: number): string => {
 }
 
 /** «0.5» → «نصف متر» */
-export const metersLabel = (value: number): string =>
-  value === 0.5 ? tr('core.metersHalf') : `${Number(value.toFixed(2)).toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ')} ${tr('core.metersWord')}`
+export const metersLabel = (value: number): string => {
+  const quantity = Math.max(0, Math.floor(value))
+  if (getCurrentLang() === 'en') return `${quantity} ${quantity === 1 ? 'device' : 'devices'}`
+  return quantity === 1 ? 'جهاز واحد' : `${quantity.toLocaleString('ar-IQ')} أجهزة`
+}
 
-export const formatMeters = (value: number): string => (value === 0.5
-  ? tr('core.metersShortHalf')
-  : `${value.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} ${tr('core.metersShortUnit')}`)
+export const formatMeters = (value: number): string => metersLabel(value)
 
 export const normalizeHalfMeters = (value: number): number => {
   if (!Number.isFinite(value) || value <= 0) return 0
-  return Math.max(0.5, Math.ceil(value * 2) / 2)
+  return Math.max(1, Math.round(value))
 }
 
 export const availableMeters = (product: Product, color?: ProductColor): number => {
