@@ -1,10 +1,12 @@
 name: Deploy Ritaj Al Arabi Store
 
 on:
+  push:
+    branches: [ritaj-al-arabi]
   workflow_dispatch:
 
 concurrency:
-  group: ritaj-al-arabi-deploy
+  group: ritaj-al-arabi-deploy-optimized
   cancel-in-progress: true
 
 permissions:
@@ -29,10 +31,12 @@ jobs:
             package.json
             pnpm-lock.yaml
             pnpm-workspace.yaml
-            artifacts/eva-fabrics-store
-            artifacts/eva-worker
+            artifacts/eva-fabrics-store/src
+            artifacts/eva-fabrics-store/public/fonts
+            artifacts/eva-worker/src
+            artifacts/eva-worker/migrations
             data
-            lib
+            lib/api-client-react
           sparse-checkout-cone-mode: true
 
       - name: Sanitize Cloudflare credentials
