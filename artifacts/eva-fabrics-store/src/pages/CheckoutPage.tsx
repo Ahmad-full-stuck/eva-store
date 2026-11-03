@@ -43,8 +43,8 @@ interface StoredOrder {
   address: string
 }
 
-const ORDERS_KEY = 'eva-orders'
-const PROFILE_KEY = 'eva-customer'
+const ORDERS_KEY = 'ritaj-orders'
+const PROFILE_KEY = 'ritaj-customer'
 
 const fieldOrder: (keyof CheckoutForm)[] = ['name', 'phone', 'governorate', 'district', 'address', 'landmark', 'email', 'notes']
 
@@ -56,7 +56,7 @@ const createLocalOrderNumber = (): string => {
   const now = new Date()
   const stamp = `${String(now.getFullYear()).slice(-2)}${padNumber(now.getMonth() + 1)}${padNumber(now.getDate())}`
   const suffix = Math.floor(1000 + Math.random() * 9000)
-  return `EVA-${stamp}-${suffix}`
+  return `RTA-${stamp}-${suffix}`
 }
 
 const glassStyles = `
@@ -304,7 +304,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
       const record: StoredOrder = {
         orderNumber,
         createdAt: new Date().toISOString(),
-        items: payload.items.map((item) => ({ productName: item.productName, colorName: item.colorName, meters: item.quantity, unitPrice: item.unitPrice, total: item.totalPrice })),
+        items: payload.items.map((item) => ({ productName: item.productName, colorName: item.colorName, quantity: item.quantity, unitPrice: item.unitPrice, total: item.totalPrice })),
         subtotal: payload.subtotal,
         deliveryFee: payload.deliveryFee,
         total: payload.total,
