@@ -36,10 +36,10 @@ export const matchesProductSearch = (product: Product, query: string): boolean =
 
 export const getCartTotals = (cart: CartItem[]): { subtotal: number; deliveryFee: number; total: number } => {
   const settings = readStoreSettings()
-  const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
-  const fee = Math.max(0, settings.deliveryFee ?? 5000)
+  const freeFrom = Math.max(0, settings.freeDeliveryFrom ?? 0)
+  const fee = Math.max(0, settings.deliveryFee ?? 0)
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.length, 0)
-  const deliveryFee = subtotal === 0 || subtotal >= freeFrom ? 0 : fee
+  const deliveryFee = subtotal === 0 || freeFrom === 0 || subtotal >= freeFrom ? 0 : fee
   return { subtotal, deliveryFee, total: subtotal + deliveryFee }
 }
 
