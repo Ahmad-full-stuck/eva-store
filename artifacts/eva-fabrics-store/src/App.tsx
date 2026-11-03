@@ -63,7 +63,7 @@ const PAGE_SEO: Record<string, { title: string; desc: string }> = {
   '/checkout': { title: 'إتمام الطلب | إيفا ستور', desc: 'أدخلي بياناتك وعدد الأمتار لتأكيد طلب الأقمشة مع التوصيل إلى جميع محافظات العراق.' },
   '/favorites': { title: 'المفضلة | إيفا ستور', desc: 'الأقمشة التي حفظتيها للرجوع إليها لاحقاً.' },
   '/about': { title: 'من نحن | إيفا ستور', desc: 'قصة إيفا ستور وخامة تصنع الفرق.' },
-  '/fabric-guide': { title: 'دليل الأقمشة | إيفا ستور', desc: 'كيف تفرقي بين أنواع الأقمشة؟ دليل عملي بالأسئلة الشائعة عن المرونة والكثافة والعناية.' },
+  '/device-guide': { title: 'دليل الأقمشة | إيفا ستور', desc: 'كيف تفرقي بين أنواع الأقمشة؟ دليل عملي بالأسئلة الشائعة عن المرونة والكثافة والعناية.' },
   '/contact': { title: 'تواصلي معنا | إيفا ستور', desc: 'أرسلي رسالتك عبر نموذج التواصل في موقع إيفا ستور للاستفسار عن الأقمشة والتوصيل وتتبّع الطلبات.' },
   '/policies': { title: 'السياسات والخصوصية | إيفا ستور', desc: 'سياسات الشحن والإرجاع والخصوصية الخاصة بمتجر إيفا ستور.' },
   '/order-tracking': { title: 'تتبع الطلب | إيفا ستور', desc: 'تتبعي حالة طلبك برقم الطلب الخاص بك.' },
@@ -77,7 +77,7 @@ const PAGE_SEO_EN: Record<string, { title: string; desc: string }> = {
   '/checkout': { title: 'Checkout | Eva Store', desc: 'Enter your details and meters to confirm your fabric order with delivery across Iraq.' },
   '/favorites': { title: 'Favorites | Eva Store', desc: 'The fabrics you saved to come back to later.' },
   '/about': { title: 'About us | Eva Store', desc: 'The story of Eva Store and a fabric that makes the difference.' },
-  '/fabric-guide': { title: 'Fabric guide | Eva Store', desc: 'How to tell fabric types apart? A practical guide with FAQs on stretch, density and care.' },
+  '/device-guide': { title: 'Fabric guide | Eva Store', desc: 'How to tell fabric types apart? A practical guide with FAQs on stretch, density and care.' },
   '/contact': { title: 'Contact us | Eva Store', desc: 'Send us a message through the Eva Store contact form about fabrics, delivery and order tracking.' },
   '/policies': { title: 'Policies & privacy | Eva Store', desc: 'Shipping, returns and privacy policies for Eva Store.' },
   '/order-tracking': { title: 'Track order | Eva Store', desc: 'Track your order status using your order number.' },
@@ -189,6 +189,7 @@ function AppShell() {
           <Route path="/checkout" component={() => <CheckoutPage cart={cart} onComplete={completeOrder} />} />
           <Route path="/favorites" component={() => <FavoritesPage {...pageProps} />} />
           <Route path="/about" component={AboutPage} />
+          <Route path="/device-guide" component={FabricGuidePage} />
           <Route path="/fabric-guide" component={FabricGuidePage} />
           <Route path="/contact" component={ContactPage} />
           <Route path="/policies" component={PoliciesPage} />
