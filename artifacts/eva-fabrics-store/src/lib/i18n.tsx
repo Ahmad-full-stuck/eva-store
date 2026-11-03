@@ -24,38 +24,90 @@ const LANG_KEY = 'ritaj-lang'
 
 const brandCopy = (value: string, lang: Lang): string => {
   if (lang === 'ar') {
-    return value
-      .replaceAll('إيفا ستور للأقمشة', 'شركة رتاج العربي')
-      .replaceAll('إيفا ستور', 'رتاج العربي')
-      .replaceAll('إيفا', 'رتاج')
-      .replaceAll('كل الأقمشة', 'جميع الأجهزة')
-      .replaceAll('الأقمشة', 'الأجهزة')
-      .replaceAll('أقمشة', 'أجهزة')
-      .replaceAll('القماش', 'الهاتف')
-      .replaceAll('قماش', 'هاتف')
-      .replaceAll('الخامات', 'الهواتف')
-      .replaceAll('الخامة', 'الجهاز')
-      .replaceAll('خامة', 'جهاز')
-      .replaceAll('نصف متر', 'جهاز واحد')
-      .replaceAll('الأمتار', 'الأجهزة')
-      .replaceAll('المتر', 'الوحدة')
-      .replaceAll('متر', 'جهاز')
-      .replaceAll('غير مطاطي', 'لا يشترط 5G')
-      .replaceAll('مطاطي', 'يدعم 5G')
-      .replaceAll('المرونة', 'دعم 5G')
-      .replaceAll('الشفافية', 'الكاميرا')
+    const replacements: Array<[string, string]> = [
+      ['إيفا ستور للأقمشة', 'شركة رتاج العربي'],
+      ['متجر إيفا ستور', 'متجر رتاج العربي'],
+      ['إيفا ستور', 'رتاج العربي'],
+      ['إيفا', 'رتاج العربي'],
+      ['دليل اختيار الأقمشة', 'دليل اختيار الأجهزة'],
+      ['دليل الأقمشة', 'دليل الأجهزة'],
+      ['معرض الأقمشة', 'كتالوج الأجهزة'],
+      ['معرض أقمشة', 'كتالوج الأجهزة'],
+      ['كل الأقمشة', 'جميع الأجهزة'],
+      ['الأقمشة', 'الأجهزة'],
+      ['أقمشة', 'أجهزة'],
+      ['القماش', 'الهاتف'],
+      ['قماش', 'هاتف'],
+      ['الخامات', 'الأجهزة'],
+      ['الخامة', 'مواصفات الجهاز'],
+      ['خامة', 'جهاز'],
+      ['نصف متر', 'جهاز واحد'],
+      ['أنصاف الأمتار', 'أعداد الأجهزة'],
+      ['الأمتار', 'الأجهزة'],
+      ['أمتار', 'أجهزة'],
+      ['المتر الواحد', 'الجهاز الواحد'],
+      ['للمتر', 'للجهاز'],
+      ['المتر', 'الجهاز'],
+      ['متر', 'جهاز'],
+      ['غير مطاطي', 'لا يشترط 5G'],
+      ['مطاطي', 'يدعم 5G'],
+      ['المرونة', 'دعم شبكات 5G'],
+      ['الشفافية', 'الكاميرا'],
+      ['فساتين السهرة', 'التصوير'],
+      ['فستان سهرة', 'التصوير'],
+      ['الفساتين اليومية', 'الاستخدام اليومي'],
+      ['فستان يومي', 'استخدام يومي'],
+      ['الفساتين', 'الهواتف'],
+      ['الفستان', 'الهاتف'],
+      ['فستان', 'هاتف'],
+      ['العباءات', 'هواتف أندرويد'],
+      ['عباءة أو برنوش', 'هواتف أندرويد'],
+      ['العباءة', 'الهاتف'],
+      ['عباءة', 'هاتف'],
+      ['القطعة', 'الجهاز'],
+      ['القطع', 'الأجهزة'],
+      ['التطريز', 'الكاميرا'],
+      ['النسيج', 'الجهاز'],
+      ['الخياطة', 'الاستخدام'],
+      ['عرض القماش', 'حجم الشاشة'],
+      ['العرض مطابق للمكتوب', 'السعة مطابقة للمواصفات'],
+    ]
+    let result = value
+    for (const [from, to] of replacements) result = result.replaceAll(from, to)
+    return result
   }
-  return value
-    .replace(/Eva Store Fabrics|Eva Store/gi, 'Ritaj Al Arabi')
-    .replace(/\bfabrics\b/gi, 'devices')
-    .replace(/\bfabric\b/gi, 'phone')
-    .replace(/\bhalf a meter\b/gi, 'one device')
-    .replace(/\bmeters?\b/gi, 'devices')
-    .replace(/\bstretchy\b/gi, '5G-enabled')
-    .replace(/\bstretch\b/gi, '5G support')
-    .replace(/\bsheerness\b|\bopacity\b/gi, 'camera')
-    .replace(/\bgarments?\b/gi, 'devices')
-};
+  const replacements: Array<[RegExp, string]> = [
+    [/Eva Store Fabrics|Eva Store/gi, 'Ritaj Al Arabi'],
+    [/fabric guide/gi, 'device guide'],
+    [/fabric gallery|fabric showroom/gi, 'device catalogue'],
+    [/\\bfabrics\\b/gi, 'devices'],
+    [/\\bfabric\\b/gi, 'device'],
+    [/\\bhalf a meter\\b/gi, 'one device'],
+    [/\\bmeters\\b/gi, 'devices'],
+    [/\\bmeter\\b/gi, 'device'],
+    [/everyday dresses/gi, 'everyday use'],
+    [/evening dress/gi, 'photography'],
+    [/\\bdresses\\b/gi, 'phones'],
+    [/\\bdress\\b/gi, 'phone'],
+    [/\\babaya(s)?\\b/gi, 'Android phone'],
+    [/\\bburnous\\b/gi, 'Android phone'],
+    [/\\bgarments?\\b/gi, 'devices'],
+    [/cutting and sewing/gi, 'device use and performance'],
+    [/\\bsewing\\b/gi, 'usage'],
+    [/\\bcutting\\b/gi, 'usage'],
+    [/\\bstretchy\\b/gi, '5G-enabled'],
+    [/\\bnon-stretch(?:y)?\\b/gi, 'without 5G requirement'],
+    [/\\bstretch\\b/gi, '5G support'],
+    [/\\bsheerness\\b|\\bopacity\\b/gi, 'camera'],
+    [/\\bwidth\\b/gi, 'screen size'],
+    [/\\bweight\\b/gi, 'RAM'],
+    [/\\bembroidered\\b/gi, 'advanced'],
+    [/\\bembroidery\\b/gi, 'camera'],
+  ]
+  let result = value
+  for (const [pattern, replacement] of replacements) result = result.replace(pattern, replacement)
+  return result
+}
 
 const readStoredLang = (): Lang => {
   try {
