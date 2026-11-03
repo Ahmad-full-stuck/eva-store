@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Layers, LayoutGrid, Sparkles, Truck, Wallet } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Layers, LayoutGrid, Sparkles } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, Product } from '@/types'
 import { CountUp } from './CountUp'
@@ -34,7 +34,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
 
   // الصور تديرها الإدارة (إضافة/حذف/ترتيب). إن لم توجد صور محفوظة نرجع للافتراضية.
   const slideSrcs = Array.isArray(content.heroSlides) && content.heroSlides.length ? content.heroSlides : DEFAULT_HERO_SLIDES
-  const slides = slideSrcs.map((src, index) => ({ src, alt: `${content.shopName || 'EVA'} — ${index + 1}` }))
+  const slides = slideSrcs.map((src, index) => ({ src, alt: `${content.shopName || 'رتاج العربي'} — ${index + 1}` }))
   const [activeSlide, setActiveSlide] = useState(0)
   const timerRef = useRef<number | undefined>(undefined)
   const slideMs = Math.max(1200, Number(content.heroSlideMs) || 2600)
@@ -102,7 +102,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
               {slides.map((slide, index) => <button key={slide.src} type="button" role="tab" aria-selected={index === activeSlide} aria-label={slide.alt} className={index === activeSlide ? 'is-active' : ''} onClick={() => { setActiveSlide(index); restart() }} />)}
             </div>
           </>}
-          <div className="hero-vertical-label" aria-hidden="true">EVA · FABRICS</div>
+          <div className="hero-vertical-label" aria-hidden="true">RITAJ · AL ARABI</div>
         </div>
       </section>
 
