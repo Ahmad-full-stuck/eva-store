@@ -173,9 +173,9 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
                   </div>
                   <div className="cart-item-bottom">
                     <div className="quantity-control compact">
-                      <button type="button" onClick={() => handleUpdate(item, item.length - 0.5)} disabled={item.length <= 0.5} aria-label={t('cart.decreaseAria').replace('{name}', item.product.name)}><Minus size={15} /></button>
+                      <button type="button" onClick={() => handleUpdate(item, item.length - 1)} disabled={item.length <= 1} aria-label={t('cart.decreaseAria').replace('{name}', item.product.name)}><Minus size={15} /></button>
                       <output aria-label={t('cart.qtyAria').replace('{name}', item.product.name)}>{formatMeters(item.length)}</output>
-                      <button type="button" onClick={() => handleUpdate(item, item.length + 0.5)} disabled={item.length >= maxMeters} aria-label={t('cart.increaseAria').replace('{name}', item.product.name)}><Plus size={15} /></button>
+                      <button type="button" onClick={() => handleUpdate(item, item.length + 1)} disabled={item.length >= maxMeters} aria-label={t('cart.increaseAria').replace('{name}', item.product.name)}><Plus size={15} /></button>
                     </div>
                     <div className="cart-item-total">
                       <small>{formatMeters(item.length)} × {formatPrice(item.product.price)}</small>
