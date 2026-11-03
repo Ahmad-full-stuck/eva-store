@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ritaj-al-arabi-store",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "../eva-fabrics-store/dist/public",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/media/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ritaj-al-arabi-db",
+      "database_id": "f3abba38-1f82-45a6-bfa6-37f014b9a5bc",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    "STORE_ORIGIN": "https://ritaj-al-arabi-store.eva-store.workers.dev"
+  }
+}
