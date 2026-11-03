@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Layers, MapPin, Mail, MessageCircle, PackageCheck, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Truck } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Layers, MapPin, Mail, MessageCircle, PackageCheck, Ruler, RotateCcw, Smartphone, Scissors, Search, Send, ShieldCheck, Sparkles, Truck } from 'lucide-react'
 import { Link, useLocation, useSearch } from 'wouter'
 import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
 import { useT } from '@/lib/i18n'
-import { guideFaqsEn, quickGuideAnswersEn } from '@/lib/strings/info'
 import { fallbackCategories, fallbackProducts, guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
 import { apiUrl } from '@/lib/site'
-import { sendSimpleEmail } from '@/lib/email'
 import { useSiteContent } from '@/lib/site-content'
 import { mergeAdminCategories, mergeAdminProducts } from '@/components/AdminSecret'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -341,8 +339,6 @@ const buildAboutTimeline = () => {
 export function AboutPage() {
   const { t, lang } = useT()
   const content = useSiteContent()
-  const aboutStats = buildAboutStats()
-  const aboutTimeline = buildAboutTimeline()
   const productsCount = catalogCounts().products.toLocaleString(lang === 'en' ? 'en-US' : 'ar-IQ')
   return (
     <>
@@ -356,9 +352,9 @@ export function AboutPage() {
             <h1>{content.aboutTitle}</h1>
             <p>{content.aboutText}</p>
             <div className="chip-row" style={{ marginTop: '22px' }}>
-              <span className="chip"><Ruler size={13} />{t('about.chipOrder')}</span>
+              <span className="chip"><Smartphone size={13} />{t('about.chipOrder')}</span>
               <span className="chip"><ShieldCheck size={13} />{t('about.chipSpecs')}</span>
-              <span className="chip"><Truck size={13} />{t('about.chipDelivery')}</span>
+              <span className="chip"><MessageCircle size={13} />{t('about.chipDelivery')}</span>
             </div>
             <div className="about-points">
               <div><span>{t('about.point1Num')}</span><strong>{t('about.point1Title')}</strong><p>{t('about.point1Text')}</p></div>
@@ -367,9 +363,9 @@ export function AboutPage() {
             </div>
           </div>
           <div className="about-collage">
-            <SmartImage src="products/dantylfrnsyambrwdry/01.jpg" alt={t('about.imgAlt1')} sizes="(max-width: 820px) 46vw, 24vw" />
-            <SmartImage src="products/lmshalbwklywnsyjalankwra/01.jpg" alt={t('about.imgAlt2')} sizes="(max-width: 820px) 46vw, 24vw" />
-            <span>EVA<br /><strong>FABRICS</strong></span>
+            <SmartImage src="https://media.ldlc.com/r1600/ld/products/00/06/27/53/LD0006275321.jpg" alt={t('about.imgAlt1')} sizes="(max-width: 820px) 46vw, 24vw" />
+            <SmartImage src="https://ddfndelma2gpn.cloudfront.net/color/3387/Cobalt_Violet.webp" alt={t('about.imgAlt2')} sizes="(max-width: 820px) 46vw, 24vw" />
+            <span>RITAJ<br /><strong>AL ARABI</strong></span>
           </div>
         </section>
 
@@ -387,17 +383,6 @@ export function AboutPage() {
           </div>
         </section>
 
-        <section className="section-block" aria-labelledby="about-stats-title">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">{t('about.statsEyebrow')}</span>
-              <h2 id="about-stats-title">{t('about.statsTitle')}</h2>
-              <p>{t('about.statsText')}</p>
-            </div>
-          </div>
-          <div className="stats-grid">{aboutStats.map((stat) => <StatCard key={stat.label} stat={stat} />)}</div>
-        </section>
-
         <section className="section-block" aria-labelledby="about-values-title">
           <div className="section-heading">
             <div>
@@ -407,28 +392,6 @@ export function AboutPage() {
             </div>
           </div>
           <div className="about-values">{aboutValues.map((value) => <article className="glass-card value-card" key={value.title}><span className="value-icon">{value.icon}</span><h3>{t(value.title)}</h3><p>{t(value.text)}</p></article>)}</div>
-        </section>
-
-        <section className="section-soft" aria-labelledby="about-timeline-title">
-          <div className="section-head-tight">
-            <div>
-              <span className="eyebrow">{t('about.timelineEyebrow')}</span>
-              <h2 id="about-timeline-title">{t('about.timelineTitle')}</h2>
-            </div>
-            <span className="chip chip-neutral">{t('about.timelineChip')}</span>
-          </div>
-          <ol className="timeline">
-            {aboutTimeline.map((item, index) => (
-              <li className="timeline-item" key={item.year}>
-                <span className="timeline-dot" aria-hidden="true">{index + 1}</span>
-                <div className="glass-card timeline-body">
-                  <span className="timeline-year">{t(item.year)}</span>
-                  <strong>{t(item.title)}</strong>
-                  <p>{t(item.text).replace('{count}', productsCount)}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
         </section>
 
         <section className="about-cta glass-dark">
@@ -508,6 +471,21 @@ function StatCard({ stat }: { stat: AboutStat }) {
     </div>
   )
 }
+const ritajGuideQuestionsEn: ProductFaq[] = [
+  { question: 'How do I choose the right phone?', answer: 'Start with your everyday needs and budget, then compare the processor, storage, RAM, camera and battery.' },
+  { question: 'How much storage do I need?', answer: 'Choose storage based on your apps, photos, videos and files. Confirm the exact variant before ordering.' },
+  { question: 'Why does RAM matter?', answer: 'RAM affects multitasking and app switching. The right amount depends on how you use the phone.' },
+  { question: 'Does every version support 5G?', answer: 'Network support can differ by model and region. Confirm the exact model number and local bands.' },
+  { question: 'What should I check before ordering?', answer: 'Confirm storage, colour, device condition, accessories, warranty and final price with the company.' },
+]
+const ritajQuickGuideAnswersEn = [
+  { question: 'How should I compare processors?', answers: ['Start with your primary use.', 'Compare chips within the same device class.', 'Check independent performance tests when needed.'] },
+  { question: 'Which storage size is suitable?', answers: ['128GB may suit moderate use.', '256GB or more can help with large photo and video libraries.', 'Confirm the exact storage of the listed variant.'] },
+  { question: 'How do I compare cameras?', answers: ['Do not rely on megapixels alone.', 'Check low-light, stabilization and video quality.', 'Compare sample photos from the exact model.'] },
+  { question: 'What should I review about battery?', answers: ['Compare capacity and power efficiency.', 'Confirm charging speed and charger compatibility.', 'Check battery health on used devices.'] },
+  { question: 'Do I need 5G?', answers: ['Check the model supports local network bands.', 'Confirm the exact regional variant.', 'Network support can differ by release.'] },
+  { question: 'What should I confirm before buying?', answers: ['Whether the device is new or used.', 'Storage, colour and included accessories.', 'Final price, warranty and exchange terms.'] },
+]
 const extraGuideQuestions = (t: (key: string) => string): ProductFaq[] => [
   { question: t('guide.extraQ1Question'), answer: t('guide.extraQ1Answer') },
   { question: t('guide.extraQ2Question'), answer: t('guide.extraQ2Answer') },
@@ -536,8 +514,8 @@ const qualityChecks = [
 
 export function FabricGuidePage() {
   const { t, lang } = useT()
-  const questions: ProductFaq[] = [...(lang === 'en' ? guideFaqsEn : guideQuestions), ...extraGuideQuestions(t)]
-  const quickAnswers = lang === 'en' ? quickGuideAnswersEn : quickGuideAnswers
+  const questions: ProductFaq[] = [...(lang === 'en' ? ritajGuideQuestionsEn : guideQuestions), ...extraGuideQuestions(t)]
+  const quickAnswers = lang === 'en' ? ritajQuickGuideAnswersEn : quickGuideAnswers
   const [openQuick, setOpenQuick] = useState<number | null>(0)
   const [openGuide, setOpenGuide] = useState<number | null>(0)
   return (
@@ -734,14 +712,13 @@ export function ContactPage() {
       setState('sent')
     } catch {
       window.clearTimeout(timer)
-      const mailed = await sendSimpleEmail({
-        to: content.emailOrdersTo,
-        action: content.emailFormSubmitAction || undefined,
-        subject: t('contact.emailSubject'),
-        body: composeText(),
-        fields: { name: name.trim(), phone: phone.replace(/[\s()-]/g, '') },
-      })
-      setState(mailed ? 'sent' : 'failed')
+      try {
+        await window.navigator.clipboard.writeText(composeText())
+      } catch {
+        // Clipboard access is optional; the visitor can still message the company.
+      }
+      window.open('https://ig.me/m/alrtag_2', '_blank', 'noopener,noreferrer')
+      setState('sent')
       return
     }
     window.clearTimeout(timer)
@@ -768,7 +745,7 @@ export function ContactPage() {
             <p>{content.contactText}</p>
 
             <div className="contact-methods">
-              <a href="#contact-form" aria-label={t('contact.method1Aria')}>
+              <a href="https://ig.me/m/alrtag_2" target="_blank" rel="noreferrer" aria-label={t('contact.method1Aria')}>
                 <Send size={19} /><span><strong>{t('contact.method1Title')}</strong><small>{t('contact.method1Text')}</small></span><ArrowLeft size={15} />
               </a>
               <Link href="/order-tracking" aria-label={t('contact.method2Aria')}>
@@ -997,7 +974,7 @@ interface StoredOrder {
   items?: StoredOrderItem[]
 }
 
-const ORDER_KEYS = ['eva-orders', 'eva-order', 'eva-last-order', 'eva-fabrics-orders', 'eva-fabrics-order', 'eva-checkout-order', 'eva-pending-order', 'eva-order-number']
+const ORDER_KEYS = ['ritaj-orders', 'ritaj-order', 'ritaj-last-order', 'ritaj-orders', 'ritaj-order', 'ritaj-checkout-order', 'ritaj-pending-order', 'ritaj-order-number']
 
 const statusSteps = ['track.step1', 'track.step2', 'track.step3', 'track.step4', 'track.step5']
 
