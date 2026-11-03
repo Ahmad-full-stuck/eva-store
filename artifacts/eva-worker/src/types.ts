@@ -3,6 +3,8 @@ export interface Env {
   MEDIA?: R2Bucket
   STORE_ORIGIN: string
   ADMIN_PIN?: string
+  ADMIN_USERNAME?: string
+  ADMIN_PASSWORD?: string
   VAPID_PUBLIC_KEY?: string
   VAPID_PRIVATE_KEY?: string
   VAPID_SUBJECT?: string
