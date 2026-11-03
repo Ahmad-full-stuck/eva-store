@@ -5,7 +5,6 @@ import type { CartItem } from '@/types'
 import { availableMeters, formatDinar, formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
 import { useT } from '@/lib/i18n'
 import { typeLabelsEn } from '@/lib/strings/product'
-import { useStoreSettings } from '@/lib/site-content'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 interface CartPageProps {
@@ -82,8 +81,6 @@ const glassStyles = `
 
 export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   const { t, lang } = useT()
-  const settings = useStoreSettings()
-  const freeFrom = Math.max(0, settings.freeDeliveryFrom ?? 0)
   const totals = getCartTotals(cart)
   const [announcement, setAnnouncement] = useState('')
   const itemsRef = useRef<HTMLElement>(null)
