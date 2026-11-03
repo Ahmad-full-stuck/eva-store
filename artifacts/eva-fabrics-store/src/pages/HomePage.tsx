@@ -160,7 +160,7 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
               ))}
             </h2>
             <p>{content.guideText}</p>
-            <Link href="/fabric-guide" className="button button-light">{content.guideCta} <ArrowLeft size={16} /></Link>
+            <Link href="/device-guide" className="button button-light">{content.guideCta} <ArrowLeft size={16} /></Link>
           </div>
           <div className="guide-faq-list glass-dark">{faqSource.slice(0, 4).map((item, index) => <div className={`guide-faq ${openFaq === index ? 'is-open' : ''}`} key={item.question}><button type="button" onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}><span>{t('home.faq.questionNumber').replace('{n}', String(index + 1))}</span><strong>{item.question}</strong><ChevronDown size={17} /></button>{openFaq === index && <p>{item.answer}</p>}</div>)}</div>
         </div>
