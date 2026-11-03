@@ -33,7 +33,7 @@ const STRETCH_OPTIONS: { value: StretchKey; labelKey: string }[] = [
   { value: 'non', labelKey: 'cat.stretchNon' },
 ]
 
-const STOP_WORDS = new Set(['قماش', 'القماش', 'اقمشه', 'الاقمشه', 'fabric'])
+const STOP_WORDS = new Set(['جهاز', 'الهاتف', 'هاتف', 'هواتف', 'اجهزه', 'الأجهزة', 'device', 'devices', 'phone', 'phones'])
 
 const PAGE_SIZE = 24
 
@@ -145,15 +145,11 @@ const matchesQuery = (product: Product, query: string, categories: Category[]): 
   const clean = normalizeArabic(query)
   if (!clean) return true
   const stretch = isStretchProduct(product)
-  const asksNonStretch = clean.includes('غير مطاطي')
-  const asksStretch = !asksNonStretch && clean.includes('مطاطي')
+  const asksNonStretch = clean.includes('لا يشترط 5g') || clean.includes('بدون 5g')
+  const asksStretch = !asksNonStretch && clean.includes('5g')
   if (asksNonStretch && stretch) return false
   if (asksStretch && !stretch) return false
-  const rest = asksNonStretch
-    ? clean.replace(/غير\s*مطاطي(?:ه)?/g, ' ')
-    : asksStretch
-      ? clean.replace(/مطاطي(?:ه)?/g, ' ')
-      : clean
+  const rest = asksNonStretch || asksStretch ? clean.replace(/5g/g, ' ').replace(/لا يشترط|بدون/g, ' ') : clean
   const words = rest.split(' ').filter((word) => word && !STOP_WORDS.has(word))
   if (words.length === 0) return true
   const category = categories.find((item) => item.id === product.categoryId)
