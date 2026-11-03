@@ -15,10 +15,10 @@ export const fallbackRoutes: SiteRoute[] = [
   { id: 'catalog', label: 'الأجهزة', path: '/catalog', header: true },
   { id: 'new', label: 'وصل حديثاً', path: '/catalog', header: true },
   { id: 'favorites', label: 'المفضلة', path: '/favorites', header: false },
-  { id: 'about', label: 'من نحن', path: '/about', header: true },
+  { id: 'about', label: 'عن رتاج العربي', path: '/about', header: true },
   { id: 'guide', label: 'دليل الأجهزة', path: '/device-guide', header: true },
-  { id: 'contact', label: 'تواصلي معنا', path: '/contact', header: false },
-  { id: 'tracking', label: 'تتبع الطلب', path: '/order-tracking', header: false },
+  { id: 'contact', label: 'تواصل معنا', path: '/contact', header: false },
+  { id: 'tracking', label: 'متابعة الطلب', path: '/order-tracking', header: false },
   { id: 'policies', label: 'السياسات', path: '/policies', header: false },
 ]
 
