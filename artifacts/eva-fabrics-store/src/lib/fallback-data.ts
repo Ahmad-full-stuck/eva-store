@@ -40,7 +40,7 @@ export const trustItems = [
   { title: 'خيارات متعددة', description: 'هواتف وأجهزة وإكسسوارات', icon: 'layers' },
   { title: 'طلب منظم', description: 'اختياراتك في مكان واحد', icon: 'shopping-bag' },
   { title: 'تواصل مباشر', description: 'عبر حساب الشركة الرسمي', icon: 'message' },
-] as constt
+] as const
 
 export const homeStory = {
   title: 'تقنية تستحق اختياراً واثقاً',
