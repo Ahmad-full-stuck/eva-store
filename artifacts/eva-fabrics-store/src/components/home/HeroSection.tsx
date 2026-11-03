@@ -26,10 +26,8 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
   const { t } = useT()
   const content = useSiteContent()
   const stats: HeroStat[] = [
-    { key: 'fabrics', icon: <Layers size={16} />, value: products.length, prefix: '+', suffix: '', label: t('home.stats.fabricsLabel'), trend: t('home.stats.fabricsTrend') },
-    { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '+', suffix: '', label: t('home.stats.categoriesLabel'), trend: t('home.stats.categoriesTrend') },
-    { key: 'delivery', icon: <Truck size={16} />, value: 18, prefix: '', suffix: '', label: t('home.stats.deliveryLabel'), trend: t('home.stats.deliveryTrend') },
-    { key: 'cash', icon: <Wallet size={16} />, value: 100, prefix: '', suffix: t('home.stats.percent'), label: t('home.stats.cashLabel'), trend: t('home.stats.cashTrend') },
+    { key: 'devices', icon: <Layers size={16} />, value: products.length, prefix: '', suffix: '', label: t('home.stats.fabricsLabel'), trend: t('home.stats.fabricsTrend') },
+    { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '', suffix: '', label: t('home.stats.categoriesLabel'), trend: t('home.stats.categoriesTrend') },
   ]
 
   // الصور تديرها الإدارة (إضافة/حذف/ترتيب). إن لم توجد صور محفوظة نرجع للافتراضية.
