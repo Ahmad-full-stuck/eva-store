@@ -96,7 +96,7 @@ export const defaultSiteContent: SiteContent = {
   statsTitle: 'نظرة على المعاينة',
   heroSlideMs: '3400',
   heroSlides: [...DEFAULT_HERO_SLIDES],
-  hiddenSections: ['newsletter'],
+  hiddenSections: ['newsletter', 'promo'],
   categoriesEyebrow: 'تسوّق حسب الفئة',
   categoriesTitle: 'عالم رتاج من الأجهزة',
   newEyebrow: 'اختيارات من الكتالوج',
