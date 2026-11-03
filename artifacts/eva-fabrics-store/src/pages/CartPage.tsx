@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, Minus, Pencil, Plus, ShieldCheck, ShoppingBag, Trash2, Truck } from 'lucide-react'
+import { ArrowLeft, Minus, Pencil, Plus, ShieldCheck, ShoppingBag, Trash2 } from 'lucide-react'
 import { Link } from 'wouter'
 import type { CartItem } from '@/types'
 import { availableMeters, formatDinar, formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
@@ -83,7 +83,7 @@ const glassStyles = `
 export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   const { t, lang } = useT()
   const settings = useStoreSettings()
-  const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
+  const freeFrom = Math.max(0, settings.freeDeliveryFrom ?? 0)
   const totals = getCartTotals(cart)
   const [announcement, setAnnouncement] = useState('')
   const itemsRef = useRef<HTMLElement>(null)
@@ -189,19 +189,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         </section>
         <aside className="order-summary glass glass-strong" aria-label={t('cart.summary')}>
           <h2>{t('cart.summary')}</h2>
-          {remaining > 0 ? (
-            <div className="delivery-progress">
-              <div className="delivery-progress-head">
-                <span>{t('cart.freeAt').replace('{amount}', formatDinar(freeFrom))}</span>
-                <b>{t('cart.remaining').replace('{amount}', formatDinar(remaining))}</b>
-              </div>
-              <div className="progress-track" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={t('cart.progressAria')}>
-                <i style={{ width: `${progress}%` }} />
-              </div>
-            </div>
-          ) : (
-            <div className="delivery-free glass-dark"><Truck size={16} /><span>{t('cart.freeUnlocked')}</span></div>
-          )}
+          <p className="summary-note">{t('cart.summaryNote')}</p>
           <div className="glass-divider" />
           <div className="summary-line">
             <span>{t('cart.subtotal')}</span>
