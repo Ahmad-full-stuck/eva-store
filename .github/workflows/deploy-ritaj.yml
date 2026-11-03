@@ -1,8 +1,6 @@
 name: Deploy Ritaj Al Arabi Store
 
 on:
-  push:
-    branches: [ritaj-al-arabi]
   workflow_dispatch:
 
 concurrency:
