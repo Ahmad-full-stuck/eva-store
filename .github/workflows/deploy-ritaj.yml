@@ -153,6 +153,14 @@ jobs:
         working-directory: artifacts/eva-worker
         run: pnpm exec wrangler d1 migrations apply ritaj-al-arabi-db --remote --config wrangler.ritaj.jsonc
 
+      - name: Publish the storefront on the branded Ritaj Pages domain
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: artifacts/eva-worker
+          command: pages deploy ../eva-fabrics-store/dist/public --project-name ritaj-al-arabi --branch main
+
       - name: Deploy the complete Ritaj Worker and storefront assets
         uses: cloudflare/wrangler-action@v3
         with:
