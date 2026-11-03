@@ -1030,4 +1030,9 @@ export const ritajStrings: Record<string, StringEntry> = {
   "co.serverErrorBody": { ar: "تعذر الاتصال بنظام الطلبات. جهّز الرسالة وأرسلها إلى الشركة عبر إنستغرام.", en: "The request system could not be reached. Prepare the message and send it to the company via Instagram." },
   "co.notSentNote": { ar: "لا يعتبر الطلب مرسلاً للشركة حتى ترسل الرسالة عبر الحساب الرسمي.", en: "Your request is not sent to the company until you send the message through the official account." },
   "co.submit": { ar: "تجهيز الطلب وفتح إنستغرام", en: "Prepare request and open Instagram" },
+  "cart.free": { ar: "يؤكد مع الشركة", en: "Confirmed with the company" },
+  "co.free": { ar: "يحدد عند التأكيد", en: "Confirmed later" },
+  "co.pieceOne": { ar: "جهاز", en: "device" },
+  "co.pieceMany": { ar: "أجهزة", en: "devices" },
+  "cart.perMeter": { ar: "للوحدة", en: "per unit" },
 }
