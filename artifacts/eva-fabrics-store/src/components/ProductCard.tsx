@@ -185,7 +185,7 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
             type="button"
             className="add-button"
             disabled={soldOut}
-            onClick={() => addColor && onAdd(product, addColor, 0.5)}
+            onClick={() => addColor && onAdd(product, addColor, 1)}
             aria-label={addLabel}
           >
             {soldOut ? t('card.soldOut') : <><ShoppingBag size={14} aria-hidden="true" /><span>{t('card.addHalf')}</span></>}
