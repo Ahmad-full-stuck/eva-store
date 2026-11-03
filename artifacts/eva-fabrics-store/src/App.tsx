@@ -16,7 +16,7 @@ import { ProductPage } from '@/pages/ProductPage'
 import { CartPage } from '@/pages/CartPage'
 import { CheckoutPage } from '@/pages/CheckoutPage'
 import { FavoritesPage } from '@/pages/FavoritesPage'
-import { AboutPage, ContactPage, FabricGuidePage, OrderConfirmationPage, OrderTrackingPage, PoliciesPage } from '@/pages/InfoPages'
+import { AboutPage, ContactPage, DeviceGuidePage, OrderConfirmationPage, OrderTrackingPage, PoliciesPage } from '@/pages/InfoPages'
 import NotFound from '@/pages/not-found'
 
 const shellStyles = `
@@ -188,7 +188,7 @@ function AppShell() {
           <Route path="/checkout" component={() => <CheckoutPage cart={cart} onComplete={completeOrder} />} />
           <Route path="/favorites" component={() => <FavoritesPage {...pageProps} />} />
           <Route path="/about" component={AboutPage} />
-          <Route path="/device-guide" component={FabricGuidePage} />
+          <Route path="/device-guide" component={DeviceGuidePage} />
           <Route path="/contact" component={ContactPage} />
           <Route path="/policies" component={PoliciesPage} />
           <Route path="/order-tracking" component={OrderTrackingPage} />
