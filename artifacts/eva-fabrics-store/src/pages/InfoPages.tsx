@@ -375,7 +375,7 @@ export function AboutPage() {
               <span className="eyebrow">{t('about.storyEyebrow')}</span>
               <h2 id="about-story-title">{t('about.storyTitle')}</h2>
             </div>
-            <Link href="/fabric-guide" className="underlined-link">{t('about.storyLink')} <ArrowLeft size={15} /></Link>
+            <Link href="/device-guide" className="underlined-link">{t('about.storyLink')} <ArrowLeft size={15} /></Link>
           </div>
           <div className="story-copy-grid">
             <p>{t('about.storyP1')}</p>
@@ -751,7 +751,7 @@ export function ContactPage() {
               <Link href="/order-tracking" aria-label={t('contact.method2Aria')}>
                 <PackageCheck size={19} /><span><strong>{t('contact.method2Title')}</strong><small>{t('contact.method2Text')}</small></span><ArrowLeft size={15} />
               </Link>
-              <Link href="/fabric-guide" aria-label={t('contact.method3Aria')}>
+              <Link href="/device-guide" aria-label={t('contact.method3Aria')}>
                 <Ruler size={19} /><span><strong>{t('contact.method3Title')}</strong><small>{t('contact.method3Text')}</small></span><ArrowLeft size={15} />
               </Link>
             </div>
