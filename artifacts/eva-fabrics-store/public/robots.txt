@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ritaj-al-arabi-store.eva-store.workers.dev/sitemap.xml
+Sitemap: https://ritaj-al-arabi.pages.dev/sitemap.xml
