@@ -297,6 +297,17 @@ textarea.glass-input { min-height: 132px; resize: vertical; line-height: 1.9; }
   .not-found-card { padding: 38px 20px; }
   .order-empty, .empty-glass { padding: 32px 18px; }
 }
+/* LAMHA: white surfaces, navy typography, controlled blue accent */
+.glass,.glass-card,.glass-pill,.section-soft,.glass-input,.guide-card,.quick-answer{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+.glass,.glass-card,.glass-pill,.section-soft,.guide-card,.quick-answer{background:#fff!important;border:1px solid #dce5ee!important;box-shadow:0 8px 22px rgba(6,23,43,.045)!important;color:#06172b;}
+.glass-dark,.about-cta{background:#06172b!important;color:#f3f6fa!important;border:1px solid #0b1d32!important;box-shadow:none!important;}
+.glass-dark p,.glass-dark small,.glass-dark li{color:#d3deea!important;}
+.glass-pill,.chip{background:#f4f7fb!important;border-color:#dce5ee!important;color:#33465d!important;}
+.stat-card:before,.glass:before,.glass-card:before{display:none!important;}
+.value-icon{background:#eaf3fc!important;border-color:#cfe2f4!important;color:#147be5!important;box-shadow:none!important;}
+.stat-value{color:#147be5!important;}
+.timeline:before{background:#dce5ee!important;}
+
 `;
 
 export function GlassStyles() {
@@ -339,109 +350,67 @@ const buildAboutTimeline = () => {
 }
 
 export function AboutPage() {
-  const { t, lang } = useT()
-  const content = useSiteContent()
-  const aboutStats = buildAboutStats()
-  const aboutTimeline = buildAboutTimeline()
-  const productsCount = catalogCounts().products.toLocaleString(lang === 'en' ? 'en-US' : 'ar-IQ')
+  const { lang, t } = useT()
+  const en = lang === 'en'
+  const copy = en ? {
+    eyebrow: 'About LAMHA',
+    title: 'Security made easier to understand.',
+    intro: 'LAMHA helps you explore surveillance cameras and practical security equipment with clear product information and a simple way to ask questions before ordering.',
+    cards: [
+      ['Choose by location', 'Start with the place you want to monitor: indoors, outdoors, an entrance or a larger space.'],
+      ['Check model details', 'Connectivity, image quality, night vision, storage and audio features vary by model. Review the specific product details before deciding.'],
+      ['Confirm compatibility', 'Ask us about power, network, recording equipment and accessories when you need a compatible setup.'],
+    ],
+    noteTitle: 'No guesswork on specifications',
+    note: 'We identify model-dependent features clearly. When a detail is not confirmed, ask us before ordering instead of relying on a generic claim.',
+    guide: 'Read the device guide',
+    browse: 'Browse devices',
+    contact: 'Contact LAMHA',
+  } : {
+    eyebrow: 'عن لَمْحة',
+    title: 'الأمان يبدأ باختيار واضح.',
+    intro: 'تساعدك لَمْحة على استكشاف كاميرات المراقبة وأجهزة الحماية العملية، مع معلومات واضحة عن المنتجات وطريقة سهلة للاستفسار قبل الطلب.',
+    cards: [
+      ['اختاري حسب المكان', 'ابدئي بتحديد المكان الذي تريدين مراقبته: داخل المنزل أو خارجه أو المدخل أو مساحة أوسع.'],
+      ['راجعي تفاصيل الموديل', 'الاتصال وجودة الصورة والرؤية الليلية والتخزين والصوت تختلف من موديل إلى آخر. راجعي تفاصيل الجهاز نفسه قبل الاختيار.'],
+      ['تأكدي من التوافق', 'اسألينا عن الطاقة والشبكة وأجهزة التسجيل والملحقات عندما تحتاجين إلى نظام متوافق.'],
+    ],
+    noteTitle: 'لا نخمن المواصفات',
+    note: 'نوضح الميزات التي تعتمد على الموديل. وعندما لا تكون المعلومة مؤكدة، الأفضل الاستفسار قبل الطلب بدلاً من الاعتماد على وصف عام.',
+    guide: 'اقرئي دليل الأجهزة',
+    browse: 'تصفحي الأجهزة',
+    contact: 'تواصلي مع لَمْحة',
+  }
   return (
     <>
       <GlassStyles />
       <main className="container-eva info-page">
         <div className="breadcrumbs"><Link href="/">{t('about.crumbHome')}</Link><span>›</span><span>{t('about.crumbCurrent')}</span></div>
-
-        <section className="about-hero">
-          <div className="about-copy">
-            <span className="eyebrow"><Sparkles size={14} />{t('about.eyebrow')}</span>
-            <h1>{content.aboutTitle}</h1>
-            <p>{content.aboutText}</p>
-            <div className="chip-row" style={{ marginTop: '22px' }}>
-              <span className="chip"><Ruler size={13} />{t('about.chipOrder')}</span>
-              <span className="chip"><ShieldCheck size={13} />{t('about.chipSpecs')}</span>
-              <span className="chip"><Truck size={13} />{t('about.chipDelivery')}</span>
-            </div>
-            <div className="about-points">
-              <div><span>{t('about.point1Num')}</span><strong>{t('about.point1Title')}</strong><p>{t('about.point1Text')}</p></div>
-              <div><span>{t('about.point2Num')}</span><strong>{t('about.point2Title')}</strong><p>{t('about.point2Text')}</p></div>
-              <div><span>{t('about.point3Num')}</span><strong>{t('about.point3Title')}</strong><p>{t('about.point3Text')}</p></div>
-            </div>
-          </div>
-          <div className="about-collage">
-            <SmartImage src="products/dantylfrnsyambrwdry/01.jpg" alt={t('about.imgAlt1')} sizes="(max-width: 820px) 46vw, 24vw" />
-            <SmartImage src="products/lmshalbwklywnsyjalankwra/01.jpg" alt={t('about.imgAlt2')} sizes="(max-width: 820px) 46vw, 24vw" />
-            <span>EVA<br /><strong>FABRICS</strong></span>
+        <section className="info-heading">
+          <span className="eyebrow"><ShieldCheck size={14} />{copy.eyebrow}</span>
+          <h1>{copy.title}</h1>
+          <p>{copy.intro}</p>
+        </section>
+        <section className="steps-grid" aria-label={copy.eyebrow}>
+          {copy.cards.map(([title, body], index) => (
+            <article className="glass-card value-card" key={title}>
+              <span className="chip">{String(index + 1).padStart(2, '0')}</span>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </article>
+          ))}
+        </section>
+        <section className="section-soft" style={{ marginTop: 26 }}>
+          <h2>{copy.noteTitle}</h2>
+          <p style={{ marginTop: 10, maxWidth: 850 }}>{copy.note}</p>
+          <div className="chip-row" style={{ marginTop: 22 }}>
+            <Link href="/device-guide" className="chip">{copy.guide}</Link>
+            <Link href="/catalog" className="chip">{copy.browse}</Link>
           </div>
         </section>
-
-        <section className="section-soft" aria-labelledby="about-story-title">
-          <div className="section-head-tight">
-            <div>
-              <span className="eyebrow">{t('about.storyEyebrow')}</span>
-              <h2 id="about-story-title">{t('about.storyTitle')}</h2>
-            </div>
-            <Link href="/fabric-guide" className="underlined-link">{t('about.storyLink')} <ArrowLeft size={15} /></Link>
-          </div>
-          <div className="story-copy-grid">
-            <p>{t('about.storyP1')}</p>
-            <p>{t('about.storyP2').replace('{count}', productsCount)}</p>
-          </div>
-        </section>
-
-        <section className="section-block" aria-labelledby="about-stats-title">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">{t('about.statsEyebrow')}</span>
-              <h2 id="about-stats-title">{t('about.statsTitle')}</h2>
-              <p>{t('about.statsText')}</p>
-            </div>
-          </div>
-          <div className="stats-grid">{aboutStats.map((stat) => <StatCard key={stat.label} stat={stat} />)}</div>
-        </section>
-
-        <section className="section-block" aria-labelledby="about-values-title">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">{t('about.valuesEyebrow')}</span>
-              <h2 id="about-values-title">{t('about.valuesTitle')}</h2>
-              <p>{t('about.valuesText')}</p>
-            </div>
-          </div>
-          <div className="about-values">{aboutValues.map((value) => <article className="glass-card value-card" key={value.title}><span className="value-icon">{value.icon}</span><h3>{t(value.title)}</h3><p>{t(value.text)}</p></article>)}</div>
-        </section>
-
-        <section className="section-soft" aria-labelledby="about-timeline-title">
-          <div className="section-head-tight">
-            <div>
-              <span className="eyebrow">{t('about.timelineEyebrow')}</span>
-              <h2 id="about-timeline-title">{t('about.timelineTitle')}</h2>
-            </div>
-            <span className="chip chip-neutral">{t('about.timelineChip')}</span>
-          </div>
-          <ol className="timeline">
-            {aboutTimeline.map((item, index) => (
-              <li className="timeline-item" key={item.year}>
-                <span className="timeline-dot" aria-hidden="true">{index + 1}</span>
-                <div className="glass-card timeline-body">
-                  <span className="timeline-year">{t(item.year)}</span>
-                  <strong>{t(item.title)}</strong>
-                  <p>{t(item.text).replace('{count}', productsCount)}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className="about-cta glass-dark">
-          <div>
-            <span className="eyebrow"><Sparkles size={14} />{t('about.ctaEyebrow')}</span>
-            <h2>{t('about.ctaTitle')}</h2>
-            <p>{t('about.ctaText')}</p>
-          </div>
-          <div className="cta-actions">
-            <Link href="/catalog" className="button button-primary">{t('about.ctaBrowse')} <ArrowLeft size={16} /></Link>
-            <Link href="/contact" className="button button-outline"><MessageCircle size={16} />{t('about.ctaAsk')}</Link>
-          </div>
-        </section>
+        <div className="center-action">
+          <Link href="/contact" className="button button-primary"><MessageCircle size={16} />{copy.contact}</Link>
+        </div>
       </main>
     </>
   )
@@ -534,152 +503,94 @@ const qualityChecks = [
   'guide.check6',
 ]
 
-export function FabricGuidePage() {
-  const { t, lang } = useT()
-  const questions: ProductFaq[] = [...(lang === 'en' ? guideFaqsEn : guideQuestions), ...extraGuideQuestions(t)]
-  const quickAnswers = lang === 'en' ? quickGuideAnswersEn : quickGuideAnswers
-  const [openQuick, setOpenQuick] = useState<number | null>(0)
-  const [openGuide, setOpenGuide] = useState<number | null>(0)
+export function DeviceGuidePage() {
+  const { lang, t } = useT()
+  const en = lang === 'en'
+  const copy = en ? {
+    eyebrow: 'Practical buying guide',
+    title: 'Choose a security device for the place you need to protect.',
+    intro: 'A few checks before ordering can help you choose a camera or recorder that fits the location and the rest of your setup.',
+    cards: [
+      ['1. Where will it be used?', 'Indoor and outdoor cameras are designed for different environments. Check the product details and installation requirements for the specific model.'],
+      ['2. How will it connect?', 'Some models use Wi-Fi, while others require a wired network or a recorder. Confirm the connection method and compatibility before ordering.'],
+      ['3. What needs to be recorded?', 'Recording may rely on a memory card, an NVR or another supported storage method. Check the supported storage type and capacity for the model.'],
+      ['4. Which features matter?', 'Resolution, viewing angle, night vision, motion alerts and two-way audio are model-dependent. Only rely on features listed for the exact product.'],
+    ],
+    noteTitle: 'Before you place an order',
+    note: 'Send us the location, number of cameras and any existing recorder or network details. We can help you check compatibility and confirm what is included with the selected model.',
+    faqTitle: 'What should I confirm?',
+    faqs: [
+      ['Does every camera work outdoors?', 'No. Check the stated indoor or outdoor rating for the selected model before installing it outside.'],
+      ['Do all cameras connect to Wi-Fi?', 'No. Connectivity differs by model. Some devices require a wired connection or a compatible recorder.'],
+      ['Is storage included?', 'Do not assume so. Check whether a memory card, hard drive or recorder is included or needs to be purchased separately.'],
+      ['Can I combine different cameras?', 'Compatibility depends on the recording system, connection type and supported standards. Confirm the exact models before buying a mixed setup.'],
+    ],
+    browse: 'Browse devices',
+    contact: 'Ask LAMHA',
+  } : {
+    eyebrow: 'دليل شراء عملي',
+    title: 'اختاري جهاز المراقبة حسب المكان الذي تريدين حمايته.',
+    intro: 'بعض الأسئلة قبل الطلب تساعدك على اختيار كاميرا أو جهاز تسجيل مناسب للمكان ومتوافق مع بقية التجهيزات.',
+    cards: [
+      ['١. أين سيُستخدم الجهاز؟', 'كاميرات الداخل والخارج مصممة لظروف مختلفة. راجعي تفاصيل الموديل ومتطلبات تركيبه قبل الاستخدام.'],
+      ['٢. كيف سيكون الاتصال؟', 'بعض الموديلات تعمل عبر Wi‑Fi، وأخرى تحتاج إلى اتصال سلكي أو جهاز تسجيل. تأكدي من طريقة الاتصال والتوافق قبل الطلب.'],
+      ['٣. كيف تريدين حفظ التسجيل؟', 'قد يعتمد التسجيل على بطاقة ذاكرة أو جهاز NVR أو وسيلة تخزين مدعومة أخرى. تحققي من نوع التخزين وسعته التي يدعمها الموديل.'],
+      ['٤. ما الميزات التي تحتاجينها؟', 'الدقة وزاوية الرؤية والرؤية الليلية والتنبيه بالحركة والصوت الثنائي تختلف حسب الموديل. اعتمدي فقط الميزات المكتوبة للمنتج نفسه.'],
+    ],
+    noteTitle: 'قبل إرسال الطلب',
+    note: 'أرسلي لنا مكان التركيب وعدد الكاميرات وأي تفاصيل عن جهاز التسجيل أو الشبكة الموجودة لديك. نساعدك على مراجعة التوافق وتأكيد محتويات الموديل المختار.',
+    faqTitle: 'ما الذي يجب التأكد منه؟',
+    faqs: [
+      ['هل كل كاميرا مناسبة للخارج؟', 'لا. تحققي من أن الموديل مخصص للاستخدام الخارجي قبل تركيبه خارج المنزل.'],
+      ['هل كل الكاميرات تعمل عبر Wi‑Fi؟', 'لا. الاتصال يختلف حسب الموديل؛ بعض الأجهزة تحتاج إلى اتصال سلكي أو جهاز تسجيل متوافق.'],
+      ['هل التخزين يأتي مع الكاميرا؟', 'لا تفترضي ذلك. تأكدي مما إذا كانت بطاقة الذاكرة أو القرص الصلب أو جهاز التسجيل ضمن محتويات المنتج أم يُشترى منفصلاً.'],
+      ['هل يمكن جمع موديلات مختلفة؟', 'يعتمد التوافق على نظام التسجيل ونوع الاتصال والمعايير المدعومة. تأكدي من الموديلات المحددة قبل شراء نظام مختلط.'],
+    ],
+    browse: 'تصفحي الأجهزة',
+    contact: 'استفسري من لَمْحة',
+  }
   return (
     <>
       <GlassStyles />
       <main className="container-eva info-page">
         <div className="breadcrumbs"><Link href="/">{t('guide.crumbHome')}</Link><span>›</span><span>{t('guide.crumbCurrent')}</span></div>
-
         <section className="info-heading">
-          <span className="eyebrow"><Ruler size={14} />{t('guide.heroEyebrow')}</span>
-          <h1>{t('guide.heroTitle')}</h1>
-          <p>{t('guide.heroText')}</p>
+          <span className="eyebrow"><ShieldCheck size={14} />{copy.eyebrow}</span>
+          <h1>{copy.title}</h1>
+          <p>{copy.intro}</p>
         </section>
-
-        <section className="quick-answers" aria-labelledby="quick-answers-title">
-          <div className="section-head-tight">
-            <div>
-              <span className="eyebrow"><MessageCircle size={14} />{t('guide.quickEyebrow')}</span>
-              <h2 id="quick-answers-title">{t('guide.quickTitle')}</h2>
-              <p>{t('guide.quickText')}</p>
-            </div>
-            <a href="#guide-faq-title" className="underlined-link" onClick={(event) => { event.preventDefault(); document.getElementById('guide-faq-title')?.scrollIntoView({ block: 'start', behavior: 'smooth' }) }}>{t('guide.quickLink')} <ArrowLeft size={15} /></a>
-          </div>
-          <div className="quick-answers-grid">
-            {quickAnswers.map((entry, index) => (
-              <article className={`quick-answer ${openQuick === index ? 'is-open' : ''}`} key={entry.question}>
-                <button type="button" onClick={() => setOpenQuick(openQuick === index ? null : index)} aria-expanded={openQuick === index}>
-                  <strong>{entry.question}</strong>
-                  <ChevronDown size={16} />
-                </button>
-                {openQuick === index && (
-                  <ul>
-                    {entry.answers.map((answer) => <li key={answer}>{answer}</li>)}
-                  </ul>
-                )}
-              </article>
-            ))}
-          </div>
+        <section className="steps-grid">
+          {copy.cards.map(([title, body]) => (
+            <article className="glass-card value-card" key={title}>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </article>
+          ))}
         </section>
-
-        <section className="steps-grid" aria-label={t('guide.stepsAria')}>
-          <article className="glass-card">
-            <span className="chip">{t('guide.stepChip1')}</span>
-            <div className="value-card"><h3>{t('guide.step1Title')}</h3><p>{t('guide.step1Text')}</p></div>
-          </article>
-          <article className="glass-card">
-            <span className="chip">{t('guide.stepChip2')}</span>
-            <div className="value-card"><h3>{t('guide.step2Title')}</h3><p>{t('guide.step2Text')}</p></div>
-          </article>
-          <article className="glass-card">
-            <span className="chip">{t('guide.stepChip3')}</span>
-            <div className="value-card"><h3>{t('guide.step3Title')}</h3><p>{t('guide.step3Text')}</p></div>
-          </article>
-        </section>
-
-        <section className="section-block" aria-labelledby="guide-faq-title">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">{t('guide.faqEyebrow')}</span>
-              <h2 id="guide-faq-title">{t('guide.faqTitle')}</h2>
-              <p>{t('guide.faqText')}</p>
-            </div>
-            <Link href="/contact" className="underlined-link">{t('guide.faqLink')} <ArrowLeft size={15} /></Link>
-          </div>
+        <section className="section-block">
+          <div className="section-heading"><h2>{copy.faqTitle}</h2></div>
           <div className="guide-grid">
-            {questions.map((item, index) => (
-              <details className="guide-card" key={item.question} open={openGuide === index}>
-                <summary
-                  onClick={(event) => { event.preventDefault(); setOpenGuide(openGuide === index ? null : index) }}
-                  aria-expanded={openGuide === index}
-                >
-                  <span>{index + 1 < 10 ? t('guide.faqPad').replace('{n}', String(index + 1)) : index + 1}</span>
-                  <strong>{item.question}</strong>
-                  <ChevronDown size={18} />
-                </summary>
-                <p>{item.answer}</p>
+            {copy.faqs.map(([question, answer]) => (
+              <details className="guide-card" key={question}>
+                <summary><strong>{question}</strong><ChevronDown size={18} /></summary>
+                <p>{answer}</p>
               </details>
             ))}
           </div>
         </section>
-
-        <section className="section-soft" aria-labelledby="guide-tips-title">
-          <div className="section-head-tight">
-            <div>
-              <span className="eyebrow">{t('guide.tipsEyebrow')}</span>
-              <h2 id="guide-tips-title">{t('guide.tipsTitle')}</h2>
-              <p>{t('guide.tipsText')}</p>
-            </div>
-            <span className="chip"><Layers size={13} />{t('guide.tipsChip')}</span>
-          </div>
-          <div className="tips-table-wrap" role="region" aria-label={t('guide.tipsAria')} tabIndex={0}>
-            <table className="tips-table">
-              <caption>{t('guide.tipsCaption')}</caption>
-              <thead>
-                <tr>
-                  <th scope="col">{t('guide.thUse')}</th>
-                  <th scope="col">{t('guide.thFabric')}</th>
-                  <th scope="col">{t('guide.thWeight')}</th>
-                  <th scope="col">{t('guide.thTip')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {fabricTips.map((row) => (
-                  <tr key={row.use}>
-                    <th scope="row">{t(row.use)}</th>
-                    <td>{t(row.fabric)}</td>
-                    <td>{t(row.weight)}</td>
-                    <td>{t(row.tip)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="table-hint">{t('guide.tableHint')}</p>
+        <section className="section-soft">
+          <h2>{copy.noteTitle}</h2>
+          <p style={{ marginTop: 10, maxWidth: 880 }}>{copy.note}</p>
         </section>
-
-        <section className="section-block" aria-labelledby="guide-quality-title">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">{t('guide.qualityEyebrow')}</span>
-              <h2 id="guide-quality-title">{t('guide.qualityTitle')}</h2>
-              <p>{t('guide.qualityText')}</p>
-            </div>
-          </div>
-          <ul className="guide-checklist">
-            {qualityChecks.map((item) => <li key={item}><Check size={15} />{t(item)}</li>)}
-          </ul>
-          <div className="chip-row" style={{ marginTop: '22px' }}>
-            <span className="chip"><Scissors size={13} />{t('guide.chipCut')}</span>
-            <span className="chip"><Heart size={13} />{t('guide.chipCare')}</span>
-            <span className="chip"><Clock size={13} />{t('guide.chipReply')}</span>
-            <span className="chip"><ShieldCheck size={13} />{t('guide.chipConfirm')}</span>
-          </div>
-        </section>
-
         <div className="center-action">
-          <Link href="/catalog" className="button button-primary">{t('guide.ctaStart')} <ArrowLeft size={16} /></Link>
+          <Link href="/catalog" className="button button-primary">{copy.browse} <ArrowLeft size={16} /></Link>
+          <Link href="/contact" className="underlined-link">{copy.contact} <ArrowLeft size={15} /></Link>
         </div>
       </main>
     </>
   )
 }
+
 interface ContactErrors {
   name?: string
   phone?: string

@@ -126,7 +126,7 @@ export const headerStrings: Record<string, StringEntry> = {
   'home.hero.next': { ar: 'الصورة التالية', en: 'Next image' },
   'home.hero.prev': { ar: 'الصورة السابقة', en: 'Previous image' },
   'home.hero.dots': { ar: 'صور الغلاف', en: 'Cover images' },
-  'home.stats.devicesLabel': { ar: 'جهاز متاحة', en: 'Available devices' },
+  'home.stats.devicesLabel': { ar: 'أجهزة متاحة', en: 'Available devices' },
   'home.stats.devicesTrend': { ar: 'تشكيلة تتجدد', en: 'A range that keeps growing' },
   'home.stats.categoriesLabel': { ar: 'أقسام مختارة', en: 'Curated categories' },
   'home.stats.categoriesTrend': { ar: 'لكل مشروع', en: 'For every project' },
@@ -176,7 +176,7 @@ export const trustItemsEn: { title: string; description: string; icon: string }[
 
 export const homeStoryEn = {
   title: 'Devices worth choosing with confidence',
-  text: 'LAMHA Store is an Iraqi space that brings together a varied range with a clear explanation of feel, stretch and colour, so your decision is easier before you order by the meter.',
+  text: 'LAMHA brings together surveillance cameras and security equipment with practical product information, helping you compare models and check connectivity and storage before ordering.',
 }
 
 export const guideQuestionsEn: { question: string; answer: string }[] = [
