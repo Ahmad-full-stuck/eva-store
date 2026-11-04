@@ -339,7 +339,7 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
     return cachedJson(request, 300, async () => {
       const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'store'").first<{ value: string }>()
       const stored = row ? (JSON.parse(row.value) as Record<string, unknown>) : {}
-      return json({ data: { colorsEnabled: true, freeDeliveryFrom: 50000, deliveryFee: 5000, ...stored } })
+      return json({ data: { ...stored, colorsEnabled: stored.colorsEnabled ?? true, freeDeliveryFrom: Math.max(0, Number(stored.freeDeliveryFrom) || 0), deliveryFee: Math.max(0, Number(stored.deliveryFee) || 0) } })
     })
   }
 
