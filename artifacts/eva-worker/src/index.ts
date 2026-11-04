@@ -394,10 +394,60 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
         ...(governorate ? { governorate } : {}),
         ...(district ? { district } : {}),
       }
-      const totals =
-        body.totals && typeof body.totals === 'object'
-          ? body.totals
-          : { subtotal: body.subtotal ?? 0, deliveryFee: body.deliveryFee ?? 0, total: body.total ?? 0 }
+      if (items.length > 40) return json({ error: 'عدد المنتجات في الطلب أكبر من المسموح' }, 400)
+
+      // Recalculate prices from D1; client-provided prices and totals are never trusted.
+      const validatedItems: Record<string, unknown>[] = []
+      let subtotal = 0
+      for (const rawItem of items) {
+        if (!rawItem || typeof rawItem !== 'object') return json({ error: 'تفاصيل منتج غير صالحة' }, 400)
+        const item = rawItem as Record<string, unknown>
+        const productId = String(item.productId ?? '').trim()
+        const quantity = Number(item.quantity)
+        if (!productId || !Number.isSafeInteger(quantity) || quantity < 1 || quantity > 99) {
+          return json({ error: 'كمية المنتج غير صالحة' }, 400)
+        }
+        const product = await env.DB.prepare('SELECT id, slug, name, price, hidden FROM products WHERE id = ?1')
+          .bind(productId)
+          .first<{ id: string; slug: string; name: string; price: number; hidden: number }>()
+        if (!product || product.hidden === 1) return json({ error: 'أحد المنتجات لم يعد متاحاً' }, 409)
+        const unitPrice = Number(product.price) || 0
+        if (!Number.isFinite(unitPrice) || unitPrice <= 0) {
+          return json({ error: 'سعر هذا المنتج غير محدد بعد؛ يرجى الاستفسار قبل إرسال الطلب' }, 409)
+        }
+        const totalPrice = unitPrice * quantity
+        subtotal += totalPrice
+        validatedItems.push({
+          ...item,
+          productId: product.id,
+          productSlug: product.slug,
+          productName: product.name,
+          quantity,
+          unitPrice,
+          totalPrice,
+        })
+      }
+
+      const settingsRow = await env.DB.prepare("SELECT value FROM settings WHERE key = 'store'").first<{ value: string }>()
+      let storeSettings: Record<string, unknown> = {}
+      try {
+        storeSettings = settingsRow?.value ? JSON.parse(settingsRow.value) as Record<string, unknown> : {}
+      } catch {
+        storeSettings = {}
+      }
+      const freeDeliveryFrom = Math.max(0, Number(storeSettings.freeDeliveryFrom) || 0)
+      const deliveryFeeConfigured = Math.max(0, Number(storeSettings.deliveryFee) || 0)
+      const deliveryFree = freeDeliveryFrom > 0 && deliveryFeeConfigured > 0 && subtotal >= freeDeliveryFrom
+      const deliveryFeeConfirmed = deliveryFeeConfigured > 0
+      const deliveryFee = deliveryFree ? 0 : deliveryFeeConfigured
+      const totals = {
+        subtotal,
+        deliveryFee,
+        total: subtotal + deliveryFee,
+        deliveryFeeConfirmed,
+        deliveryFree,
+      }
+      const orderBody = { ...body, items: validatedItems, totals }
       const requested = String(body.orderNumber ?? '').trim()
       const number = requested || orderNumber()
       if (requested) {
@@ -412,20 +462,20 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
           number,
           number,
           JSON.stringify(customer),
-          JSON.stringify(items),
+          JSON.stringify(validatedItems),
           JSON.stringify(totals),
           String(body.notes ?? body.note ?? ''),
         )
         .run()
       // Email delivery (formsubmit) can take 1-7s and is unrelated to the
       // customer's confirmation — it must never block the 201 response.
-      const emailWork = notifyOrderEmail(env, { number, body }).catch((error) => {
+      const emailWork = notifyOrderEmail(env, { number, body: orderBody }).catch((error) => {
         console.log(`[notify] order=${number} deferred failure ${error instanceof Error ? error.message : String(error)}`)
         return false
       })
       let pushWork: Promise<unknown> | null = null
       if (pushConfigured(env)) {
-        const itemLines = (items as Record<string, unknown>[])
+        const itemLines = validatedItems
           .slice(0, 4)
           .map((item) => `${String(item.productName ?? '')} ×${Number(item.quantity ?? 0) || 0}`)
           .join('، ')
