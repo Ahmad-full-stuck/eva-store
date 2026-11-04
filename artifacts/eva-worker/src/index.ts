@@ -157,8 +157,10 @@ const buildOrderMessage = (order: NotifyOrder): string => {
   }
   lines.push('')
   lines.push(`المجموع الفرعي: ${fmtDinar(num('subtotal'))}`)
-  lines.push(`رسوم التوصيل: ${fmtDinar(num('deliveryFee'))}`)
-  lines.push(`الإجمالي: ${fmtDinar(num('total'))}`)
+  const deliveryConfirmed = totals.deliveryFeeConfirmed !== false
+  const deliveryFree = totals.deliveryFree === true
+  lines.push(!deliveryConfirmed ? 'رسوم التوصيل: تُحدد لاحقاً مع العنوان' : deliveryFree ? 'رسوم التوصيل: مجاني' : `رسوم التوصيل: ${fmtDinar(num('deliveryFee'))}`)
+  lines.push(deliveryConfirmed ? `الإجمالي: ${fmtDinar(num('total'))}` : `المجموع قبل رسوم التوصيل: ${fmtDinar(num('total'))}`)
   lines.push(`التاريخ: ${new Date().toLocaleString('ar-IQ', { timeZone: 'Asia/Baghdad' })}`)
   return lines.join('\n')
 }
