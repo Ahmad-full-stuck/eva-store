@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Layers, MapPin, Mail, MessageCircle, PackageCheck, Ruler, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Truck } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, Check, ChevronDown, Clock, Copy as CopyIcon, Heart, Layers, MapPin, Mail, MessageCircle, PackageCheck, Camera, RotateCcw, Scissors, Search, Send, ShieldCheck, Sparkles, Truck } from 'lucide-react'
 import { Link, useLocation, useSearch } from 'wouter'
-import type { ProductFaq } from '@/types'
 import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
 import { useT } from '@/lib/i18n'
 import { guideFaqsEn, quickGuideAnswersEn } from '@/lib/strings/info'
@@ -477,31 +476,7 @@ function StatCard({ stat }: { stat: AboutStat }) {
     </div>
   )
 }
-const extraGuideQuestions = (t: (key: string) => string): ProductFaq[] => [
-  { question: t('guide.extraQ1Question'), answer: t('guide.extraQ1Answer') },
-  { question: t('guide.extraQ2Question'), answer: t('guide.extraQ2Answer') },
-  { question: t('guide.extraQ3Question'), answer: t('guide.extraQ3Answer') },
-  { question: t('guide.extraQ4Question'), answer: t('guide.extraQ4Answer') },
-  { question: t('guide.extraQ5Question'), answer: t('guide.extraQ5Answer') },
-]
 
-const fabricTips = [
-  { use: 'guide.tip1Use', fabric: 'guide.tip1Fabric', weight: 'guide.tip1Weight', tip: 'guide.tip1Tip' },
-  { use: 'guide.tip2Use', fabric: 'guide.tip2Fabric', weight: 'guide.tip2Weight', tip: 'guide.tip2Tip' },
-  { use: 'guide.tip3Use', fabric: 'guide.tip3Fabric', weight: 'guide.tip3Weight', tip: 'guide.tip3Tip' },
-  { use: 'guide.tip4Use', fabric: 'guide.tip4Fabric', weight: 'guide.tip4Weight', tip: 'guide.tip4Tip' },
-  { use: 'guide.tip5Use', fabric: 'guide.tip5Fabric', weight: 'guide.tip5Weight', tip: 'guide.tip5Tip' },
-  { use: 'guide.tip6Use', fabric: 'guide.tip6Fabric', weight: 'guide.tip6Weight', tip: 'guide.tip6Tip' },
-]
-
-const qualityChecks = [
-  'guide.check1',
-  'guide.check2',
-  'guide.check3',
-  'guide.check4',
-  'guide.check5',
-  'guide.check6',
-]
 
 export function DeviceGuidePage() {
   const { lang, t } = useT()
@@ -685,8 +660,8 @@ export function ContactPage() {
               <Link href="/order-tracking" aria-label={t('contact.method2Aria')}>
                 <PackageCheck size={19} /><span><strong>{t('contact.method2Title')}</strong><small>{t('contact.method2Text')}</small></span><ArrowLeft size={15} />
               </Link>
-              <Link href="/fabric-guide" aria-label={t('contact.method3Aria')}>
-                <Ruler size={19} /><span><strong>{t('contact.method3Title')}</strong><small>{t('contact.method3Text')}</small></span><ArrowLeft size={15} />
+              <Link href="/device-guide" aria-label={t('contact.method3Aria')}>
+                <Camera size={19} /><span><strong>{t('contact.method3Title')}</strong><small>{t('contact.method3Text')}</small></span><ArrowLeft size={15} />
               </Link>
             </div>
 
@@ -908,7 +883,7 @@ interface StoredOrder {
   items?: StoredOrderItem[]
 }
 
-const ORDER_KEYS = ['eva-orders', 'eva-order', 'eva-last-order', 'eva-fabrics-orders', 'eva-fabrics-order', 'eva-checkout-order', 'eva-pending-order', 'eva-order-number']
+const ORDER_KEYS = ['lamha-orders']
 
 const statusSteps = ['track.step1', 'track.step2', 'track.step3', 'track.step4', 'track.step5']
 

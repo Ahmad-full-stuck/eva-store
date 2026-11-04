@@ -52,7 +52,7 @@ const drawerGroups: { label: string; items: IconNavItem[] }[] = [
     label: 'header.group.shopping',
     items: [
       { id: 'home', label: 'header.nav.home', path: '/', Icon: Home },
-      { id: 'catalog', label: 'header.nav.allDevices', path: '/catalog', Icon: Shirt },
+      { id: 'catalog', label: 'header.nav.allDevices', path: '/catalog', Icon: Camera },
       { id: 'favorites', label: 'header.nav.favorites', path: '/favorites', Icon: Heart },
       { id: 'cart', label: 'header.nav.cart', path: '/cart', Icon: ShoppingBag },
     ],

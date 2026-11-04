@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
-import { ArrowLeft, ArrowRight, Camera, ChevronLeft, ChevronRight, LayoutGrid, Truck, Wallet } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Camera, ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, Product } from '@/types'
 import { CountUp } from './CountUp'
@@ -28,8 +28,6 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
   const stats: HeroStat[] = [
     { key: 'devices', icon: <Camera size={16} />, value: products.length, prefix: '', suffix: '', label: t('home.stats.devicesLabel'), trend: t('home.stats.devicesTrend') },
     { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '+', suffix: '', label: t('home.stats.categoriesLabel'), trend: t('home.stats.categoriesTrend') },
-    { key: 'delivery', icon: <Truck size={16} />, value: 18, prefix: '', suffix: '', label: t('home.stats.deliveryLabel'), trend: t('home.stats.deliveryTrend') },
-    { key: 'cash', icon: <Wallet size={16} />, value: 100, prefix: '', suffix: t('home.stats.percent'), label: t('home.stats.cashLabel'), trend: t('home.stats.cashTrend') },
   ]
 
   // الصور تديرها الإدارة (إضافة/حذف/ترتيب). إن لم توجد صور محفوظة نرجع للافتراضية.
