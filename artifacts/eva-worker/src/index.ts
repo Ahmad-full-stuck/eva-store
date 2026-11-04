@@ -1,6 +1,6 @@
 import type { Env } from './types'
 import { toProduct, type ProductRow, type StoreProduct } from './types'
-import { requireAdmin, verifyPin, createSession, destroySession, rateLimit, orderRateLimit, ensureAuthSchema, verifyAdminUser, SESSION_TTL_MS } from './auth'
+import { requireAdmin, createSession, destroySession, rateLimit, orderRateLimit, ensureAuthSchema, hashPassword, verifyPassword, SESSION_TTL_MS } from './auth'
 import { handleAdmin } from './admin'
 import { runDiscovery, type DiscoveryInput } from './discover'
 import { sendPushToAll, pushConfigured } from './push'
@@ -231,20 +231,39 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
     if (rest[0] === 'login' && method === 'POST') {
       const body = await readBody<{ pin?: string; username?: string; password?: string }>(request)
       if (!rateLimit(request)) return json({ error: 'حاولي لاحقاً' }, 429)
-      await ensureAuthSchema(env)
-      const username = typeof body?.username === 'string' ? body.username : ''
+      const username = typeof body?.username === 'string' ? body.username.trim().toLowerCase() : ''
       const password = typeof body?.password === 'string' ? body.password : ''
       const pin = typeof body?.pin === 'string' ? body.pin : ''
+      const configuredPassword = String(env.ADMIN_PASSWORD ?? '')
+      const configuredPin = String(env.ADMIN_PIN ?? '')
       let adminId: string | null = null
       let valid = false
-      if (username && password) {
-        const admin = await verifyAdminUser(env, username, password)
-        if (admin) {
-          valid = true
-          adminId = admin.id
+
+      // Admin access is fail-closed: no source-code defaults are accepted.
+      if (username && password && configuredPassword.length >= 12 && password === configuredPassword) {
+        await ensureAuthSchema(env)
+        const row = await env.DB.prepare('SELECT id, username, password_hash FROM admins WHERE username = ?1')
+          .bind(username)
+          .first<{ id: string; username: string; password_hash: string }>()
+        if (row) {
+          if (!(await verifyPassword(configuredPassword, row.password_hash))) {
+            const hash = await hashPassword(configuredPassword)
+            await env.DB.prepare('UPDATE admins SET password_hash = ?1 WHERE id = ?2').bind(hash, row.id).run()
+          }
+          adminId = row.id
+        } else {
+          const hash = await hashPassword(configuredPassword)
+          adminId = 'owner'
+          await env.DB.prepare('INSERT INTO admins (id, username, password_hash, display_name) VALUES (?1, ?2, ?3, ?4)')
+            .bind(adminId, username, hash, 'مدير لَمْحة')
+            .run()
         }
+        valid = true
       }
-      if (!valid && pin) valid = await verifyPin(env, pin)
+
+      if (!valid && pin && /^\\d{6,12}$/.test(configuredPin) && pin === configuredPin) {
+        valid = true
+      }
       if (!valid) return json({ error: 'بيانات الدخول غير صحيحة' }, 401)
       const token = await createSession(env, adminId)
       return json({ data: { token, expiresIn: Math.floor(SESSION_TTL_MS / 1000) } })

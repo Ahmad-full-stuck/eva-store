@@ -15,6 +15,7 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       LAMHA_ADMIN_PIN: ${{ secrets.LAMHA_ADMIN_PIN }}
+      LAMHA_ADMIN_PASSWORD: ${{ secrets.LAMHA_ADMIN_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -45,6 +46,10 @@ jobs:
         if: env.LAMHA_ADMIN_PIN != ''
         working-directory: artifacts/eva-worker
         run: printf '%s' "$LAMHA_ADMIN_PIN" | pnpm exec wrangler secret put ADMIN_PIN --config wrangler.jsonc
+      - name: Configure LAMHA admin password
+        if: env.LAMHA_ADMIN_PASSWORD != ''
+        working-directory: artifacts/eva-worker
+        run: printf '%s' "$LAMHA_ADMIN_PASSWORD" | pnpm exec wrangler secret put ADMIN_PASSWORD --config wrangler.jsonc
       - name: Deploy the LAMHA storefront and API together
         uses: cloudflare/wrangler-action@v3
         with:
