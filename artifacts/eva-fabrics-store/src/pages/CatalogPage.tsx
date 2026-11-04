@@ -18,7 +18,6 @@ interface CatalogPageProps {
 }
 
 type SortKey = 'featured' | 'price-asc' | 'price-desc'
-type StretchKey = 'all' | 'stretch' | 'non'
 type ParamChanges = Record<string, string | null>
 
 const SORT_OPTIONS: { value: SortKey; labelKey: string }[] = [
@@ -27,13 +26,8 @@ const SORT_OPTIONS: { value: SortKey; labelKey: string }[] = [
   { value: 'price-desc', labelKey: 'cat.sortPriceDesc' },
 ]
 
-const STRETCH_OPTIONS: { value: StretchKey; labelKey: string }[] = [
-  { value: 'all', labelKey: 'cat.stretchAll' },
-  { value: 'stretch', labelKey: 'cat.stretchYes' },
-  { value: 'non', labelKey: 'cat.stretchNon' },
-]
 
-const STOP_WORDS = new Set(['قماش', 'القماش', 'اقمشه', 'الاقمشه', 'fabric'])
+const STOP_WORDS = new Set(['من', 'في', 'على', 'و', 'مع', 'the', 'a', 'an', 'of', 'for', 'with'])
 
 const PAGE_SIZE = 24
 
@@ -120,16 +114,6 @@ const parseAmount = (raw: string | null): number | null => {
 
 const readSort = (raw: string | null): SortKey => (SORT_OPTIONS.some((option) => option.value === raw) ? (raw as SortKey) : 'featured')
 
-const readStretch = (raw: string | null): StretchKey => {
-  if (raw === '1' || raw === 'stretch' || raw === 'yes' || raw === 'true') return 'stretch'
-  if (raw === '0' || raw === 'non' || raw === 'no' || raw === 'false') return 'non'
-  return 'all'
-}
-
-const isStretchProduct = (product: Product): boolean => {
-  if (typeof product.specs.isStretch === 'boolean') return product.specs.isStretch
-  return !normalizeArabic(product.specs.stretch || '').includes('غير مطاطي')
-}
 
 const belongsToCategory = (product: Product, category: Category): boolean =>
   product.categoryId === category.id || product.categoryId === category.name || product.categoryId === category.slug
@@ -144,17 +128,7 @@ const buildQuery = (location: string, browserSearch: string): string => {
 const matchesQuery = (product: Product, query: string, categories: Category[]): boolean => {
   const clean = normalizeArabic(query)
   if (!clean) return true
-  const stretch = isStretchProduct(product)
-  const asksNonStretch = clean.includes('غير مطاطي')
-  const asksStretch = !asksNonStretch && clean.includes('مطاطي')
-  if (asksNonStretch && stretch) return false
-  if (asksStretch && !stretch) return false
-  const rest = asksNonStretch
-    ? clean.replace(/غير\s*مطاطي(?:ه)?/g, ' ')
-    : asksStretch
-      ? clean.replace(/مطاطي(?:ه)?/g, ' ')
-      : clean
-  const words = rest.split(' ').filter((word) => word && !STOP_WORDS.has(word))
+  const words = clean.split(' ').filter((word) => word && !STOP_WORDS.has(word))
   if (words.length === 0) return true
   const category = categories.find((item) => item.id === product.categoryId)
   const text = normalizeArabic([
@@ -187,7 +161,6 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
 
   const categoryId = params.get('category') || ''
   const search = params.get('search') || ''
-  const stretch = readStretch(params.get('stretch'))
   const inStock = params.get('stock') === '1'
   const minRaw = params.get('min') || ''
   const maxRaw = params.get('max') || ''
@@ -216,7 +189,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
     window.scrollTo({ top: Math.max(0, y), behavior: 'auto' })
   }
 
-  const filterSig = [categoryId, stretch, inStock, minRaw, maxRaw, sort, search].join('|')
+  const filterSig = [categoryId, inStock, minRaw, maxRaw, sort, search].join('|')
   const firstSigRef = useRef(true)
   useEffect(() => {
     if (firstSigRef.current) {
@@ -242,7 +215,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
     setSearchInput('')
     setMinInput('')
     setMaxInput('')
-    updateParams({ category: null, search: null, stretch: null, stock: null, min: null, max: null })
+    updateParams({ category: null, search: null, stock: null, min: null, max: null })
   }
 
   const activeCategory = useMemo(
@@ -266,7 +239,6 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
           : product.categoryId === categoryId
         if (!categoryMatch) return false
       }
-      if (stretch !== 'all' && isStretchProduct(product) !== (stretch === 'stretch')) return false
       if (inStock && isSoldOut(product)) return false
       if (priceRange.min !== null && product.price < priceRange.min) return false
       if (priceRange.max !== null && product.price > priceRange.max) return false
@@ -279,7 +251,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       return Number(b.isFeatured) - Number(a.isFeatured) || Number(b.isNew) - Number(a.isNew) || b.createdAt.localeCompare(a.createdAt)
     })
     return sorted
-  }, [activeCategory, categoryId, categories, inStock, priceRange, products, search, sort, stretch])
+  }, [activeCategory, categoryId, categories, inStock, priceRange, products, search, sort])
 
   const pageCount = Math.max(1, Math.ceil(shown.length / PAGE_SIZE))
   const safePage = Math.min(page, pageCount)
@@ -305,7 +277,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
 
   const availableCount = shown.filter((product) => !isSoldOut(product)).length
   const averagePrice = shown.length ? Math.round(shown.reduce((total, product) => total + product.price, 0) / shown.length) : 0
-  const activeCount = Number(Boolean(categoryId)) + Number(stretch !== 'all') + Number(inStock) + Number(minPrice !== null) + Number(maxPrice !== null) + Number(Boolean(search))
+  const activeCount = Number(Boolean(categoryId)) + Number(inStock) + Number(minPrice !== null) + Number(maxPrice !== null) + Number(Boolean(search))
   const priceLabel = priceRange.min !== null && priceRange.max !== null
     ? `${formatPrice(priceRange.min)} — ${formatPrice(priceRange.max)}`
     : priceRange.min !== null
@@ -364,7 +336,6 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       categories={categories}
       categoryId={categoryId}
       activeCategoryId={activeCategoryId}
-      stretch={stretch}
       inStock={inStock}
       minInput={minInput}
       maxInput={maxInput}
@@ -384,15 +355,15 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       <div className="breadcrumbs">
         <Link href="/">{t('cat.breadcrumbHome')}</Link>
         <span>›</span>
-        <span>{t('cat.breadcrumbFabrics')}</span>
+        <span>{t('cat.breadcrumbDevices')}</span>
         {activeCategory && <><span>›</span><span>{activeCategory.name}</span></>}
       </div>
 
       <div className="catalog-heading">
         <div>
           <span className="eyebrow">{t('cat.eyebrow')}</span>
-          <h1>{activeCategory ? activeCategory.name : t('cat.allFabricsTitle')}</h1>
-          <p>{t('cat.countFabrics').replace('{n}', String(products.length))} · {statusLabel}</p>
+          <h1>{activeCategory ? activeCategory.name : t('cat.allDevicesTitle')}</h1>
+          <p>{t('cat.countDevices').replace('{n}', String(products.length))} · {statusLabel}</p>
         </div>
         <div className="catalog-sort">
           <label htmlFor="catalog-sort">{t('cat.sortBy')}</label>
@@ -443,7 +414,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       </div>
 
       <div className="catalog-layout">
-        <aside className="filter-sidebar" aria-label={t('cat.filterFabrics')}>{sidePanel}</aside>
+        <aside className="filter-sidebar" aria-label={t('cat.filterDevices')}>{sidePanel}</aside>
         <section ref={resultsRef} className="catalog-results" aria-label={t('cat.resultsAria')}>
           <form className="catalog-search" onSubmit={submitSearch} role="search">
             <Search size={18} aria-hidden="true" />
@@ -470,8 +441,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
               {search && <FilterChip label={t('cat.filterSearch').replace('{q}', search)} onRemove={resetSearch} />}
               {activeCategory && <FilterChip label={activeCategory.name} onRemove={() => updateParams({ category: null })} />}
               {categoryId && !activeCategory && <FilterChip label={t('cat.filterCategory').replace('{name}', categoryId)} onRemove={() => updateParams({ category: null })} />}
-              {stretch !== 'all' && <FilterChip label={t(STRETCH_OPTIONS.find((item) => item.value === stretch)?.labelKey || '')} onRemove={() => updateParams({ stretch: null })} />}
-              {inStock && <FilterChip label={t('cat.inStockOnly')} onRemove={() => updateParams({ stock: null })} />}
+                            {inStock && <FilterChip label={t('cat.inStockOnly')} onRemove={() => updateParams({ stock: null })} />}
               {priceLabel && (
                 <FilterChip
                   label={priceLabel}
@@ -547,7 +517,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
         </section>
       </div>
 
-      <Modal open={filterOpen} onClose={() => setFilterOpen(false)} title={t('cat.filterFabrics')} variant="bottom" className="filter-drawer">
+      <Modal open={filterOpen} onClose={() => setFilterOpen(false)} title={t('cat.filterDevices')} variant="bottom" className="filter-drawer">
         <div className="drawer-header">
           <h2>{t('cat.filterResultsTitle')}</h2>
           <button type="button" className="icon-button" onClick={() => setFilterOpen(false)} aria-label={t('cat.closeFilter')}>
@@ -568,7 +538,6 @@ interface FilterPanelProps {
   categories: Category[]
   categoryId: string
   activeCategoryId: string
-  stretch: StretchKey
   inStock: boolean
   minInput: string
   maxInput: string
@@ -584,7 +553,6 @@ function FilterPanel({
   categories,
   categoryId,
   activeCategoryId,
-  stretch,
   inStock,
   minInput,
   maxInput,
@@ -603,7 +571,7 @@ function FilterPanel({
       </div>
 
       <fieldset>
-        <legend>{t('cat.fabricType')}</legend>
+        <legend>{t('cat.deviceType')}</legend>
         <label className="filter-option">
           <input type="radio" name={`category-${scope}`} checked={!categoryId} onChange={() => onChange({ category: null })} />
           <span>{t('cat.allCategories')}</span>
@@ -617,21 +585,6 @@ function FilterPanel({
               onChange={() => onChange({ category: category.id })}
             />
             <span>{category.name}</span>
-          </label>
-        ))}
-      </fieldset>
-
-      <fieldset>
-        <legend>{t('cat.stretchLegend')}</legend>
-        {STRETCH_OPTIONS.map((option) => (
-          <label className="filter-option" key={`${scope}-${option.value}`}>
-            <input
-              type="radio"
-              name={`stretch-${scope}`}
-              checked={stretch === option.value}
-              onChange={() => onChange({ stretch: option.value === 'all' ? null : option.value === 'stretch' ? '1' : '0' })}
-            />
-            <span>{t(option.labelKey)}</span>
           </label>
         ))}
       </fieldset>
@@ -671,7 +624,7 @@ function FilterPanel({
       </label>
 
       <button type="button" className="filter-browse" onClick={onClear} disabled={!hasFilters}>
-        {t('cat.showAllFabrics')} <ArrowLeft size={14} aria-hidden="true" />
+        {t('cat.showAllDevices')} <ArrowLeft size={14} aria-hidden="true" />
       </button>
     </div>
   )

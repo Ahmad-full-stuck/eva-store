@@ -27,10 +27,6 @@ export const matchesProductSearch = (product: Product, query: string): boolean =
     product.specs.finish,
     ...product.colors.map((item) => item.name),
   ].join(' '))
-  const asksForNonStretch = cleanQuery.includes('غير مطاطي')
-  const asksForStretch = cleanQuery.includes('مطاطي') && !asksForNonStretch
-  if (asksForNonStretch && product.specs.isStretch) return false
-  if (asksForStretch && !product.specs.isStretch) return false
   return cleanQuery.split(' ').every((word) => text.includes(word))
 }
 

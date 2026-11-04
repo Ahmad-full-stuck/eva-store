@@ -148,7 +148,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   }
 
   return <main className="container-eva product-page">
-    <div className="breadcrumbs"><Link href="/">{t('pd.breadcrumbHome')}</Link><span>›</span><Link href="/catalog">{t('pd.breadcrumbFabrics')}</Link><span>›</span><span>{product.name}</span></div>
+    <div className="breadcrumbs"><Link href="/">{t('pd.breadcrumbHome')}</Link><span>›</span><Link href="/catalog">{t('pd.breadcrumbDevices')}</Link><span>›</span><span>{product.name}</span></div>
     <div className="product-detail-layout">
       <section className="product-gallery" aria-label={t('pd.galleryAria').replace('{name}', product.name)}>
         <div
@@ -229,7 +229,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
       ]
       const compareRows = allRows.filter((row) => compareList.some((item) => {
         const value = row.value(item)
-        return Boolean(value) && value !== 'غير محددة' && value !== 'خامة غير محددة'
+        return Boolean(value) && value !== 'غير محدد' && value !== 'غير محدد'
       }))
       return (
         <section className="compare-section">
@@ -269,4 +269,4 @@ function Spec({ label, value }: { label: string; value: string }) {
   return <div><span>{label}</span><strong>{value}</strong></div>
 }
 function Accordion({ id, title, open, onToggle, children }: { id: string; title: string; open: boolean; onToggle: () => void; children: React.ReactNode }) { return <section className={`detail-accordion ${open ? 'is-open' : ''}`}><button type="button" onClick={onToggle} aria-expanded={open} aria-controls={`accordion-${id}`}><strong>{title}</strong><ChevronDown size={17} /></button>{open && <div id={`accordion-${id}`}>{children}</div>}</section> }
-function ProductMissing() { const { t } = useT(); return <main className="container-eva empty-state page-empty"><div className="empty-icon">404</div><h1>{t('pd.missingTitle')}</h1><p>{t('pd.missingText')}</p><Link href="/catalog" className="button button-primary">{t('pd.backToFabrics')} <ArrowLeft size={16} /></Link></main> }
+function ProductMissing() { const { t } = useT(); return <main className="container-eva empty-state page-empty"><div className="empty-icon">404</div><h1>{t('pd.missingTitle')}</h1><p>{t('pd.missingText')}</p><Link href="/catalog" className="button button-primary">{t('pd.backToDevices')} <ArrowLeft size={16} /></Link></main> }
