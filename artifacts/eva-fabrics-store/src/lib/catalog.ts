@@ -58,17 +58,15 @@ export const formatDinar = (value: number): string => {
   return tr('core.dinarShort').replace('{n}', safe.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ'))
 }
 
-/** «0.5» → «نصف متر» */
+/** Device quantities are whole units; this helper keeps the existing app state shape. */
 export const metersLabel = (value: number): string =>
-  value === 0.5 ? tr('core.metersHalf') : `${Number(value.toFixed(2)).toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ')} ${tr('core.metersWord')}`
+  `${Math.max(0, Math.floor(value)).toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ')} ${tr('core.itemsWord')}`
 
-export const formatMeters = (value: number): string => (value === 0.5
-  ? tr('core.metersShortHalf')
-  : `${value.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} ${tr('core.metersShortUnit')}`)
+export const formatMeters = (value: number): string => metersLabel(value)
 
 export const normalizeHalfMeters = (value: number): number => {
   if (!Number.isFinite(value) || value <= 0) return 0
-  return Math.max(0.5, Math.ceil(value * 2) / 2)
+  return Math.max(1, Math.round(value))
 }
 
 export const availableMeters = (product: Product, color?: ProductColor): number => {
