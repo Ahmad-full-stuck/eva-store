@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { readServerContent, readServerSettings } from '@/lib/api'
 import { setTextOverrides } from '@/lib/text-overrides'
 
-export const CONTENT_KEY = 'eva-admin-content'
+export const CONTENT_KEY = 'lamha-admin-content'
 
 /** الصور الافتراضية للغلاف — تُستخدم إن لم يحدّد الإدارة أي صور. */
-export const DEFAULT_HERO_SLIDES = ['home/hero-1.jpg', 'home/hero-2.jpg', 'home/hero-3.jpg', 'home/hero-4.jpg']
+export const DEFAULT_HERO_SLIDES = ['lamha-hero.svg']
 
 /** أقسام الصفحة الرئيسية القابلة للإخفاء/الإظهار من الإدارة. */
 export const HOME_SECTION_KEYS = [
@@ -78,47 +78,47 @@ export interface SiteContent {
 }
 
 export const defaultSiteContent: SiteContent = {
-  shopName: 'إيفا ستور للأقمشة',
-  phone: '07727282001',
-  whatsapp: '9647727282001',
-  instagram: 'https://www.instagram.com/x__illc/',
+  shopName: 'لَمْحة للحماية الذكية',
+  phone: '',
+  whatsapp: '',
+  instagram: '',
   announcementRight: 'شحن إلى جميع محافظات العراق',
   announcementLeft: 'التوصيل بـ ٥ آلاف دينار فقط',
-  aboutTitle: 'قصة إيفا تبدأ بسؤال واحد: ماذا ستصنعين؟',
-  aboutText: 'بدأت إيفا ستور بفكرة بسيطة: أن يرى الزبون الخامة كما تراها الخياطة، بشرح واضح للّمس والامتداد واللون قبل أن تدفع ديناراً واحداً. اليوم نعرض تشكيلة متنوعة مع مواصفات مكتوبة وطلب يبدأ من نصف متر.',
-  contactTitle: 'سؤال عن خامة أو طلب؟',
-  contactText: 'اكتبي لنا ما يدور في بالك. إن تعذّر إرسال الرسالة من الموقع مباشرة، نحوّلها تلقائياً إلى بريد إلكتروني مكتوب برسالتك نفسها.',
-  heroEyebrow: 'معرض أقمشة عربي',
-  heroTitle: 'اختاري *القماش المثالي*|لكل إبداع',
-  heroText: 'تشكيلة منتقاة من الأقمشة الفاخرة والمريحة، مع شرح واضح للخامة قبل أن تضيفيها إلى مشروعك.',
+  aboutTitle: 'لَمْحة أوضح لرؤية أكثر أماناً',
+  aboutText: 'لَمْحة وجهتك للتعرّف على حلول المراقبة والحماية الذكية. نعرض الأجهزة ومواصفاتها بطريقة واضحة تساعدك على اختيار الحل المناسب لمنزلك أو عملك.',
+  contactTitle: 'تحتاج مساعدة في اختيار جهاز؟',
+  contactText: 'أرسل استفسارك عن الأجهزة والمواصفات والتوفر والضمان، وسيتواصل معك فريق لَمْحة.',
+  heroEyebrow: 'حلول المراقبة والحماية الذكية',
+  heroTitle: 'أمانك في *لَمْحة*|رؤية أوضح، واطمئنان أكبر',
+  heroText: 'اكتشف أجهزة المراقبة والحماية الذكية بمواصفات واضحة وتجربة اختيار أسهل لمنزلك أو عملك.',
   heroNote: 'توصيل إلى جميع محافظات العراق',
   heroNoteAlt: 'دفع عند استلام الطلب',
   statsTitle: 'أرقام المعرض الآن',
   heroSlideMs: '2600',
   heroSlides: [...DEFAULT_HERO_SLIDES],
   hiddenSections: [],
-  categoriesEyebrow: 'اختاري من البداية',
-  categoriesTitle: 'مساحات القماش',
-  newEyebrow: 'نماذج مختارة',
-  newTitle: 'وصل حديثاً',
-  newDesc: 'أحدث الخامات التي أضفناها إلى المعرض',
-  guideEyebrow: 'قبل أن تختاري',
-  guideTitle: 'القماش قرار بصري|ولمسي في آن واحد.',
-  guideText: 'العينة الجيدة لا تخفي التفاصيل. قارني السماكة والمرونة واللمعة وطريقة سقوط القماش قبل أن تحددي الاستخدام.',
-  guideCta: 'ابدئي دليل الأقمشة',
-  newsletterEyebrow: 'نشرة إيفا',
+  categoriesEyebrow: 'تصفّح حسب احتياجك',
+  categoriesTitle: 'حلول المراقبة والحماية',
+  newEyebrow: 'تعرّف على الأجهزة',
+  newTitle: 'أجهزة مختارة',
+  newDesc: 'تفاصيل ومواصفات تساعدك على المقارنة قبل الاستفسار',
+  guideEyebrow: 'دليل الاختيار',
+  guideTitle: 'اختر جهازك|على أساس احتياجك.',
+  guideText: 'قارن مجال الرؤية ودقة التصوير والرؤية الليلية والاتصال والتخزين قبل اختيار جهاز المراقبة.',
+  guideCta: 'تصفّح الأجهزة',
+  newsletterEyebrow: 'ابقَ على اطلاع',
   newsletterTitle: 'اشتراك بالبريد',
   newsletterText: 'خامة جديدة أو لون متجدد يصلك عبر البريد: اكتبي بريدك واضغطي الزر لتفتح البريد وتؤكدي الاشتراك.',
   promoPill: 'توصيل لكل العراق',
   promoLead: 'توصيل مجاني',
   promoText: 'للطلبات فوق {price}',
-  emailOrdersTo: 'gdumingm@gmail.com',
+  emailOrdersTo: '',
   emailFromName: 'إيفا ستور للأقمشة',
   emailFrom: '',
   emailSubjectOrder: 'طلب جديد من متجر إيفا #{orderNumber}',
   emailTemplateOrder: '',
   emailProvider: 'formsubmit',
-  emailFormSubmitAction: 'https://formsubmit.co/gdumingm@gmail.com',
+  emailFormSubmitAction: '',
   texts: {},
 }
 

@@ -1,6 +1,6 @@
 const adminContent = (): Record<string, string> => {
   try {
-    const raw = window.localStorage.getItem('eva-admin-content')
+    const raw = window.localStorage.getItem('lamha-admin-content')
     if (!raw) return {}
     const parsed: unknown = JSON.parse(raw)
     return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Record<string, string>) : {}
@@ -10,7 +10,7 @@ const adminContent = (): Record<string, string> => {
 }
 
 const rawWhatsApp = import.meta.env.VITE_WHATSAPP_NUMBER || '9647727282001'
-const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/x__illc/'
+const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com//'
 const apiBase = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '')
 
 const digits = (value: string): string => value.replace(/[^0-9]/g, '')
@@ -31,12 +31,12 @@ const localPhone = (() => {
 const safeInstagram = /^https?:\/\//i.test(rawInstagram) ? rawInstagram : `https://${rawInstagram.replace(/^\/+/, '')}`
 
 export const siteConfig = {
-  get name() { return adminContent().shopName || 'إيفا ستور للأقمشة' },
-  shortName: 'إيفا ستور',
+  get name() { return adminContent().shopName || 'لَمْحة للحماية الذكية' },
+  shortName: 'لَمْحة',
   get phone() { return adminContent().phone || localPhone },
   get instagramUrl() { return adminContent().instagram || safeInstagram },
-  get contactEmail() { return adminContent().emailOrdersTo || 'gdumingm@gmail.com' },
-  emailUrl: (subject = 'استفسار من متجر إيفا', body = 'مرحباً إيفا، أريد الاستفسار عن منتجاتكم.'): string => `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+  get contactEmail() { return adminContent().emailOrdersTo || '' },
+  emailUrl: (subject = 'استفسار من لَمْحة', body = 'مرحباً لَمْحة، أريد الاستفسار عن أجهزة المراقبة.'): string => `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
   instagramText: 'إيفا ستور على إنستغرام',
 }
 

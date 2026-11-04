@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "www",
+  "name": "lamha-iq",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
   "compatibility_flags": [
@@ -14,14 +14,14 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "eva-store",
-      "database_id": "e45faebc-0ae8-422e-a20b-0c0525b4e8db"
+      "database_name": "lamha-store-db",
+      "database_id": "REPLACE_WITH_LAMHA_DB_ID"
     }
   ],
   "vars": {
-    "STORE_ORIGIN": "https://www.eva-store.workers.dev",
+    "STORE_ORIGIN": "https://lamha-iq.pages.dev",
     "VAPID_PUBLIC_KEY": "BJssVonGGp_qBtx4gEGxPm30sjQFlJOEMkI5MYY8DTl8GW9eCAWwwhxe1iieyqKo_fcxklaw3VL6XDyZ5fkX5TU",
     "VAPID_PRIVATE_KEY": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgQhKdkqar2Qvpwe6OdJmvwhLnQ7m671r+q05JESL5WcuhRANCAASbLFaJxhqf6gbceIBBsT5t9LI0BZSThDJCOTGGPA05fBlvXggFsMIcXtYonsqiqP33MZJWsN1S+lw8meX5F+U1",
-    "VAPID_SUBJECT": "mailto:admin@eva-store.workers.dev"
+    "VAPID_SUBJECT": "mailto:admin@lamha-iq.pages.dev"
   }
 }
