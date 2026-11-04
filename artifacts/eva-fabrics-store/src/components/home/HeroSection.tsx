@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Layers, LayoutGrid, Sparkles } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Layers, LayoutGrid, Smartphone } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, Product } from '@/types'
 import { CountUp } from './CountUp'
@@ -31,7 +31,9 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
   ]
 
   // الصور تديرها الإدارة (إضافة/حذف/ترتيب). إن لم توجد صور محفوظة نرجع للافتراضية.
-  const slideSrcs = Array.isArray(content.heroSlides) && content.heroSlides.length ? content.heroSlides : DEFAULT_HERO_SLIDES
+  const configuredSlides = Array.isArray(content.heroSlides) && content.heroSlides.length ? content.heroSlides : DEFAULT_HERO_SLIDES
+  const filteredSlides = configuredSlides.filter((src) => !/cobalt[_-]?violet|purple|violet/i.test(src))
+  const slideSrcs = filteredSlides.length ? filteredSlides : DEFAULT_HERO_SLIDES
   const slides = slideSrcs.map((src, index) => ({ src, alt: `${content.shopName || 'رتاج العربي'} — ${index + 1}` }))
   const [activeSlide, setActiveSlide] = useState(0)
   const timerRef = useRef<number | undefined>(undefined)
@@ -68,7 +70,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
     <>
       <section className="home-hero glass-hero container-eva">
         <div className="hero-copy">
-          <span className="eyebrow"><Sparkles size={14} />{content.heroEyebrow}</span>
+          <span className="eyebrow"><Smartphone size={14} />{content.heroEyebrow}</span>
           <h1>
             {contentLines(content.heroTitle).map((line, lineIndex) => (
               <Fragment key={`${lineIndex}-${line}`}>

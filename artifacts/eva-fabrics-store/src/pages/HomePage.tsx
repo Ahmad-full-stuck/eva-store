@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft, BadgeCheck, ChevronDown, MessageCircle, Sparkles, Truck, Wallet } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, ChevronDown, MessageCircle, SlidersHorizontal, Truck, Wallet } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
 import { guideQuestions, homeStory, trustItems } from '@/lib/fallback-data'
@@ -113,7 +113,7 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
 
       {sectionVisible(content, 'discovery') && (
       <section className="container-eva section-block discovery-section">
-        <div className="discovery-intro"><span className="eyebrow"><Sparkles size={14} />{t('home.discovery.eyebrow')}</span><h2>{t('home.discovery.title1')}<br />{t('home.discovery.title2')}</h2><p>{t('home.discovery.intro')}</p></div>
+        <div className="discovery-intro"><span className="eyebrow"><SlidersHorizontal size={14} />{t('home.discovery.eyebrow')}</span><h2>{t('home.discovery.title1')}<br />{t('home.discovery.title2')}</h2><p>{t('home.discovery.intro')}</p></div>
         <div className="discovery-card">
           <div className="discovery-progress"><span>{t('home.discovery.progress').replace('{step}', String(discoveryStep + 1))}</span><div><i style={{ width: `${((discoveryStep + 1) / 3) * 100}%` }} /></div></div>
           <h3>{t(discoveryQuestions[discoveryStep].title)}</h3>

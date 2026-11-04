@@ -5,7 +5,7 @@ import { setTextOverrides } from '@/lib/text-overrides'
 export const CONTENT_KEY = 'ritaj-admin-content'
 
 /** الصور الافتراضية للغلاف — تُستخدم إن لم يحدّد الإدارة أي صور. */
-export const DEFAULT_HERO_SLIDES = ['https://media.ldlc.com/r1600/ld/products/00/06/27/53/LD0006275321.jpg', 'https://ddfndelma2gpn.cloudfront.net/color/3387/Cobalt_Violet.webp', 'https://cdn.etoren.com/upload/images/0.99641000_1772525373_xiaomi-17-ultra-5g-dual-sim-1tb-black-16gb-ram-global-version.png', 'https://www.maccenter.vn/App_Images/iPadPro-13inch-M5-Black-A.jpg']
+export const DEFAULT_HERO_SLIDES = ['https://media.ldlc.com/r1600/ld/products/00/06/27/53/LD0006275321.jpg', 'https://cdn.etoren.com/upload/images/0.99641000_1772525373_xiaomi-17-ultra-5g-dual-sim-1tb-black-16gb-ram-global-version.png', 'https://www.maccenter.vn/App_Images/iPadPro-13inch-M5-Black-A.jpg']
 
 /** أقسام الصفحة الرئيسية القابلة للإخفاء/الإظهار من الإدارة. */
 export const HOME_SECTION_KEYS = [

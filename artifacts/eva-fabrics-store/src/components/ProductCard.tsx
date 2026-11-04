@@ -18,26 +18,26 @@ const glassStyles = `
 .glass-card {
   border: 1px solid rgba(255, 255, 255, .75);
   border-radius: 20px;
-  background: linear-gradient(155deg, rgba(255, 255, 255, .8), rgba(255, 250, 250, .46));
-  box-shadow: 0 14px 34px rgba(74, 24, 43, .1);
-  backdrop-filter: blur(16px) saturate(1.15);
-  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  background: linear-gradient(155deg, rgba(255, 255, 255, .8), rgba(248, 245, 237, .84));
+  box-shadow: 0 14px 34px rgba(43, 41, 34, .08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .glass-surface {
   border: 1px solid rgba(255, 255, 255, .8);
   border-radius: 22px;
-  background: linear-gradient(150deg, rgba(255, 255, 255, .78), rgba(255, 250, 250, .44));
-  box-shadow: 0 16px 38px rgba(74, 24, 43, .1);
-  backdrop-filter: blur(18px) saturate(1.12);
-  -webkit-backdrop-filter: blur(18px) saturate(1.12);
+  background: linear-gradient(150deg, rgba(255, 255, 255, .78), rgba(248, 245, 237, .82));
+  box-shadow: 0 16px 38px rgba(43, 41, 34, .08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .glass-pill {
   border: 1px solid rgba(255, 255, 255, .85);
   border-radius: 999px;
-  background: linear-gradient(140deg, rgba(255, 255, 255, .85), rgba(255, 250, 250, .55));
-  box-shadow: 0 8px 22px rgba(74, 24, 43, .08);
-  backdrop-filter: blur(14px) saturate(1.1);
-  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  background: linear-gradient(140deg, rgba(255, 255, 255, .85), rgba(248, 245, 237, .9));
+  box-shadow: 0 8px 22px rgba(43, 41, 34, .06);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
 }
 .product-card.glass-card {
   position: relative;
@@ -46,15 +46,15 @@ const glassStyles = `
 }
 .product-card.glass-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(122, 30, 60, .38);
-  box-shadow: 0 26px 48px rgba(122, 30, 60, .18);
+  border-color: rgba(152, 120, 72, .34);
+  box-shadow: 0 26px 48px rgba(43, 41, 34, .12);
 }
 @media (max-width: 560px) {
   .product-card.glass-card { padding: 10px 10px 14px; }
 }
 .product-card.glass-card .product-card-media {
   border-radius: 12px;
-  background: linear-gradient(160deg, rgba(232, 220, 211, .92), rgba(248, 243, 237, .75));
+  background: linear-gradient(160deg, rgba(239, 234, 223, .96), rgba(250, 247, 239, .94));
 }
 .product-card.glass-card .product-card-image { transition: transform .5s ease; }
 .product-card.glass-card .product-card-body { padding: 13px 0 3px; }
@@ -64,11 +64,11 @@ const glassStyles = `
   backdrop-filter: blur(9px);
   -webkit-backdrop-filter: blur(9px);
 }
-.product-card.glass-card .badge-accent { background: rgba(122, 30, 60, .85); }
-.product-card.glass-card .badge-warm { background: rgba(217, 121, 67, .88); }
-.product-card.glass-card .badge-muted { background: rgba(255, 252, 249, .88); }
+.product-card.glass-card .badge-accent { background: rgba(152, 120, 72, .92); }
+.product-card.glass-card .badge-warm { background: rgba(133, 111, 75, .9); }
+.product-card.glass-card .badge-muted { background: rgba(247, 243, 234, .94); }
 .product-card.glass-card .product-wish {
-  background: rgba(44, 30, 30, .34);
+  background: rgba(43, 41, 34, .30);
   transition: background-color .2s ease, color .2s ease, transform .2s ease;
 }
 .product-card.glass-card .product-wish:hover,
