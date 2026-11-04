@@ -52,3 +52,45 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: artifacts/eva-worker
           command: deploy
+      - name: Smoke-test the live LAMHA storefront and API
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const base = 'https://lamha-iq.eva-store.workers.dev'
+          const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+          let lastError
+          for (let attempt = 1; attempt <= 12; attempt++) {
+            try {
+              const [page, products, categories] = await Promise.all([
+                fetch(base + '/', { cache: 'no-store' }),
+                fetch(base + '/api/products', { cache: 'no-store' }),
+                fetch(base + '/api/categories', { cache: 'no-store' }),
+              ])
+              if (!page.ok) throw new Error('Homepage returned HTTP ' + page.status)
+              if (!products.ok) throw new Error('Products API returned HTTP ' + products.status)
+              if (!categories.ok) throw new Error('Categories API returned HTTP ' + categories.status)
+              const html = await page.text()
+              if (/SERVICE NOTICE|Temporarily Unavailable/i.test(html)) throw new Error('Maintenance page is being served instead of the storefront')
+              const productData = await products.json()
+              const categoryData = await categories.json()
+              if (!Array.isArray(productData.data) || productData.data.length < 1) throw new Error('Products API returned no products')
+              if (!Array.isArray(categoryData.data) || categoryData.data.length < 1) throw new Error('Categories API returned no categories')
+              const script = html.match(/<script[^>]+src=["']([^"']+\.js)["']/i)?.[1]
+              if (!script) throw new Error('Vite JavaScript bundle was not found in homepage HTML')
+              const asset = await fetch(new URL(script, base), { cache: 'no-store' })
+              if (!asset.ok) throw new Error('JavaScript bundle returned HTTP ' + asset.status)
+              console.log(JSON.stringify({
+                homepage: page.status,
+                products: productData.data.length,
+                categories: categoryData.data.length,
+                javascriptBundle: asset.status,
+              }))
+              process.exit(0)
+            } catch (error) {
+              lastError = error
+              console.log('Smoke test attempt ' + attempt + '/12: ' + (error instanceof Error ? error.message : String(error)))
+              if (attempt < 12) await sleep(5000)
+            }
+          }
+          throw lastError
+          NODE
