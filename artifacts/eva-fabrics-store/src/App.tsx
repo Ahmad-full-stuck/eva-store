@@ -57,31 +57,30 @@ const shellStyles = `
 `
 
 const PAGE_SEO: Record<string, { title: string; desc: string }> = {
-  '/': { title: 'إيفا ستور للأقمشة | خامات مختارة تصنع الفرق', desc: 'متجر إيفا ستور للأقمشة: تعرفي على الخامة والمرونة والشفافية واللون، اختاري ما يناسب قطعك، واطلبي بنصف متر مع توصيل إلى جميع محافظات العراق.' },
-  '/catalog': { title: 'كل الأقمشة | إيفا ستور', desc: 'تصفحي أقمشة إيفا ستور: قطن، كريب، ساتان وأكثر — مع المرونة واللون والسعر لكل متر.' },
-  '/cart': { title: 'سلة المشتريات | إيفا ستور', desc: 'راجعي قماشك المختار وعدد الأمتار قبل إتمام الطلب.' },
-  '/checkout': { title: 'إتمام الطلب | إيفا ستور', desc: 'أدخلي بياناتك وعدد الأمتار لتأكيد طلب الأقمشة مع التوصيل إلى جميع محافظات العراق.' },
-  '/favorites': { title: 'المفضلة | إيفا ستور', desc: 'الأقمشة التي حفظتيها للرجوع إليها لاحقاً.' },
-  '/about': { title: 'من نحن | إيفا ستور', desc: 'قصة إيفا ستور وخامة تصنع الفرق.' },
-  '/fabric-guide': { title: 'دليل الأقمشة | إيفا ستور', desc: 'كيف تفرقي بين أنواع الأقمشة؟ دليل عملي بالأسئلة الشائعة عن المرونة والكثافة والعناية.' },
-  '/contact': { title: 'تواصلي معنا | إيفا ستور', desc: 'أرسلي رسالتك عبر نموذج التواصل في موقع إيفا ستور للاستفسار عن الأقمشة والتوصيل وتتبّع الطلبات.' },
-  '/policies': { title: 'السياسات والخصوصية | إيفا ستور', desc: 'سياسات الشحن والإرجاع والخصوصية الخاصة بمتجر إيفا ستور.' },
-  '/order-tracking': { title: 'تتبع الطلب | إيفا ستور', desc: 'تتبعي حالة طلبك برقم الطلب الخاص بك.' },
-  '/order-confirmation': { title: 'تم تسجيل طلبك | إيفا ستور', desc: 'تم تسجيل طلبك بنجاح، سنتواصل معك قريباً لتأكيد التفاصيل.' },
+  '/': { title: 'لَمْحة LAMHA | حلول المراقبة والحماية الذكية', desc: 'تعرّف على أجهزة المراقبة وحلول الحماية الذكية من لَمْحة. راجع صور الأجهزة ومواصفاتها، أضف الكمية المطلوبة، وأرسل طلبك للتأكيد.' },
+  '/catalog': { title: 'أجهزة المراقبة والحماية | لَمْحة', desc: 'تصفح كاميرات المراقبة الداخلية والخارجية، كاميرات Wi‑Fi، أجهزة التسجيل وملحقات الحماية من لَمْحة.' },
+  '/cart': { title: 'سلة الطلب | لَمْحة', desc: 'راجع أجهزة المراقبة والكميات قبل إتمام الطلب.' },
+  '/checkout': { title: 'إرسال الطلب | لَمْحة', desc: 'أدخل بيانات التواصل والتوصيل لإرسال طلبك إلى لَمْحة.' },
+  '/favorites': { title: 'المفضلة | لَمْحة', desc: 'أجهزتك المحفوظة للرجوع إليها لاحقاً.' },
+  '/about': { title: 'من نحن | لَمْحة', desc: 'لَمْحة للحلول الذكية للمراقبة والحماية.' },
+  '/device-guide': { title: 'دليل اختيار أجهزة المراقبة | لَمْحة', desc: 'إرشادات تساعدك على اختيار الكاميرا وجهاز التسجيل بحسب المكان والاتصال والميزات التي تحتاجها.' },
+  '/contact': { title: 'تواصل معنا | لَمْحة', desc: 'تواصل مع لَمْحة للاستفسار عن الأجهزة والتوافق والتوصيل.' },
+  '/policies': { title: 'السياسات والخصوصية | لَمْحة', desc: 'سياسات الطلب والتوصيل والخصوصية الخاصة بمتجر لَمْحة.' },
+  '/order-tracking': { title: 'تتبع الطلب | لَمْحة', desc: 'تتبع حالة طلبك باستخدام رقم الطلب.' },
+  '/order-confirmation': { title: 'تم استلام الطلب | لَمْحة', desc: 'تم استلام طلبك، وسيتم التواصل معك لتأكيد التفاصيل.' },
 }
-
 const PAGE_SEO_EN: Record<string, { title: string; desc: string }> = {
-  '/': { title: 'Eva Store Fabrics | Fabrics that make the difference', desc: 'Eva Store fabrics: learn about texture, stretch, opacity and color, choose what fits your piece, and order by the half meter with delivery across Iraq.' },
-  '/catalog': { title: 'All fabrics | Eva Store', desc: 'Browse Eva Store fabrics: cotton, crepe, satin and more — with stretch, color and price per meter.' },
-  '/cart': { title: 'Shopping cart | Eva Store', desc: 'Review your chosen fabric and meters before placing your order.' },
-  '/checkout': { title: 'Checkout | Eva Store', desc: 'Enter your details and meters to confirm your fabric order with delivery across Iraq.' },
-  '/favorites': { title: 'Favorites | Eva Store', desc: 'The fabrics you saved to come back to later.' },
-  '/about': { title: 'About us | Eva Store', desc: 'The story of Eva Store and a fabric that makes the difference.' },
-  '/fabric-guide': { title: 'Fabric guide | Eva Store', desc: 'How to tell fabric types apart? A practical guide with FAQs on stretch, density and care.' },
-  '/contact': { title: 'Contact us | Eva Store', desc: 'Send us a message through the Eva Store contact form about fabrics, delivery and order tracking.' },
-  '/policies': { title: 'Policies & privacy | Eva Store', desc: 'Shipping, returns and privacy policies for Eva Store.' },
-  '/order-tracking': { title: 'Track order | Eva Store', desc: 'Track your order status using your order number.' },
-  '/order-confirmation': { title: 'Order received | Eva Store', desc: 'Your order was registered successfully — we will contact you shortly to confirm the details.' },
+  '/': { title: 'LAMHA | Smart Surveillance and Security Solutions', desc: 'Explore LAMHA surveillance cameras and smart security devices. Review product details, choose quantities and submit an order for confirmation.' },
+  '/catalog': { title: 'Surveillance and Security Devices | LAMHA', desc: 'Browse indoor and outdoor cameras, Wi-Fi cameras, recording devices and security accessories.' },
+  '/cart': { title: 'Your Cart | LAMHA', desc: 'Review your selected devices and quantities before checkout.' },
+  '/checkout': { title: 'Submit Your Order | LAMHA', desc: 'Enter your contact and delivery details to submit your order to LAMHA.' },
+  '/favorites': { title: 'Favorites | LAMHA', desc: 'Your saved devices.' },
+  '/about': { title: 'About LAMHA', desc: 'LAMHA smart surveillance and security solutions.' },
+  '/device-guide': { title: 'Security Device Guide | LAMHA', desc: 'Guidance for choosing cameras and recording devices by location, connectivity and required features.' },
+  '/contact': { title: 'Contact LAMHA', desc: 'Contact LAMHA about products, compatibility and delivery.' },
+  '/policies': { title: 'Policies and Privacy | LAMHA', desc: 'Ordering, delivery and privacy policies for LAMHA.' },
+  '/order-tracking': { title: 'Track Your Order | LAMHA', desc: 'Check your order status using your order number.' },
+  '/order-confirmation': { title: 'Order Received | LAMHA', desc: 'Your order was received. We will contact you to confirm the details.' },
 }
 
 const safeDecode = (value: string): string => {
@@ -109,7 +108,7 @@ function AppShell() {
       : undefined
     const fallback = pathname.startsWith('/order-confirmation') ? seo['/order-confirmation'] : undefined
     const entry = product
-      ? { title: `${product.name} | ${lang === 'en' ? 'Eva Store' : 'إيفا ستور'}`, desc: product.description || seo['/catalog'].desc }
+      ? { title: `${product.name} | ${lang === 'en' ? 'LAMHA' : 'لَمْحة'}`, desc: product.description || seo['/catalog'].desc }
       : seo[pathname] ?? fallback
     document.title = entry?.title ?? seo['/'].title
     if (entry?.desc) document.querySelector('meta[name="description"]')?.setAttribute('content', entry.desc)
@@ -189,7 +188,7 @@ function AppShell() {
           <Route path="/checkout" component={() => <CheckoutPage cart={cart} onComplete={completeOrder} />} />
           <Route path="/favorites" component={() => <FavoritesPage {...pageProps} />} />
           <Route path="/about" component={AboutPage} />
-          <Route path="/fabric-guide" component={FabricGuidePage} />
+          <Route path="/device-guide" component={FabricGuidePage} />
           <Route path="/contact" component={ContactPage} />
           <Route path="/policies" component={PoliciesPage} />
           <Route path="/order-tracking" component={OrderTrackingPage} />

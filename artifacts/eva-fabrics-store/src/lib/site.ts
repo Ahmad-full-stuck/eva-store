@@ -10,7 +10,7 @@ const adminContent = (): Record<string, string> => {
 }
 
 const rawWhatsApp = import.meta.env.VITE_WHATSAPP_NUMBER || '9647727282001'
-const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com//'
+const rawInstagram = import.meta.env.VITE_INSTAGRAM_URL || ''
 const apiBase = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '')
 
 const digits = (value: string): string => value.replace(/[^0-9]/g, '')
@@ -28,7 +28,7 @@ const localPhone = (() => {
   return rawWhatsApp
 })()
 
-const safeInstagram = /^https?:\/\//i.test(rawInstagram) ? rawInstagram : `https://${rawInstagram.replace(/^\/+/, '')}`
+const safeInstagram = /^https:\/\/www\.instagram\.com\/[A-Za-z0-9._]+\/?$/i.test(rawInstagram) ? rawInstagram : ''
 
 export const siteConfig = {
   get name() { return adminContent().shopName || 'لَمْحة للحماية الذكية' },
@@ -37,7 +37,7 @@ export const siteConfig = {
   get instagramUrl() { return adminContent().instagram || safeInstagram },
   get contactEmail() { return adminContent().emailOrdersTo || '' },
   emailUrl: (subject = 'استفسار من لَمْحة', body = 'مرحباً لَمْحة، أريد الاستفسار عن أجهزة المراقبة.'): string => `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
-  instagramText: 'إيفا ستور على إنستغرام',
+  instagramText: 'لَمْحة على إنستغرام',
 }
 
 export const apiUrl = (path: string): string => `${apiBase}${path.startsWith('/') ? path : `/${path}`}`

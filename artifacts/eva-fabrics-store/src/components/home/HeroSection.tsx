@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Layers, LayoutGrid, Sparkles, Truck, Wallet } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Camera, ChevronLeft, ChevronRight, LayoutGrid, Truck, Wallet } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, Product } from '@/types'
 import { CountUp } from './CountUp'
@@ -26,7 +26,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
   const { t } = useT()
   const content = useSiteContent()
   const stats: HeroStat[] = [
-    { key: 'fabrics', icon: <Layers size={16} />, value: products.length, prefix: '+', suffix: '', label: t('home.stats.fabricsLabel'), trend: t('home.stats.fabricsTrend') },
+    { key: 'devices', icon: <Camera size={16} />, value: products.length, prefix: '', suffix: '', label: t('home.stats.devicesLabel'), trend: t('home.stats.devicesTrend') },
     { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '+', suffix: '', label: t('home.stats.categoriesLabel'), trend: t('home.stats.categoriesTrend') },
     { key: 'delivery', icon: <Truck size={16} />, value: 18, prefix: '', suffix: '', label: t('home.stats.deliveryLabel'), trend: t('home.stats.deliveryTrend') },
     { key: 'cash', icon: <Wallet size={16} />, value: 100, prefix: '', suffix: t('home.stats.percent'), label: t('home.stats.cashLabel'), trend: t('home.stats.cashTrend') },
@@ -34,7 +34,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
 
   // الصور تديرها الإدارة (إضافة/حذف/ترتيب). إن لم توجد صور محفوظة نرجع للافتراضية.
   const slideSrcs = Array.isArray(content.heroSlides) && content.heroSlides.length ? content.heroSlides : DEFAULT_HERO_SLIDES
-  const slides = slideSrcs.map((src, index) => ({ src, alt: `${content.shopName || 'EVA'} — ${index + 1}` }))
+  const slides = slideSrcs.map((src, index) => ({ src, alt: `${content.shopName || 'LAMHA'} — ${index + 1}` }))
   const [activeSlide, setActiveSlide] = useState(0)
   const timerRef = useRef<number | undefined>(undefined)
   const slideMs = Math.max(1200, Number(content.heroSlideMs) || 2600)
@@ -70,7 +70,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
     <>
       <section className="home-hero glass-hero container-eva">
         <div className="hero-copy">
-          <span className="eyebrow"><Sparkles size={14} />{content.heroEyebrow}</span>
+          <span className="eyebrow"><Camera size={14} />{content.heroEyebrow}</span>
           <h1>
             {contentLines(content.heroTitle).map((line, lineIndex) => (
               <Fragment key={`${lineIndex}-${line}`}>
@@ -102,7 +102,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
               {slides.map((slide, index) => <button key={slide.src} type="button" role="tab" aria-selected={index === activeSlide} aria-label={slide.alt} className={index === activeSlide ? 'is-active' : ''} onClick={() => { setActiveSlide(index); restart() }} />)}
             </div>
           </>}
-          <div className="hero-vertical-label" aria-hidden="true">EVA · FABRICS</div>
+          <div className="hero-vertical-label" aria-hidden="true">LAMHA · SMART SECURITY</div>
         </div>
       </section>
 
