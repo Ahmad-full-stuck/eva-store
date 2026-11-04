@@ -194,6 +194,10 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [pendingOrderNumber, setPendingOrderNumber] = useState('')
   const [liveMessage, setLiveMessage] = useState('')
   const totals = getCartTotals(cart)
+  const settings = useStoreSettings()
+  const freeFrom = Math.max(0, Number(settings.freeDeliveryFrom) || 0)
+  const freeDeliveryUnlocked = freeFrom > 0 && Number(settings.deliveryFee) > 0 && totals.subtotal >= freeFrom
+  const deliveryLabel = totals.deliveryFee > 0 ? formatPrice(totals.deliveryFee) : freeDeliveryUnlocked ? t('co.free') : t('co.deliveryToConfirm')
   const siteContent = useSiteContent()
   const boxRef = useRef<HTMLDivElement>(null)
   const restored = useRef(false)
