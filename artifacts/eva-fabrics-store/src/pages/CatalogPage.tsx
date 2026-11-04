@@ -276,7 +276,8 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
   }
 
   const availableCount = shown.filter((product) => !isSoldOut(product)).length
-  const averagePrice = shown.length ? Math.round(shown.reduce((total, product) => total + product.price, 0) / shown.length) : 0
+  const pricedShown = shown.filter((product) => product.price > 0)
+  const averagePrice = pricedShown.length ? Math.round(pricedShown.reduce((total, product) => total + product.price, 0) / pricedShown.length) : 0
   const activeCount = Number(Boolean(categoryId)) + Number(inStock) + Number(minPrice !== null) + Number(maxPrice !== null) + Number(Boolean(search))
   const priceLabel = priceRange.min !== null && priceRange.max !== null
     ? `${formatPrice(priceRange.min)} — ${formatPrice(priceRange.max)}`
@@ -459,7 +460,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
           <div className="stats-bar glass-card" role="status">
             <span className="stat-item"><Layers size={14} aria-hidden="true" />{t('cat.statShow')} <strong>{shown.length}</strong> {t('cat.statOfTotal').replace('{total}', String(products.length))}</span>
             <span className="stat-divider" aria-hidden="true" />
-            <span className="stat-item"><Tag size={14} aria-hidden="true" />{t('cat.statAvgPrice')} <strong>{shown.length ? formatPrice(averagePrice) : '—'}</strong></span>
+            {pricedShown.length > 0 && <><span className="stat-divider" /><span className="stat-item"><Tag size={14} aria-hidden="true" />{t('cat.statAvgPrice')} <strong>{formatPrice(averagePrice)}</strong></span></>}
             <span className="stat-divider" aria-hidden="true" />
             <span className="stat-item"><Package size={14} aria-hidden="true" />{t('cat.statAvailable')} <strong>{availableCount}</strong></span>
             {pageCount > 1 && (
