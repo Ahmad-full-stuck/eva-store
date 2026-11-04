@@ -95,8 +95,10 @@ const glassStyles = `
 export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   const { t, lang } = useT()
   const settings = useStoreSettings()
-  const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
+  const freeFrom = Math.max(0, Number(settings.freeDeliveryFrom) || 0)
+  const freeDeliveryConfigured = freeFrom > 0 && Number(settings.deliveryFee) > 0
   const totals = getCartTotals(cart)
+  const deliveryLabel = totals.deliveryFee > 0 ? formatPrice(totals.deliveryFee) : freeDeliveryConfigured && totals.subtotal >= freeFrom ? t('cart.free') : t('cart.deliveryToConfirm')
   const [announcement, setAnnouncement] = useState('')
   const itemsRef = useRef<HTMLElement>(null)
   const emptyRef = useRef<HTMLDivElement>(null)
@@ -138,8 +140,8 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   }
 
   const meters = cart.reduce((sum, item) => sum + item.length, 0)
-  const remaining = Math.max(0, freeFrom - totals.subtotal)
-  const progress = freeFrom ? Math.min(100, Math.round((totals.subtotal / freeFrom) * 100)) : 100
+  const remaining = freeDeliveryConfigured ? Math.max(0, freeFrom - totals.subtotal) : 0
+  const progress = freeDeliveryConfigured ? Math.min(100, Math.round((totals.subtotal / freeFrom) * 100)) : 0
 
   return (
     <main className="container-eva cart-page glass-scope">
@@ -201,7 +203,9 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         </section>
         <aside className="order-summary glass glass-strong" aria-label={t('cart.summary')}>
           <h2>{t('cart.summary')}</h2>
-          {remaining > 0 ? (
+          {!freeDeliveryConfigured ? (
+            <div className="delivery-progress"><span>{t('cart.deliveryToConfirm')}</span></div>
+          ) : remaining > 0 ? (
             <div className="delivery-progress">
               <div className="delivery-progress-head">
                 <span>{t('cart.freeAt').replace('{amount}', formatDinar(freeFrom))}</span>
@@ -221,7 +225,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
           </div>
           <div className="summary-line">
             <span>{t('cart.delivery')} <small>{t('cart.estimated')}</small></span>
-            <strong>{totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('cart.free')}</strong>
+            <strong>{deliveryLabel}</strong>
           </div>
           <div className="summary-total">
             <span>{t('cart.total')}</span>
