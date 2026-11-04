@@ -78,6 +78,22 @@ jobs:
               if (/SERVICE NOTICE|Temporarily Unavailable/i.test(html)) throw new Error('Maintenance page is being served instead of the storefront')
               const productData = await products.json()
               const categoryData = await categories.json()
+              const unpriced = productData.data.find((item) => !(Number(item.price) > 0))
+              let unpricedOrderGuard = 'not-needed'
+              if (unpriced) {
+                const guard = await fetch(base + '/api/orders', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    customerName: 'LAMHA deployment check',
+                    phone: '0000000000',
+                    items: [{ productId: unpriced.id, quantity: 1, unitPrice: 0, totalPrice: 0 }],
+                    totals: { subtotal: 0, deliveryFee: 0, total: 0 },
+                  }),
+                })
+                if (guard.status !== 409) throw new Error('Unpriced product order guard returned HTTP ' + guard.status)
+                unpricedOrderGuard = 'rejected'
+              }
               if (!Array.isArray(productData.data) || productData.data.length < 1) throw new Error('Products API returned no products')
               if (!Array.isArray(categoryData.data) || categoryData.data.length < 1) throw new Error('Categories API returned no categories')
               const script = html.match(/<script[^>]+src=["']([^"']+\.js)["']/i)?.[1]
@@ -89,6 +105,7 @@ jobs:
                 products: productData.data.length,
                 categories: categoryData.data.length,
                 javascriptBundle: asset.status,
+                unpricedOrderGuard,
               }))
               process.exit(0)
             } catch (error) {
