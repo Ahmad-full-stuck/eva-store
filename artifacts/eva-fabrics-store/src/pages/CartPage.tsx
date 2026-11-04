@@ -114,7 +114,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
 
   const handleUpdate = (item: CartItem, nextLength: number) => {
     onUpdate(orderKey(item), nextLength)
-    setAnnouncement(t('cart.updated').replace('{name}', item.product.name).replace('{meters}', formatMeters(nextLength)))
+    setAnnouncement(t('cart.updated').replace('{name}', item.product.name).replace('{quantity}', formatMeters(nextLength)))
   }
 
   const handleRemove = (item: CartItem) => {
@@ -153,7 +153,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         <div>
           <span className="eyebrow">{t('cart.eyebrow')}</span>
           <h1>{t('cart.title')}</h1>
-          <p>{t('cart.inCart').replace('{meters}', formatMeters(meters))}</p>
+          <p>{t('cart.inCart').replace('{quantity}', formatMeters(meters))}</p>
         </div>
         <Link href="/catalog" className="underlined-link">{t('cart.continue')} <ArrowLeft size={15} /></Link>
       </div>
@@ -175,7 +175,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
                       <span className="product-type">{lang === 'en' ? typeLabelsEn[item.product.type] || item.product.type : item.product.type}</span>
                       <Link href={`/product/${item.product.slug}`} className="product-name">{item.product.name}</Link>
                       <div className="cart-item-chips">
-                        <span className="chip glass-pill">{formatPrice(item.product.price)} / {t('cart.perMeter')}</span>
+                        <span className="chip glass-pill">{formatPrice(item.product.price)} / {t('cart.perItem')}</span>
                       </div>
                     </div>
                     <div className="cart-item-tools">
