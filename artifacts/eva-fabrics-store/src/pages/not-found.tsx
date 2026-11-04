@@ -19,7 +19,7 @@ export default function NotFound() {
   if (fragmentIndex > 0) {
     const base = location.slice(0, fragmentIndex)
     if (base === '/about') return <AboutPage />
-    if (base === '/device-guide' return <DeviceGuidePage />
+    if (base === '/device-guide') return <DeviceGuidePage />
     if (base === '/contact') return <ContactPage />
     if (base === '/policies') return <PoliciesPage />
     if (base === '/order-tracking') return <OrderTrackingPage />
