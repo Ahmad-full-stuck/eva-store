@@ -1,4 +1,4 @@
-import { Heart, Plus, ShoppingBag } from 'lucide-react'
+import { Heart, MessageCircle, Plus, ShoppingBag } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { useT } from '@/lib/i18n'
@@ -133,9 +133,10 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
   const { t, lang } = useT()
   const addColor = product.colors.find((color) => color.available && color.stockMeters > 0) || product.colors[0]
   const soldOut = !addColor || isSoldOut(product)
+  const priceOnRequest = !(product.price > 0)
   const lowStock = !soldOut && product.stockMeters > 0 && product.stockMeters <= 3
   const wishLabel = wished ? t('card.wishRemove').replace('{name}', product.name) : t('card.wishAdd').replace('{name}', product.name)
-  const addLabel = t('card.addHalfAria').replace('{name}', product.name)
+  const addLabel = (priceOnRequest ? t('card.askPriceAria') : t('card.addHalfAria')).replace('{name}', product.name)
   const detailPath = `/product/${product.slug}`
 
   return (
@@ -191,18 +192,20 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
             <p className="product-type">{lang === 'en' ? typeLabelEn(product.type) : product.type}</p>
             <Link href={detailPath} className="product-name">{product.name}</Link>
           </div>
-          <span className="product-price">{formatPrice(product.price)}<small>{t('card.perMeter')}</small></span>
+          <span className="product-price">{priceOnRequest ? t('card.priceOnRequest') : <>{formatPrice(product.price)}<small>{t('card.perMeter')}</small></>}</span>
         </div>
         <div className="product-card-footer">
-          <button
-            type="button"
-            className="add-button"
-            disabled={soldOut}
-            onClick={() => addColor && onAdd(product, addColor, 1)}
-            aria-label={addLabel}
-          >
-            {soldOut ? t('card.soldOut') : <><ShoppingBag size={14} aria-hidden="true" /><span>{t('card.addHalf')}</span></>}
-          </button>
+          {soldOut ? (
+            <button type="button" className="add-button" disabled aria-label={addLabel}>{t('card.soldOut')}</button>
+          ) : priceOnRequest ? (
+            <Link href="/contact" className="add-button" aria-label={addLabel}>
+              <MessageCircle size={14} aria-hidden="true" /><span>{t('card.askPrice')}</span>
+            </Link>
+          ) : (
+            <button type="button" className="add-button" onClick={() => addColor && onAdd(product, addColor, 1)} aria-label={addLabel}>
+              <ShoppingBag size={14} aria-hidden="true" /><span>{t('card.addHalf')}</span>
+            </button>
+          )}
         </div>
       </div>
     </article>
