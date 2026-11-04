@@ -21,8 +21,7 @@
   ],
   "vars": {
     "STORE_ORIGIN": "https://lamha-iq.eva-store.workers.dev",
-    "VAPID_PUBLIC_KEY": "BJssVonGGp_qBtx4gEGxPm30sjQFlJOEMkI5MYY8DTl8GW9eCAWwwhxe1iieyqKo_fcxklaw3VL6XDyZ5fkX5TU",
-    "VAPID_PRIVATE_KEY": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgQhKdkqar2Qvpwe6OdJmvwhLnQ7m671r+q05JESL5WcuhRANCAASbLFaJxhqf6gbceIBBsT5t9LI0BZSThDJCOTGGPA05fBlvXggFsMIcXtYonsqiqP33MZJWsN1S+lw8meX5F+U1",
+    "VAPID_PUBLIC_KEY": "BGx1_hVRVRmzwNYUzzH8P7H6TG4zeyIee3wtvKTaI6e7j1cXDqW7oEAY_4NQ8eUyeuzzNVVojwac17lShdmVMHk",
     "VAPID_SUBJECT": "mailto:admin@lamha-iq.pages.dev"
   }
 }
