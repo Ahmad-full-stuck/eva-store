@@ -25,20 +25,6 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Provision isolated LAMHA database
-        working-directory: artifacts/eva-worker
-        run: |
-          set -euo pipefail
-          DB_ID=$(pnpm exec wrangler d1 list --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const a=JSON.parse(s);const x=a.find(v=>v.name==='lamha-eva-store-db');if(x)process.stdout.write(x.uuid)})")
-          if [ -z "$DB_ID" ]; then
-            OUT=$(pnpm exec wrangler d1 create lamha-eva-store-db --json)
-            DB_ID=$(printf '%s' "$OUT" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const x=JSON.parse(s);process.stdout.write(x.uuid||x.result?.uuid||'')})")
-          fi
-          test -n "$DB_ID"
-          python - "$DB_ID" <<'PY'
-          import json,re,sys
-          p='wrangler.jsonc';s=open(p,encoding='utf-8').read();s=re.sub(r'"database_id"\s*:\s*"[^"]+"', '"database_id": "'+sys.argv[1]+'"', s, count=1);open(p,'w',encoding='utf-8').write(s)
-          PY
       - name: Apply schema and seed the demo catalog
         working-directory: artifacts/eva-worker
         run: |
@@ -52,13 +38,14 @@ jobs:
           BASE_PATH: "/"
           VITE_WHATSAPP_NUMBER: ""
           VITE_INSTAGRAM_URL: ""
+          VITE_API_URL: "https://lamha-iq.eva-store.workers.dev"
       - name: Remove unused inherited fabric photography to keep this deployment lean
         run: rm -rf artifacts/eva-fabrics-store/dist/public/products artifacts/eva-fabrics-store/dist/public/videos artifacts/eva-fabrics-store/dist/public/home
       - name: Configure LAMHA admin PIN
         if: env.LAMHA_ADMIN_PIN != ''
         working-directory: artifacts/eva-worker
         run: printf '%s' "$LAMHA_ADMIN_PIN" | pnpm exec wrangler secret put ADMIN_PIN --config wrangler.jsonc
-      - name: Deploy LAMHA Worker and static storefront
+      - name: Deploy the LAMHA storefront and API together
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

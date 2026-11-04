@@ -80,7 +80,7 @@ const cachedJson = async (request: Request, ttlSeconds: number, build: () => Pro
 const purgePublicCache = async (): Promise<void> => {
   const cache = caches.default
   const keys = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings'].map((path) => {
-    const url = new URL(`https://lamha-iq.pages.dev${path}`)
+    const url = new URL(path, env.STORE_ORIGIN)
     url.searchParams.set('__lamha', CACHE_VERSION)
     return new Request(url.toString())
   })
@@ -113,14 +113,14 @@ const publicProduct = (product: StoreProduct): StoreProduct => {
 }
 
 const orderNumber = (): string =>
-  `LAMHA-${Date.now()}.toString(36).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`
+  `LAMHA-${Date.now().toString(36).toUpperCase()}-${Math.floor(Math.random() * 90 + 10)}`
 
 const fmtDinar = (value: number): string =>
   value >= 1000 && value % 1000 === 0 ? `${value / 1000} الف دينار عراقي` : `${value.toLocaleString('en-US')} دينار عراقي`
 
-const fmtMeters = (m: number): string => {
-  const s = String(m)
-  return s === '0.5' || s === '1.5' || s === '2.5' || s === '3.5' || s === '4.5' || s === '5.5' ? `${s} م` : `${s} متر`
+const formatQuantity = (value: number): string => {
+  const quantity = Math.max(0, Math.floor(Number(value) || 0))
+  return `${quantity} ${quantity === 1 ? 'قطعة' : 'قطع'}`
 }
 
 interface NotifyOrder {
@@ -153,7 +153,7 @@ const buildOrderMessage = (order: NotifyOrder): string => {
     const qty = Number(item.quantity ?? 0) || 0
     const unit = Number(item.unitPrice ?? 0) || 0
     const total = Number(item.totalPrice ?? 0) || 0
-    lines.push(`- ${name} (${color}) × ${fmtMeters(qty)} × ${fmtDinar(unit)} = ${fmtDinar(total)}`)
+    lines.push(`- ${name} (${color}) × ${formatQuantity(qty)} × ${fmtDinar(unit)} = ${fmtDinar(total)}`)
   }
   lines.push('')
   lines.push(`المجموع الفرعي: ${fmtDinar(num('subtotal'))}`)
@@ -179,7 +179,11 @@ const notifyOrderEmail = async (env: Env, order: NotifyOrder): Promise<boolean> 
       console.log(`[notify] order=${order.number} skipped provider=${provider}`)
       return false
     }
-    const to = String(content.emailOrdersTo ?? '').trim() || 'gdumingm@gmail.com'
+    const to = String(content.emailOrdersTo ?? '').trim()
+    if (!to) {
+      console.log(`[notify] order=${order.number} skipped: no LAMHA order email configured`)
+      return false
+    }
     const action = String(content.emailFormSubmitAction ?? '').trim() || `https://formsubmit.co/${encodeURIComponent(to)}`
     const subjectTemplate = String(content.emailSubjectOrder ?? 'طلب جديد #{orderNumber}')
     const subject = subjectTemplate.replace('#{orderNumber}', `#${order.number}`).replace('{orderNumber}', order.number)
@@ -409,7 +413,7 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
         const total = Number((totals as Record<string, unknown>).total ?? 0) || 0
         const governorate = String(nested.governorate ?? body.governorate ?? '').trim()
         pushWork = sendPushToAll(env, {
-          title: 'طلب جديد • إيفا ستور',
+          title: 'طلب جديد • لَمْحة',
           body: `#${number}\n${name}${governorate ? ` — ${governorate}` : ''}\n${itemLines}\nالإجمالي: ${fmtDinar(total)}`,
           data: { orderNumber: number, status: 'new', url: '/#/admin' },
         }).catch((error) => {
@@ -458,7 +462,7 @@ export default {
         return new Response(bytes, { headers })
       }
 
-      return new Response('EVA STORE API', { status: 404 })
+      return env.ASSETS.fetch(request)
     } catch (error) {
       const message = error instanceof Error ? error.message : 'خطأ غير متوقع'
       return withCors(json({ error: message }, 500))
