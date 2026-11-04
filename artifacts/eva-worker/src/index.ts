@@ -261,7 +261,7 @@ async function handleApi(request: Request, env: Env, path: string, ctx?: Executi
         valid = true
       }
 
-      if (!valid && pin && /^\\d{6,12}$/.test(configuredPin) && pin === configuredPin) {
+      if (!valid && pin && /^\d{6,12}$/.test(configuredPin) && pin === configuredPin) {
         valid = true
       }
       if (!valid) return json({ error: 'بيانات الدخول غير صحيحة' }, 401)
