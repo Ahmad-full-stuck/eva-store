@@ -152,8 +152,8 @@ export interface StoreSettings {
 
 export const defaultStoreSettings: StoreSettings = {
   colorsEnabled: true,
-  freeDeliveryFrom: 50000,
-  deliveryFee: 5000,
+  freeDeliveryFrom: 0,
+  deliveryFee: 0,
 }
 
 export const readStoreSettings = (): StoreSettings => ({
