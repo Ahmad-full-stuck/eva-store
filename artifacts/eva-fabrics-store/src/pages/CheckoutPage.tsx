@@ -553,7 +553,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
             </div>
           )}
           <div className="order-total-strip">
-            <span>{t('co.totalWithDelivery')}<small>{cart.length.toLocaleString(lang === 'en' ? 'en-US' : 'ar-IQ')} {cart.length === 1 ? t('co.pieceOne') : t('co.pieceMany')} · {totals.deliveryFee ? t('co.deliveryFee').replace('{price}', formatPrice(totals.deliveryFee)) : t('co.deliveryFree')}</small></span>
+            <span>{t('co.totalWithDelivery')}<small>{cart.length.toLocaleString(lang === 'en' ? 'en-US' : 'ar-IQ')} {cart.length === 1 ? t('co.pieceOne') : t('co.pieceMany')} · {totals.deliveryFee > 0 ? t('co.deliveryFee').replace('{price}', formatPrice(totals.deliveryFee)) : freeDeliveryUnlocked ? t('co.deliveryFree') : t('co.deliveryToConfirm')}</small></span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
           <div className="consent-row">
@@ -607,7 +607,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
           </div>
           <div className="summary-line">
             <span>{t('co.delivery')} <small>{t('co.estimated')}</small></span>
-            <strong>{totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('co.free')}</strong>
+            <strong>{deliveryLabel}</strong>
           </div>
           <div className="summary-total">
             <span>{t('co.total')}</span>
