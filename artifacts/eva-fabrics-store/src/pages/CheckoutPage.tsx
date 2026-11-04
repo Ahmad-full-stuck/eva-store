@@ -6,7 +6,7 @@ import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/
 import { useT } from '@/lib/i18n'
 import { apiUrl } from '@/lib/site'
 import { governorates } from '@/lib/fallback-data'
-import { useSiteContent } from '@/lib/site-content'
+import { useSiteContent, useStoreSettings } from '@/lib/site-content'
 import { sendOrderEmail } from '@/lib/email'
 import { queuePendingOrder } from '@/lib/api'
 import { SmartImage } from '@/components/ui/SmartImage'
