@@ -102,6 +102,7 @@ export const productStrings: Record<string, StringEntry> = {
   'cart.freeUnlocked': { ar: 'حصلتِ على توصيل مجاني لهذا الطلب', en: 'You have free delivery on this order' },
   'cart.subtotal': { ar: 'المجموع الفرعي', en: 'Subtotal' },
   'cart.delivery': { ar: 'التوصيل', en: 'Delivery' },
+  'cart.deliveryToConfirm': { ar: 'تُحدد تكلفة التسليم بعد مراجعة العنوان', en: 'Delivery charge is confirmed later' },
   'cart.estimated': { ar: '(تقديري)', en: '(estimated)' },
   'cart.free': { ar: 'مجاناً', en: 'Free' },
   'cart.total': { ar: 'الإجمالي', en: 'Total' },
