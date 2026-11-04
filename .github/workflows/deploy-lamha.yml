@@ -52,6 +52,8 @@ jobs:
           BASE_PATH: "/"
           VITE_WHATSAPP_NUMBER: ""
           VITE_INSTAGRAM_URL: ""
+      - name: Remove unused inherited fabric photography to keep this deployment lean
+        run: rm -rf artifacts/eva-fabrics-store/dist/public/products artifacts/eva-fabrics-store/dist/public/videos artifacts/eva-fabrics-store/dist/public/home
       - name: Configure LAMHA admin PIN
         if: env.LAMHA_ADMIN_PIN != ''
         working-directory: artifacts/eva-worker
