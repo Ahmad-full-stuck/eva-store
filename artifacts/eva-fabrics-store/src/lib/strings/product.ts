@@ -167,6 +167,7 @@ export const productStrings: Record<string, StringEntry> = {
   'co.pieceMany': { ar: 'قطع', en: 'items' },
   'co.deliveryFee': { ar: 'توصيل {price}', en: 'Delivery {price}' },
   'co.deliveryFree': { ar: 'توصيل مجاني', en: 'Free delivery' },
+  'co.deliveryToConfirm': { ar: 'تُحدد لاحقًا', en: 'To be confirmed' },
   'co.consentTitle': { ar: 'أوافق على شروط الاستخدام وسياسة الخصوصية', en: 'I agree to the terms of use and privacy policy' },
   'co.consentHelp': { ar: 'نستخدم بياناتك لتجهيز الطلب والتواصل معك فقط، ولا نشاركها مع أي جهة أخرى.', en: 'We use your details only to prepare your order and contact you — never shared with anyone else.' },
   'co.linkTerms': { ar: 'الشروط', en: 'Terms' },
