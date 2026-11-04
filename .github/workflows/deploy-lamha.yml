@@ -1,0 +1,65 @@
+name: Deploy LAMHA storefront
+on:
+  push:
+    branches: [lamha-eva-store]
+  workflow_dispatch:
+concurrency:
+  group: lamha-store-deploy
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      LAMHA_ADMIN_PIN: ${{ secrets.LAMHA_ADMIN_PIN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Provision isolated LAMHA database
+        working-directory: artifacts/eva-worker
+        run: |
+          set -euo pipefail
+          DB_ID=$(pnpm exec wrangler d1 list --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const a=JSON.parse(s);const x=a.find(v=>v.name==='lamha-store-db');if(x)process.stdout.write(x.uuid)})")
+          if [ -z "$DB_ID" ]; then
+            OUT=$(pnpm exec wrangler d1 create lamha-store-db --json)
+            DB_ID=$(printf '%s' "$OUT" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const x=JSON.parse(s);process.stdout.write(x.uuid||x.result?.uuid||'')})")
+          fi
+          test -n "$DB_ID"
+          python - "$DB_ID" <<'PY'
+          import json,re,sys
+          p='wrangler.jsonc';s=open(p,encoding='utf-8').read();s=re.sub(r'"database_id"\s*:\s*"[^"]+"', '"database_id": "'+sys.argv[1]+'"', s, count=1);open(p,'w',encoding='utf-8').write(s)
+          PY
+      - name: Apply schema and seed the demo catalog
+        working-directory: artifacts/eva-worker
+        run: |
+          pnpm exec wrangler d1 migrations apply lamha-store-db --remote --config wrangler.jsonc
+          cd ../.. && python tools/build_seed_sql.py
+          cd artifacts/eva-worker && pnpm exec wrangler d1 execute lamha-store-db --remote --file ../../data/seed.sql --config wrangler.jsonc
+      - name: Build original Eva Store application with LAMHA branding
+        run: pnpm --filter @workspace/eva-fabrics-store build
+        env:
+          PORT: "5173"
+          BASE_PATH: "/"
+          VITE_WHATSAPP_NUMBER: ""
+          VITE_INSTAGRAM_URL: ""
+      - name: Configure LAMHA admin PIN
+        if: env.LAMHA_ADMIN_PIN != ''
+        working-directory: artifacts/eva-worker
+        run: printf '%s' "$LAMHA_ADMIN_PIN" | pnpm exec wrangler secret put ADMIN_PIN --config wrangler.jsonc
+      - name: Deploy LAMHA Worker and static storefront
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: artifacts/eva-worker
+          command: deploy

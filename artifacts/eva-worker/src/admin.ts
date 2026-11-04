@@ -12,13 +12,13 @@ const CACHE_VERSION = 'v2'
 const PUBLIC_CACHE_PATHS = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings']
 
 const purgePublicCache = async (): Promise<void> => {
-  const origins = ['https://www.eva-store.workers.dev', 'https://ahmad-full-stuck.github.io', 'https://www.eva-store.com']
+  const origins = ['https://lamha-iq.eva-store.workers.dev', 'https://ahmad-full-stuck.github.io', 'https://www.eva-store.com']
   const keys: Request[] = []
   for (const origin of origins) {
     for (const path of PUBLIC_CACHE_PATHS) {
       const url = new URL(`${origin}${path}`)
       // Cache API keys must be fully-qualified URLs — same shape as index.ts.
-      url.searchParams.set('__eva', CACHE_VERSION)
+      url.searchParams.set('__lamha', CACHE_VERSION)
       keys.push(new Request(url.toString()))
     }
   }

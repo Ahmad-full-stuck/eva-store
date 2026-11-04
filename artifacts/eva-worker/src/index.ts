@@ -44,7 +44,7 @@ const cacheKeyFor = (request: Request): Request => {
   // The Cache API only accepts fully-qualified URLs as keys, so the version
   // rides in a query parameter instead of a prefix.
   const url = new URL(request.url)
-  url.searchParams.set('__eva', CACHE_VERSION)
+  url.searchParams.set('__lamha', CACHE_VERSION)
   return new Request(url.toString())
 }
 
@@ -81,7 +81,7 @@ const purgePublicCache = async (): Promise<void> => {
   const cache = caches.default
   const keys = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings'].map((path) => {
     const url = new URL(`https://lamha-iq.pages.dev${path}`)
-    url.searchParams.set('__eva', CACHE_VERSION)
+    url.searchParams.set('__lamha', CACHE_VERSION)
     return new Request(url.toString())
   })
   await Promise.all(keys.map((key) => cache.delete(key).catch(() => false)))
@@ -113,7 +113,7 @@ const publicProduct = (product: StoreProduct): StoreProduct => {
 }
 
 const orderNumber = (): string =>
-  `EVA-${Date.now().toString(36).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`
+  `LAMHA-${Date.now()}.toString(36).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`
 
 const fmtDinar = (value: number): string =>
   value >= 1000 && value % 1000 === 0 ? `${value / 1000} الف دينار عراقي` : `${value.toLocaleString('en-US')} دينار عراقي`
