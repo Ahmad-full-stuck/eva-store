@@ -4,7 +4,7 @@ on:
     branches: [lamha-eva-store]
   workflow_dispatch:
 concurrency:
-  group: lamha-store-deploy
+  group: lamha-eva-store-deploy-v2
   cancel-in-progress: true
 permissions:
   contents: read
