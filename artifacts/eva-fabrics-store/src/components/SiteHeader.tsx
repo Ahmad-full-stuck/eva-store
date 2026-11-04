@@ -150,7 +150,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
               <Heart size={19} />
               {wishlistCount > 0 && <span>{wishlistCount}</span>}
             </Link>
-            <Link href="/cart" className="cart-button" onClick={navigate} aria-label={t('header.cartAria').replace('{meters}', formatMeters(cartMeters))}>
+            <Link href="/cart" className="cart-button" onClick={navigate} aria-label={t('header.cartAria').replace('{quantity}', formatMeters(cartMeters))}>
               <ShoppingBag size={17} />
               <span>{t('core.toastCart')}</span>
               {cartMeters > 0 && <b>{formatMeters(cartMeters)}</b>}

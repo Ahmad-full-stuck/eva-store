@@ -36,10 +36,10 @@ export const guideQuestions: ProductFaq[] = [
 ]
 
 export const trustItems = [
-  { title: 'توصيل لكل العراق', description: 'جميع المحافظات', icon: 'truck' },
-  { title: 'توصيل ٥ آلاف دينار', description: 'رسوم ثابتة', icon: 'wallet' },
-  { title: 'دعم داخل الموقع', description: 'قبل وبعد الطلب', icon: 'message' },
-  { title: 'اختيار واعٍ', description: 'مواصفات واضحة', icon: 'check' },
+  { title: 'تفاصيل حسب الموديل', description: 'راجع مواصفات الجهاز نفسه', icon: 'check' },
+  { title: 'تأكيد التوفر', description: 'قبل تثبيت الطلب', icon: 'message' },
+  { title: 'مساعدة في التوافق', description: 'الكاميرات وأجهزة التسجيل', icon: 'message' },
+  { title: 'اختيار حسب المكان', description: 'استخدام داخلي أو خارجي', icon: 'check' },
 ] as const
 
 export const homeStory = {

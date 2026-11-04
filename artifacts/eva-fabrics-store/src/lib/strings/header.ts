@@ -21,7 +21,7 @@ export const headerStrings: Record<string, StringEntry> = {
   'header.mainNav': { ar: 'التنقل الرئيسي', en: 'Main navigation' },
   'header.openSearch': { ar: 'فتح البحث في الأجهزة', en: 'Open device search' },
   'header.favoritesAria': { ar: 'المفضلة، {count} عناصر', en: 'Favorites, {count} items' },
-  'header.cartAria': { ar: 'السلة، {meters}', en: 'Cart, {meters}' },
+  'header.cartAria': { ar: 'السلة، {quantity}', en: 'Cart, {quantity}' },
   'header.openMenu': { ar: 'فتح قائمة التنقل', en: 'Open navigation menu' },
   'header.quickNav': { ar: 'تنقل سريع', en: 'Quick navigation' },
   'header.menuTitle': { ar: 'قائمة التنقل', en: 'Navigation menu' },
@@ -45,9 +45,8 @@ export const headerStrings: Record<string, StringEntry> = {
   'foot.contactForm': { ar: 'نموذج التواصل في الموقع', en: 'Contact form on the site' },
   'foot.trackStatus': { ar: 'تتبّع حالة الطلب', en: 'Track your order status' },
   'foot.colServiceArea': { ar: 'نطاق الخدمة', en: 'Service area' },
-  'foot.deliveryRange': { ar: 'نوصل إلى {list} وجميع محافظات العراق.', en: 'We deliver to {list} and every governorate in Iraq.' },
-  'foot.listSeparator': { ar: '،', en: ',' },
-  'foot.deliveryFee': { ar: 'توصيل ٥ آلاف دينار', en: 'Delivery 5,000 dinars' },
+  'foot.deliveryRange': { ar: 'تُراجع خيارات التسليم بحسب المحافظة قبل تأكيد الطلب.', en: 'Delivery options are checked for your governorate before order confirmation.' },
+  'foot.deliveryFee': { ar: 'تُؤكد تكلفة التسليم قبل الطلب', en: 'Delivery cost is confirmed before ordering' },
   'foot.pricesNote': { ar: 'الأسعار والمواصفات تُراجع قبل تأكيد الطلب', en: 'Prices and specifications are reviewed before your order is confirmed' },
 
   'home.categoriesAria': { ar: 'أقسام المعرض', en: 'Showroom categories' },
@@ -103,11 +102,11 @@ export const headerStrings: Record<string, StringEntry> = {
   'home.steps.s2.text': { ar: 'أضيفي الأجهزة والملحقات إلى السلة بالكمية التي تحتاجينها، ثم راجعي الطلب.', en: 'Add the devices and accessories you need, then review the order.' },
   'home.steps.s2.hint': { ar: 'اختاري الكمية', en: 'Choose quantity' },
   'home.steps.s3.index': { ar: '٠٣', en: '03' },
-  'home.steps.s3.title': { ar: 'أرسلي الطلب وادفعي', en: 'Send your order and pay' },
-  'home.steps.s3.text': { ar: 'أكملي اسمك ومحافظتك وعنوانك، ثم ادفعي نقداً عند استلام الطلب في باب المنزل.', en: 'Fill in your name, governorate and address, then pay in cash when the order arrives at your door.' },
-  'home.steps.s3.hint': { ar: 'دفع عند الاستلام', en: 'Cash on delivery' },
+  'home.steps.s3.title': { ar: 'أرسلي الطلب للتأكيد', en: 'Submit your order for confirmation' },
+  'home.steps.s3.text': { ar: 'أكملي بياناتك، وسنراجع تفاصيل الجهاز والتوفر وخيارات التسليم معك قبل تثبيت الطلب.', en: 'Complete your details. We will review the device, availability and delivery options with you before confirming the order.' },
+  'home.steps.s3.hint': { ar: 'تأكيد التفاصيل أولاً', en: 'Details confirmed first' },
 
-  'home.promo.aria': { ar: 'توصيل مجاني للطلبات فوق {price}', en: 'Free delivery on orders over {price}' },
+  'home.promo.aria': { ar: 'حلول لَمْحة للمراقبة والحماية الذكية', en: 'LAMHA smart surveillance and security solutions' },
   'home.promo.cta': { ar: 'اطلبي الآن', en: 'Order now' },
 
   'home.newsletter.aria': { ar: 'اشتراك بالنشرة', en: 'Newsletter signup' },
@@ -115,7 +114,7 @@ export const headerStrings: Record<string, StringEntry> = {
   'home.newsletter.emailPlaceholder': { ar: 'بريدك الإلكتروني', en: 'Your email address' },
   'home.newsletter.submit': { ar: 'اشتراك بالبريد', en: 'Subscribe' },
   'home.newsletter.error': { ar: 'يرجى إدخال بريد إلكتروني صحيح.', en: 'Please enter a valid email address.' },
-  'home.newsletter.sent': { ar: 'تم تسجيل بريدك في النشرة، ستصلك أحدث القطع والأخبار.', en: 'Your email is on the list — the latest pieces and news will reach your inbox.' },
+  'home.newsletter.sent': { ar: 'تم تسجيل بريدك، وسنشاركك أخبار الأجهزة والحلول الجديدة.', en: 'Your email is registered. We will share updates about new devices and solutions.' },
   'home.newsletter.noteLead': { ar: 'أو اطلبي استشارة في اختيار الجهاز عبر', en: 'Or ask for help choosing your device through' },
   'home.newsletter.noteLink': { ar: 'نموذج التواصل في الموقع', en: 'the contact form on the site' },
   'home.newsletter.subject': { ar: 'اشتراك في نشرة لَمْحة ستور', en: 'LAMHA Store newsletter subscription' },
@@ -168,25 +167,23 @@ export const discoveryEngineValues: Record<string, string> = {
 }
 
 export const trustItemsEn: { title: string; description: string; icon: string }[] = [
-  { title: 'Delivery across Iraq', description: 'All governorates', icon: 'truck' },
-  { title: 'Delivery 5,000 dinars', description: 'Fixed fee', icon: 'wallet' },
-  { title: 'Support on the site', description: 'Before and after you order', icon: 'message' },
-  { title: 'A confident choice', description: 'Clear specifications', icon: 'check' },
+  { title: 'Model-specific details', description: 'Check each product listing', icon: 'check' },
+  { title: 'Availability confirmation', description: 'Before the order is placed', icon: 'message' },
+  { title: 'Compatibility guidance', description: 'Cameras and recording devices', icon: 'message' },
+  { title: 'Choose by location', description: 'Indoor or outdoor use', icon: 'check' },
 ]
-
 export const homeStoryEn = {
   title: 'Devices worth choosing with confidence',
   text: 'LAMHA brings together surveillance cameras and security equipment with practical product information, helping you compare models and check connectivity and storage before ordering.',
 }
 
 export const guideQuestionsEn: { question: string; answer: string }[] = [
-  { question: 'How do I pick the right device?', answer: 'Start with the occasion: everyday device should be light and comfortable, while special events may call for weight, structure and shine. Check the stretch, opacity and width before you buy.' },
-  { question: 'What is the difference between stretchy and non-stretchy?', answer: 'Stretchy device contains elastane or spandex, so it stretches and returns to shape. Non-stretchy device holds its structure better and suits clearly tailored pieces. Labels in the store follow the actual stretch of the design.' },
-  { question: 'How do I know the right width?', answer: 'Width is the measurement from edge to edge, and it is listed in every product spec. The wider the device, the less you need for a single piece.' },
-  { question: 'How much device do I need?', answer: 'A simple piece usually needs between 2 and 2.5 meters, and an abaya between 3 and 4 meters. Add a small margin for cutting and sewing, and half-meter orders are welcome.' },
-  { question: 'How do I read the colour description?', answer: 'The photos are a visual sample of the material. Compare the colour with the lighting around you and with similar pieces, and contact us if the shade is critical to your project.' },
+  { question: 'How do I choose the right camera?', answer: 'Start with the installation location, then review connectivity, resolution, storage and the features listed for the exact model.' },
+  { question: 'What is the difference between indoor and outdoor cameras?', answer: 'They are designed for different environments. Do not install an indoor model outdoors unless its product details explicitly support that use.' },
+  { question: 'Do all cameras use Wi-Fi?', answer: 'No. Some models are wireless, while others need a wired connection or a compatible recorder. Check the model details before ordering.' },
+  { question: 'Is recording storage included?', answer: 'Not necessarily. A memory card, NVR or hard drive may be separate. Check the product contents and supported storage.' },
+  { question: 'Can different camera models work together?', answer: 'Compatibility depends on the recorder, connection method and supported standards. Confirm the exact models before building a mixed system.' },
 ]
-
 export const governoratesEn: string[] = [
   'Baghdad', 'Basra', 'Nineveh', 'Erbil', 'Najaf', 'Karbala', 'Al Anbar', 'Diyala',
   'Kirkuk', 'Salah ad Din', 'Wasit', 'Babylon', 'Dhi Qar', 'Maysan', 'Muthanna', 'Al Qadisiyah', 'Duhok', 'Sulaymaniyah',
