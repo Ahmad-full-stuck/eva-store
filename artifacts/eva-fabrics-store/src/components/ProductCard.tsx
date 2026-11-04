@@ -104,6 +104,19 @@ const glassStyles = `
   .chip.chip-active:hover,
   .button:hover { transform: none !important; }
 }
+/* LAMHA product cards: solid surfaces, restrained accents */
+.glass-card,.glass-surface,.glass-pill{background:#fff!important;border:1px solid #dce5ee!important;border-radius:16px!important;box-shadow:0 8px 22px rgba(6,23,43,.045)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+.product-card.glass-card:hover{transform:translateY(-2px);border-color:#bfd8f0!important;box-shadow:0 12px 26px rgba(6,23,43,.075)!important;}
+.product-card.glass-card .product-card-media{background:#eef4fa!important;}
+.product-card.glass-card .badge{box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+.product-card.glass-card .badge-accent{background:#147be5!important;}
+.product-card.glass-card .badge-warm{background:#0b1d32!important;}
+.product-card.glass-card .badge-muted{background:#f4f7fb!important;}
+.product-card.glass-card .product-wish{background:rgba(6,23,43,.82)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+.product-card.glass-card .product-wish:hover,.product-card.glass-card .product-wish.is-active{background:#147be5!important;}
+.product-card.glass-card .add-button{background:#fff!important;border:1px solid #dce5ee!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+.product-card.glass-card .add-button:hover:not(:disabled){background:#f4f8fc!important;border-color:#b9d6f0!important;}
+
 `
 
 const injectStyles = (id: string, css: string) => {

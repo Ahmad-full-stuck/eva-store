@@ -43,8 +43,8 @@ interface StoredOrder {
   address: string
 }
 
-const ORDERS_KEY = 'eva-orders'
-const PROFILE_KEY = 'eva-customer'
+const ORDERS_KEY = 'lamha-orders'
+const PROFILE_KEY = 'lamha-customer'
 
 const fieldOrder: (keyof CheckoutForm)[] = ['name', 'phone', 'governorate', 'district', 'address', 'landmark', 'email', 'notes']
 
@@ -56,7 +56,7 @@ const createLocalOrderNumber = (): string => {
   const now = new Date()
   const stamp = `${String(now.getFullYear()).slice(-2)}${padNumber(now.getMonth() + 1)}${padNumber(now.getDate())}`
   const suffix = Math.floor(1000 + Math.random() * 9000)
-  return `EVA-${stamp}-${suffix}`
+  return `LAMHA-${stamp}-${suffix}`
 }
 
 const glassStyles = `
@@ -168,6 +168,17 @@ const glassStyles = `
   html { scroll-behavior: auto; }
   .glass-scope *, .glass-scope *::before, .glass-scope *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+/* LAMHA checkout: clear panels, no frosted blur */
+.glass-scope .glass{background:#fff!important;border:1px solid #dce5ee!important;box-shadow:0 8px 22px rgba(6,23,43,.045)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+.glass-scope .glass-strong,.glass-scope .review-block,.glass-scope .order-total-strip{background:#f4f7fb!important;border-color:#dce5ee!important;}
+.glass-scope .glass-dark,.glass-scope .checkout-secure.glass-dark{background:#06172b!important;color:#f3f6fa!important;box-shadow:none!important;}
+.glass-scope .glass-divider{background:#dce5ee!important;}
+.glass-scope .chip,.glass-scope .order-trust li{background:#f4f7fb!important;border-color:#dce5ee!important;color:#33465d!important;}
+.glass-scope .email-panel p strong{color:#147be5!important;}
+.glass-scope .order-box-icon{background:#147be5!important;box-shadow:none!important;}
+.glass-scope .button-mail,.glass-scope .order-submit{box-shadow:none!important;}
+.glass-scope input,.glass-scope textarea,.glass-scope select{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+
 `
 
 export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {

@@ -1694,3 +1694,35 @@ picture { display: contents; }
 }
 
 .footer-grid span.footer-delivery-note { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; margin-top: 4px; color: #a89a96; font-size: 11.5px; }
+
+
+/* LAMHA storefront visual system — precise, calm, product-first */
+:root{--eva-bg:#f4f7fb;--eva-surface:#fff;--eva-surface-strong:#fff;--eva-ink:#06172b;--eva-muted:#65758a;--eva-line:#dce5ee;--eva-line-strong:#c3d0dd;--eva-rose:#147be5;--eva-rose-dark:#0b1d32;--eva-rose-soft:#eaf3fc;--eva-rose-tint:#dff0fa;--eva-orange:#27c5e8;--eva-blush:#eaf4f8;--eva-charcoal:#06172b;--eva-lilac:#8492a3;--eva-shadow:0 10px 26px -18px rgba(6,23,43,.24);--eva-shadow-small:0 4px 12px -9px rgba(6,23,43,.2);--glass-bg:#fff;--glass-bg-strong:#fff;--glass-bg-soft:#f7f9fc;--glass-surface:#fff;--glass-border:#dce5ee;--glass-border-soft:#e9eef4;--glass-blur:none;--glass-blur-strong:none;--glass-shadow:0 10px 26px -18px rgba(6,23,43,.24);--glass-shadow-hover:0 14px 28px -18px rgba(6,23,43,.26);--glass-dark-bg:#06172b;--glass-radius:14px;--glass-radius-lg:18px;}
+html,body{background:#f4f7fb!important;color:#06172b;}
+body::before,body::after,.glass-hero::before,.glass-hero::after,.newsletter-card::before,.newsletter-card::after,.stat-card::before{display:none!important;}
+.announcement-bar{background:#06172b!important;color:#f3f6fa!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+.announcement-bar a{color:#fff!important;}
+.site-header{background:rgba(255,255,255,.98)!important;border-bottom:1px solid #dce5ee!important;box-shadow:0 4px 14px rgba(6,23,43,.04)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+.button-primary,.cart-button{background:#147be5!important;box-shadow:none!important;border-color:#147be5!important;}
+.button-primary:hover,.cart-button:hover{background:#0b1d32!important;border-color:#0b1d32!important;box-shadow:none!important;}
+.glass,.glass-card,.glass-surface,.glass-pill,.soft-card,.product-card,.category-card,.stats-bar.glass-card,.filter-panel,.policy-accordion,.guide-card{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+.glass-card,.glass-surface,.glass-pill,.soft-card,.product-card,.category-card,.stats-bar.glass-card,.policy-accordion,.guide-card{background:#fff!important;border:1px solid #dce5ee!important;box-shadow:0 8px 22px rgba(6,23,43,.045)!important;}
+.glass-dark,.about-cta,.hero-dark-panel{background:#06172b!important;color:#f3f6fa!important;border:1px solid #0b1d32!important;box-shadow:none!important;}
+.glass-dark p,.glass-dark small,.glass-dark li{color:#d3deea!important;}
+.glass-pill,.chip{background:#f4f7fb!important;border-color:#dce5ee!important;color:#33465d;}
+.eyebrow,.underlined-link,.product-type,.stat-item svg,.stat-item strong{color:#147be5!important;}
+.product-card-media,.cart-item-image,.discovery-result-thumb{background:#eef4fa!important;border-color:#dce5ee!important;}
+.product-card:hover,.category-card:hover,.glass-card:hover{transform:translateY(-2px);border-color:#c3d9ef!important;box-shadow:0 12px 26px rgba(6,23,43,.07)!important;}
+.badge-accent{background:#147be5!important;}.badge-warm{background:#0b1d32!important;}
+.button-light{background:#fff!important;color:#06172b!important;border:1px solid #dce5ee!important;backdrop-filter:none!important;}
+.home-hero{background:#06172b!important;color:#f3f6fa!important;border:1px solid #0b1d32!important;box-shadow:none!important;}
+.home-hero p,.home-hero .hero-note,.home-hero .hero-vertical-label{color:#d3deea!important;}
+.home-hero .eyebrow{color:#27c5e8!important;}
+.home-hero .hero-visual,.home-hero .hero-image,.home-hero .hero-media{box-shadow:none!important;}
+.home-hero .hero-visual::before,.home-hero .hero-visual::after,.home-hero::before,.home-hero::after{display:none!important;}
+.product-card{border-radius:16px!important;}.product-card-media{border-radius:12px!important;}
+.product-card-image{transition:transform .25s ease!important;}.product-card:hover .product-card-image{transform:scale(1.015)!important;}
+.product-card .product-wish{background:rgba(6,23,43,.82)!important;border-color:rgba(255,255,255,.65)!important;backdrop-filter:none!important;}
+.product-card .add-button{background:#fff!important;border-color:#dce5ee!important;color:#147be5!important;backdrop-filter:none!important;}
+input,select,textarea{border-color:#d3deea!important;}:focus-visible{outline-color:rgba(20,123,229,.55)!important;}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
