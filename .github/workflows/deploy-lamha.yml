@@ -29,9 +29,9 @@ jobs:
         working-directory: artifacts/eva-worker
         run: |
           set -euo pipefail
-          DB_ID=$(pnpm exec wrangler d1 list --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const a=JSON.parse(s);const x=a.find(v=>v.name==='lamha-store-db');if(x)process.stdout.write(x.uuid)})")
+          DB_ID=$(pnpm exec wrangler d1 list --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const a=JSON.parse(s);const x=a.find(v=>v.name==='lamha-eva-store-db');if(x)process.stdout.write(x.uuid)})")
           if [ -z "$DB_ID" ]; then
-            OUT=$(pnpm exec wrangler d1 create lamha-store-db --json)
+            OUT=$(pnpm exec wrangler d1 create lamha-eva-store-db --json)
             DB_ID=$(printf '%s' "$OUT" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const x=JSON.parse(s);process.stdout.write(x.uuid||x.result?.uuid||'')})")
           fi
           test -n "$DB_ID"
@@ -42,9 +42,9 @@ jobs:
       - name: Apply schema and seed the demo catalog
         working-directory: artifacts/eva-worker
         run: |
-          pnpm exec wrangler d1 migrations apply lamha-store-db --remote --config wrangler.jsonc
+          pnpm exec wrangler d1 migrations apply lamha-eva-store-db --remote --config wrangler.jsonc
           cd ../.. && python tools/build_seed_sql.py
-          cd artifacts/eva-worker && pnpm exec wrangler d1 execute lamha-store-db --remote --file ../../data/seed.sql --config wrangler.jsonc
+          cd artifacts/eva-worker && pnpm exec wrangler d1 execute lamha-eva-store-db --remote --file ../../data/seed.sql --config wrangler.jsonc
       - name: Build original Eva Store application with LAMHA branding
         run: pnpm --filter @workspace/eva-fabrics-store build
         env:

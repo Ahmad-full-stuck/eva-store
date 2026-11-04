@@ -14,7 +14,7 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "lamha-store-db",
+      "database_name": "lamha-eva-store-db",
       "database_id": "REPLACE_WITH_LAMHA_DB_ID"
     }
   ],
