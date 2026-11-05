@@ -737,9 +737,9 @@ export function ContactPage() {
               <Link href="/order-tracking" aria-label={t('contact.method2Aria')}>
                 <PackageCheck size={19} /><span><strong>{t('contact.method2Title')}</strong><small>{t('contact.method2Text')}</small></span><ArrowLeft size={15} />
               </Link>
-              <Link href="/fabric-guide" aria-label={t('contact.method3Aria')}>
+              {!content.tenantKey && <Link href="/fabric-guide" aria-label={t('contact.method3Aria')}>
                 <Ruler size={19} /><span><strong>{t('contact.method3Title')}</strong><small>{t('contact.method3Text')}</small></span><ArrowLeft size={15} />
-              </Link>
+              </Link>}
             </div>
 
             <div className="contact-hours glass-card">
