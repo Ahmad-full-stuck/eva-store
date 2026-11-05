@@ -5,7 +5,7 @@ import { setTextOverrides } from '@/lib/text-overrides'
 export const CONTENT_KEY = 'eva-admin-content'
 
 /** الصور الافتراضية للغلاف — تُستخدم إن لم يحدّد الإدارة أي صور. */
-export const DEFAULT_HERO_SLIDES = ['home/hero-1.jpg', 'home/hero-2.jpg', 'home/hero-3.jpg', 'home/hero-4.jpg']
+export const DEFAULT_HERO_SLIDES: string[] = []
 
 /** أقسام الصفحة الرئيسية القابلة للإخفاء/الإظهار من الإدارة. */
 export const HOME_SECTION_KEYS = [
@@ -75,51 +75,79 @@ export interface SiteContent {
   emailTemplateOrder: string
   emailProvider: 'mailto' | 'formsubmit'
   emailFormSubmitAction: string
+  shortName?: string
+  tagline?: string
+  catalogLabel?: string
+  quantityUnit?: string
+  quantityUnitEn?: string
+  theme?: Record<string, string>
+  storyImage?: string
+  location?: string
+  hours?: string
+  contactUrl?: string
+  deliveryNote?: string
+  paymentNote?: string
+  statsDeliveryValue?: number
+  statsTrustValue?: number
+  statsTrustSuffix?: string
 }
 
 export const defaultSiteContent: SiteContent = {
-  shopName: 'إيفا ستور للأقمشة',
-  phone: '07727282001',
-  whatsapp: '9647727282001',
-  instagram: 'https://www.instagram.com/x__illc/',
-  announcementRight: 'شحن إلى جميع محافظات العراق',
-  announcementLeft: 'التوصيل بـ ٥ آلاف دينار فقط',
-  aboutTitle: 'قصة إيفا تبدأ بسؤال واحد: ماذا ستصنعين؟',
-  aboutText: 'بدأت إيفا ستور بفكرة بسيطة: أن يرى الزبون الخامة كما تراها الخياطة، بشرح واضح للّمس والامتداد واللون قبل أن تدفع ديناراً واحداً. اليوم نعرض تشكيلة متنوعة مع مواصفات مكتوبة وطلب يبدأ من نصف متر.',
-  contactTitle: 'سؤال عن خامة أو طلب؟',
-  contactText: 'اكتبي لنا ما يدور في بالك. إن تعذّر إرسال الرسالة من الموقع مباشرة، نحوّلها تلقائياً إلى بريد إلكتروني مكتوب برسالتك نفسها.',
-  heroEyebrow: 'معرض أقمشة عربي',
-  heroTitle: 'اختاري *القماش المثالي*|لكل إبداع',
-  heroText: 'تشكيلة منتقاة من الأقمشة الفاخرة والمريحة، مع شرح واضح للخامة قبل أن تضيفيها إلى مشروعك.',
-  heroNote: 'توصيل إلى جميع محافظات العراق',
-  heroNoteAlt: 'دفع عند استلام الطلب',
-  statsTitle: 'أرقام المعرض الآن',
+  shopName: 'المتجر الإلكتروني',
+  phone: '',
+  whatsapp: '',
+  instagram: '',
+  announcementRight: 'تواصل مباشر مع المتجر',
+  announcementLeft: 'تأكيد التفاصيل قبل الطلب',
+  aboutTitle: 'قصة العلامة تبدأ من اهتمامها بالتفاصيل',
+  aboutText: 'تجربة تسوق متكاملة تجمع التشكيلة والمعلومات ووسائل التواصل في واجهة واحدة، مع مسار طلب واضح ومريح.',
+  contactTitle: 'هل تحتاج مساعدة في اختيارك؟',
+  contactText: 'أرسل استفسارك عن المنتجات أو المقاسات أو التوفر، وسيعود إليك فريق المتجر لتأكيد التفاصيل.',
+  heroEyebrow: 'تجربة تسوق متكاملة',
+  heroTitle: 'اكتشف *اختياراتنا*|بتفاصيل تهمك',
+  heroText: 'تصفح التشكيلة بعناية، وشاهد الصور والتفاصيل، ثم أرسل طلبك بخطوات بسيطة وواضحة.',
+  heroNote: 'تواصل مباشر مع المتجر',
+  heroNoteAlt: 'تأكيد التفاصيل قبل الطلب',
+  statsTitle: 'التجربة في أرقام',
   heroSlideMs: '2600',
-  heroSlides: [...DEFAULT_HERO_SLIDES],
-  hiddenSections: [],
-  categoriesEyebrow: 'اختاري من البداية',
-  categoriesTitle: 'مساحات القماش',
-  newEyebrow: 'نماذج مختارة',
-  newTitle: 'وصل حديثاً',
-  newDesc: 'أحدث الخامات التي أضفناها إلى المعرض',
-  guideEyebrow: 'قبل أن تختاري',
-  guideTitle: 'القماش قرار بصري|ولمسي في آن واحد.',
-  guideText: 'العينة الجيدة لا تخفي التفاصيل. قارني السماكة والمرونة واللمعة وطريقة سقوط القماش قبل أن تحددي الاستخدام.',
-  guideCta: 'ابدئي دليل الأقمشة',
-  newsletterEyebrow: 'نشرة إيفا',
-  newsletterTitle: 'اشتراك بالبريد',
-  newsletterText: 'خامة جديدة أو لون متجدد يصلك عبر البريد: اكتبي بريدك واضغطي الزر لتفتح البريد وتؤكدي الاشتراك.',
-  promoPill: 'توصيل لكل العراق',
-  promoLead: 'توصيل مجاني',
-  promoText: 'للطلبات فوق {price}',
-  emailOrdersTo: 'gdumingm@gmail.com',
-  emailFromName: 'إيفا ستور للأقمشة',
+  heroSlides: [],
+  hiddenSections: ['discovery', 'guide', 'newsletter'],
+  categoriesEyebrow: 'تصفح حسب القسم',
+  categoriesTitle: 'الأقسام الرئيسية',
+  newEyebrow: 'تشكيلة المتجر',
+  newTitle: 'مختاراتنا',
+  newDesc: 'مجموعة من المنتجات والنماذج المتاحة للتصفح',
+  guideEyebrow: 'دليل التسوق',
+  guideTitle: 'اختر بثقة|واطلب بسهولة',
+  guideText: 'راجع الصور والتفاصيل، واستفسر عن التوفر والمقاسات قبل إتمام الطلب.',
+  guideCta: 'تصفح المنتجات',
+  newsletterEyebrow: 'ابقَ على اطلاع',
+  newsletterTitle: 'تواصل معنا مباشرة',
+  newsletterText: 'تابع الجديد واسأل عن المنتجات والتفاصيل المتاحة عبر قنوات المتجر الرسمية.',
+  promoPill: 'خدمة المتجر',
+  promoLead: 'تجربة تسوق',
+  promoText: 'تصفح التشكيلة وتواصل معنا لتأكيد التفاصيل',
+  emailOrdersTo: '',
+  emailFromName: 'المتجر الإلكتروني',
   emailFrom: '',
-  emailSubjectOrder: 'طلب جديد من متجر إيفا #{orderNumber}',
+  emailSubjectOrder: 'طلب جديد من المتجر #{orderNumber}',
   emailTemplateOrder: '',
-  emailProvider: 'formsubmit',
-  emailFormSubmitAction: 'https://formsubmit.co/gdumingm@gmail.com',
+  emailProvider: 'mailto',
+  emailFormSubmitAction: '',
   texts: {},
+  shortName: 'المتجر',
+  tagline: 'تجربة تسوق متكاملة',
+  catalogLabel: 'المنتجات',
+  quantityUnit: 'قطعة',
+  quantityUnitEn: 'item',
+  storyImage: '',
+  location: '',
+  hours: '',
+  contactUrl: '',
+  deliveryNote: 'تُؤكد تفاصيل الخدمة مع المتجر',
+  paymentNote: 'تُؤكد طريقة الدفع مباشرة مع المتجر',
+  statsDeliveryValue: 0,
+  statsTrustValue: 1,
 }
 
 const readJson = <T,>(key: string, fallback: T): T => {
@@ -151,9 +179,9 @@ export interface StoreSettings {
 }
 
 export const defaultStoreSettings: StoreSettings = {
-  colorsEnabled: true,
-  freeDeliveryFrom: 50000,
-  deliveryFee: 5000,
+  colorsEnabled: false,
+  freeDeliveryFrom: 0,
+  deliveryFee: 0,
 }
 
 export const readStoreSettings = (): StoreSettings => ({
