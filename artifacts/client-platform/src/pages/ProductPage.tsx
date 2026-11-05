@@ -134,7 +134,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     event.preventDefault()
   }
   const increase = () => setLength((current) => Math.min(maxLength, Math.round((current + 1) * 10) / 10))
-  const decrease = () => setLength((current) => Math.max(0.5, Math.round((current - 1) * 10) / 10))
+  const decrease = () => setLength((current) => Math.max(1, Math.round(current - 1)))
   const add = () => {
     onAdd(product, product.colors[0], length)
     setJustAdded(true)
@@ -202,7 +202,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         <label className="meters-input-row"><input className="meters-input" type="number" inputMode="decimal" min={1} max={Math.max(1, Math.floor(maxLength))} step={1} value={length} onChange={(event) => {
           const next = Number(event.target.value)
           if (!Number.isFinite(next)) return
-          setLength(Math.min(Math.max(1, Math.round(next)), Math.max(0.5, maxLength)))
+          setLength(Math.min(Math.max(1, Math.round(next)), Math.max(1, Math.floor(maxLength))))
         }} aria-label={t('pd.metersInputAria')} /><em>{t('pd.unitMeters')}</em></label>
         <div className="line-total"><span>{t('pd.lineTotal').replace('{meters}', metersLabel(length)).replace('{price}', formatPrice(product.price))}</span><strong>{formatPrice(product.price * length)}</strong></div>
         <button ref={addBtnRef} type="button" className="button button-primary detail-add" onClick={add} disabled={maxLength <= 0}><ShoppingBag size={17} />{maxLength <= 0 ? t('pd.unavailable') : t('pd.addCart')}<ArrowLeft size={16} /></button>
