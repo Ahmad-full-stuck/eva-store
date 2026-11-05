@@ -14,7 +14,7 @@ export function Logo({ light = false, glass = false }: LogoProps) {
   return (
     <Link href="/" className={classes} aria-label={t('core.logoHome')}>
       <span className="logo-symbol" aria-hidden="true">
-        <span />
+        <b>{content.monogram || (content.shortName || content.shopName || 'M').slice(0, 1)}</b>
       </span>
       <span className="logo-copy">
         <strong>{content.shortName || content.shopName || t('core.logoName')}</strong>
