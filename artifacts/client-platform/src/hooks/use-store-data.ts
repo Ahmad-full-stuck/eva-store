@@ -29,10 +29,8 @@ const listFrom = (payload: unknown, key: string): unknown[] => {
   if (Array.isArray(payload)) return payload
   if (!isRecord(payload)) return []
   if (Array.isArray(payload[key])) return payload[key] as unknown[]
-  if (isRecord(payload.data)) {
-    if (Array.isArray(payload.data[key])) return payload.data[key] as unknown[]
-    if (Array.isArray(payload.data)) return payload.data as unknown[]
-  }
+  if (Array.isArray(payload.data)) return payload.data as unknown[]
+  if (isRecord(payload.data) && Array.isArray(payload.data[key])) return payload.data[key] as unknown[]
   if (Array.isArray(payload.items)) return payload.items as unknown[]
   return []
 }
