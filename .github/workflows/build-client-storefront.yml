@@ -37,6 +37,8 @@ jobs:
           cache: pnpm
       - name: Install workspace dependencies
         run: pnpm install --frozen-lockfile
+      - name: Link the Eva workspace dependencies to the copied app
+        run: ln -s ../eva-fabrics-store/node_modules artifacts/client-platform/node_modules
       - name: Build the shared Eva client platform
         run: pnpm --filter @workspace/eva-fabrics-store exec vite build --config vite.client-stores.config.ts
       - name: Publish compiled static bundle to the repository
