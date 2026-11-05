@@ -31,6 +31,7 @@ export const sectionVisible = (content: SiteContent, key: HomeSectionKey): boole
 
 export interface SiteContent {
   shopName: string
+  tenantKey?: string
   phone: string
   whatsapp: string
   instagram: string
