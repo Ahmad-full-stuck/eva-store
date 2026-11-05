@@ -76,6 +76,7 @@ export interface SiteContent {
   emailProvider: 'mailto' | 'formsubmit'
   emailFormSubmitAction: string
   shortName?: string
+  monogram?: string
   tagline?: string
   catalogLabel?: string
   quantityUnit?: string
