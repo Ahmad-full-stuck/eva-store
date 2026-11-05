@@ -7,6 +7,8 @@ import { formatPrice, isSoldOut, normalizeArabic } from '@/lib/catalog'
 import { ProductCard, ProductGridSkeleton } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
 import { prefetchImages, thumbUrl } from '@/lib/prefetch'
+import { useSiteContent } from '@/lib/site-content'
+import { getStoreBrand } from '@/lib/store-brand'
 
 interface CatalogPageProps {
   products: Product[]
@@ -175,6 +177,9 @@ const matchesQuery = (product: Product, query: string, categories: Category[]): 
 
 export function CatalogPage({ products, categories, status, wishlist, onWish, onAdd }: CatalogPageProps) {
   const { t } = useT()
+  const content = useSiteContent()
+  const hostKey = typeof window !== 'undefined' ? window.location.hostname.split('.')[0] : ''
+  const brand = getStoreBrand(content.tenantKey || hostKey)
   const [location, navigate] = useLocation()
   const browserSearch = useSearch()
 
@@ -374,6 +379,23 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
 
   const sidePanel = renderFilterPanel('side')
   const drawerPanel = renderFilterPanel('drawer')
+
+  if (products.length === 0) {
+    return (
+      <main className="container-eva tenant-catalog">
+        <div className="breadcrumbs"><Link href="/">الرئيسية</Link><span>›</span><span>{content.catalogLabel || 'المنتجات'}</span></div>
+        <section className={'tenant-catalog__lead tenant-catalog--' + brand.key}>
+          <span className="tenant-kicker">{brand.kicker}</span>
+          <h1>{brand.catalogTitle}</h1>
+          <p>{brand.catalogIntro}</p>
+          <Link href="/contact" className="tenant-button tenant-button--primary">{brand.catalogAction} <ArrowLeft size={16}/></Link>
+        </section>
+        <div className="tenant-catalog__categories">
+          {brand.categories.map((category,index) => <Link key={category.id} href="/contact" className="tenant-catalog__category"><b>0{index+1}</b><span><strong>{category.label}</strong><small>{category.description}</small></span><ArrowLeft size={16}/></Link>)}
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="container-eva catalog-page">
