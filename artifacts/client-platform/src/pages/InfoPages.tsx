@@ -341,105 +341,58 @@ const buildAboutTimeline = () => {
 export function AboutPage() {
   const { t, lang } = useT()
   const content = useSiteContent()
-  const aboutStats = buildAboutStats()
-  const aboutTimeline = buildAboutTimeline()
-  const productsCount = catalogCounts().products.toLocaleString(lang === 'en' ? 'en-US' : 'ar-IQ')
+  const highlights = [
+    { title: lang === 'en' ? 'Curated collection' : 'تشكيلة مختارة', text: lang === 'en' ? 'A focused catalogue built around the store’s categories.' : 'كتالوج منظم حول الأقسام الأساسية للمتجر.' },
+    { title: lang === 'en' ? 'Clear product details' : 'تفاصيل واضحة', text: lang === 'en' ? 'Product imagery, descriptions and options in one place.' : 'صور المنتجات ووصفها وخياراتها ضمن واجهة واحدة.' },
+    { title: lang === 'en' ? 'Direct communication' : 'تواصل مباشر', text: lang === 'en' ? 'Reach the store to confirm availability and order details.' : 'تواصل مع المتجر لتأكيد التوفر وتفاصيل الطلب.' },
+  ]
   return (
     <>
       <GlassStyles />
       <main className="container-eva info-page">
         <div className="breadcrumbs"><Link href="/">{t('about.crumbHome')}</Link><span>›</span><span>{t('about.crumbCurrent')}</span></div>
-
         <section className="about-hero">
           <div className="about-copy">
-            <span className="eyebrow"><Sparkles size={14} />{t('about.eyebrow')}</span>
+            <span className="eyebrow"><Sparkles size={14} />{content.shortName || content.shopName}</span>
             <h1>{content.aboutTitle}</h1>
             <p>{content.aboutText}</p>
             <div className="chip-row" style={{ marginTop: '22px' }}>
-              <span className="chip"><Ruler size={13} />{t('about.chipOrder')}</span>
-              <span className="chip"><ShieldCheck size={13} />{t('about.chipSpecs')}</span>
-              <span className="chip"><Truck size={13} />{t('about.chipDelivery')}</span>
-            </div>
-            <div className="about-points">
-              <div><span>{t('about.point1Num')}</span><strong>{t('about.point1Title')}</strong><p>{t('about.point1Text')}</p></div>
-              <div><span>{t('about.point2Num')}</span><strong>{t('about.point2Title')}</strong><p>{t('about.point2Text')}</p></div>
-              <div><span>{t('about.point3Num')}</span><strong>{t('about.point3Title')}</strong><p>{t('about.point3Text')}</p></div>
+              <span className="chip"><ShieldCheck size={13} />{lang === 'en' ? 'Product details' : 'تفاصيل المنتجات'}</span>
+              <span className="chip"><Truck size={13} />{content.deliveryNote || (lang === 'en' ? 'Service details on request' : 'تفاصيل الخدمة عند التواصل')}</span>
             </div>
           </div>
           <div className="about-collage">
-            <SmartImage src="products/dantylfrnsyambrwdry/01.jpg" alt={t('about.imgAlt1')} sizes="(max-width: 820px) 46vw, 24vw" />
-            <SmartImage src="products/lmshalbwklywnsyjalankwra/01.jpg" alt={t('about.imgAlt2')} sizes="(max-width: 820px) 46vw, 24vw" />
-            <span>EVA<br /><strong>FABRICS</strong></span>
+            <SmartImage src={content.storyImage || ''} alt={content.shopName || 'Store'} sizes="(max-width: 820px) 92vw, 45vw" />
+            <span>{content.shortName || content.shopName}</span>
           </div>
         </section>
-
-        <section className="section-soft" aria-labelledby="about-story-title">
-          <div className="section-head-tight">
-            <div>
-              <span className="eyebrow">{t('about.storyEyebrow')}</span>
-              <h2 id="about-story-title">{t('about.storyTitle')}</h2>
-            </div>
-            <Link href="/fabric-guide" className="underlined-link">{t('about.storyLink')} <ArrowLeft size={15} /></Link>
-          </div>
-          <div className="story-copy-grid">
-            <p>{t('about.storyP1')}</p>
-            <p>{t('about.storyP2').replace('{count}', productsCount)}</p>
-          </div>
-        </section>
-
-        <section className="section-block" aria-labelledby="about-stats-title">
+        <section className="section-block">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">{t('about.statsEyebrow')}</span>
-              <h2 id="about-stats-title">{t('about.statsTitle')}</h2>
-              <p>{t('about.statsText')}</p>
+              <span className="eyebrow">{lang === 'en' ? 'The experience' : 'تجربة المتجر'}</span>
+              <h2>{lang === 'en' ? 'A smoother way to discover and order' : 'طريقة أوضح لاكتشاف المنتجات وطلبها'}</h2>
+              <p>{content.tagline}</p>
             </div>
           </div>
-          <div className="stats-grid">{aboutStats.map((stat) => <StatCard key={stat.label} stat={stat} />)}</div>
-        </section>
-
-        <section className="section-block" aria-labelledby="about-values-title">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">{t('about.valuesEyebrow')}</span>
-              <h2 id="about-values-title">{t('about.valuesTitle')}</h2>
-              <p>{t('about.valuesText')}</p>
-            </div>
-          </div>
-          <div className="about-values">{aboutValues.map((value) => <article className="glass-card value-card" key={value.title}><span className="value-icon">{value.icon}</span><h3>{t(value.title)}</h3><p>{t(value.text)}</p></article>)}</div>
-        </section>
-
-        <section className="section-soft" aria-labelledby="about-timeline-title">
-          <div className="section-head-tight">
-            <div>
-              <span className="eyebrow">{t('about.timelineEyebrow')}</span>
-              <h2 id="about-timeline-title">{t('about.timelineTitle')}</h2>
-            </div>
-            <span className="chip chip-neutral">{t('about.timelineChip')}</span>
-          </div>
-          <ol className="timeline">
-            {aboutTimeline.map((item, index) => (
-              <li className="timeline-item" key={item.year}>
-                <span className="timeline-dot" aria-hidden="true">{index + 1}</span>
-                <div className="glass-card timeline-body">
-                  <span className="timeline-year">{t(item.year)}</span>
-                  <strong>{t(item.title)}</strong>
-                  <p>{t(item.text).replace('{count}', productsCount)}</p>
-                </div>
-              </li>
+          <div className="about-values">
+            {highlights.map((item, index) => (
+              <article className="glass-card value-card" key={item.title}>
+                <span className="value-icon">{index + 1}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
             ))}
-          </ol>
+          </div>
         </section>
-
         <section className="about-cta glass-dark">
           <div>
-            <span className="eyebrow"><Sparkles size={14} />{t('about.ctaEyebrow')}</span>
-            <h2>{t('about.ctaTitle')}</h2>
-            <p>{t('about.ctaText')}</p>
+            <span className="eyebrow"><Sparkles size={14} />{lang === 'en' ? 'Explore the collection' : 'اكتشف التشكيلة'}</span>
+            <h2>{lang === 'en' ? 'Find what you are looking for' : 'اعثر على ما تبحث عنه'}</h2>
+            <p>{lang === 'en' ? 'Browse the catalogue or contact the store for current options.' : 'تصفح الكتالوج أو تواصل مع المتجر لمعرفة الخيارات المتاحة حالياً.'}</p>
           </div>
           <div className="cta-actions">
-            <Link href="/catalog" className="button button-primary">{t('about.ctaBrowse')} <ArrowLeft size={16} /></Link>
-            <Link href="/contact" className="button button-outline"><MessageCircle size={16} />{t('about.ctaAsk')}</Link>
+            <Link href="/catalog" className="button button-primary">{lang === 'en' ? 'Browse products' : 'تصفح المنتجات'} <ArrowLeft size={16} /></Link>
+            <Link href="/contact" className="button button-outline"><MessageCircle size={16} />{lang === 'en' ? 'Contact the store' : 'تواصل مع المتجر'}</Link>
           </div>
         </section>
       </main>
