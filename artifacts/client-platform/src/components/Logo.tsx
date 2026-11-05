@@ -1,5 +1,6 @@
 import { Link } from 'wouter'
 import { useT } from '@/lib/i18n'
+import { useSiteContent } from '@/lib/site-content'
 
 interface LogoProps {
   light?: boolean
@@ -8,6 +9,7 @@ interface LogoProps {
 
 export function Logo({ light = false, glass = false }: LogoProps) {
   const { t } = useT()
+  const content = useSiteContent()
   const classes = ['logo', light ? 'logo-light' : '', glass ? 'glass-pill' : ''].filter(Boolean).join(' ')
   return (
     <Link href="/" className={classes} aria-label={t('core.logoHome')}>
@@ -15,8 +17,8 @@ export function Logo({ light = false, glass = false }: LogoProps) {
         <span />
       </span>
       <span className="logo-copy">
-        <strong>{t('core.logoName')}</strong>
-        <small>{t('core.logoTag')}</small>
+        <strong>{content.shortName || content.shopName || t('core.logoName')}</strong>
+        <small>{content.tagline || t('core.logoTag')}</small>
       </span>
     </Link>
   )
