@@ -277,6 +277,20 @@ export default { async fetch(request,env) {
       return json({data:{orderNumber}},201);
     } catch { return json({error:"تعذر تسجيل الطلب"},400); }
   }
+  const mediaMatch = path.match(/^\\/api\\/media\\/([a-f0-9-]+)$/i);
+  if (mediaMatch && request.method === "GET") {
+    const stored = await env.ORDERS.get(slug + ":asset:" + mediaMatch[1]);
+    if (!stored || !stored.startsWith("data:image/")) return json({error:"الصورة غير موجودة"},404);
+    const comma = stored.indexOf(",");
+    if (comma < 0) return json({error:"الصورة غير صالحة"},400);
+    const header = stored.slice(0,comma);
+    const payload = stored.slice(comma + 1);
+    const mimeType = header.slice(5).split(";")[0] || "image/jpeg";
+    const binary = atob(payload);
+    const bytes = new Uint8Array(binary.length);
+    for (let index=0; index<binary.length; index++) bytes[index] = binary.charCodeAt(index);
+    return new Response(bytes,{headers:{"content-type":mimeType,"cache-control":"public,max-age=31536000,immutable","x-content-type-options":"nosniff"}});
+  }
   const orderMatch = path.match(/^\/api\/orders\/([^/]+)$/);
   if (orderMatch && request.method === "GET") {
     const number = decodeURIComponent(orderMatch[1]);
@@ -306,6 +320,14 @@ export default { async fetch(request,env) {
       const value = await request.json();
       await writeKV(env,slug,"content",value);
       return json({data:value},200);
+    }
+    if (path === "/api/admin/upload" && request.method === "POST") {
+      const body = await request.json();
+      const dataUrl = String(body.dataUrl || "");
+      if (!dataUrl.startsWith("data:image/") || dataUrl.length > 6000000) return json({error:"الصورة غير صالحة أو حجمها كبير"},400);
+      const assetId = crypto.randomUUID();
+      await env.ORDERS.put(slug + ":asset:" + assetId,dataUrl);
+      return json({data:{url:"/api/media/" + assetId}},201);
     }
     if (path === "/api/admin/pin" && request.method === "POST") {
       const body = await request.json();
