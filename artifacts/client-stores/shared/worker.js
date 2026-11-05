@@ -20,8 +20,11 @@ export default {async fetch(request,env,ctx){
  const upstream=await fetch(ROOT+(shared||slug+"/"+file),{cf:{cacheTtl:300,cacheEverything:true}});
  if(!upstream.ok)return new Response("Storefront source unavailable",{status:503});
  const headers=new Headers(upstream.headers);headers.set("x-content-type-options","nosniff");headers.set("referrer-policy","strict-origin-when-cross-origin");
- if(path==="index.html")headers.set("content-type","text/html; charset=utf-8");
- if(path.endsWith(".js"))headers.set("content-type","application/javascript; charset=utf-8");
- if(path.endsWith(".css"))headers.set("content-type","text/css; charset=utf-8");
+ const assetPath=shared||file;
+ if(assetPath==="index.html")headers.set("content-type","text/html; charset=utf-8");
+ if(assetPath==="store.json")headers.set("content-type","application/json; charset=utf-8");
+ if(assetPath==="favicon.svg")headers.set("content-type","image/svg+xml");
+ if(assetPath.endsWith(".js"))headers.set("content-type","application/javascript; charset=utf-8");
+ if(assetPath.endsWith(".css"))headers.set("content-type","text/css; charset=utf-8");
  return new Response(request.method==="HEAD"?null:upstream.body,{status:200,headers});
 }};
