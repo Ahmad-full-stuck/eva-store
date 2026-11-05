@@ -10,13 +10,14 @@ export default {async fetch(request,env,ctx){
   const items=Array.isArray(b.items)?b.items.slice(0,20).map(x=>({id:String(x.id||"").slice(0,80),name:String(x.name||"").slice(0,120),qty:Math.max(1,Math.min(20,Number(x.qty)||1))})).filter(x=>x.id&&x.name):[];
   if(!name||!phone||!area||!items.length)return Response.json({ok:false,error:"Complete order details"},{status:400});
   const id="ORD-"+crypto.randomUUID().slice(0,8).toUpperCase();
-  try{await env.DB.prepare("INSERT INTO orders(id,customer_name,phone,area,note,items_json,status,created_at) VALUES(?1,?2,?3,?4,?5,?6,'new',CURRENT_TIMESTAMP)").bind(id,name,phone,area,note,JSON.stringify(items)).run();return Response.json({ok:true,id,store:slug},{status:201});}
+  try{const record={id,store:slug,name,phone,area,note,items,createdAt:new Date().toISOString(),status:"new"};await env.ORDERS.put(slug+":"+id,JSON.stringify(record),{metadata:{status:"new",createdAt:record.createdAt}});return Response.json({ok:true,id,store:slug},{status:201});}
   catch(e){console.error("order-save",String(e));return Response.json({ok:false,error:"Could not save order"},{status:503});}
  }
  if(url.pathname==="/api/orders")return new Response("Method not allowed",{status:405});
  if(request.method!=="GET"&&request.method!=="HEAD")return new Response("Method not allowed",{status:405});
- const path=url.pathname==="/store.json"?"store.json":url.pathname==="/favicon.svg"?"favicon.svg":url.pathname==="/assets/storefront.js"?"../shared/storefront.js":url.pathname==="/assets/storefront.css"?"../shared/storefront.css":"index.html";
- const upstream=await fetch(ROOT+slug+"/"+path,{cf:{cacheTtl:300,cacheEverything:true}});
+ const shared=url.pathname==="/assets/storefront.js"?"shared/storefront.js":url.pathname==="/assets/storefront.css"?"shared/storefront.css":null;
+ const file=url.pathname==="/store.json"?"store.json":url.pathname==="/favicon.svg"?"favicon.svg":"index.html";
+ const upstream=await fetch(ROOT+(shared||slug+"/"+file),{cf:{cacheTtl:300,cacheEverything:true}});
  if(!upstream.ok)return new Response("Storefront source unavailable",{status:503});
  const headers=new Headers(upstream.headers);headers.set("x-content-type-options","nosniff");headers.set("referrer-policy","strict-origin-when-cross-origin");
  if(path==="index.html")headers.set("content-type","text/html; charset=utf-8");
