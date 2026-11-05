@@ -225,8 +225,10 @@ export default { async fetch(request,env) {
   if (path === "/api/content" && request.method === "GET") return jsonData(contentFor(profile,savedContent),200);
   if (path === "/api/settings" && request.method === "GET") return jsonData({colorsEnabled:false,freeDeliveryFrom:0,deliveryFee:0,...savedSettings},200);
   if (path === "/api/products" && request.method === "GET") {
-    const extras = await readKV(env,slug,"products",[]);
-    return jsonData(productRows(profile,Array.isArray(extras)?extras:[]),200);
+    const saved = await readKV(env,slug,"products",{overrides:[],removed:[]});
+    const overrides = Array.isArray(saved) ? saved : (Array.isArray(saved.overrides) ? saved.overrides : []);
+    const removed = new Set(Array.isArray(saved.removed) ? saved.removed : []);
+    return jsonData(productRows(profile,overrides).filter((item) => !removed.has(item.slug)),200);
   }
   if (path === "/api/categories" && request.method === "GET") return jsonData(categoryRows(profile),200);
   if (path === "/api/routes" && request.method === "GET") return jsonData(routeRows(),200);
@@ -305,10 +307,48 @@ export default { async fetch(request,env) {
       await writeKV(env,slug,"content",value);
       return json({data:value},200);
     }
+    if (path === "/api/admin/pin" && request.method === "POST") {
+      const body = await request.json();
+      const pin = String(body.pin || "").trim();
+      if (!/^\\d{4,12}$/.test(pin)) return json({error:"رمز الإدارة يجب أن يكون من 4 إلى 12 رقماً"},400);
+      await env.ORDERS.put(slug + ":admin-pin",pin);
+      return json({data:{saved:true}},200);
+    }
+    if (path === "/api/admin/products" && request.method === "POST") {
+      const product = await request.json();
+      const productSlug = String(product.slug || product.id || "").trim();
+      if (!productSlug) return json({error:"المنتج يحتاج إلى معرف"},400);
+      const saved = await readKV(env,slug,"products",{overrides:[],removed:[]});
+      const state = Array.isArray(saved) ? {overrides:saved,removed:[]} : saved;
+      const overrides = Array.isArray(state.overrides) ? state.overrides : [];
+      const removed = Array.isArray(state.removed) ? state.removed.filter((item) => item !== productSlug) : [];
+      const next = [product,...overrides.filter((item) => String(item.slug || item.id) !== productSlug)];
+      await writeKV(env,slug,"products",{overrides:next,removed});
+      return json({data:product},201);
+    }
+    if (path === "/api/admin/restore" && request.method === "POST") {
+      const body = await request.json();
+      const slugs = Array.isArray(body.slugs) ? body.slugs.map(String) : [];
+      const saved = await readKV(env,slug,"products",{overrides:[],removed:[]});
+      const state = Array.isArray(saved) ? {overrides:saved,removed:[]} : saved;
+      const removed = (Array.isArray(state.removed) ? state.removed : []).filter((item) => !slugs.includes(item));
+      await writeKV(env,slug,"products",{overrides:Array.isArray(state.overrides)?state.overrides:[],removed});
+      return json({data:{restored:slugs.length}},200);
+    }
     if (path === "/api/admin/settings" && request.method === "PUT") {
       const value = await request.json();
       await writeKV(env,slug,"settings",value);
       return json({data:value},200);
+    }
+    const productAdmin = path.match(/^\\/api\\/admin\\/products\\/([^/]+)$/);
+    if (productAdmin && request.method === "DELETE") {
+      const productSlug = decodeURIComponent(productAdmin[1]);
+      const saved = await readKV(env,slug,"products",{overrides:[],removed:[]});
+      const state = Array.isArray(saved) ? {overrides:saved,removed:[]} : saved;
+      const overrides = (Array.isArray(state.overrides) ? state.overrides : []).filter((item) => String(item.slug || item.id) !== productSlug);
+      const removed = [...new Set([...(Array.isArray(state.removed)?state.removed:[]),productSlug])];
+      await writeKV(env,slug,"products",{overrides,removed});
+      return json({data:{deleted:true}},200);
     }
     const orderAdmin = path.match(/^\/api\/admin\/orders\/([^/]+)$/);
     if (orderAdmin) {
