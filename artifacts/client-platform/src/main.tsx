@@ -10,12 +10,19 @@ import './index.css'
 const root = document.getElementById('root')
 
 if (root) {
-  void loadServerConfig().then(flushPendingOrders)
-  createRoot(root).render(
+  const mount = () => createRoot(root).render(
     <ErrorBoundary>
       <Router hook={useHashLocation}>
         <App />
       </Router>
     </ErrorBoundary>,
   )
+  const configReady = Promise.race([
+    loadServerConfig(),
+    new Promise<void>((resolve) => window.setTimeout(resolve, 1600)),
+  ])
+  void configReady.finally(() => {
+    mount()
+    void flushPendingOrders()
+  })
 }
