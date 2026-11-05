@@ -287,8 +287,12 @@ export default { async fetch(request,env) {
       const body = await request.json();
       const expected = await env.ORDERS.get(slug + ":admin-pin");
       if (!expected || String(body.pin || "") !== expected) return json({error:"رمز الإدارة غير صحيح"},401);
-      const token = await env.ORDERS.get(slug + ":admin-token");
-      return token ? json({data:{token}},200) : json({error:"حساب الإدارة غير مهيأ"},503);
+      let token = await env.ORDERS.get(slug + ":admin-token");
+      if (!token) {
+        token = crypto.randomUUID() + crypto.randomUUID().replace(/-/g,"");
+        await env.ORDERS.put(slug + ":admin-token",token);
+      }
+      return json({data:{token}},200);
     } catch { return json({error:"تعذر تسجيل الدخول"},400); }
   }
   if (path.startsWith("/api/admin/")) {
