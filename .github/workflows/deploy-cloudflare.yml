@@ -92,41 +92,21 @@ jobs:
           command: deploy
 
       - name: Deploy BRAND_LAYA storefront Worker
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: artifacts/client-stores/laya
-          command: deploy
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/laya/wrangler.jsonc
 
       - name: Deploy مكتب النجوم storefront Worker
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: artifacts/client-stores/njom
-          command: deploy
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/njom/wrangler.jsonc
 
       - name: Deploy شركة لنا storefront Worker
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: artifacts/client-stores/lna
-          command: deploy
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/lna/wrangler.jsonc
 
       - name: Deploy SCOOPER storefront Worker
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: artifacts/client-stores/scoop
-          command: deploy
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/scoop/wrangler.jsonc
 
       - name: Deploy MUKHTAR storefront Worker
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: artifacts/client-stores/mukhtar
-          command: deploy
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/mukhtar/wrangler.jsonc
