@@ -22,7 +22,7 @@
       "number": "+9647801234544"
     }
   ],
-  "heroImage": "https://images.unsplash.com/photo-1691452194257-57e0f170c32e?fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNhbXN1bmd8ZW58MHx8fHwx&ixlib=rb-4.1.0&q=80&w=1500",
+  "heroImage": "https://shop-image.samsung.com.cn/goods/2023/02/13/63ea3f51e4b08db2edda4432.png",
   "theme": {
     "bg": "#071827",
     "ink": "#f4f8fc",
@@ -52,14 +52,14 @@
       "name": "هواتف Samsung",
       "category": "هواتف",
       "description": "مجموعة هواتف سامسونج. الموديل والسعة والسعر حسب المتوفر لدى المكتب.",
-      "image": "https://images.unsplash.com/photo-1691452194257-57e0f170c32e?fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNhbXN1bmd8ZW58MHx8fHwx&ixlib=rb-4.1.0&q=80&w=1500"
+      "image": "https://shop-image.samsung.com.cn/goods/2023/02/13/63ea3f51e4b08db2edda4432.png"
     },
     {
       "id": "njom-a1",
       "name": "سماعات لاسلكية",
       "category": "إكسسوارات",
       "description": "اسأل عن السماعات المتوفرة والتوافق مع هاتفك.",
-      "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=1200&q=85"
+      "image": "https://p.globalsources.com/IMAGES/PDT/B5987807955/TWS-Earbuds-Dual-Mic-TWS-earphones-ENC-TWS-Earbuds.jpg"
     },
     {
       "id": "njom-a2",
@@ -73,7 +73,7 @@
       "name": "الصيانة والبرمجة",
       "category": "صيانة",
       "description": "استفسر عن خدمة الصيانة أو البرمجة المطلوبة قبل زيارة المكتب.",
-      "image": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=1200&q=85"
+      "image": "https://static.wixstatic.com/media/23c426_b39414fc0133439c9edcdb722bd44180~mv2.jpg/v1/fill/w_948%2Ch_632%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/23c426_b39414fc0133439c9edcdb722bd44180~mv2.jpg"
     }
   ],
   "heroFit": "contain",
