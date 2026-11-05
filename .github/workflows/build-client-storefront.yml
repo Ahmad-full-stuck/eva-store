@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - ".github/workflows/build-client-storefront.yml"
       - "artifacts/client-platform/src/**"
       - "artifacts/client-platform/public/**"
       - "artifacts/client-platform/index.html"
