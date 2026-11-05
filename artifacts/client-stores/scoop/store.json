@@ -43,36 +43,7 @@
     "تيشيرتات",
     "إطلالات"
   ],
-  "products": [
-    {
-      "id": "scoop-c1",
-      "name": "قميص رجالي كلاسيكي",
-      "category": "قمصان",
-      "description": "نموذج عرض لقميص رجالي بقصة مرتبة. اسأل عن الألوان والمقاسات المتوفرة.",
-      "image": "https://karaku.co.kr/cdn/shop/files/KRK-GPD-GS1344-05.jpg?v=1761717533&width=1200"
-    },
-    {
-      "id": "scoop-p1",
-      "name": "تيشيرت بولو",
-      "category": "تيشيرتات",
-      "description": "قطعة أساسية للإطلالة اليومية. الموديل والخامة والمقاس تؤكد عند التواصل.",
-      "image": "https://www.niamsports.com/cdn/shop/files/NM12043_Bobby_Light_Blue_Flat.png?v=1773855887&width=1500"
-    },
-    {
-      "id": "scoop-l1",
-      "name": "إطلالة كاجوال",
-      "category": "إطلالات",
-      "description": "تنسيق رجالي يومي كنموذج للعرض. اسأل عن القطع المتوفرة بشكل منفصل.",
-      "image": "https://witcdn.sarar.com/polo-yaka-kisa-kol-pamuklu-taba-triko-20087-polo-yaka-tisort-sarar-56589-20-O.jpg"
-    },
-    {
-      "id": "scoop-l2",
-      "name": "إطلالة رجالية داكنة",
-      "category": "إطلالات",
-      "description": "نموذج تنسيق يجمع القطع الداكنة. تفاصيل المنتجات الفعلية عند الاستفسار.",
-      "image": "https://cdn.hemden.de/media/image/c8/56/4c/2210-609_b2c_4_1600.jpg"
-    }
-  ],
+  "products": [],
   "heroFit": "cover",
   "productFit": "contain"
 }
