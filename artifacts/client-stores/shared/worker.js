@@ -207,26 +207,9 @@ const listKVRecords = async (env,prefix) => {
   }));
   return rows.filter(Boolean).sort((a,b) => String(b.created_at || b.createdAt || "").localeCompare(String(a.created_at || a.createdAt || "")));
 };
-const staticAsset = async (request,slug,path) => {
-  let requested = path === "/" ? "index.html" : path.replace(/^\/+/, "");
-  if (requested.split("/").some((part) => part === ".." || part === ".")) return text("Not found",404);
-  if (requested === "favicon.svg") {
-    const response = await githubFile("client-stores/" + slug + "/favicon.svg",3600);
-    return response ? new Response(response.body,{headers:{"content-type":"image/svg+xml","cache-control":"public,max-age=3600"}}) : text("Not found",404);
-  }
-  const candidate = await githubFile(COMMON_ASSETS + "/" + requested, requested.endsWith(".html") ? 60 : 86400);
-  if (candidate) {
-    const headers = new Headers(candidate.headers);
-    headers.set("content-type",mime(requested));
-    headers.set("cache-control",requested.endsWith(".html") ? "no-cache" : "public,max-age=31536000,immutable");
-    headers.set("x-content-type-options","nosniff");
-    if (request.method === "HEAD") return new Response(null,{status:200,headers});
-    return new Response(candidate.body,{status:200,headers});
-  }
-  if (requested.includes(".")) return text("Not found",404);
-  const index = await githubFile(COMMON_ASSETS + "/index.html",60);
-  if (!index) return text("Application bundle is being prepared",503,"no-store");
-  return new Response(index.body,{headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-cache","x-content-type-options":"nosniff"}});
+const staticAsset = async (request,env) => {
+  if (!env.ASSETS) return text("Store assets are not configured",503);
+  return env.ASSETS.fetch(request);
 };
 export default { async fetch(request,env) {
   const url = new URL(request.url);
@@ -234,7 +217,7 @@ export default { async fetch(request,env) {
   if (!SLUGS.has(slug)) return text("Unknown storefront",404);
   const path = url.pathname;
   if (path === "/api/health") return json({ok:true,store:slug},200);
-  if (!path.startsWith("/api/")) return staticAsset(request,slug,path);
+  if (!path.startsWith("/api/")) return staticAsset(request,env);
   const profile = await profileFor(slug);
   if (!profile) return text("Store profile is temporarily unavailable",503);
   const savedContent = await readKV(env,slug,"content",{});

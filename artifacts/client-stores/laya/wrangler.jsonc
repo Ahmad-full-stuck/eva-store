@@ -23,5 +23,13 @@
       "binding": "ORDERS",
       "id": "92d9752349614977bdc0e8e37dc88b6b"
     }
-  ]
+  ],
+  "assets": {
+    "directory": "../../client-platform/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  }
 }

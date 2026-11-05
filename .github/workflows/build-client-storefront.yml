@@ -7,6 +7,7 @@ on:
       - ".github/workflows/build-client-storefront.yml"
       - "artifacts/client-platform/src/**"
       - "artifacts/client-platform/public/**"
+      - "artifacts/client-platform/brand-public/**"
       - "artifacts/client-platform/index.html"
       - "artifacts/eva-fabrics-store/vite.client-stores.config.ts"
       - "artifacts/eva-fabrics-store/package.json"
