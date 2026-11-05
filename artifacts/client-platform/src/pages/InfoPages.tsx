@@ -6,7 +6,7 @@ import { formatMeters, formatPrice, normalizeArabic } from '@/lib/catalog'
 import { useT } from '@/lib/i18n'
 import { guideFaqsEn, quickGuideAnswersEn } from '@/lib/strings/info'
 import { fallbackCategories, fallbackProducts, guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
-import { apiUrl } from '@/lib/site'
+import { apiUrl, siteConfig } from '@/lib/site'
 import { sendSimpleEmail } from '@/lib/email'
 import { useSiteContent } from '@/lib/site-content'
 import { mergeAdminCategories, mergeAdminProducts } from '@/components/AdminSecret'
@@ -724,6 +724,16 @@ export function ContactPage() {
               <a href="#contact-form" aria-label={t('contact.method1Aria')}>
                 <Send size={19} /><span><strong>{t('contact.method1Title')}</strong><small>{t('contact.method1Text')}</small></span><ArrowLeft size={15} />
               </a>
+              {content.contactUrl && (
+                <a href={content.contactUrl} target="_blank" rel="noreferrer" aria-label="التواصل عبر الحساب الرسمي">
+                  <MessageCircle size={19} /><span><strong>التواصل عبر الحساب الرسمي</strong><small>افتح قناة التواصل المعتمدة للمتجر</small></span><ArrowLeft size={15} />
+                </a>
+              )}
+              {siteConfig.phone && (
+                <a href={"tel:" + siteConfig.phone} aria-label="اتصل بالمتجر">
+                  <Send size={19} /><span><strong>اتصال مباشر</strong><small dir="ltr">{siteConfig.phone}</small></span><ArrowLeft size={15} />
+                </a>
+              )}
               <Link href="/order-tracking" aria-label={t('contact.method2Aria')}>
                 <PackageCheck size={19} /><span><strong>{t('contact.method2Title')}</strong><small>{t('contact.method2Text')}</small></span><ArrowLeft size={15} />
               </Link>
@@ -734,9 +744,8 @@ export function ContactPage() {
 
             <div className="contact-hours glass-card">
               <span className="hours-title"><Clock size={15} />{t('contact.hoursTitle')}</span>
-              <div className="hours-row"><span>{t('contact.hours1Label')}</span><strong>{t('contact.hours1Value')}</strong></div>
-              <div className="hours-row"><span>{t('contact.hours2Label')}</span><strong>{t('contact.hours2Value')}</strong></div>
-              <div className="hours-row"><span>{t('contact.hours3Label')}</span><strong>{t('contact.hours3Value')}</strong></div>
+              <div className="hours-row"><span>ساعات العمل</span><strong>{content.hours || 'يؤكدها المتجر عند التواصل'}</strong></div>
+              {content.location && <div className="hours-row"><span>العنوان</span><strong>{content.location}</strong></div>}
             </div>
 
             <div className="map-card glass-dark">
@@ -744,7 +753,7 @@ export function ContactPage() {
               <div className="map-copy">
                 <span className="map-pin"><MapPin size={18} /></span>
                 <strong>{t('contact.mapTitle')}</strong>
-                <p>{t('contact.mapText')}</p>
+                <p>{content.location || t('contact.mapText')}</p>
               </div>
             </div>
           </div>
