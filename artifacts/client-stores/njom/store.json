@@ -1,0 +1,79 @@
+{
+  "key": "njom",
+  "name": "مكتب النجوم للهواتف النقالة",
+  "monogram": "N",
+  "tagline": "هواتف · إكسسوارات · صيانة",
+  "eyebrow": "AL NJOOM · MOBILE CENTER",
+  "heroTitle": "كل ما يخص هاتفك، في مكان واحد",
+  "heroText": "بيع وشراء الهواتف النقالة، إكسسوارات، صيانة وبرمجة، وخدمة زين كاش. تواصل مع مكتب النجوم للاستفسار عن الموديل والتوفر.",
+  "storyTitle": "خبرة في الهاتف وما حوله",
+  "storyText": "مكتب النجوم للهواتف النقالة في البصرة، يجمع خدمات بيع وشراء الهواتف مع الإكسسوارات والصيانة والبرمجة. اسألنا عن الجهاز أو الخدمة التي تحتاجها.",
+  "description": "مكتب النجوم للهواتف النقالة في البصرة — بيع وشراء الهواتف والإكسسوارات والصيانة والبرمجة.",
+  "note": "بيع وشراء الهواتف · إكسسوارات · صيانة وبرمجة · زين كاش",
+  "location": "البصرة · الجزائر · قرب جامع الموسوي",
+  "contactLabel": "تواصل مع النجوم",
+  "contactUrl": "https://www.instagram.com/alnjom_center/",
+  "instagram": "https://www.instagram.com/alnjom_center/",
+  "facebook": "https://www.facebook.com/alnjoom8?mibextid=LQQJ4d",
+  "contactMode": "copy",
+  "phones": [
+    {
+      "label": "الاتصال بالمكتب",
+      "number": "+9647801234544"
+    }
+  ],
+  "heroImage": "https://images.unsplash.com/photo-1691452194257-57e0f170c32e?fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNhbXN1bmd8ZW58MHx8fHwx&ixlib=rb-4.1.0&q=80&w=1500",
+  "theme": {
+    "bg": "#071827",
+    "ink": "#f4f8fc",
+    "surface": "#102337",
+    "muted": "#9db2c5",
+    "accent": "#61c3e5",
+    "line": "#294158",
+    "hero": "#0d263d",
+    "photo": "#e9eef3"
+  },
+  "categories": [
+    "الكل",
+    "هواتف",
+    "إكسسوارات",
+    "صيانة"
+  ],
+  "products": [
+    {
+      "id": "njom-p1",
+      "name": "هواتف iPhone",
+      "category": "هواتف",
+      "description": "استفسر عن موديلات iPhone وسعات التخزين والألوان المتاحة قبل الشراء.",
+      "image": "https://buy.gazelle.com/cdn/shop/files/iPhone_11_Pro_-_Space_Gray_-_Angle-cropped_d738113c-3cd5-4b3a-85c1-c1352b651e4f.jpg?v=1757019462&width=1946"
+    },
+    {
+      "id": "njom-p2",
+      "name": "هواتف Samsung",
+      "category": "هواتف",
+      "description": "مجموعة هواتف سامسونج. الموديل والسعة والسعر حسب المتوفر لدى المكتب.",
+      "image": "https://images.unsplash.com/photo-1691452194257-57e0f170c32e?fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNhbXN1bmd8ZW58MHx8fHwx&ixlib=rb-4.1.0&q=80&w=1500"
+    },
+    {
+      "id": "njom-a1",
+      "name": "سماعات لاسلكية",
+      "category": "إكسسوارات",
+      "description": "اسأل عن السماعات المتوفرة والتوافق مع هاتفك.",
+      "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=1200&q=85"
+    },
+    {
+      "id": "njom-a2",
+      "name": "إكسسوارات وشواحن",
+      "category": "إكسسوارات",
+      "description": "إكسسوارات الهاتف وملحقات الشحن. النوع والتوافق يُؤكدان عند التواصل.",
+      "image": "https://www.flamingo.com.co/cdn/shop/files/6_142ce499-b7be-4e2c-9e92-83d4a89af1b1.png?v=1761857208&width=1000"
+    },
+    {
+      "id": "njom-s1",
+      "name": "الصيانة والبرمجة",
+      "category": "صيانة",
+      "description": "استفسر عن خدمة الصيانة أو البرمجة المطلوبة قبل زيارة المكتب.",
+      "image": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=1200&q=85"
+    }
+  ]
+}

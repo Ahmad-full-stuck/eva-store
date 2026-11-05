@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "scoop",
+  "main": "../shared/worker.js",
+  "compatibility_date": "2026-11-05",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+      "persist": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true
+    }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "scoop-shop",
+      "database_id": "PENDING_DATABASE_ID"
+    }
+  ]
+}

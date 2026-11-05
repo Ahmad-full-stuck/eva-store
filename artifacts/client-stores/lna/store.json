@@ -1,0 +1,82 @@
+{
+  "key": "lna",
+  "name": "شركة لنا",
+  "monogram": "ل",
+  "tagline": "موبايلات · جملة ومفرد · أقساط",
+  "eyebrow": "LNA COMPANY · MOBILE CENTER",
+  "heroTitle": "خيارات أكثر، وخدمة أقرب",
+  "heroText": "موبايلات جملة ومفرد، أقساط مريحة، إكسسوارات وصيانة. تواصل مع قسم المبيعات أو الإكسسوارات مباشرة.",
+  "storyTitle": "شركة لنا — كل احتياجات الهاتف",
+  "storyText": "من شراء الموبايل إلى الإكسسوارات والصيانة، يجمع سنتر لنا احتياجاتك في مكان واحد. تتوفر خيارات الجملة والمفرد والأقساط، مع ضمان معتمد لمدة سنة وفق معلومات المتجر.",
+  "description": "شركة لنا — موبايلات جملة ومفرد، أقساط مريحة، إكسسوارات وصيانة في بغداد.",
+  "note": "جملة ومفرد · أقساط مريحة · ضمان معتمد لمدة سنة",
+  "location": "قرب جامع تكريتي · مجمع العذراء",
+  "contactLabel": "تواصل مع سنتر لنا",
+  "contactUrl": "https://www.instagram.com/lna_company/",
+  "instagram": "https://www.instagram.com/lna_company/",
+  "contactMode": "copy",
+  "phones": [
+    {
+      "label": "قسم المبيعات",
+      "number": "07703333130"
+    },
+    {
+      "label": "قسم الإكسسوارات",
+      "number": "07703333430"
+    }
+  ],
+  "heroImage": "https://www.flamingo.com.co/cdn/shop/files/6_142ce499-b7be-4e2c-9e92-83d4a89af1b1.png?v=1761857208&width=1000",
+  "theme": {
+    "bg": "#f2f6fa",
+    "ink": "#10233b",
+    "surface": "#ffffff",
+    "muted": "#65788c",
+    "accent": "#17669b",
+    "line": "#d9e4ec",
+    "hero": "#e7f0f7",
+    "photo": "#e9f0f6"
+  },
+  "categories": [
+    "الكل",
+    "موبايلات",
+    "إكسسوارات",
+    "صيانة"
+  ],
+  "products": [
+    {
+      "id": "lna-p1",
+      "name": "هواتف iPhone",
+      "category": "موبايلات",
+      "description": "استفسر عن موديلات iPhone والتخزين والأقساط المتاحة.",
+      "image": "https://buy.gazelle.com/cdn/shop/files/iPhone_11_Pro_-_Space_Gray_-_Angle-cropped_d738113c-3cd5-4b3a-85c1-c1352b651e4f.jpg?v=1757019462&width=1946"
+    },
+    {
+      "id": "lna-p2",
+      "name": "هواتف Android",
+      "category": "موبايلات",
+      "description": "خيارات متنوعة من أجهزة Android. الموديلات والتوفر حسب المخزون.",
+      "image": "https://images.unsplash.com/photo-1691452194257-57e0f170c32e?fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNhbXN1bmd8ZW58MHx8fHwx&ixlib=rb-4.1.0&q=80&w=1500"
+    },
+    {
+      "id": "lna-a1",
+      "name": "إكسسوارات الهاتف",
+      "category": "إكسسوارات",
+      "description": "إكسسوارات وملحقات للاستخدام اليومي. اسأل قسم الإكسسوارات عن التوافق.",
+      "image": "https://www.flamingo.com.co/cdn/shop/files/6_142ce499-b7be-4e2c-9e92-83d4a89af1b1.png?v=1761857208&width=1000"
+    },
+    {
+      "id": "lna-a2",
+      "name": "سماعات لاسلكية",
+      "category": "إكسسوارات",
+      "description": "مجموعة عرض للسماعات اللاسلكية. الأنواع المتاحة تؤكد من المتجر.",
+      "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=1200&q=85"
+    },
+    {
+      "id": "lna-s1",
+      "name": "الصيانة وخدمات الهاتف",
+      "category": "صيانة",
+      "description": "تواصل مع فريق لنا لمعرفة خدمات الصيانة المتاحة.",
+      "image": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=1200&q=85"
+    }
+  ]
+}

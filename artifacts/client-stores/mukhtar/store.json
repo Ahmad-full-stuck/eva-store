@@ -1,0 +1,71 @@
+{
+  "key": "mukhtar",
+  "name": "MUKHTAR | مُختار",
+  "monogram": "M",
+  "tagline": "ألبسة رجالية",
+  "eyebrow": "MUKHTAR · THE STORY CONTINUES",
+  "heroTitle": "الروايةُ بدأت للتّو",
+  "heroText": "إطلالات رجالية مختارة بتفاصيل هادئة وحضور معاصر. استكشف النماذج واسأل عن الموديلات والمقاسات المتاحة.",
+  "storyTitle": "MUKHTAR — الرواية بدأت للتو",
+  "storyText": "مُختار علامة للألبسة الرجالية. صُممت هذه الواجهة لتكون نقطة وصول واضحة للمتجر، مع عرض أولي للأقسام ووسائل التواصل والفرع.",
+  "description": "MUKHTAR مُختار — ألبسة رجالية، الفرع الأول في بغداد الحرية، ڤينيسيا مول.",
+  "note": "الفرع الأول · بغداد الحرية – ڤينيسيا مول",
+  "location": "بغداد · الحرية · ڤينيسيا مول",
+  "contactLabel": "تواصل مع مُختار",
+  "contactUrl": "https://www.instagram.com/6f_v/",
+  "instagram": "https://www.instagram.com/6f_v/",
+  "contactMode": "copy",
+  "phones": [
+    {
+      "label": "استفسار",
+      "number": "07827266656"
+    }
+  ],
+  "heroImage": "https://media.falabella.com/falabellaCO/883446850_1/w%3D1500%2Ch%3D1500%2Cfit%3Dcover",
+  "theme": {
+    "bg": "#f0ede6",
+    "ink": "#252a27",
+    "surface": "#fbf9f4",
+    "muted": "#777c75",
+    "accent": "#8b765d",
+    "line": "#ded8cc",
+    "hero": "#e4e0d6",
+    "photo": "#e8e5dd"
+  },
+  "categories": [
+    "الكل",
+    "قمصان",
+    "بولو",
+    "إطلالات"
+  ],
+  "products": [
+    {
+      "id": "muk-c1",
+      "name": "قميص رجالي بتفصيل هادئ",
+      "category": "قمصان",
+      "description": "نموذج أولي لقميص رجالي بتصميم مرتب. التوفر والمقاسات تؤكد من الفرع.",
+      "image": "https://articl3.com/cdn/shop/files/WhatsAppImage2024-05-01at16.11.41_1_aec7eca4-367b-4a7c-b6b4-ab0da39c1ad3.jpg?v=1761825514&width=2048"
+    },
+    {
+      "id": "muk-p1",
+      "name": "بولو رجالي",
+      "category": "بولو",
+      "description": "قطعة بولو ضمن نماذج العرض. اسأل عن الألوان والمقاسات المتوفرة.",
+      "image": "https://www.niamsports.com/cdn/shop/files/NM12043_Bobby_Light_Blue_Flat.png?v=1773855887&width=1500"
+    },
+    {
+      "id": "muk-l1",
+      "name": "إطلالة عصرية",
+      "category": "إطلالات",
+      "description": "تنسيق رجالي معاصر كنموذج للعرض. تفاصيل القطع المتوفرة لدى المتجر.",
+      "image": "https://media.falabella.com/falabellaCO/883446850_1/w%3D1500%2Ch%3D1500%2Cfit%3Dcover"
+    },
+    {
+      "id": "muk-l2",
+      "name": "إطلالة يومية راقية",
+      "category": "إطلالات",
+      "description": "اقتراح تنسيق يومي. الموديلات والألوان والأسعار تؤكد عند الاستفسار.",
+      "image": "https://www.petermillar.com/dw/image/v2/BHFJ_PRD/on/demandware.static/-/Sites-PM-Library/default/dw47db8b8c/nav/2025/02-feb/new-right-2-3.jpg"
+    }
+  ]
+}
