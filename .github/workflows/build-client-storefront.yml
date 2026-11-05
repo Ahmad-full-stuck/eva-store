@@ -49,5 +49,6 @@ jobs:
           git add -f artifacts/client-platform/dist
           if ! git diff --cached --quiet; then
             git commit -m "Build compiled client storefront app"
+            git pull --rebase origin main
             git push origin HEAD:main
           fi
