@@ -5,6 +5,7 @@ import { governorates } from '@/lib/fallback-data'
 import { useT } from '@/lib/i18n'
 import { governoratesEn, routeLabelsEn } from '@/lib/strings/header'
 import { siteConfig } from '@/lib/site'
+import { useSiteContent } from '@/lib/site-content'
 import { Logo } from './Logo'
 
 interface SiteFooterProps {
@@ -22,26 +23,27 @@ const infoItems = [
 
 export function SiteFooter({ routes, categories }: SiteFooterProps) {
   const { lang, t } = useT()
+  const content = useSiteContent()
   const infoRoutes = infoItems.map((item) => {
     const matched = routes.find((route) => route.path === item.path)
     const label = matched?.label || t(item.label)
     return { ...item, id: item.path, label: lang === 'en' && matched ? routeLabelsEn[matched.id] ?? label : label }
   })
-  const nearbyGovernorates = (lang === 'en' ? governoratesEn : governorates).slice(0, 6)
+  const serviceArea = content.location || (lang === 'en' ? 'Contact the store for service details' : 'تواصل مع المتجر لمعرفة تفاصيل الخدمة')
 
   return (
     <footer className="site-footer glass-dark">
       <div className="container-eva footer-brand footer-top">
         <Logo light />
-        <p>{t('foot.tagline')}</p>
+        <p>{content.tagline || t('foot.tagline')}</p>
         <div className="social-links">
           <Link href="/contact" aria-label={t('foot.contactViaSite')}><MessageCircle size={17} /></Link>
         </div>
       </div>
       <div className="container-eva footer-grid">
         <div className="footer-col">
-          <h2>{t('foot.colFabrics')}</h2>
-          <Link href="/catalog">{t('foot.allFabrics')}</Link>
+          <h2>{content.catalogLabel || t('foot.colFabrics')}</h2>
+          <Link href="/catalog">{lang === 'en' ? 'Browse all products' : 'عرض كل المنتجات'}</Link>
           {categories.slice(0, 5).map((category) => <Link key={category.id} href={`/catalog?category=${encodeURIComponent(category.id)}`}>{category.name}</Link>)}
         </div>
         <div className="footer-col">
@@ -58,8 +60,8 @@ export function SiteFooter({ routes, categories }: SiteFooterProps) {
         </div>
         <div className="footer-col">
           <h2>{t('foot.colServiceArea')}</h2>
-          <p>{t('foot.deliveryRange').replace('{list}', nearbyGovernorates.join(`${t('foot.listSeparator')} `))}</p>
-          <span className="footer-delivery-note"><MapPin size={15} />{t('foot.deliveryFee')}</span>
+          <p>{serviceArea}</p>
+          <span className="footer-delivery-note"><MapPin size={15} />{content.deliveryNote || (lang === 'en' ? 'Confirm service details with the store' : 'تُؤكد تفاصيل الخدمة مع المتجر')}</span>
         </div>
       </div>
       <div className="footer-bottom">
