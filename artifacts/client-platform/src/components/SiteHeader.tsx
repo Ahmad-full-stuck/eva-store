@@ -78,7 +78,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
   const pathname = location.split('?')[0]
 
   const withRoutes = <T extends NavItem>(items: T[]): T[] =>
-    items.map((item) => {
+    items.filter((item) => !(content.tenantKey && item.id === 'guide')).map((item) => {
       const matched = routes.find((route) => route.id === item.id)
       const path = matched ? matched.path : item.path
       const label = matched ? matched.label : t(item.label)
