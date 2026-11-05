@@ -24,7 +24,7 @@ const infoItems = [
 export function SiteFooter({ routes, categories }: SiteFooterProps) {
   const { lang, t } = useT()
   const content = useSiteContent()
-  const infoRoutes = infoItems.map((item) => {
+  const infoRoutes = infoItems.filter((item) => !(content.tenantKey && item.path === '/fabric-guide')).map((item) => {
     const matched = routes.find((route) => route.path === item.path)
     const label = matched?.label || t(item.label)
     return { ...item, id: item.path, label: lang === 'en' && matched ? routeLabelsEn[matched.id] ?? label : label }
@@ -42,7 +42,7 @@ export function SiteFooter({ routes, categories }: SiteFooterProps) {
       </div>
       <div className="container-eva footer-grid">
         <div className="footer-col">
-          <h2>{content.catalogLabel || t('foot.colFabrics')}</h2>
+          <h2>{content.catalogLabel || 'المنتجات'}</h2>
           <Link href="/catalog">{lang === 'en' ? 'Browse all products' : 'عرض كل المنتجات'}</Link>
           {categories.slice(0, 5).map((category) => <Link key={category.id} href={`/catalog?category=${encodeURIComponent(category.id)}`}>{category.name}</Link>)}
         </div>
