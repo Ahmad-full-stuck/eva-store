@@ -72,6 +72,7 @@ jobs:
 
       - name: Configure the Masha admin PIN secret when supplied
         if: env.MASHA_ADMIN_PIN != ''
+        continue-on-error: true
         working-directory: artifacts/masha-worker
         run: printf '%s' "$MASHA_ADMIN_PIN" | pnpm exec wrangler secret put ADMIN_PIN --config wrangler.jsonc
 
