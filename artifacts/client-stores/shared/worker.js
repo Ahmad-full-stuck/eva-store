@@ -277,7 +277,7 @@ export default { async fetch(request,env) {
       return json({data:{orderNumber}},201);
     } catch { return json({error:"تعذر تسجيل الطلب"},400); }
   }
-  const mediaMatch = path.match(/^\\/api\\/media\\/([a-f0-9-]+)$/i);
+  const mediaMatch = path.match(/^\/api\/media\/([a-f0-9-]+)$/i);
   if (mediaMatch && request.method === "GET") {
     const stored = await env.ORDERS.get(slug + ":asset:" + mediaMatch[1]);
     if (!stored || !stored.startsWith("data:image/")) return json({error:"الصورة غير موجودة"},404);
@@ -332,7 +332,7 @@ export default { async fetch(request,env) {
     if (path === "/api/admin/pin" && request.method === "POST") {
       const body = await request.json();
       const pin = String(body.pin || "").trim();
-      if (!/^\\d{4,12}$/.test(pin)) return json({error:"رمز الإدارة يجب أن يكون من 4 إلى 12 رقماً"},400);
+      if (!/^\d{4,12}$/.test(pin)) return json({error:"رمز الإدارة يجب أن يكون من 4 إلى 12 رقماً"},400);
       await env.ORDERS.put(slug + ":admin-pin",pin);
       return json({data:{saved:true}},200);
     }
@@ -362,7 +362,7 @@ export default { async fetch(request,env) {
       await writeKV(env,slug,"settings",value);
       return json({data:value},200);
     }
-    const productAdmin = path.match(/^\\/api\\/admin\\/products\\/([^/]+)$/);
+    const productAdmin = path.match(/^\/api\/admin\/products\/([^/]+)$/);
     if (productAdmin && request.method === "DELETE") {
       const productSlug = decodeURIComponent(productAdmin[1]);
       const saved = await readKV(env,slug,"products",{overrides:[],removed:[]});
