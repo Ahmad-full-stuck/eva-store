@@ -38,36 +38,7 @@
     "بولو",
     "إطلالات"
   ],
-  "products": [
-    {
-      "id": "muk-c1",
-      "name": "قميص رجالي بتفصيل هادئ",
-      "category": "قمصان",
-      "description": "نموذج أولي لقميص رجالي بتصميم مرتب. التوفر والمقاسات تؤكد من الفرع.",
-      "image": "https://cdn.hemden.de/media/image/c8/56/4c/2210-609_b2c_4_1600.jpg"
-    },
-    {
-      "id": "muk-p1",
-      "name": "بولو رجالي",
-      "category": "بولو",
-      "description": "قطعة بولو ضمن نماذج العرض. اسأل عن الألوان والمقاسات المتوفرة.",
-      "image": "https://www.niamsports.com/cdn/shop/files/NM12043_Bobby_Light_Blue_Flat.png?v=1773855887&width=1500"
-    },
-    {
-      "id": "muk-l1",
-      "name": "إطلالة عصرية",
-      "category": "إطلالات",
-      "description": "تنسيق رجالي معاصر كنموذج للعرض. تفاصيل القطع المتوفرة لدى المتجر.",
-      "image": "https://witcdn.sarar.com/polo-yaka-kisa-kol-pamuklu-taba-triko-20087-polo-yaka-tisort-sarar-56589-20-O.jpg"
-    },
-    {
-      "id": "muk-l2",
-      "name": "إطلالة يومية راقية",
-      "category": "إطلالات",
-      "description": "اقتراح تنسيق يومي. الموديلات والألوان والأسعار تؤكد عند الاستفسار.",
-      "image": "https://karaku.co.kr/cdn/shop/files/KRK-GPD-GS1344-05.jpg?v=1761717533&width=1200"
-    }
-  ],
+  "products": [],
   "heroFit": "cover",
   "productFit": "contain"
 }
