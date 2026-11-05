@@ -234,6 +234,7 @@ export default { async fetch(request,env) {
   if (!SLUGS.has(slug)) return text("Unknown storefront",404);
   const path = url.pathname;
   if (path === "/api/health") return json({ok:true,store:slug},200);
+  if (!path.startsWith("/api/")) return staticAsset(request,slug,path);
   const profile = await profileFor(slug);
   if (!profile) return text("Store profile is temporarily unavailable",503);
   const savedContent = await readKV(env,slug,"content",{});
