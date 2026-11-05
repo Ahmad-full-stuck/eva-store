@@ -1,6 +1,7 @@
 import type { CartItem, Product, ProductColor } from '@/types'
 import { readStoreSettings } from '@/lib/site-content'
 import { getCurrentLang, tr } from '@/lib/i18n'
+import { siteConfig } from '@/lib/site'
 
 export const normalizeArabic = (value: string): string => value
   .normalize('NFKD')
@@ -59,16 +60,27 @@ export const formatDinar = (value: number): string => {
 }
 
 /** «0.5» → «نصف متر» */
-export const metersLabel = (value: number): string =>
-  value === 0.5 ? tr('core.metersHalf') : `${Number(value.toFixed(2)).toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ')} ${tr('core.metersWord')}`
+export const metersLabel = (value: number): string => {
+  const count = Math.max(0, Math.round(value))
+  const number = count.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ')
+  const unit = getCurrentLang() === 'en'
+    ? (count === 1 ? siteConfig.quantityUnitEn : siteConfig.quantityUnitEn + 's')
+    : siteConfig.quantityUnit
+  return number + ' ' + unit
+}
 
-export const formatMeters = (value: number): string => (value === 0.5
-  ? tr('core.metersShortHalf')
-  : `${value.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} ${tr('core.metersShortUnit')}`)
+export const formatMeters = (value: number): string => {
+  const count = Math.max(0, Math.round(value))
+  const number = count.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ')
+  const unit = getCurrentLang() === 'en'
+    ? (count === 1 ? siteConfig.quantityUnitEn : siteConfig.quantityUnitEn + 's')
+    : siteConfig.quantityUnit
+  return number + ' ' + unit
+}
 
 export const normalizeHalfMeters = (value: number): number => {
   if (!Number.isFinite(value) || value <= 0) return 0
-  return Math.max(0.5, Math.ceil(value * 2) / 2)
+  return Math.max(1, Math.ceil(value))
 }
 
 export const availableMeters = (product: Product, color?: ProductColor): number => {
