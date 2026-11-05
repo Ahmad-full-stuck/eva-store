@@ -115,16 +115,13 @@ legend { padding: 0; }
 .site-header { position: sticky; top: 0; z-index: 30; background: linear-gradient(180deg, rgba(255, 250, 250, .82), rgba(255, 250, 250, .62)); border-bottom: 1px solid rgba(255, 255, 255, .7); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); box-shadow: 0 12px 32px rgba(74, 24, 43, .07); }
 .header-inner { min-height: 82px; display: flex; align-items: center; gap: 35px; }
 .logo { display: inline-flex; align-items: center; gap: 9px; flex: 0 0 auto; }
-.logo-symbol { width: 34px; height: 38px; position: relative; display: inline-block; border: 1.5px solid var(--eva-ink); border-radius: 50% 50% 44% 44%; transform: rotate(10deg); }
-.logo-symbol:before { content: ''; position: absolute; width: 10px; height: 21px; top: 7px; right: 11px; border: 1.4px solid var(--eva-ink); border-radius: 50%; }
-.logo-symbol:after { content: ''; position: absolute; width: 23px; height: 1px; right: 5px; bottom: 9px; background: var(--eva-ink); transform: rotate(-57deg); }
-.logo-symbol span { position: absolute; width: 4px; height: 4px; right: 7px; top: 4px; border-radius: 50%; background: var(--eva-rose); }
+.logo-symbol { width: 38px; height: 38px; position: relative; display: inline-grid; place-items: center; border: 1.4px solid var(--eva-rose); border-radius: 12px; color: var(--eva-rose); background: rgba(255,255,255,.48); box-shadow: inset 0 1px 0 rgba(255,255,255,.8); }
+.logo-symbol:before, .logo-symbol:after { content: none; display: none; }
+.logo-symbol b { font-size: 16px; line-height: 1; font-weight: 700; letter-spacing: -.04em; }
 .logo-copy { display: grid; line-height: 1.15; }
 .logo-copy strong { font-size: 16px; letter-spacing: -.03em; }
 .logo-copy small { margin-top: 4px; color: var(--eva-muted); font-size: 11.5px; }
-.logo-light .logo-symbol { border-color: #fff6ee; }
-.logo-light .logo-symbol:before { border-color: #fff6ee; }
-.logo-light .logo-symbol:after { background: #fff6ee; }
+.logo-light .logo-symbol { border-color: #fff6ee; color: #fff6ee; background: rgba(255,255,255,.08); }
 .logo-light .logo-copy strong, .logo-light .logo-copy small { color: #fff6ee; }
 .desktop-nav { display: flex; align-items: center; gap: 25px; margin-inline: auto; }
 .desktop-nav a { position: relative; color: var(--eva-muted); font-size: 12px; font-weight: 500; transition: color .2s ease; }
