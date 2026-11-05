@@ -215,7 +215,7 @@ export function InlineAddButton({ product, onAdd }: { product: Product; onAdd: (
       type="button"
       className="icon-button"
       disabled={!color}
-      onClick={() => color && onAdd(product, color, 0.5)}
+      onClick={() => color && onAdd(product, color, 1)}
       aria-label={t('card.addToCartAria').replace('{name}', product.name)}
     >
       <Plus size={18} aria-hidden="true" />
