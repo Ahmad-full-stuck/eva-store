@@ -5,7 +5,6 @@ import { catalogStrings } from '@/lib/strings/catalog'
 import { productStrings } from '@/lib/strings/product'
 import { infoStrings } from '@/lib/strings/info'
 import { getTextOverride } from '@/lib/text-overrides'
-import { adaptTenantCopy } from '@/lib/site'
 
 export type Lang = 'ar' | 'en'
 export type StringEntry = { ar: string; en: string }
@@ -40,10 +39,10 @@ export const getCurrentLang = (): Lang => currentLang
 /** Non-React translation using the current language (for non-component code). */
 export const tr = (key: string): string => {
   const override = getTextOverride(key)
-  if (override !== undefined) return adaptTenantCopy(override, currentLang)
+  if (override !== undefined) return override
   const entry = DICT[key]
   if (!entry) return key
-  return adaptTenantCopy(entry[currentLang] || entry.ar || key, currentLang)
+  return entry[currentLang] || entry.ar || key
 }
 
 export interface StringInfo {
@@ -95,10 +94,10 @@ export function LangProvider({ children }: { children: ReactNode }) {
     setLang,
     t: (key: string) => {
       const override = getTextOverride(key)
-      if (override !== undefined) return adaptTenantCopy(override, lang)
+      if (override !== undefined) return override
       const entry = DICT[key]
       if (!entry) return key
-      return adaptTenantCopy(entry[lang] || entry.ar || key, lang)
+      return entry[lang] || entry.ar || key
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [lang, setLang, revision])

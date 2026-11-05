@@ -5,6 +5,8 @@ import { ArrowLeft, Check, ShoppingBag } from 'lucide-react'
 import type { CartItem, Product, ProductColor } from '@/types'
 import { useStoreData } from '@/hooks/use-store-data'
 import { LangProvider, useT } from '@/lib/i18n'
+import { adaptTenantCopy } from '@/lib/site'
+import { useSiteContent } from '@/lib/site-content'
 import { addCartItem, getStoredCart, getStoredWishlist, reconcileCart, removeCartItem, setStoredCart, setStoredWishlist, updateCartItem } from '@/lib/storage'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
@@ -95,6 +97,7 @@ const safeDecode = (value: string): string => {
 function AppShell() {
   const { products, categories, routes, status } = useStoreData()
   const { t, lang } = useT()
+  const content = useSiteContent()
   const [location, setLocation] = useLocation()
   const [cart, setCart] = useState<CartItem[]>(() => getStoredCart(products))
   const [wishlist, setWishlist] = useState<string[]>(() => getStoredWishlist())
@@ -111,9 +114,32 @@ function AppShell() {
     const entry = product
       ? { title: `${product.name} | ${lang === 'en' ? 'Eva Store' : 'إيفا ستور'}`, desc: product.description || seo['/catalog'].desc }
       : seo[pathname] ?? fallback
-    document.title = entry?.title ?? seo['/'].title
-    if (entry?.desc) document.querySelector('meta[name="description"]')?.setAttribute('content', entry.desc)
+    document.title = adaptTenantCopy(entry?.title ?? seo['/'].title, lang)
+    if (entry?.desc) document.querySelector('meta[name="description"]')?.setAttribute('content', adaptTenantCopy(entry.desc, lang))
   }, [pathname, products, lang])
+
+  useEffect(() => {
+    const theme = content.theme || {}
+    const vars: Record<string, string> = {
+      '--eva-bg': theme.bg || '#faf5f4',
+      '--eva-surface': theme.surface || '#fffbfb',
+      '--eva-surface-strong': theme.surfaceStrong || '#ffffff',
+      '--eva-ink': theme.ink || '#2b2124',
+      '--eva-muted': theme.muted || '#6d5a60',
+      '--eva-line': theme.line || '#ecdedd',
+      '--eva-line-strong': theme.lineStrong || '#dcc7c8',
+      '--eva-rose': theme.accent || '#7a1e3c',
+      '--eva-rose-dark': theme.accentDark || '#5a1129',
+      '--eva-rose-soft': theme.accentSoft || '#f7ebef',
+      '--eva-rose-tint': theme.accentTint || '#f2dde4',
+      '--eva-orange': theme.warm || '#b0763c',
+      '--eva-blush': theme.highlight || '#e8b0c1',
+      '--eva-charcoal': theme.dark || '#2e1821',
+      '--eva-green': theme.success || '#4e7a5e',
+    }
+    Object.entries(vars).forEach(([name, value]) => document.documentElement.style.setProperty(name, value))
+    document.documentElement.style.background = vars['--eva-bg']
+  }, [content.theme])
 
   useEffect(() => {
     if (status === 'loading') return
@@ -189,7 +215,7 @@ function AppShell() {
           <Route path="/checkout" component={() => <CheckoutPage cart={cart} onComplete={completeOrder} />} />
           <Route path="/favorites" component={() => <FavoritesPage {...pageProps} />} />
           <Route path="/about" component={AboutPage} />
-          <Route path="/fabric-guide" component={FabricGuidePage} />
+          <Route path="/fabric-guide" component={() => <CatalogPage {...pageProps} status={status} />} />
           <Route path="/contact" component={ContactPage} />
           <Route path="/policies" component={PoliciesPage} />
           <Route path="/order-tracking" component={OrderTrackingPage} />

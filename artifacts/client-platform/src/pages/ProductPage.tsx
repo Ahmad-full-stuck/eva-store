@@ -22,7 +22,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const { t, lang } = useT()
   const product = products.find((item) => item.slug === slug)
   const [activeImage, setActiveImage] = useState(0)
-  const [length, setLength] = useState(0.5)
+  const [length, setLength] = useState(1)
   const [zoomOpen, setZoomOpen] = useState(false)
   const [openSection, setOpenSection] = useState('specs')
   const [justAdded, setJustAdded] = useState(false)
@@ -35,7 +35,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
 
   useEffect(() => {
     setActiveImage(0)
-    setLength(0.5)
+    setLength(1)
     setJustAdded(false)
     setZoomOpen(false)
     setVideoNeedsUnmute(false)
@@ -94,7 +94,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
 
   useEffect(() => {
     if (maxLength <= 0) return
-    setLength((current) => (current > maxLength ? Math.max(0.5, Math.floor(maxLength * 2) / 2) : current))
+    setLength((current) => (current > maxLength ? Math.max(1, Math.floor(maxLength)) : current))
   }, [maxLength])
   const related = useMemo(() => product ? products.filter((item) => item.slug !== product.slug && item.categoryId === product.categoryId).slice(0, 6) : [], [product, products])
 
@@ -133,8 +133,8 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     else return
     event.preventDefault()
   }
-  const increase = () => setLength((current) => Math.min(maxLength, Math.round((current + 0.5) * 10) / 10))
-  const decrease = () => setLength((current) => Math.max(0.5, Math.round((current - 0.5) * 10) / 10))
+  const increase = () => setLength((current) => Math.min(maxLength, Math.round((current + 1) * 10) / 10))
+  const decrease = () => setLength((current) => Math.max(0.5, Math.round((current - 1) * 10) / 10))
   const add = () => {
     onAdd(product, product.colors[0], length)
     setJustAdded(true)
@@ -198,11 +198,11 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         <div className="price-block"><span>{t('pd.pricePerMeter')}</span><strong>{formatPrice(product.price)}</strong>{product.compareAtPrice && <del>{formatPrice(product.compareAtPrice)}</del>}</div>
         <div className="detail-divider" />
         <div className="quantity-heading"><div><strong>{t('pd.qtyHeading')}</strong><small>{t('pd.qtyHint')}</small></div><span>{t('pd.availability')}</span></div>
-        <div className="quantity-control"><button type="button" onClick={decrease} disabled={length <= 0.5} aria-label={t('pd.decreaseHalf')}><Minus size={17} /></button><output aria-live="polite">{metersLabel(length)}</output><button type="button" onClick={increase} disabled={length >= maxLength} aria-label={t('pd.increaseHalf')}><Plus size={17} /></button></div>
-        <label className="meters-input-row"><input className="meters-input" type="number" inputMode="decimal" min={0.5} max={Math.max(0.5, maxLength)} step={0.5} value={length} onChange={(event) => {
+        <div className="quantity-control"><button type="button" onClick={decrease} disabled={length <= 1} aria-label={t('pd.decreaseHalf')}><Minus size={17} /></button><output aria-live="polite">{metersLabel(length)}</output><button type="button" onClick={increase} disabled={length >= maxLength} aria-label={t('pd.increaseHalf')}><Plus size={17} /></button></div>
+        <label className="meters-input-row"><input className="meters-input" type="number" inputMode="decimal" min={1} max={Math.max(1, Math.floor(maxLength))} step={1} value={length} onChange={(event) => {
           const next = Number(event.target.value)
           if (!Number.isFinite(next)) return
-          setLength(Math.min(Math.max(0.5, next), Math.max(0.5, maxLength)))
+          setLength(Math.min(Math.max(1, Math.round(next)), Math.max(0.5, maxLength)))
         }} aria-label={t('pd.metersInputAria')} /><em>{t('pd.unitMeters')}</em></label>
         <div className="line-total"><span>{t('pd.lineTotal').replace('{meters}', metersLabel(length)).replace('{price}', formatPrice(product.price))}</span><strong>{formatPrice(product.price * length)}</strong></div>
         <button ref={addBtnRef} type="button" className="button button-primary detail-add" onClick={add} disabled={maxLength <= 0}><ShoppingBag size={17} />{maxLength <= 0 ? t('pd.unavailable') : t('pd.addCart')}<ArrowLeft size={16} /></button>

@@ -27,11 +27,7 @@ const SORT_OPTIONS: { value: SortKey; labelKey: string }[] = [
   { value: 'price-desc', labelKey: 'cat.sortPriceDesc' },
 ]
 
-const STRETCH_OPTIONS: { value: StretchKey; labelKey: string }[] = [
-  { value: 'all', labelKey: 'cat.stretchAll' },
-  { value: 'stretch', labelKey: 'cat.stretchYes' },
-  { value: 'non', labelKey: 'cat.stretchNon' },
-]
+const STRETCH_OPTIONS: { value: StretchKey; labelKey: string }[] = []
 
 const STOP_WORDS = new Set(['قماش', 'القماش', 'اقمشه', 'الاقمشه', 'fabric'])
 
