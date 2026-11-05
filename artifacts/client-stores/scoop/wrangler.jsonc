@@ -18,11 +18,10 @@
       "persist": true
     }
   },
-  "d1_databases": [
+  "kv_namespaces": [
     {
-      "binding": "DB",
-      "database_name": "scoop-shop",
-      "database_id": "PENDING_DATABASE_ID"
+      "binding": "ORDERS",
+      "id": "6d442a100d344f81bf9ea7debdca9a51"
     }
   ]
 }
