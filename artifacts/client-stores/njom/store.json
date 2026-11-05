@@ -39,43 +39,7 @@
     "إكسسوارات",
     "صيانة"
   ],
-  "products": [
-    {
-      "id": "njom-p1",
-      "name": "هواتف iPhone",
-      "category": "هواتف",
-      "description": "استفسر عن موديلات iPhone وسعات التخزين والألوان المتاحة قبل الشراء.",
-      "image": "https://buy.gazelle.com/cdn/shop/files/iPhone_11_Pro_-_Space_Gray_-_Angle-cropped_d738113c-3cd5-4b3a-85c1-c1352b651e4f.jpg?v=1757019462&width=1946"
-    },
-    {
-      "id": "njom-p2",
-      "name": "هواتف Samsung",
-      "category": "هواتف",
-      "description": "مجموعة هواتف سامسونج. الموديل والسعة والسعر حسب المتوفر لدى المكتب.",
-      "image": "https://shop-image.samsung.com.cn/goods/2023/02/13/63ea3f51e4b08db2edda4432.png"
-    },
-    {
-      "id": "njom-a1",
-      "name": "سماعات لاسلكية",
-      "category": "إكسسوارات",
-      "description": "اسأل عن السماعات المتوفرة والتوافق مع هاتفك.",
-      "image": "https://p.globalsources.com/IMAGES/PDT/B5987807955/TWS-Earbuds-Dual-Mic-TWS-earphones-ENC-TWS-Earbuds.jpg"
-    },
-    {
-      "id": "njom-a2",
-      "name": "إكسسوارات وشواحن",
-      "category": "إكسسوارات",
-      "description": "إكسسوارات الهاتف وملحقات الشحن. النوع والتوافق يُؤكدان عند التواصل.",
-      "image": "https://www.flamingo.com.co/cdn/shop/files/6_142ce499-b7be-4e2c-9e92-83d4a89af1b1.png?v=1761857208&width=1000"
-    },
-    {
-      "id": "njom-s1",
-      "name": "الصيانة والبرمجة",
-      "category": "صيانة",
-      "description": "استفسر عن خدمة الصيانة أو البرمجة المطلوبة قبل زيارة المكتب.",
-      "image": "https://static.wixstatic.com/media/23c426_b39414fc0133439c9edcdb722bd44180~mv2.jpg/v1/fill/w_948%2Ch_632%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/23c426_b39414fc0133439c9edcdb722bd44180~mv2.jpg"
-    }
-  ],
+  "products": [],
   "heroFit": "contain",
   "productFit": "contain"
 }
