@@ -67,5 +67,7 @@
       "description": "اقتراح تنسيق يومي. الموديلات والألوان والأسعار تؤكد عند الاستفسار.",
       "image": "https://www.petermillar.com/dw/image/v2/BHFJ_PRD/on/demandware.static/-/Sites-PM-Library/default/dw47db8b8c/nav/2025/02-feb/new-right-2-3.jpg"
     }
-  ]
+  ],
+  "heroFit": "cover",
+  "productFit": "contain"
 }

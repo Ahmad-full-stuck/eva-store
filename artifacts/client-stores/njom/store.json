@@ -75,5 +75,7 @@
       "description": "استفسر عن خدمة الصيانة أو البرمجة المطلوبة قبل زيارة المكتب.",
       "image": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=1200&q=85"
     }
-  ]
+  ],
+  "heroFit": "contain",
+  "productFit": "contain"
 }

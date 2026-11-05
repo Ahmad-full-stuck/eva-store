@@ -72,5 +72,7 @@
       "description": "نموذج تنسيق يجمع القطع الداكنة. تفاصيل المنتجات الفعلية عند الاستفسار.",
       "image": "https://media.falabella.com/falabellaCO/883446850_1/w%3D1500%2Ch%3D1500%2Cfit%3Dcover"
     }
-  ]
+  ],
+  "heroFit": "cover",
+  "productFit": "contain"
 }
