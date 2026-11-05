@@ -102,7 +102,7 @@ const contentFor = (p, saved={}) => {
   const primaryPhone = String(phones[0]?.number || "");
   const theme = p.theme || {};
   const defaultContent = {
-    shopName:p.name, shortName:p.name, monogram:p.monogram || "", tagline:p.tagline || "",
+    tenantKey:p.key || "", shopName:p.name, shortName:p.name, monogram:p.monogram || "", tagline:p.tagline || "",
     phone:primaryPhone, whatsapp:primaryPhone, instagram:p.instagram || "",
     contactUrl:p.contactUrl || p.instagram || "",
     location:p.location || "", hours:p.hours || "",
