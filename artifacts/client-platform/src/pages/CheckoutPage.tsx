@@ -222,6 +222,33 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     )
   }
 
+  if (siteContent.tenantKey) {
+    return (
+      <main className="container-eva tenant-demo-checkout">
+        <div className="breadcrumbs"><Link href="/">{t('co.breadcrumbHome')}</Link><span>›</span><span>تأكيد الطلب</span></div>
+        <section className="tenant-demo-checkout__panel">
+          <span className="tenant-kicker">PREVIEW MODE · {siteContent.shortName || siteContent.shopName}</span>
+          <h1>هذه معاينة تجريبية للمتجر</h1>
+          <p>السلة وتفاصيل المنتجات تعمل لغرض تجربة التصميم فقط. لن نطلب اسمك أو رقم هاتفك أو عنوانك، ولن نسجل طلب شراء من هذه النسخة.</p>
+          <div className="tenant-demo-checkout__items">
+            {cart.map((item) => (
+              <div className="tenant-demo-checkout__item" key={item.product.id + ':' + item.color.id}>
+                <SmartImage src={item.product.image} alt={item.product.name} sizes="64px" />
+                <span><strong>{item.product.name}</strong><small>{item.color.name} · {formatMeters(item.length)}</small></span>
+                <b>{formatPrice(item.product.price * item.length)}</b>
+              </div>
+            ))}
+          </div>
+          <div className="tenant-demo-checkout__actions">
+            <Link href="/catalog" className="button button-primary">العودة إلى التشكيلة <ArrowLeft size={16} /></Link>
+            <Link href="/contact" className="button button-quiet">التواصل مع المتجر <ArrowLeft size={16} /></Link>
+          </div>
+          <small className="tenant-demo-checkout__foot">المنتجات والأسعار والصور المعروضة أمثلة افتراضية، وتُستبدل بالبيانات المعتمدة قبل إطلاق المتجر.</small>
+        </section>
+      </main>
+    )
+  }
+
   const update = (key: keyof CheckoutForm, value: string) => {
     setForm((current) => ({ ...current, [key]: value }))
     if (errors[key]) setErrors((current) => ({ ...current, [key]: undefined }))
