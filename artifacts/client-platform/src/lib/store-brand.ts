@@ -93,8 +93,8 @@ export const STORE_BRANDS: Record<string, StoreBrand> = {
       {title:'موقع المتجر',description:'بغداد – الحرية، ڤينيسيا مول',icon:'pin'},
       {title:'تواصل مباشر',description:'استفسر عن القياسات والقطع المتاحة',icon:'check'}
     ],
-    catalogTitle:'الفصل الجديد من MUKHTAR',catalogIntro:'اكتشف القطع المتاحة حالياً عبر التواصل مع المتجر، مع تأكيد القياس والتفاصيل قبل الزيارة.',catalogAction:'اسأل عن التشكيلة'
-  },
+    catalogTitle:'الفصل الجديد من MUKHTAR',catalogIntro:'اكتشف القطع المتاحة حالياً عبر التواصل مع المتجر، مع تأكيد القياس والتفاصيل قبل الزيارة.',catalogAction:'اسأل عن التشكيلة',
     specLabels:{"composition":"الخامة","width":"المقاس","weight":"سماكة القماش","stretch":"اللون","opacity":"تفاصيل القطعة","finish":"القصة والتصميم","care":"العناية","use":"التنسيق"}
+  }
 }
 export const getStoreBrand=(key?:string):StoreBrand=>STORE_BRANDS[key||'']||STORE_BRANDS.laya
