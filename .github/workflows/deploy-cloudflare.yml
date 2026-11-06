@@ -55,6 +55,12 @@ jobs:
       - name: Build storefront
         run: pnpm --filter @workspace/eva-fabrics-store build
 
+      - name: Link the Eva workspace dependencies to the copied client app
+        run: ln -s ../eva-fabrics-store/node_modules artifacts/client-platform/node_modules
+
+      - name: Build the shared client storefront platform
+        run: pnpm --filter @workspace/eva-fabrics-store exec vite build --config vite.client-stores.config.ts
+
       - name: Build Masha storefront for its isolated Worker
         run: pnpm --filter @workspace/masha-store build
         env:
