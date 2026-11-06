@@ -3,13 +3,13 @@
   "name": "شركة لنا",
   "monogram": "ل",
   "tagline": "موبايلات · جملة ومفرد · أقساط",
-  "eyebrow": "LNA COMPANY · MOBILE CENTER",
-  "heroTitle": "خيارات أكثر، وخدمة أقرب",
-  "heroText": "موبايلات جملة ومفرد، أقساط مريحة، إكسسوارات وصيانة. تواصل مع قسم المبيعات أو الإكسسوارات مباشرة.",
-  "storyTitle": "شركة لنا — كل احتياجات الهاتف",
-  "storyText": "من شراء الموبايل إلى الإكسسوارات والصيانة، يجمع سنتر لنا احتياجاتك في مكان واحد. تتوفر خيارات الجملة والمفرد والأقساط، مع ضمان معتمد لمدة سنة وفق معلومات المتجر.",
-  "description": "شركة لنا — موبايلات جملة ومفرد، أقساط مريحة، إكسسوارات وصيانة في بغداد.",
-  "note": "جملة ومفرد · أقساط مريحة · ضمان معتمد لمدة سنة",
+  "eyebrow": "LNA COMPANY · MOBILE & TECHNOLOGY",
+  "heroTitle": "خيارات تقنية أوضح للأفراد والتجار",
+  "heroText": "تصفح نماذج الهواتف والإكسسوارات، واستكشف كيف يمكن تنظيم أقسام الجملة والمفرد والأقساط والصيانة داخل واجهة واحدة.",
+  "storyTitle": "من اختيار الجهاز إلى ما يحتاجه",
+  "storyText": "واجهة تجريبية لعرض منتجات شركة لنا وخدماتها، مع أمثلة منفصلة للأجهزة والإكسسوارات والصيانة. الأسعار والموديلات هنا توضيحية وليست عروضاً معتمدة.",
+  "description": "تصور إلكتروني لشركة لنا للهواتف بالجملة والمفرد والأقساط والإكسسوارات والصيانة.",
+  "note": "نماذج تجريبية فقط — الأسعار والتوفر وشروط الأقساط تُعتمد من الشركة",
   "location": "قرب جامع تكريتي · مجمع العذراء",
   "contactLabel": "تواصل مع سنتر لنا",
   "contactUrl": "https://www.instagram.com/lna_company/",
@@ -25,7 +25,7 @@
       "number": "07703333430"
     }
   ],
-  "heroImage": "https://buy.gazelle.com/cdn/shop/files/iPhone_11_Pro_-_Space_Gray_-_Angle-cropped_d738113c-3cd5-4b3a-85c1-c1352b651e4f.jpg?v=1757019462&width=1946",
+  "heroImage": "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1100&q=85",
   "theme": {
     "bg": "#f2f6fa",
     "ink": "#10233b",
@@ -42,7 +42,318 @@
     "إكسسوارات",
     "صيانة"
   ],
-  "products": [],
+  "products": [
+    {
+      "id": "lna-phone-01",
+      "name": "iPhone 16 · 128GB",
+      "category": "موبايلات",
+      "price": 1250000,
+      "image": "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "مثال عرض لهاتف آيفون مع إبراز السعة والمواصفات وخيارات الضمان بعد ربطها ببيانات شركة لنا.",
+      "specs": {
+        "composition": "Apple",
+        "width": "128GB",
+        "weight": "8GB RAM",
+        "stretch": "5G",
+        "opacity": "نموذج جديد",
+        "finish": "كاميرا متقدمة",
+        "care": "ضمان الوكيل وفق الشروط عند التنفيذ",
+        "use": "سعر وسعة توضيحيان"
+      },
+      "colors": [
+        {
+          "id": "ultramarine",
+          "name": "أزرق",
+          "hex": "#34567f",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "black",
+          "name": "أسود",
+          "hex": "#262626",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 1320000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "lna-phone-02",
+      "name": "Samsung Galaxy S24 FE · 256GB",
+      "category": "موبايلات",
+      "price": 675000,
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "نموذج لجهاز سامسونج يوضح إمكانية مقارنة الخيارات حسب الموديل والسعة والفئة.",
+      "specs": {
+        "composition": "Samsung",
+        "width": "256GB",
+        "weight": "8GB RAM",
+        "stretch": "5G",
+        "opacity": "نموذج عرض",
+        "finish": "شاشة Dynamic AMOLED",
+        "care": "تفاصيل الضمان تعتمد من الشركة",
+        "use": "للعمل والاستخدام اليومي"
+      },
+      "colors": [
+        {
+          "id": "graphite",
+          "name": "رمادي",
+          "hex": "#575b60",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "violet",
+          "name": "بنفسجي",
+          "hex": "#746b82",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 720000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "lna-phone-03",
+      "name": "Redmi Note 14 Pro · 256GB",
+      "category": "موبايلات",
+      "price": 395000,
+      "image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "مثال لهاتف من فئة اقتصادية متقدمة، مع حقول للسعة والذاكرة واللون.",
+      "specs": {
+        "composition": "Xiaomi",
+        "width": "256GB",
+        "weight": "8GB RAM",
+        "stretch": "5G",
+        "opacity": "نموذج عرض",
+        "finish": "كاميرا عالية الدقة",
+        "care": "الضمان حسب الوكيل",
+        "use": "قيمة توضيحية فقط"
+      },
+      "colors": [
+        {
+          "id": "black",
+          "name": "أسود",
+          "hex": "#252525",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "green",
+          "name": "أخضر",
+          "hex": "#68786c",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 425000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "lna-acc-01",
+      "name": "سماعات لاسلكية Pro",
+      "category": "إكسسوارات",
+      "price": 89000,
+      "image": "https://images.unsplash.com/photo-1608156639585-b3a032ef9689?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85",
+        "https://urbansupplyplus.com/cdn/shop/collections/864fb4b7-16ba-47e8-af6b-34adc0edb37b.png?v=1764522364"
+      ],
+      "description": "نموذج لإكسسوار تقني يعرض الصور والتوافق والخصائص ضمن قسم مستقل.",
+      "specs": {
+        "composition": "سماعات لاسلكية",
+        "width": "داخل الأذن",
+        "weight": "خفيفة",
+        "stretch": "أبيض",
+        "opacity": "علبة شحن",
+        "finish": "عزل ضوضاء — مثال",
+        "care": "حفظها داخل العلبة",
+        "use": "أجهزة متوافقة"
+      },
+      "colors": [
+        {
+          "id": "white",
+          "name": "أبيض",
+          "hex": "#eeeeea",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 99000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "lna-acc-02",
+      "name": "شاحن جداري سريع 30W",
+      "category": "إكسسوارات",
+      "price": 32000,
+      "image": "https://urbansupplyplus.com/cdn/shop/collections/864fb4b7-16ba-47e8-af6b-34adc0edb37b.png?v=1764522364",
+      "images": [
+        "https://images.unsplash.com/flagged/photo-1594344141311-8ea00ba55612?auto=format&fit=crop&fm=jpg&w=1100&q=85",
+        "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "مثال لشاحن جداري مع منفذ حديث ومعلومات واضحة عن القدرة والتوافق.",
+      "specs": {
+        "composition": "شاحن جداري",
+        "width": "30W",
+        "weight": "خفيف",
+        "stretch": "أبيض",
+        "opacity": "USB‑C",
+        "finish": "حماية متعددة",
+        "care": "تجنب الرطوبة",
+        "use": "الهواتف والأجهزة المتوافقة"
+      },
+      "colors": [
+        {
+          "id": "white",
+          "name": "أبيض",
+          "hex": "#f5f5f2",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 38000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "lna-service-01",
+      "name": "طلب صيانة أو فحص",
+      "category": "صيانة",
+      "price": 0,
+      "image": "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://urbansupplyplus.com/cdn/shop/collections/864fb4b7-16ba-47e8-af6b-34adc0edb37b.png?v=1764522364",
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "بطاقة خدمة لتوضيح طريقة استقبال استفسارات الصيانة وربطها بالقسم المناسب.",
+      "specs": {
+        "composition": "خدمة صيانة",
+        "width": "حسب الجهاز",
+        "weight": "فحص أولي",
+        "stretch": "حسب الحالة",
+        "opacity": "بموعد",
+        "finish": "تأكيد قبل التنفيذ",
+        "care": "تقدير التكلفة من الفريق",
+        "use": "صيانة وتشخيص"
+      },
+      "colors": [
+        {
+          "id": "service",
+          "name": "تواصل مع القسم",
+          "hex": "#17669b",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 0,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    }
+  ],
   "heroFit": "contain",
-  "productFit": "contain"
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/flagged/photo-1594344141311-8ea00ba55612?auto=format&fit=crop&fm=jpg&w=1100&q=85"
+  ],
+  "demoMode": true,
+  "demoNotice": "الأسعار والموديلات والصور تجريبية — راجع الشركة للتفاصيل الفعلية"
 }
