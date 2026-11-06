@@ -2,14 +2,14 @@
   "key": "scoop",
   "name": "سكوبر | SCOOPER",
   "monogram": "S",
-  "tagline": "متجر ألبسة رجالي",
+  "tagline": "أسلوب رجالي يومي بطابع معاصر",
   "eyebrow": "SCOOPER · MEN'S WEAR",
-  "heroTitle": "أسلوب واضح. حضور يترك أثره.",
-  "heroText": "ألبسة رجالية بإطلالات يومية وعملية. تصفح النماذج الأولية واسألنا عن الموديلات والمقاسات المتوفرة.",
-  "storyTitle": "SCOOPER — الألبسة الرجالية",
-  "storyText": "سكوبر متجر ألبسة رجالي في الغزالية. نعرض هنا نماذج أولية لتسهيل تصفح الأقسام، ويُؤكد اللون والمقاس والتوفر عبر فريق المتجر.",
-  "description": "سكوبر SCOOPER — متجر ألبسة رجالي في الغزالية، بغداد.",
-  "note": "أوقات العمل يومياً من 10 صباحاً إلى 11 مساءً",
+  "heroTitle": "أسلوب واضح. قطع تختارها بثقة.",
+  "heroText": "اكتشف القمصان والتيشيرتات والإطلالات الرجالية ضمن كتالوج مصور يسهّل عليك اختيار القطعة والمقاس قبل زيارة المتجر.",
+  "storyTitle": "كل قطعة لها مكانها في إطلالتك",
+  "storyText": "تصور تجريبي لمتجر SCOOPER، يعرض نماذج للقمصان والتيشيرتات والإطلالات. تُستبدل الصور والأسعار والمقاسات بالمنتجات الحقيقية المعتمدة من المتجر.",
+  "description": "تصور متجر SCOOPER للألبسة الرجالية في الغزالية — بغداد.",
+  "note": "صور وأسعار ومقاسات تجريبية — ليست مخزوناً فعلياً",
   "location": "بغداد · الغزالية · وسط شارع البدالة",
   "hours": "10:00 صباحاً – 11:00 مساءً",
   "contactLabel": "راسل سكوبر",
@@ -26,7 +26,7 @@
       "number": "07722270709"
     }
   ],
-  "heroImage": "https://www.petermillar.com/dw/image/v2/BHFJ_PRD/on/demandware.static/-/Sites-PM-Library/default/dw47db8b8c/nav/2025/02-feb/new-right-2-3.jpg",
+  "heroImage": "https://200brands.com/cdn/shop/files/rn-image_picker_lib_temp_2c343095-0312-4795-8e4e-caef4a4988fc_600x.png?v=1775288870",
   "theme": {
     "bg": "#111416",
     "ink": "#f6f5f1",
@@ -43,7 +43,332 @@
     "تيشيرتات",
     "إطلالات"
   ],
-  "products": [],
+  "products": [
+    {
+      "id": "scoop-shirt-01",
+      "name": "قميص Oxford يومي",
+      "category": "قمصان",
+      "price": 45000,
+      "image": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://thelondongentlemen.com/cdn/shop/files/ChatGPT_Image_Apr_16_2026_03_41_51_PM_92ee7286-b074-427f-b8d6-07907414a71b.png?v=1776336381&width=1024",
+        "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "قميص يومي بقصة مرتبة، نموذج لعرض ألوان القمصان وتفاصيلها ومقاساتها.",
+      "specs": {
+        "composition": "قطن مخلوط",
+        "width": "S – XXL",
+        "weight": "متوسط",
+        "stretch": "أبيض",
+        "opacity": "قماش متوسط الكثافة",
+        "finish": "ياقة كلاسيكية وأزرار",
+        "care": "غسيل بارد",
+        "use": "العمل والإطلالات اليومية"
+      },
+      "colors": [
+        {
+          "id": "white",
+          "name": "أبيض",
+          "hex": "#f4f0e8",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "blue",
+          "name": "أزرق فاتح",
+          "hex": "#a9c2d2",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 52000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "scoop-tee-01",
+      "name": "تيشيرت قطن ثقيل",
+      "category": "تيشيرتات",
+      "price": 28000,
+      "image": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=1100&q=85",
+        "https://classybystyle.com/cdn/shop/products/O1CN01yXwlm326XMxjyVc2Z__3893227671-0-cib.jpg?v=1652881251"
+      ],
+      "description": "تيشيرت أساسي بقماش أثقل وقصة مريحة، مثال لعرض الأساسيات اليومية.",
+      "specs": {
+        "composition": "قطن",
+        "width": "S – XXL",
+        "weight": "ثقيل نسبياً",
+        "stretch": "أسود",
+        "opacity": "غير شفاف",
+        "finish": "ياقة دائرية",
+        "care": "غسيل مقلوب",
+        "use": "الكاجوال اليومي"
+      },
+      "colors": [
+        {
+          "id": "black",
+          "name": "أسود",
+          "hex": "#222222",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "white",
+          "name": "أبيض",
+          "hex": "#f5f3ee",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 32000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "scoop-polo-01",
+      "name": "بولو كلاسيكي",
+      "category": "تيشيرتات",
+      "price": 39000,
+      "image": "https://thelondongentlemen.com/cdn/shop/files/ChatGPT_Image_Apr_16_2026_03_41_51_PM_92ee7286-b074-427f-b8d6-07907414a71b.png?v=1776336381&width=1024",
+      "images": [
+        "https://classybystyle.com/cdn/shop/products/O1CN01yXwlm326XMxjyVc2Z__3893227671-0-cib.jpg?v=1652881251",
+        "https://200brands.com/cdn/shop/files/rn-image_picker_lib_temp_2c343095-0312-4795-8e4e-caef4a4988fc_600x.png?v=1775288870"
+      ],
+      "description": "قطعة بولو سهلة التنسيق، تعرض في المتجر مع خيارات اللون والمقاس.",
+      "specs": {
+        "composition": "قطن بيكيه",
+        "width": "M – XXL",
+        "weight": "متوسط",
+        "stretch": "خمري",
+        "opacity": "ياقة وأزرار",
+        "finish": "حواف مضلعة",
+        "care": "غسيل لطيف",
+        "use": "كاجوال مرتب"
+      },
+      "colors": [
+        {
+          "id": "red",
+          "name": "أحمر داكن",
+          "hex": "#843d3c",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "navy",
+          "name": "كحلي",
+          "hex": "#24364b",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 45000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "scoop-look-01",
+      "name": "إطلالة قميص وبنطال",
+      "category": "إطلالات",
+      "price": 79000,
+      "image": "https://200brands.com/cdn/shop/files/rn-image_picker_lib_temp_2c343095-0312-4795-8e4e-caef4a4988fc_600x.png?v=1775288870",
+      "images": [
+        "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "تنسيق افتراضي يوضح كيف يمكن عرض أكثر من قطعة ضمن إطلالة واحدة.",
+      "specs": {
+        "composition": "قميص وبنطال",
+        "width": "مقاسات متعددة",
+        "weight": "متوسط",
+        "stretch": "أزرق ورمادي",
+        "opacity": "قطعتان منفصلتان",
+        "finish": "تنسيق جاهز",
+        "care": "حسب تعليمات كل قطعة",
+        "use": "إطلالة شبه رسمية"
+      },
+      "colors": [
+        {
+          "id": "blue",
+          "name": "أزرق",
+          "hex": "#4d667e",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 88000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "scoop-pants-01",
+      "name": "بنطال Chino",
+      "category": "إطلالات",
+      "price": 42000,
+      "image": "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1100&q=85",
+        "https://200brands.com/cdn/shop/files/rn-image_picker_lib_temp_2c343095-0312-4795-8e4e-caef4a4988fc_600x.png?v=1775288870"
+      ],
+      "description": "بنطال تشينو بقصة مستقيمة كمثال على إضافة قسم البنطال والإطلالات.",
+      "specs": {
+        "composition": "قطن مع إيلاستين",
+        "width": "30 – 38",
+        "weight": "متوسط",
+        "stretch": "بيج",
+        "opacity": "قصة مستقيمة",
+        "finish": "جيب جانبي وخلفي",
+        "care": "غسيل بارد",
+        "use": "يومي وشبه رسمي"
+      },
+      "colors": [
+        {
+          "id": "sand",
+          "name": "رملي",
+          "hex": "#c9b99f",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "navy",
+          "name": "كحلي",
+          "hex": "#25354b",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 49000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "scoop-jacket-01",
+      "name": "جاكيت خفيف",
+      "category": "إطلالات",
+      "price": 68000,
+      "image": "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "قطعة خارجية خفيفة لعرض تشكيلة موسمية ضمن المتجر.",
+      "specs": {
+        "composition": "قماش مقاوم للهواء",
+        "width": "M – XXL",
+        "weight": "خفيف",
+        "stretch": "زيتي",
+        "opacity": "بطانة خفيفة",
+        "finish": "سحاب أمامي",
+        "care": "تنظيف حسب الملصق",
+        "use": "الموسم المعتدل"
+      },
+      "colors": [
+        {
+          "id": "olive",
+          "name": "زيتي",
+          "hex": "#59634d",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "black",
+          "name": "أسود",
+          "hex": "#222222",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 75000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    }
+  ],
   "heroFit": "cover",
-  "productFit": "contain"
+  "productFit": "contain",
+  "heroSlides": [
+    "https://200brands.com/cdn/shop/files/rn-image_picker_lib_temp_2c343095-0312-4795-8e4e-caef4a4988fc_600x.png?v=1775288870",
+    "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1100&q=85",
+    "https://thelondongentlemen.com/cdn/shop/files/ChatGPT_Image_Apr_16_2026_03_41_51_PM_92ee7286-b074-427f-b8d6-07907414a71b.png?v=1776336381&width=1024"
+  ],
+  "demoMode": true,
+  "demoNotice": "هذه نماذج عرض وليست قطعاً مؤكدة التوفر أو الأسعار"
 }
