@@ -4,6 +4,7 @@ export type StoreBrand = {
   artLabel: string; artTitle: string; categories: BrandCategory[];
   features: { title: string; description: string; icon: string }[];
   catalogTitle: string; catalogIntro: string; catalogAction: string;
+  specLabels: { composition:string; width:string; weight:string; stretch:string; opacity:string; finish:string; care:string; use:string };
 }
 export const STORE_BRANDS: Record<string, StoreBrand> = {
   laya: {
@@ -20,7 +21,8 @@ export const STORE_BRANDS: Record<string, StoreBrand> = {
       {title:'دفع إلكتروني',description:'تأكيد طريقة الدفع قبل إتمام الطلب',icon:'credit'},
       {title:'تأكيد التفاصيل',description:'اسألي عن اللون والموديل المتوفر قبل الطلب',icon:'check'}
     ],
-    catalogTitle:'تشكيلة LAYA',catalogIntro:'للاطلاع على الحقائب والأحذية المتوفرة حالياً، تواصلي مع فريق LAYA ليشاركك الصور والتفاصيل المعتمدة.',catalogAction:'اطلبي صور التشكيلة المتوفرة'
+    catalogTitle:'تشكيلة LAYA',catalogIntro:'للاطلاع على الحقائب والأحذية المتوفرة حالياً، تواصلي مع فريق LAYA ليشاركك الصور والتفاصيل المعتمدة.',catalogAction:'اطلبي صور التشكيلة المتوفرة',
+    specLabels:{"composition":"الخامة","width":"المقاس","weight":"الوزن","stretch":"اللون","opacity":"التفاصيل الداخلية","finish":"الإغلاق","care":"العناية","use":"التنسيق"}
   },
   njom: {
     key:'njom',mark:'N',kicker:'ALNJOOM  /  MOBILE CENTER',
@@ -37,7 +39,8 @@ export const STORE_BRANDS: Record<string, StoreBrand> = {
       {title:'زين كاش',description:'وسيلة دفع متاحة لدى المكتب',icon:'credit'},
       {title:'موقع واضح',description:'البصرة – الجزائر، قرب جامع الموسوي',icon:'pin'}
     ],
-    catalogTitle:'الأجهزة والخدمات',catalogIntro:'تختلف الأجهزة والموديلات والتوفر. تواصل مع مكتب النجوم لمعرفة الموجود فعلياً والسعر الحالي.',catalogAction:'استفسر عن الأجهزة المتوفرة'
+    catalogTitle:'الأجهزة والخدمات',catalogIntro:'تختلف الأجهزة والموديلات والتوفر. تواصل مع مكتب النجوم لمعرفة الموجود فعلياً والسعر الحالي.',catalogAction:'استفسر عن الأجهزة المتوفرة',
+    specLabels:{"composition":"الشركة المصنعة","width":"سعة التخزين","weight":"الذاكرة","stretch":"الشبكة","opacity":"حالة الجهاز","finish":"المزايا","care":"الضمان","use":"التفاصيل"}
   },
   lna: {
     key:'lna',mark:'ل',kicker:'LNA COMPANY  /  MOBILE & TECHNOLOGY',
@@ -54,7 +57,8 @@ export const STORE_BRANDS: Record<string, StoreBrand> = {
       {title:'خيارات أقساط',description:'استفسر عن شروط الأقساط المتاحة',icon:'installment'},
       {title:'ضمان معتمد سنة',description:'ضمان لمدة سنة وفق شروط الوكيل',icon:'warranty'}
     ],
-    catalogTitle:'منتجات وخدمات شركة لنا',catalogIntro:'لأن الأسعار والتوفر يتغيران حسب الموديل، اطلب القائمة الحالية من فريق المبيعات أو الإكسسوارات.',catalogAction:'تواصل مع المبيعات'
+    catalogTitle:'منتجات وخدمات شركة لنا',catalogIntro:'لأن الأسعار والتوفر يتغيران حسب الموديل، اطلب القائمة الحالية من فريق المبيعات أو الإكسسوارات.',catalogAction:'تواصل مع المبيعات',
+    specLabels:{"composition":"الشركة المصنعة","width":"سعة التخزين","weight":"الذاكرة","stretch":"الشبكة","opacity":"حالة الجهاز","finish":"المزايا","care":"الضمان","use":"التفاصيل"}
   },
   scoop: {
     key:'scoop',mark:'S',kicker:'SCOOPER  /  MEN’S WEAR',
@@ -71,7 +75,8 @@ export const STORE_BRANDS: Record<string, StoreBrand> = {
       {title:'زيارة المتجر',description:'الغزالية – وسط شارع البدالة',icon:'pin'},
       {title:'أوقات العمل',description:'يومياً من 10 صباحاً إلى 11 مساءً',icon:'clock'}
     ],
-    catalogTitle:'تشكيلة SCOOPER',catalogIntro:'للحصول على صور القطع والمقاسات المتوفرة فعلياً، تواصل مع المتجر قبل الزيارة.',catalogAction:'استفسر عن المقاسات والقطع'
+    catalogTitle:'تشكيلة SCOOPER',catalogIntro:'للحصول على صور القطع والمقاسات المتوفرة فعلياً، تواصل مع المتجر قبل الزيارة.',catalogAction:'استفسر عن المقاسات والقطع',
+    specLabels:{"composition":"الخامة","width":"المقاس","weight":"سماكة القماش","stretch":"اللون","opacity":"تفاصيل القطعة","finish":"القصة والتصميم","care":"العناية","use":"التنسيق"}
   },
   mukhtar: {
     key:'mukhtar',mark:'M',kicker:'MUKHTAR  /  MEN’S COLLECTION',
@@ -89,6 +94,7 @@ export const STORE_BRANDS: Record<string, StoreBrand> = {
       {title:'تواصل مباشر',description:'استفسر عن القياسات والقطع المتاحة',icon:'check'}
     ],
     catalogTitle:'الفصل الجديد من MUKHTAR',catalogIntro:'اكتشف القطع المتاحة حالياً عبر التواصل مع المتجر، مع تأكيد القياس والتفاصيل قبل الزيارة.',catalogAction:'اسأل عن التشكيلة'
-  }
+  },
+    specLabels:{"composition":"الخامة","width":"المقاس","weight":"سماكة القماش","stretch":"اللون","opacity":"تفاصيل القطعة","finish":"القصة والتصميم","care":"العناية","use":"التنسيق"}
 }
 export const getStoreBrand=(key?:string):StoreBrand=>STORE_BRANDS[key||'']||STORE_BRANDS.laya
