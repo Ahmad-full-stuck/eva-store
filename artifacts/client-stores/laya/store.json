@@ -3,20 +3,20 @@
   "name": "BRAND_LAYA",
   "monogram": "L",
   "tagline": "عالم من الأناقة النسائية",
-  "eyebrow": "LAYA · WOMEN'S ACCESSORIES",
-  "heroTitle": "تفاصيل صغيرة تصنع حضوراً مختلفاً",
-  "heroText": "حقائب وأحذية نسائية بتصاميم تجمع الأناقة والعملية. اكتشفي التشكيلة وتواصلي معنا لتأكيد اللون والتوفر.",
-  "storyTitle": "أناقتك تبدأ من اختيارك",
-  "storyText": "LAYA مساحة للأناقة النسائية، تجمع الحقائب والأحذية في تجربة تسوق واضحة وسهلة. اختاري القطعة التي تناسب يومك، واستفسري عن التفاصيل قبل إتمام الطلب.",
-  "description": "حقائب وأحذية نسائية، مع دفع إلكتروني وتوصيل إلى جميع محافظات العراق.",
-  "note": "الدفع الإلكتروني متاح · التوصيل لجميع المحافظات",
+  "eyebrow": "LAYA · WOMEN'S COLLECTION",
+  "heroTitle": "أناقة تكتمل من أول تفصيلة",
+  "heroText": "اكتشفي الحقائب والأحذية النسائية ضمن تجربة بصرية مرتبة، بتفاصيل تساعدك على اختيار القطعة التي تشبه أسلوبك.",
+  "storyTitle": "تفاصيل تختارينها لتشبهك",
+  "storyText": "مجموعة افتراضية من الحقائب والأحذية لتوضيح شكل العرض وطريقة تصفح التشكيلة. تُستبدل الصور والبيانات بالنماذج المعتمدة من LAYA عند التنفيذ.",
+  "description": "تصور متجر LAYA للحقائب والأحذية النسائية — جميع المنتجات والأسعار في هذه العينة افتراضية.",
+  "note": "صور ومنتجات وأسعار تجريبية لأغراض العرض فقط",
   "location": "التوصيل إلى جميع محافظات العراق",
   "contactLabel": "واتساب LAYA",
   "contactUrl": "https://wa.me/qr/ILWLP3ELRWYBM1",
   "instagram": "https://www.instagram.com/b.r_laya/",
   "contactMode": "copy",
   "phones": [],
-  "heroImage": "https://p16-seeyou-useast5.capcutcdn-us.com/tos-useast5-i-2zwwjm3azk-tx/0d6dbc27d94b4956a4967eff67a2ad7d~tplv-2zwwjm3azk-image.image",
+  "heroImage": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1100&q=85",
   "heroPosition": "center",
   "theme": {
     "bg": "#f5f0e9",
@@ -33,7 +33,339 @@
     "حقائب",
     "أحذية"
   ],
-  "products": [],
+  "products": [
+    {
+      "id": "laya-bag-01",
+      "name": "حقيبة كتف كلاسيكية",
+      "category": "حقائب",
+      "price": 65000,
+      "image": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1100&q=85",
+        "https://milvertons.com/cdn/shop/articles/italian-shoe-and-bag-sets-crafted-for-enduring-elegance-3293135.webp?v=1761648944"
+      ],
+      "description": "حقيبة كتف بتصميم هادئ ومساحة عملية للاستخدام اليومي. نموذج بصري افتراضي قابل للاستبدال بصور LAYA الأصلية.",
+      "specs": {
+        "composition": "جلد صناعي بملمس ناعم",
+        "width": "متوسط",
+        "weight": "خفيفة",
+        "stretch": "بيج",
+        "opacity": "جيب داخلي",
+        "finish": "إغلاق مغناطيسي",
+        "care": "تنظيف بقطعة قماش ناعمة",
+        "use": "إطلالات يومية ومناسبات بسيطة"
+      },
+      "colors": [
+        {
+          "id": "sand",
+          "name": "بيج",
+          "hex": "#c8b49d",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "black",
+          "name": "أسود",
+          "hex": "#222222",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 78000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "laya-bag-02",
+      "name": "حقيبة يد بلون عاجي",
+      "category": "حقائب",
+      "price": 72000,
+      "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1100&q=85",
+        "https://cdn.youcan.shop/stores/36a3662f8809b0cf8530224a438f9a93/products/JUXBGKpNVRQg27wBEsCzVQVocEQ7KpdPxz2r10sZ.jpg"
+      ],
+      "description": "حقيبة يد أنيقة بدرجة عاجية وتفاصيل معدنية بسيطة، مع مساحة مناسبة للأغراض الأساسية.",
+      "specs": {
+        "composition": "خامة صناعية فاخرة",
+        "width": "متوسط",
+        "weight": "خفيفة",
+        "stretch": "عاجي",
+        "opacity": "حجرة رئيسية",
+        "finish": "قفل علوي",
+        "care": "تُحفظ بعيداً عن الرطوبة",
+        "use": "العمل والخروج اليومي"
+      },
+      "colors": [
+        {
+          "id": "ivory",
+          "name": "عاجي",
+          "hex": "#e9dfcf",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "taupe",
+          "name": "تاوب",
+          "hex": "#8c7769",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 85000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "laya-bag-03",
+      "name": "حقيبة Mini Chain",
+      "category": "حقائب",
+      "price": 48000,
+      "image": "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://www.merojutta.com/cdn/shop/collections/trending-bags-and-shoes.png?v=1776805845&width=1248",
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "حقيبة صغيرة بحزام سلسلة، مناسبة عندما تحتاجين قطعة خفيفة تكمل الإطلالة دون ازدحام.",
+      "specs": {
+        "composition": "جلد صناعي",
+        "width": "صغير",
+        "weight": "خفيفة جداً",
+        "stretch": "بني",
+        "opacity": "مساحة للأغراض الأساسية",
+        "finish": "سلسلة كتف",
+        "care": "مسح لطيف عند الحاجة",
+        "use": "السهرات والإطلالات الخفيفة"
+      },
+      "colors": [
+        {
+          "id": "brown",
+          "name": "بني",
+          "hex": "#7a4b35",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "cream",
+          "name": "كريمي",
+          "hex": "#e6d8c8",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 59000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "laya-shoe-01",
+      "name": "حذاء كلاسيكي بكعب متوسط",
+      "category": "أحذية",
+      "price": 58000,
+      "image": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://milvertons.com/cdn/shop/articles/italian-shoe-and-bag-sets-crafted-for-enduring-elegance-3293135.webp?v=1761648944",
+        "https://www.merojutta.com/cdn/shop/collections/trending-bags-and-shoes.png?v=1776805845&width=1248"
+      ],
+      "description": "حذاء نسائي بكعب متوسط وتصميم أنيق، مثال لطريقة عرض الأحذية مع تفاصيل المقاس واللون.",
+      "specs": {
+        "composition": "جلد صناعي",
+        "width": "مقاسات 36–40",
+        "weight": "خفيف",
+        "stretch": "بيج",
+        "opacity": "مقدمة مغلقة",
+        "finish": "كعب متوسط",
+        "care": "تنظيف جاف ولطيف",
+        "use": "العمل والمناسبات"
+      },
+      "colors": [
+        {
+          "id": "nude",
+          "name": "نيود",
+          "hex": "#c7a58e",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "black",
+          "name": "أسود",
+          "hex": "#202020",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 69000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "laya-shoe-02",
+      "name": "حذاء يومي أنيق",
+      "category": "أحذية",
+      "price": 52000,
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=1100&q=85",
+        "https://www.merojutta.com/cdn/shop/collections/trending-bags-and-shoes.png?v=1776805845&width=1248"
+      ],
+      "description": "حذاء يومي مريح بطابع رياضي ناعم، يعرض نموذجاً لتنوع قسم الأحذية.",
+      "specs": {
+        "composition": "نسيج وجلد صناعي",
+        "width": "مقاسات 36–40",
+        "weight": "خفيف",
+        "stretch": "أبيض",
+        "opacity": "رباط أمامي",
+        "finish": "نعل مرن",
+        "care": "تنظيف موضعي",
+        "use": "المشاوير اليومية"
+      },
+      "colors": [
+        {
+          "id": "white",
+          "name": "أبيض",
+          "hex": "#f5f2ec",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "black",
+          "name": "أسود",
+          "hex": "#252525",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 62000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "laya-bag-04",
+      "name": "حقيبة Tote واسعة",
+      "category": "حقائب",
+      "price": 79000,
+      "image": "https://milvertons.com/cdn/shop/articles/italian-shoe-and-bag-sets-crafted-for-enduring-elegance-3293135.webp?v=1761648944",
+      "images": [
+        "https://www.merojutta.com/cdn/shop/collections/trending-bags-and-shoes.png?v=1776805845&width=1248",
+        "https://cdn.youcan.shop/stores/36a3662f8809b0cf8530224a438f9a93/products/JUXBGKpNVRQg27wBEsCzVQVocEQ7KpdPxz2r10sZ.jpg"
+      ],
+      "description": "حقيبة واسعة بتصميم عملي، مناسبة للعمل والتنقل وحمل الاحتياجات اليومية.",
+      "specs": {
+        "composition": "خامة متينة",
+        "width": "واسع",
+        "weight": "متوسط",
+        "stretch": "جملي",
+        "opacity": "مساحة داخلية واسعة",
+        "finish": "مقابض مزدوجة",
+        "care": "تُحفظ بشكل قائم",
+        "use": "العمل والسفر الخفيف"
+      },
+      "colors": [
+        {
+          "id": "camel",
+          "name": "جملي",
+          "hex": "#9b6f4b",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "black",
+          "name": "أسود",
+          "hex": "#222222",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 92000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    }
+  ],
   "heroFit": "contain",
-  "productFit": "contain"
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1100&q=85",
+    "https://milvertons.com/cdn/shop/articles/italian-shoe-and-bag-sets-crafted-for-enduring-elegance-3293135.webp?v=1761648944",
+    "https://www.merojutta.com/cdn/shop/collections/trending-bags-and-shoes.png?v=1776805845&width=1248"
+  ],
+  "demoMode": true,
+  "demoNotice": "هذه عينة تصميمية — المنتجات والأسعار والصور ليست مخزوناً فعلياً"
 }
