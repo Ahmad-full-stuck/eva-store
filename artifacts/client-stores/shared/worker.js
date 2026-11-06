@@ -399,5 +399,5 @@ export default { async fetch(request,env) {
     return json({error:"المسار غير مدعوم"},404);
   }
   if (request.method !== "GET" && request.method !== "HEAD") return text("Method not allowed",405);
-  return staticAsset(request,slug,path);
+  return staticAsset(request,env);
 } };
