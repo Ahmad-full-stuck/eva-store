@@ -2,6 +2,7 @@ import { Heart, Plus, ShoppingBag } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { useT } from '@/lib/i18n'
+import { useSiteContent } from '@/lib/site-content'
 import { formatPrice, isSoldOut } from '@/lib/catalog'
 import { typeLabelEn } from '@/lib/strings/catalog'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -118,6 +119,7 @@ injectStyles('eva-glass-styles', glassStyles)
 
 export function ProductCard({ product, wished, onWish, onAdd, priority = false }: ProductCardProps) {
   const { t, lang } = useT()
+  const content = useSiteContent()
   const addColor = product.colors.find((color) => color.available && color.stockMeters > 0) || product.colors[0]
   const soldOut = !addColor || isSoldOut(product)
   const lowStock = !soldOut && product.stockMeters > 0 && product.stockMeters <= 3
@@ -156,6 +158,7 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
           </span>
         </Link>
         <div className="product-card-badges">
+          {content.tenantKey && <span className="badge badge-muted">نموذج توضيحي</span>}
           {product.categoryId === 'style' && <span className="badge badge-muted">{t('card.badgeStyle')}</span>}
           {product.isNew && <span className="badge badge-accent">{t('card.badgeNew')}</span>}
           {lowStock && <span className="badge badge-warm">{t('card.badgeLow')}</span>}
