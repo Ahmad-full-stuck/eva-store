@@ -1972,3 +1972,173 @@ picture { display: contents; }
 .tenant-demo-checkout__actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:23px}
 .tenant-demo-checkout__foot{display:block;margin-top:18px;color:var(--eva-muted);font-size:10px;line-height:1.9}
 @media(max-width:560px){.tenant-demo-checkout{padding:18px 0 52px}.tenant-demo-checkout__panel{margin:22px auto;padding:22px 16px}.tenant-demo-checkout__item{grid-template-columns:55px 1fr auto;gap:9px}.tenant-demo-checkout__item img{width:55px;height:62px}.tenant-demo-checkout__item strong{font-size:11px}.tenant-demo-checkout__item>b{font-size:10px}.tenant-demo-checkout__actions{display:grid}.tenant-demo-checkout__actions .button{width:100%}}
+
+
+/* Unified brand shape language: no sharp square blocks inside soft/circular identities */
+.tenant-app{
+  --glass-radius:var(--tenant-radius-card);
+  --glass-radius-lg:var(--tenant-radius-panel);
+  --eva-radius:var(--tenant-radius-card);
+}
+.tenant-app--laya{
+  --tenant-radius-panel:36px; --tenant-radius-card:28px; --tenant-radius-media:28px;
+  --tenant-radius-control:999px; --tenant-radius-small:18px; --tenant-radius-logo:50%; --tenant-radius-icon:50%;
+}
+.tenant-app--njom{
+  --tenant-radius-panel:26px; --tenant-radius-card:22px; --tenant-radius-media:20px;
+  --tenant-radius-control:16px; --tenant-radius-small:14px; --tenant-radius-logo:18px; --tenant-radius-icon:20px;
+}
+.tenant-app--lna{
+  --tenant-radius-panel:28px; --tenant-radius-card:22px; --tenant-radius-media:22px;
+  --tenant-radius-control:999px; --tenant-radius-small:15px; --tenant-radius-logo:18px; --tenant-radius-icon:18px;
+}
+.tenant-app--scoop{
+  --tenant-radius-panel:18px; --tenant-radius-card:14px; --tenant-radius-media:14px;
+  --tenant-radius-control:12px; --tenant-radius-small:10px; --tenant-radius-logo:12px; --tenant-radius-icon:12px;
+}
+.tenant-app--mukhtar{
+  --tenant-radius-panel:36px; --tenant-radius-card:28px; --tenant-radius-media:28px;
+  --tenant-radius-control:999px; --tenant-radius-small:18px; --tenant-radius-logo:50%; --tenant-radius-icon:50%;
+}
+
+/* Main surfaces share one radius family from header to footer and product detail */
+.tenant-app .site-header,
+.tenant-app .site-footer,
+.tenant-app .tenant-hero__copy,
+.tenant-app .tenant-hero__art,
+.tenant-app .tenant-category-card--visual,
+.tenant-app .tenant-product-grid .product-card,
+.tenant-app .tenant-editorial-gallery__grid figure,
+.tenant-app .tenant-demo-note,
+.tenant-app .tenant-demo-checkout__panel,
+.tenant-app .tenant-demo-checkout__item,
+.tenant-app .tenant-contact-band,
+.tenant-app .filter-panel,
+.tenant-app .stats-bar,
+.tenant-app .gallery-main,
+.tenant-app .cart-items,
+.tenant-app .order-summary,
+.tenant-app .checkout-form-card,
+.tenant-app .contact-form,
+.tenant-app .tracking-card,
+.tenant-app .empty-card,
+.tenant-app .compare-scroll,
+.tenant-app .modal-panel,
+.tenant-app .filter-sidebar{
+  border-radius:var(--tenant-radius-panel) !important;
+}
+.tenant-app .product-card,
+.tenant-app .product-skeleton,
+.tenant-app .tenant-demo-note--inline,
+.tenant-app .tenant-catalog__lead,
+.tenant-app .tenant-catalog__category,
+.tenant-app .favorites-note,
+.tenant-app .guide-card,
+.tenant-app .review-block,
+.tenant-app .tracking-result,
+.tenant-app .confirmation-number,
+.tenant-app .server-error,
+.tenant-app .add-confirm,
+.tenant-app .discovery-result-item,
+.tenant-app .drawer-nav a,
+.tenant-app .search-result-item,
+.tenant-app .cart-item,
+.tenant-app .delivery-progress,
+.tenant-app .delivery-free{
+  border-radius:var(--tenant-radius-card) !important;
+}
+.tenant-app .tenant-hero__photo,
+.tenant-app .tenant-category-photo,
+.tenant-app .tenant-editorial-gallery__grid img,
+.tenant-app .product-card-media,
+.tenant-app .product-card-image,
+.tenant-app .gallery-main img,
+.tenant-app .gallery-thumbs button,
+.tenant-app .cart-item-image,
+.tenant-app .tenant-demo-checkout__item img,
+.tenant-app .search-result-item img,
+.tenant-app .checkout-item img{
+  border-radius:var(--tenant-radius-media) !important;
+}
+.tenant-app .tenant-button,
+.tenant-app .button,
+.tenant-app .cart-button,
+.tenant-app .add-button,
+.tenant-app .detail-add,
+.tenant-app .summary-button,
+.tenant-app .order-submit,
+.tenant-app .field-input,
+.tenant-app .field textarea,
+.tenant-app .glass-input,
+.tenant-app .meters-input-row,
+.tenant-app .meters-input,
+.tenant-app .price-fields input,
+.tenant-app .catalog-sort select,
+.tenant-app .pager-btn,
+.tenant-app .discovery-options button,
+.tenant-app .filter-trigger,
+.tenant-app .mobile-quick-nav a,
+.tenant-app .search-form,
+.tenant-app .catalog-search,
+.tenant-app .tracking-form,
+.tenant-app .tenant-demo-checkout__actions a{
+  border-radius:var(--tenant-radius-control) !important;
+}
+.tenant-app .tenant-demo-note__mark,
+.tenant-app .tenant-art__icon,
+.tenant-app .tenant-category-icon,
+.tenant-app .logo-symbol,
+.tenant-app .stat-icon,
+.tenant-app .step-index,
+.tenant-app .product-wish,
+.tenant-app .detail-wish,
+.tenant-app .gallery-zoom,
+.tenant-app .gallery-arrow,
+.tenant-app .icon-button,
+.tenant-app .related-nav button,
+.tenant-app .quantity-control button,
+.tenant-app .remove-button{
+  border-radius:var(--tenant-radius-icon) !important;
+}
+.tenant-app .tenant-art__icon,
+.tenant-app .tenant-category-icon,
+.tenant-app .logo-symbol,
+.tenant-app .tenant-category-card--visual,
+.tenant-app .tenant-editorial-gallery__grid figure,
+.tenant-app .tenant-product-grid .product-card,
+.tenant-app .tenant-demo-checkout__item,
+.tenant-app .tenant-demo-note{
+  overflow:hidden;
+}
+.tenant-app .logo-symbol{border-radius:var(--tenant-radius-logo) !important}
+.tenant-app .tenant-contact-band{padding-block:52px}
+.tenant-app .tenant-demo-note{margin-top:0}
+.tenant-app .tenant-product-grid .product-card-media{overflow:hidden}
+.tenant-app .tenant-demo-checkout__items{overflow:hidden;border-radius:var(--tenant-radius-card)}
+.tenant-app .tenant-demo-checkout__item:last-child{border-bottom:0}
+
+/* Circular identities stay circular; technical and menswear marks use softened geometry */
+.tenant-app--laya .logo-symbol,
+.tenant-app--mukhtar .logo-symbol,
+.tenant-app--laya .tenant-art__icon,
+.tenant-app--mukhtar .tenant-art__icon,
+.tenant-app--laya .tenant-category-icon,
+.tenant-app--mukhtar .tenant-category-icon{border-radius:50% !important}
+.tenant-app--njom .logo-symbol,
+.tenant-app--lna .logo-symbol,
+.tenant-app--scoop .logo-symbol{border-radius:var(--tenant-radius-logo) !important}
+.tenant-app--laya .tenant-category-card--visual,
+.tenant-app--laya .tenant-product-grid .product-card,
+.tenant-app--mukhtar .tenant-category-card--visual,
+.tenant-app--mukhtar .tenant-product-grid .product-card{border-radius:var(--tenant-radius-panel) !important}
+.tenant-app--laya .tenant-hero__copy,
+.tenant-app--laya .tenant-hero__art,
+.tenant-app--mukhtar .tenant-hero__copy,
+.tenant-app--mukhtar .tenant-hero__art{border-radius:40px !important}
+@media(max-width:680px){
+ .tenant-app--laya .tenant-hero__copy,
+ .tenant-app--laya .tenant-hero__art,
+ .tenant-app--mukhtar .tenant-hero__copy,
+ .tenant-app--mukhtar .tenant-hero__art{border-radius:28px !important}
+ .tenant-app .tenant-contact-band{padding-block:38px}
+}
