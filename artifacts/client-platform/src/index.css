@@ -2142,3 +2142,53 @@ picture { display: contents; }
  .tenant-app--mukhtar .tenant-hero__art{border-radius:28px !important}
  .tenant-app .tenant-contact-band{padding-block:38px}
 }
+
+/* SCOOPER — premium daylight menswear identity */
+.tenant-app--scoop{
+  --tenant-radius-panel:24px;
+  --tenant-radius-card:19px;
+  --tenant-radius-media:18px;
+  --tenant-radius-control:14px;
+  --tenant-radius-small:12px;
+  --tenant-radius-logo:16px;
+  --tenant-radius-icon:14px;
+}
+.tenant-app--scoop .tenant-store .tenant-hero__art{
+  background:var(--eva-charcoal);
+  border:1px solid var(--eva-line);
+}
+.tenant-app--scoop .tenant-store .tenant-hero__scrim{
+  background:
+    linear-gradient(180deg,rgba(34,43,46,.03) 0%,rgba(34,43,46,.10) 38%,rgba(34,43,46,.58) 100%),
+    linear-gradient(90deg,rgba(34,43,46,.10),transparent 64%);
+}
+.tenant-app--scoop .tenant-store .tenant-art__halo{
+  border-color:rgba(255,255,255,.48);
+  box-shadow:0 0 0 34px rgba(255,255,255,.07),0 0 0 68px rgba(255,255,255,.035);
+}
+.tenant-app--scoop .tenant-store .tenant-art__icon{
+  background:rgba(248,244,236,.20);
+  border-color:rgba(255,255,255,.58);
+}
+.tenant-app--scoop .tenant-category-shade{
+  background:linear-gradient(180deg,rgba(40,46,44,.015) 10%,rgba(40,46,44,.62) 100%);
+}
+.tenant-app--scoop .tenant-category-card--visual .tenant-category-icon{
+  background:rgba(248,244,236,.22);
+  border-color:rgba(255,255,255,.55);
+}
+.tenant-app--scoop .tenant-store .tenant-button--primary{
+  box-shadow:0 9px 22px rgba(146,117,82,.20);
+}
+.tenant-app--scoop .tenant-store .tenant-button--quiet{
+  border-color:var(--eva-line-strong);
+  color:var(--eva-ink);
+  background:var(--eva-surface);
+}
+.tenant-app--scoop .tenant-store .tenant-demo-note{
+  border-inline-start-color:var(--eva-rose);
+}
+@media(max-width:680px){
+  .tenant-app--scoop .tenant-store .tenant-hero__art{border-radius:20px}
+}
+
