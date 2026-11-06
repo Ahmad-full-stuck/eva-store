@@ -2192,3 +2192,71 @@ picture { display: contents; }
   .tenant-app--scoop .tenant-store .tenant-hero__art{border-radius:20px}
 }
 
+/* SCOOPER production palette lock — scoped tokens override any stale global theme */
+.tenant-app--scoop{
+  --eva-bg:#F5F2EC;
+  --eva-surface:#FFFEFB;
+  --eva-surface-strong:#FFFFFF;
+  --eva-ink:#26343B;
+  --eva-muted:#77817F;
+  --eva-line:#E5DED3;
+  --eva-line-strong:#D5CABC;
+  --eva-rose:#927552;
+  --eva-rose-dark:#725B3D;
+  --eva-rose-soft:#F2EADF;
+  --eva-rose-tint:#E8DDCE;
+  --eva-orange:#B68B5B;
+  --eva-blush:#DCCCB5;
+  --eva-charcoal:#26343B;
+  --eva-green:#617A68;
+}
+.tenant-app--scoop .tenant-store .tenant-hero__art{
+  background:#E9E1D5;
+  border-color:#DED4C6;
+}
+.tenant-app--scoop .tenant-contact-band{
+  color:#26343B;
+  background:linear-gradient(125deg,#E9E1D5 0%,#F3EFE7 58%,#E5D9C8 100%);
+  border:1px solid #DED4C6;
+}
+.tenant-app--scoop .tenant-contact-band h2{color:#26343B}
+.tenant-app--scoop .tenant-contact-band p,
+.tenant-app--scoop .tenant-contact-meta{color:#66736F}
+.tenant-app--scoop .tenant-contact-band .tenant-kicker{color:#927552}
+.tenant-app--scoop .tenant-contact-band .tenant-button--light{
+  color:#FFFFFF;
+  background:#725B3D;
+  border-color:#725B3D;
+}
+.tenant-app--scoop .tenant-benefit-grid{
+  background:#FFFEFB;
+  border:1px solid #E5DED3;
+}
+.tenant-app--scoop .tenant-demo-note{
+  background:#FFFEFB;
+  border-color:#E5DED3;
+}
+.tenant-app--scoop .tenant-button--primary,
+.tenant-app--scoop .button-primary{
+  color:#FFFFFF;
+  background:#927552;
+  border-color:#927552;
+}
+.tenant-app--scoop .tenant-button--primary:hover,
+.tenant-app--scoop .button-primary:hover{
+  background:#725B3D;
+  border-color:#725B3D;
+}
+.tenant-app--scoop .tenant-product-grid .product-card,
+.tenant-app--scoop .tenant-catalog__lead,
+.tenant-app--scoop .tenant-catalog__category,
+.tenant-app--scoop .tenant-demo-checkout__panel{
+  background:#FFFEFB;
+  border-color:#E5DED3;
+}
+.tenant-app--scoop .tenant-kicker,
+.tenant-app--scoop .tenant-text-link{color:#927552}
+.tenant-app--scoop .tenant-store .tenant-hero__scrim{
+  background:linear-gradient(180deg,rgba(38,52,59,.02) 0%,rgba(38,52,59,.08) 34%,rgba(38,52,59,.52) 100%);
+}
+
