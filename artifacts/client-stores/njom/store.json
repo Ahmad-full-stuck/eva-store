@@ -4,12 +4,12 @@
   "monogram": "N",
   "tagline": "هواتف · إكسسوارات · صيانة",
   "eyebrow": "AL NJOOM · MOBILE CENTER",
-  "heroTitle": "كل ما يخص هاتفك، في مكان واحد",
-  "heroText": "بيع وشراء الهواتف النقالة، إكسسوارات، صيانة وبرمجة، وخدمة زين كاش. تواصل مع مكتب النجوم للاستفسار عن الموديل والتوفر.",
-  "storyTitle": "خبرة في الهاتف وما حوله",
-  "storyText": "مكتب النجوم للهواتف النقالة في البصرة، يجمع خدمات بيع وشراء الهواتف مع الإكسسوارات والصيانة والبرمجة. اسألنا عن الجهاز أو الخدمة التي تحتاجها.",
-  "description": "مكتب النجوم للهواتف النقالة في البصرة — بيع وشراء الهواتف والإكسسوارات والصيانة والبرمجة.",
-  "note": "بيع وشراء الهواتف · إكسسوارات · صيانة وبرمجة · زين كاش",
+  "heroTitle": "كل ما يخص هاتفك، بخطوة أوضح",
+  "heroText": "استكشف الأجهزة والإكسسوارات والخدمات التقنية في واجهة واحدة، واعرف ما تحتاجه قبل التواصل أو زيارة المكتب.",
+  "storyTitle": "وجهتك للأجهزة وما بعدها",
+  "storyText": "تصور أولي يجمع أقسام الهواتف والإكسسوارات والصيانة والبرمجة. المنتجات الظاهرة افتراضية وتُستبدل بقائمة الأجهزة والخدمات المعتمدة لدى مكتب النجوم.",
+  "description": "تصور مكتب النجوم لبيع وشراء الهواتف والإكسسوارات والصيانة والبرمجة في البصرة.",
+  "note": "منتجات وصور وأسعار تجريبية — التوفر الفعلي يؤكده المكتب",
   "location": "البصرة · الجزائر · قرب جامع الموسوي",
   "contactLabel": "تواصل مع النجوم",
   "contactUrl": "https://www.instagram.com/alnjom_center/",
@@ -22,7 +22,7 @@
       "number": "+9647801234544"
     }
   ],
-  "heroImage": "https://shop-image.samsung.com.cn/goods/2023/02/13/63ea3f51e4b08db2edda4432.png",
+  "heroImage": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
   "theme": {
     "bg": "#071827",
     "ink": "#f4f8fc",
@@ -39,7 +39,325 @@
     "إكسسوارات",
     "صيانة"
   ],
-  "products": [],
+  "products": [
+    {
+      "id": "njom-phone-01",
+      "name": "iPhone 15 Pro · 256GB",
+      "category": "هواتف",
+      "price": 850000,
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "نموذج هاتف رائد لعرض طريقة تقديم المواصفات والسعة والصور المتعددة. الاسم والسعر توضيحيان فقط.",
+      "specs": {
+        "composition": "Apple",
+        "width": "256GB",
+        "weight": "8GB RAM",
+        "stretch": "5G",
+        "opacity": "نموذج توضيحي",
+        "finish": "Pro · 3 كاميرات",
+        "care": "الضمان يحدد من المكتب",
+        "use": "يُستبدل بالموديل المتوفر"
+      },
+      "colors": [
+        {
+          "id": "natural",
+          "name": "تيتانيوم طبيعي",
+          "hex": "#aaa69d",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "black",
+          "name": "تيتانيوم أسود",
+          "hex": "#343434",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 920000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "njom-phone-02",
+      "name": "Samsung Galaxy A55 · 5G",
+      "category": "هواتف",
+      "price": 365000,
+      "image": "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "نموذج لجهاز من الفئة المتوسطة مع إبراز الشبكة والتصميم والسعة عند إدخال بيانات الجهاز الحقيقي.",
+      "specs": {
+        "composition": "Samsung",
+        "width": "256GB",
+        "weight": "8GB RAM",
+        "stretch": "5G",
+        "opacity": "جديد — نموذج عرض",
+        "finish": "شاشة AMOLED",
+        "care": "تُحدد شروط الضمان",
+        "use": "بديل تجريبي للموديلات المتاحة"
+      },
+      "colors": [
+        {
+          "id": "blue",
+          "name": "أزرق",
+          "hex": "#5d7897",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "black",
+          "name": "أسود",
+          "hex": "#252525",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 399000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "njom-phone-03",
+      "name": "iPhone 13 · 128GB",
+      "category": "هواتف",
+      "price": 435000,
+      "image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "مثال لقائمة بيع وشراء الأجهزة، مع مساحة لإيضاح حالة الجهاز والفحص والملحقات عند اعتماد البيانات الحقيقية.",
+      "specs": {
+        "composition": "Apple",
+        "width": "128GB",
+        "weight": "4GB RAM",
+        "stretch": "4G / 5G",
+        "opacity": "مستعمل — مثال فقط",
+        "finish": "كاميرتان",
+        "care": "الفحص والضمان حسب اتفاق المكتب",
+        "use": "حالة الجهاز تُثبت عند الإدراج"
+      },
+      "colors": [
+        {
+          "id": "midnight",
+          "name": "منتصف الليل",
+          "hex": "#242424",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "starlight",
+          "name": "نجمي",
+          "hex": "#ded6c8",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 470000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "njom-acc-01",
+      "name": "سماعات لاسلكية",
+      "category": "إكسسوارات",
+      "price": 42000,
+      "image": "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1608156639585-b3a032ef9689?auto=format&fit=crop&w=1100&q=85",
+        "https://urbansupplyplus.com/cdn/shop/collections/864fb4b7-16ba-47e8-af6b-34adc0edb37b.png?v=1764522364"
+      ],
+      "description": "سماعات لاسلكية كنموذج لقسم الإكسسوارات مع عرض صور المنتج والتوافق والتفاصيل.",
+      "specs": {
+        "composition": "سماعات Bluetooth",
+        "width": "داخل الأذن",
+        "weight": "خفيفة",
+        "stretch": "أسود",
+        "opacity": "علبة شحن",
+        "finish": "تحكم باللمس",
+        "care": "تُحفظ في العلبة",
+        "use": "هواتف iOS وAndroid"
+      },
+      "colors": [
+        {
+          "id": "black",
+          "name": "أسود",
+          "hex": "#242424",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "white",
+          "name": "أبيض",
+          "hex": "#f2f2ee",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 50000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "njom-acc-02",
+      "name": "شاحن سريع USB‑C",
+      "category": "إكسسوارات",
+      "price": 28000,
+      "image": "https://urbansupplyplus.com/cdn/shop/collections/864fb4b7-16ba-47e8-af6b-34adc0edb37b.png?v=1764522364",
+      "images": [
+        "https://images.unsplash.com/flagged/photo-1594344141311-8ea00ba55612?auto=format&fit=crop&fm=jpg&w=1100&q=85",
+        "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "نموذج شاحن سريع مع توضيح نوع المنفذ والقدرة والتوافق بعد اعتماد مواصفات القطعة الفعلية.",
+      "specs": {
+        "composition": "شاحن USB‑C",
+        "width": "20W",
+        "weight": "مدمج",
+        "stretch": "أبيض",
+        "opacity": "منفذ واحد",
+        "finish": "حماية من الحرارة",
+        "care": "استخدم كابل مناسب",
+        "use": "أجهزة متوافقة مع USB‑C"
+      },
+      "colors": [
+        {
+          "id": "white",
+          "name": "أبيض",
+          "hex": "#f2f2ee",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 35000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "njom-service-01",
+      "name": "فحص وتشخيص الهاتف",
+      "category": "صيانة",
+      "price": 0,
+      "image": "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://urbansupplyplus.com/cdn/shop/collections/864fb4b7-16ba-47e8-af6b-34adc0edb37b.png?v=1764522364",
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "بطاقة خدمة توضيحية لعرض قسم الصيانة والبرمجة. تُضاف تفاصيل الخدمة والتكلفة الحقيقية من إدارة المكتب.",
+      "specs": {
+        "composition": "خدمة فنية",
+        "width": "حسب الجهاز",
+        "weight": "فحص أولي",
+        "stretch": "حسب العطل",
+        "opacity": "موعد بالتواصل",
+        "finish": "تشخيص قبل الإصلاح",
+        "care": "تأكيد التكلفة قبل التنفيذ",
+        "use": "صيانة وبرمجة الأجهزة"
+      },
+      "colors": [
+        {
+          "id": "service",
+          "name": "حسب الموعد",
+          "hex": "#61c3e5",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 0,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    }
+  ],
   "heroFit": "contain",
-  "productFit": "contain"
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1100&q=85",
+    "https://urbansupplyplus.com/cdn/shop/collections/864fb4b7-16ba-47e8-af6b-34adc0edb37b.png?v=1764522364"
+  ],
+  "demoMode": true,
+  "demoNotice": "عينة عرض فقط — الأجهزة والأسعار والصور لا تمثل مخزون المكتب"
 }
