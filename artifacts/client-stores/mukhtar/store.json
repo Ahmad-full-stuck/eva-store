@@ -3,13 +3,13 @@
   "name": "MUKHTAR | مُختار",
   "monogram": "M",
   "tagline": "الرواية بدأت للتو",
-  "eyebrow": "MUKHTAR · THE STORY CONTINUES",
-  "heroTitle": "الروايةُ بدأت للتّو",
-  "heroText": "إطلالات رجالية مختارة بتفاصيل هادئة وحضور معاصر. استكشف النماذج واسأل عن الموديلات والمقاسات المتاحة.",
-  "storyTitle": "MUKHTAR — الرواية بدأت للتو",
-  "storyText": "مُختار علامة للألبسة الرجالية. صُممت هذه الواجهة لتكون نقطة وصول واضحة للمتجر، مع عرض أولي للأقسام ووسائل التواصل والفرع.",
-  "description": "MUKHTAR مُختار — ألبسة رجالية، الفرع الأول في بغداد الحرية، ڤينيسيا مول.",
-  "note": "الفرع الأول · بغداد الحرية – ڤينيسيا مول",
+  "eyebrow": "MUKHTAR · MEN'S COLLECTION",
+  "heroTitle": "الرواية تبدأ من اختيارك",
+  "heroText": "اكتشف قطعاً رجالية مختارة بتفاصيل هادئة، من القمصان والبولو إلى الإطلالات المتكاملة.",
+  "storyTitle": "فصل جديد في أسلوب مُختار",
+  "storyText": "تصور بصري تجريبي لعلامة MUKHTAR، يقدم أمثلة للأزياء الرجالية بطريقة تحريرية راقية. كل المنتجات والأسعار والصور قابلة للاستبدال بمواد العلامة الفعلية.",
+  "description": "تصور متجر MUKHTAR للأزياء الرجالية — الفرع الأول في ڤينيسيا مول، بغداد.",
+  "note": "هذه تشكيلة وصور وأسعار تجريبية وليست عروضاً معتمدة",
   "location": "بغداد · الحرية · ڤينيسيا مول",
   "contactLabel": "تواصل مع مُختار",
   "contactUrl": "https://www.instagram.com/6f_v/",
@@ -21,7 +21,7 @@
       "number": "07827266656"
     }
   ],
-  "heroImage": "https://media.falabella.com/falabellaCO/883446850_1/w%3D1500%2Ch%3D1500%2Cfit%3Dcover",
+  "heroImage": "https://classybystyle.com/cdn/shop/products/O1CN01yXwlm326XMxjyVc2Z__3893227671-0-cib.jpg?v=1652881251",
   "theme": {
     "bg": "#f0ede6",
     "ink": "#252a27",
@@ -38,7 +38,332 @@
     "بولو",
     "إطلالات"
   ],
-  "products": [],
+  "products": [
+    {
+      "id": "mukhtar-shirt-01",
+      "name": "قميص Linen بألوان هادئة",
+      "category": "قمصان",
+      "price": 59000,
+      "image": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1100&q=85",
+        "https://thelondongentlemen.com/cdn/shop/files/ChatGPT_Image_Apr_16_2026_03_41_51_PM_92ee7286-b074-427f-b8d6-07907414a71b.png?v=1776336381&width=1024"
+      ],
+      "description": "قميص بقوام خفيف ولمسة طبيعية، مثال لقطعة يمكن تقديمها ضمن قصة تحريرية أنيقة.",
+      "specs": {
+        "composition": "كتان مخلوط",
+        "width": "M – XXL",
+        "weight": "خفيف",
+        "stretch": "رملي",
+        "opacity": "ملمس طبيعي",
+        "finish": "ياقة مفتوحة",
+        "care": "غسيل لطيف وتجفيف ظل",
+        "use": "صيفي وSmart Casual"
+      },
+      "colors": [
+        {
+          "id": "sand",
+          "name": "رملي",
+          "hex": "#c8b89d",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "white",
+          "name": "عاجي",
+          "hex": "#eee9df",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 65000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "mukhtar-polo-01",
+      "name": "Polo Knit راقٍ",
+      "category": "بولو",
+      "price": 48000,
+      "image": "https://classybystyle.com/cdn/shop/products/O1CN01yXwlm326XMxjyVc2Z__3893227671-0-cib.jpg?v=1652881251",
+      "images": [
+        "https://thelondongentlemen.com/cdn/shop/files/ChatGPT_Image_Apr_16_2026_03_41_51_PM_92ee7286-b074-427f-b8d6-07907414a71b.png?v=1776336381&width=1024",
+        "https://200brands.com/cdn/shop/files/rn-image_picker_lib_temp_2c343095-0312-4795-8e4e-caef4a4988fc_600x.png?v=1775288870"
+      ],
+      "description": "بولو محبوك بتفاصيل نظيفة، نموذج لعرض القطع الأساسية ذات الطابع الراقي.",
+      "specs": {
+        "composition": "قطن محبوك",
+        "width": "M – XL",
+        "weight": "متوسط",
+        "stretch": "كحلي",
+        "opacity": "نسيج محبوك",
+        "finish": "ياقة وأزرار قصيرة",
+        "care": "غسيل بارد",
+        "use": "إطلالة يومية راقية"
+      },
+      "colors": [
+        {
+          "id": "navy",
+          "name": "كحلي",
+          "hex": "#273448",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "wine",
+          "name": "عنابي",
+          "hex": "#63383e",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 55000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "mukhtar-overshirt-01",
+      "name": "Overshirt بقصة مستقيمة",
+      "category": "قمصان",
+      "price": 68000,
+      "image": "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "قميص خارجي متعدد التنسيق، يصلح كطبقة خفيفة فوق التيشيرت.",
+      "specs": {
+        "composition": "قطن ثقيل",
+        "width": "M – XXL",
+        "weight": "متوسط إلى ثقيل",
+        "stretch": "زيتي",
+        "opacity": "جيبان أماميان",
+        "finish": "أزرار أمامية",
+        "care": "غسيل لطيف",
+        "use": "طبقات وإطلالات معاصرة"
+      },
+      "colors": [
+        {
+          "id": "olive",
+          "name": "زيتي",
+          "hex": "#65705a",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "taupe",
+          "name": "تاوب",
+          "hex": "#8b8174",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 74000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "mukhtar-look-01",
+      "name": "إطلالة Smart Casual",
+      "category": "إطلالات",
+      "price": 105000,
+      "image": "https://200brands.com/cdn/shop/files/rn-image_picker_lib_temp_2c343095-0312-4795-8e4e-caef4a4988fc_600x.png?v=1775288870",
+      "images": [
+        "https://thelondongentlemen.com/cdn/shop/files/ChatGPT_Image_Apr_16_2026_03_41_51_PM_92ee7286-b074-427f-b8d6-07907414a71b.png?v=1776336381&width=1024",
+        "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "تنسيق تخيلي يوضح إمكانية جمع القميص والبنطال والحذاء في اقتراح إطلالة واحدة.",
+      "specs": {
+        "composition": "قميص وبنطال",
+        "width": "مقاسات متعددة",
+        "weight": "متوسط",
+        "stretch": "درجات محايدة",
+        "opacity": "عدة قطع",
+        "finish": "تنسيق جاهز",
+        "care": "حسب خامة كل قطعة",
+        "use": "مناسبات غير رسمية"
+      },
+      "colors": [
+        {
+          "id": "neutral",
+          "name": "محايد",
+          "hex": "#b9aa93",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 118000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "mukhtar-tee-01",
+      "name": "تيشيرت Premium",
+      "category": "بولو",
+      "price": 35000,
+      "image": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=1100&q=85",
+        "https://classybystyle.com/cdn/shop/products/O1CN01yXwlm326XMxjyVc2Z__3893227671-0-cib.jpg?v=1652881251"
+      ],
+      "description": "تيشيرت بخامة كثيفة وقصة نظيفة، نموذج للأساسيات الراقية.",
+      "specs": {
+        "composition": "قطن ثقيل",
+        "width": "S – XL",
+        "weight": "ثقيل",
+        "stretch": "فحمي",
+        "opacity": "غير شفاف",
+        "finish": "ياقة مضلعة",
+        "care": "غسيل مقلوب",
+        "use": "تنسيق تحت القمصان الخارجية"
+      },
+      "colors": [
+        {
+          "id": "charcoal",
+          "name": "فحمي",
+          "hex": "#343434",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "white",
+          "name": "أبيض",
+          "hex": "#f4f1e9",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 42000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    },
+    {
+      "id": "mukhtar-trouser-01",
+      "name": "بنطال Tailored",
+      "category": "إطلالات",
+      "price": 62000,
+      "image": "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1100&q=85",
+        "https://200brands.com/cdn/shop/files/rn-image_picker_lib_temp_2c343095-0312-4795-8e4e-caef4a4988fc_600x.png?v=1775288870"
+      ],
+      "description": "بنطال بقصة مرتبة لإكمال الإطلالات الرسمية الخفيفة.",
+      "specs": {
+        "composition": "قطن وفيسكوز",
+        "width": "30 – 38",
+        "weight": "متوسط",
+        "stretch": "فحمي",
+        "opacity": "قصة مستقيمة",
+        "finish": "إغلاق مخفي",
+        "care": "تنظيف حسب الملصق",
+        "use": "Smart Casual"
+      },
+      "colors": [
+        {
+          "id": "charcoal",
+          "name": "فحمي",
+          "hex": "#393b3d",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "sand",
+          "name": "رملي",
+          "hex": "#b8a991",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isNew": false,
+      "isFeatured": true,
+      "compareAtPrice": 69000,
+      "faqs": [
+        {
+          "question": "هل هذه المنتجات متوفرة فعلياً؟",
+          "answer": "لا، هذه منتجات وصور وأسعار افتراضية أُضيفت لغرض عرض التصميم وتجربة وظائف المتجر فقط."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي وغير معتمد. يُستبدل بسعر العلامة الفعلي بعد موافقة الإدارة."
+        }
+      ],
+      "createdAt": "2026-11-06"
+    }
+  ],
   "heroFit": "cover",
-  "productFit": "contain"
+  "productFit": "contain",
+  "heroSlides": [
+    "https://classybystyle.com/cdn/shop/products/O1CN01yXwlm326XMxjyVc2Z__3893227671-0-cib.jpg?v=1652881251",
+    "https://thelondongentlemen.com/cdn/shop/files/ChatGPT_Image_Apr_16_2026_03_41_51_PM_92ee7286-b074-427f-b8d6-07907414a71b.png?v=1776336381&width=1024",
+    "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1100&q=85"
+  ],
+  "demoMode": true,
+  "demoNotice": "صور وأسعار ونماذج افتراضية لأغراض التصميم فقط"
 }
