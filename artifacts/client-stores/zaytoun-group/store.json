@@ -1,0 +1,91 @@
+{
+  "key": "zaytoun-group",
+  "name": "زيتون كروب | ZAYTOUN GROUP",
+  "monogram": "ز",
+  "tagline": "مكملات رياضية · تغذية رياضية",
+  "eyebrow": "ZAYTOUN GROUP · SPORTS NUTRITION",
+  "heroTitle": "اختيارات رياضية أوضح. وطلب أسهل.",
+  "heroText": "تصفّح تشكيلة من المكملات الرياضية من علامات مثل YAVA LABS وApplied Nutrition، وتعرّف على تفاصيل كل منتج قبل التواصل مع فروع زيتون كروب.",
+  "storyTitle": "كل منتج يبدأ بتفاصيل واضحة",
+  "storyText": "نقدّم لك طريقة أسهل لاستكشاف المكملات الرياضية، ومقارنة الأنواع والنكهات، ثم إرسال طلبك مباشرة إلى فريق زيتون كروب. يؤكد الفرع السعر والتوفر والاختيار النهائي قبل إتمام الطلب.",
+  "description": "زيتون كروب للمكملات الغذائية والرياضية. تصفح المنتجات وتواصل مع فروع بغداد – الكرخ/أبو غريب وديالى – بعقوبة. التوصيل متاح إلى محافظات العراق.",
+  "note": "مكملات رياضية مختارة · اسأل عن النكهات والتوفر والسعر",
+  "location": "بغداد – الكرخ / أبو غريب · ديالى – بعقوبة · التوصيل إلى محافظات العراق",
+  "contactLabel": "واتساب زيتون كروب",
+  "contactUrl": "https://wa.me/9647822836669?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D9%85%D9%86%D8%AA%D8%AC",
+  "instagram": "https://www.instagram.com/zaytoun.group/",
+  "facebook": "https://www.facebook.com/ZG.GROUP",
+  "phones": [
+    {
+      "label": "فرع بغداد – الكرخ / أبو غريب",
+      "number": "+9647822836669"
+    },
+    {
+      "label": "فرع ديالى – بعقوبة",
+      "number": "+9647723098099"
+    }
+  ],
+  "heroImage": "https://drnutrition.com/storage/media/pjJqWAwrJ5YcSoqZB7XcmNVL43w2rHFWwndZaaGa.jpg",
+  "heroPosition": "center",
+  "theme": {
+    "bg": "#f5f6f1",
+    "ink": "#1d3029",
+    "surface": "#ffffff",
+    "muted": "#77847b",
+    "accent": "#52795e",
+    "line": "#dce5dc",
+    "hero": "#e8efe7",
+    "photo": "#ffffff"
+  },
+  "categories": [
+    "الكل",
+    "زيادة الوزن والبروتين",
+    "الكرياتين",
+    "الطاقة والكارب",
+    "الأحماض الأمينية"
+  ],
+  "products": [
+    {
+      "id": "mass-pro",
+      "name": "YAVA LABS · Complex Mass Pro 6KG",
+      "category": "زيادة الوزن والبروتين",
+      "image": "https://www.housenutrition.tn/storage/uploads/products/images/yava_complex_mass_pro_6kg_cookies%20%281%29.webp-69c258f9199ca.webp",
+      "description": "تركيبة عالية السعرات من YAVA LABS. تذكر بيانات المنتج الرسمية 70 غ بروتين و116 غ كربوهيدرات و5 غ كرياتين في الحصة. اسأل عن النكهة المتاحة."
+    },
+    {
+      "id": "creatine",
+      "name": "Applied Nutrition · Creatine Monohydrate",
+      "category": "الكرياتين",
+      "image": "https://www.hpnutrition.ie/image/cache/catalog/Applied/2023/applied-creatine-500g-2000x2000.jpg",
+      "description": "كرياتين مونوهيدرات ميكرونايزد من Applied Nutrition. نكهات Strawberry وIcy Blue Razz بحسب منشورات زيتون كروب. 50 حصة وفق المنشور."
+    },
+    {
+      "id": "carb-x",
+      "name": "Applied Nutrition · Carb-X",
+      "category": "الطاقة والكارب",
+      "image": "https://fuelsupplements.com/cdn/shop/files/Carb-X_1.2kg_-_Unflavoured.png?v=1764960528&width=1214",
+      "description": "Cyclic Dextrin لدعم احتياج الكارب أثناء التدريب. النكهات المذكورة في منشورات زيتون: Blackcurrant وPineapple. 48 حصة وفق المنشور."
+    },
+    {
+      "id": "critical-mass",
+      "name": "Applied Nutrition · Critical Mass 6KG",
+      "category": "زيادة الوزن والبروتين",
+      "image": "https://www.couz-nutri.com/cdn/shop/files/Applied_Nutrition_Original_Critical_Mass_Chocolate.png?v=1721894824",
+      "description": "مكمل عالي السعرات من Applied Nutrition بحجم 6 كغم ونكهة الشوكولاتة. تتوفر تفاصيل الحصة والعبوة على المنتج؛ تحقق من الإصدار الموجود لدى الفرع."
+    },
+    {
+      "id": "glutamine",
+      "name": "Applied Nutrition · L-Glutamine",
+      "category": "الأحماض الأمينية",
+      "image": "https://mega-mass.ua/images/detailed/26/71vckrxqsUL._AC_SL1500_.jpg",
+      "description": "مسحوق L-Glutamine ميكرونايزد من Applied Nutrition. اسأل الفرع عن حجم العبوة والنوع المتوفر قبل الطلب."
+    },
+    {
+      "id": "abe",
+      "name": "Applied Nutrition · ABE Ultimate Pre-Workout",
+      "category": "الطاقة والكارب",
+      "image": "https://ecombe.nahdionline.com/media/catalog/product/1/0/103518611_aef4539334e238e8a_60349.jpg?bg-color=255%2C255%2C255&canvas=1050%2C1050&fit=bounds&height=1050&optimize=high&width=1050",
+      "description": "تركيبة قبل التمرين من Applied Nutrition. ذكرت منشورات زيتون كروب نكهتي Fruit Punch وEnergy، وعبوة 30 حصة."
+    }
+  ]
+}
