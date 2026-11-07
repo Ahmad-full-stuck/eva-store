@@ -4,11 +4,11 @@
   "main": "worker.js",
   "compatibility_date": "2026-11-07",
   "workers_dev": true,
+  "services": [
+    { "binding": "STATIC", "service": "laya" }
+  ],
   "kv_namespaces": [
-    {
-      "binding": "ORDERS",
-      "id": "35dfc7f8f9c44f5aaa76f85add94d9b0"
-    }
+    { "binding": "ORDERS", "id": "35dfc7f8f9c44f5aaa76f85add94d9b0" }
   ],
   "observability": { "enabled": true }
 }
