@@ -21,3 +21,8 @@ New client previews:
 New previews are demo-only. Sample products, photography and prices are illustrative, not confirmed inventory or client-approved material. Store records are namespaced by tenant slug in the shared demo KV namespace and demo checkout rejects actual orders. Exact Instagram avatars could not be retrieved from the public web session; current marks are typographic previews awaiting approved brand assets.
 
 Cloudflare Worker resources and workers.dev subdomains for the twelve new previews were provisioned separately before first script upload to avoid first-deploy metadata lookup race conditions.
+
+
+## Phase 2 — bespoke visual direction
+
+The twelve new client previews now use dedicated vertical storefront home compositions selected by business category rather than only recoloring one shared home page. Their category navigation, editorial/food/device imagery, product-card treatment, hero composition and responsive layouts are separately art-directed. The shared catalog and product-detail screens also receive per-brand visual refinements. Demo imagery and catalog data remain illustrative until each client supplies approved assets and stock data.
