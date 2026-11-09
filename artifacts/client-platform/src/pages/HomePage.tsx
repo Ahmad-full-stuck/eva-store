@@ -8,6 +8,7 @@ import type { Product, ProductColor } from '@/types'
 import { ProductCard } from '@/components/ProductCard'
 import { useSiteContent } from '@/lib/site-content'
 import { getStoreBrand } from '@/lib/store-brand'
+import { TenantVerticalHome } from '@/components/TenantVerticalHome'
 
 interface HomePageProps {
   products: Product[]
@@ -24,6 +25,8 @@ const icons: Record<string, LucideIcon> = {
   installment:Banknote, warranty:ShieldCheck, fabric:Layers, tablet:Smartphone, computer:Monitor, audio:Headphones, power:Zap, burger:Utensils, sandwich:Utensils, food:Utensils, construction:Hammer, sanitary:Hammer, paint:Paintbrush, tools:Wrench, dress:Shirt, abaya:Shirt, fashion:Shirt, sculpture:Palette, decor:House, wall:House, custom:Palette, handmade:Palette, gift:Gift, smartwatch:Watch,
 }
 
+const VERTICAL_TENANT_KEYS = new Set(['hayder-taif','apple-center-amiriya','almass-mobile','alawhad-mobile','aalam-alqalaa','nineteen89-rest','alsifa-company','sham-couture','fink-factory','apple-store-98h','center-alsaa','morvo-handmade'])
+
 export function HomePage({ products, wishlist, onWish, onAdd }: HomePageProps) {
   const content = useSiteContent()
   const hostKey = typeof window !== 'undefined' ? window.location.hostname.split('.')[0] : ''
@@ -32,6 +35,7 @@ export function HomePage({ products, wishlist, onWish, onAdd }: HomePageProps) {
   const featured = products.filter((product) => product.isFeatured).slice(0, 6)
   const heroImage = content.storyImage || products[0]?.image || ''
   const editorialImages = (content.heroSlides || []).filter(Boolean).slice(1, 4)
+  if (content.tenantKey && VERTICAL_TENANT_KEYS.has(brand.key)) return <TenantVerticalHome products={products} wishlist={wishlist} onWish={onWish} onAdd={onAdd} />
 
   return (
     <main className={'tenant-store tenant-store--' + brand.key}>
