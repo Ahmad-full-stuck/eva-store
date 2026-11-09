@@ -19,3 +19,5 @@ New client previews:
 - MORVO Handmade — https://morvo-handmade.eva-store.workers.dev/
 
 New previews are demo-only. Sample products, photography and prices are illustrative, not confirmed inventory or client-approved material. Store records are namespaced by tenant slug in the shared demo KV namespace and demo checkout rejects actual orders. Exact Instagram avatars could not be retrieved from the public web session; current marks are typographic previews awaiting approved brand assets.
+
+Cloudflare Worker resources and workers.dev subdomains for the twelve new previews were provisioned separately before first script upload to avoid first-deploy metadata lookup race conditions.
