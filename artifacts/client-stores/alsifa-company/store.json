@@ -1,0 +1,379 @@
+{
+  "key": "alsifa-company",
+  "name": "شركة إخوان الصفا",
+  "monogram": "S",
+  "tagline": "مواد إنشائية وصحية وأصباغ",
+  "eyebrow": "شركة إخوان الصفا",
+  "storyTitle": "تفاصيل الاختيار تصنع الانطباع",
+  "storyText": "نموذج عرض أولي مخصص لـ شركة إخوان الصفا. الصور والأسماء والأسعار أمثلة تصميمية قابلة للاستبدال بالبيانات المعتمدة من صاحب النشاط.",
+  "description": "تصور متجر إلكتروني مخصص لـ شركة إخوان الصفا يعرض أقسام النشاط والمنتجات بطريقة واضحة ومريحة للتصفح.",
+  "note": "هذه معاينة تصميمية — الصور والمنتجات والأسعار أمثلة وليست مخزوناً فعلياً",
+  "demoNotice": "صور وأسعار ونماذج افتراضية لأغراض العرض فقط وتحتاج إلى اعتماد صاحب المتجر",
+  "location": "",
+  "hours": "",
+  "contactLabel": "تواصل مع المتجر",
+  "contactUrl": "https://www.instagram.com/al_sifa.company/",
+  "instagram": "https://www.instagram.com/al_sifa.company/",
+  "contactMode": "copy",
+  "phones": [],
+  "heroImage": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1100&q=85",
+  "heroPosition": "center",
+  "theme": {
+    "bg": "#F3F4F2",
+    "ink": "#303B3D",
+    "surface": "#FFFFFF",
+    "muted": "#78818A",
+    "accent": "#B46F45",
+    "line": "#E0E4E1",
+    "hero": "#E9ECE8",
+    "photo": "#E0E4E1",
+    "dark": "#303B3D",
+    "accentDark": "#B46F45",
+    "accentSoft": "#F3F4F2",
+    "accentTint": "#E0E4E1",
+    "warm": "#B46F45",
+    "highlight": "#E0E4E1"
+  },
+  "categories": [
+    "مواد إنشائية",
+    "مواد صحية",
+    "أصباغ ودهانات",
+    "مستلزمات تركيب"
+  ],
+  "products": [
+    {
+      "id": "alsifa-company-01",
+      "name": "مواد إنشائية أساسية",
+      "category": "مواد إنشائية",
+      "price": 30000,
+      "image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1604709177225-055f99402ea3?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "مواد إنشائية أساسية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر شركة إخوان الصفا.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "المقاس",
+        "weight": "الوزن",
+        "stretch": "عاجي",
+        "opacity": "المواصفات",
+        "finish": "الملحقات",
+        "care": "التنظيف والصيانة",
+        "use": "مجال الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": true,
+      "compareAtPrice": 35000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "alsifa-company-02",
+      "name": "خلاط مغسلة",
+      "category": "مواد صحية",
+      "price": 33000,
+      "image": "https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1604709177225-055f99402ea3?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "خلاط مغسلة — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر شركة إخوان الصفا.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "المقاس",
+        "weight": "الوزن",
+        "stretch": "رمادي",
+        "opacity": "المواصفات",
+        "finish": "الملحقات",
+        "care": "التنظيف والصيانة",
+        "use": "مجال الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 38000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "alsifa-company-03",
+      "name": "حوض حمام",
+      "category": "أصباغ ودهانات",
+      "price": 36000,
+      "image": "https://images.unsplash.com/photo-1604709177225-055f99402ea3?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "حوض حمام — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر شركة إخوان الصفا.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "المقاس",
+        "weight": "الوزن",
+        "stretch": "كحلي",
+        "opacity": "المواصفات",
+        "finish": "الملحقات",
+        "care": "التنظيف والصيانة",
+        "use": "مجال الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 41000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "alsifa-company-04",
+      "name": "مجموعة دش",
+      "category": "مستلزمات تركيب",
+      "price": 39000,
+      "image": "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "مجموعة دش — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر شركة إخوان الصفا.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "المقاس",
+        "weight": "الوزن",
+        "stretch": "بيج",
+        "opacity": "المواصفات",
+        "finish": "الملحقات",
+        "care": "التنظيف والصيانة",
+        "use": "مجال الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 44000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "alsifa-company-05",
+      "name": "دهان داخلي",
+      "category": "مواد إنشائية",
+      "price": 42000,
+      "image": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "دهان داخلي — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر شركة إخوان الصفا.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "المقاس",
+        "weight": "الوزن",
+        "stretch": "أزرق",
+        "opacity": "المواصفات",
+        "finish": "الملحقات",
+        "care": "التنظيف والصيانة",
+        "use": "مجال الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 47000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "alsifa-company-06",
+      "name": "مستلزمات تمديدات",
+      "category": "مواد صحية",
+      "price": 45000,
+      "image": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "مستلزمات تمديدات — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر شركة إخوان الصفا.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "المقاس",
+        "weight": "الوزن",
+        "stretch": "بني",
+        "opacity": "المواصفات",
+        "finish": "الملحقات",
+        "care": "التنظيف والصيانة",
+        "use": "مجال الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 50000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    }
+  ],
+  "heroFit": "cover",
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1604709177225-055f99402ea3?auto=format&fit=crop&w=1100&q=85"
+  ],
+  "quantityUnit": "قطعة",
+  "quantityUnitEn": "item",
+  "demoMode": true
+}

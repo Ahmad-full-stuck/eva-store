@@ -1,7 +1,7 @@
 import {
   ArrowLeft, BadgeCheck, Banknote, Clock3, CreditCard, Footprints, Headphones,
   MapPin, MessageCircle, Package, Shirt, ShieldCheck, ShoppingBag, Smartphone,
-  Store, Truck, Wrench, Check, type LucideIcon,
+  Store, Truck, Wrench, Check, Layers, Monitor, Zap, Utensils, Hammer, Paintbrush, Palette, Gift, Watch, House, type LucideIcon,
 } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
@@ -21,7 +21,7 @@ const icons: Record<string, LucideIcon> = {
   bag:ShoppingBag, shoe:Footprints, phone:Smartphone, accessory:Headphones,
   repair:Wrench, shirt:Shirt, polo:Shirt, style:BadgeCheck, truck:Truck,
   credit:CreditCard, check:Check, pin:MapPin, clock:Clock3, store:Store,
-  installment:Banknote, warranty:ShieldCheck,
+  installment:Banknote, warranty:ShieldCheck, fabric:Layers, tablet:Smartphone, computer:Monitor, audio:Headphones, power:Zap, burger:Utensils, sandwich:Utensils, food:Utensils, construction:Hammer, sanitary:Hammer, paint:Paintbrush, tools:Wrench, dress:Shirt, abaya:Shirt, fashion:Shirt, sculpture:Palette, decor:House, wall:House, custom:Palette, handmade:Palette, gift:Gift, smartwatch:Watch,
 }
 
 export function HomePage({ products, wishlist, onWish, onAdd }: HomePageProps) {

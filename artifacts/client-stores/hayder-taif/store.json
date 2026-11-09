@@ -1,0 +1,379 @@
+{
+  "key": "hayder-taif",
+  "name": "أقمشة حيدر طائف",
+  "monogram": "HT",
+  "tagline": "خامات وأقمشة",
+  "eyebrow": "أقمشة حيدر طائف",
+  "storyTitle": "تفاصيل الاختيار تصنع الانطباع",
+  "storyText": "نموذج عرض أولي مخصص لـ أقمشة حيدر طائف. الصور والأسماء والأسعار أمثلة تصميمية قابلة للاستبدال بالبيانات المعتمدة من صاحب النشاط.",
+  "description": "تصور متجر إلكتروني مخصص لـ أقمشة حيدر طائف يعرض أقسام النشاط والمنتجات بطريقة واضحة ومريحة للتصفح.",
+  "note": "هذه معاينة تصميمية — الصور والمنتجات والأسعار أمثلة وليست مخزوناً فعلياً",
+  "demoNotice": "صور وأسعار ونماذج افتراضية لأغراض العرض فقط وتحتاج إلى اعتماد صاحب المتجر",
+  "location": "",
+  "hours": "",
+  "contactLabel": "تواصل مع المتجر",
+  "contactUrl": "https://www.instagram.com/7.a.3r/",
+  "instagram": "https://www.instagram.com/7.a.3r/",
+  "contactMode": "copy",
+  "phones": [],
+  "heroImage": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1100&q=85",
+  "heroPosition": "center",
+  "theme": {
+    "bg": "#F3EFE7",
+    "ink": "#292D31",
+    "surface": "#FFFFFF",
+    "muted": "#78818A",
+    "accent": "#8C664C",
+    "line": "#E3D9CA",
+    "hero": "#EAE1D5",
+    "photo": "#E3D9CA",
+    "dark": "#292D31",
+    "accentDark": "#8C664C",
+    "accentSoft": "#F3EFE7",
+    "accentTint": "#E3D9CA",
+    "warm": "#8C664C",
+    "highlight": "#E3D9CA"
+  },
+  "categories": [
+    "أقمشة رجالية",
+    "أقمشة نسائية",
+    "أقمشة مناسبات",
+    "أقمشة منزلية"
+  ],
+  "products": [
+    {
+      "id": "hayder-taif-01",
+      "name": "كتان يومي",
+      "category": "أقمشة رجالية",
+      "price": 15000,
+      "image": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "كتان يومي — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر أقمشة حيدر طائف.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "عرض القماش",
+        "weight": "الوزن",
+        "stretch": "عاجي",
+        "opacity": "الكثافة",
+        "finish": "الملمس والنقشة",
+        "care": "العناية",
+        "use": "الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": true,
+      "compareAtPrice": 20000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "hayder-taif-02",
+      "name": "قطن ناعم",
+      "category": "أقمشة نسائية",
+      "price": 18000,
+      "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "قطن ناعم — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر أقمشة حيدر طائف.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "عرض القماش",
+        "weight": "الوزن",
+        "stretch": "رمادي",
+        "opacity": "الكثافة",
+        "finish": "الملمس والنقشة",
+        "care": "العناية",
+        "use": "الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 23000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "hayder-taif-03",
+      "name": "شيفون خفيف",
+      "category": "أقمشة مناسبات",
+      "price": 21000,
+      "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "شيفون خفيف — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر أقمشة حيدر طائف.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "عرض القماش",
+        "weight": "الوزن",
+        "stretch": "كحلي",
+        "opacity": "الكثافة",
+        "finish": "الملمس والنقشة",
+        "care": "العناية",
+        "use": "الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 26000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "hayder-taif-04",
+      "name": "ساتان مناسبات",
+      "category": "أقمشة منزلية",
+      "price": 24000,
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "ساتان مناسبات — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر أقمشة حيدر طائف.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "عرض القماش",
+        "weight": "الوزن",
+        "stretch": "بيج",
+        "opacity": "الكثافة",
+        "finish": "الملمس والنقشة",
+        "care": "العناية",
+        "use": "الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 29000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "hayder-taif-05",
+      "name": "جاكار كلاسيكي",
+      "category": "أقمشة رجالية",
+      "price": 27000,
+      "image": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "جاكار كلاسيكي — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر أقمشة حيدر طائف.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "عرض القماش",
+        "weight": "الوزن",
+        "stretch": "أزرق",
+        "opacity": "الكثافة",
+        "finish": "الملمس والنقشة",
+        "care": "العناية",
+        "use": "الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 32000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "hayder-taif-06",
+      "name": "قماش بدلات",
+      "category": "أقمشة نسائية",
+      "price": 30000,
+      "image": "https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "قماش بدلات — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر أقمشة حيدر طائف.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "عرض القماش",
+        "weight": "الوزن",
+        "stretch": "بني",
+        "opacity": "الكثافة",
+        "finish": "الملمس والنقشة",
+        "care": "العناية",
+        "use": "الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 35000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    }
+  ],
+  "heroFit": "cover",
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1100&q=85"
+  ],
+  "quantityUnit": "متر",
+  "quantityUnitEn": "meter",
+  "demoMode": true
+}

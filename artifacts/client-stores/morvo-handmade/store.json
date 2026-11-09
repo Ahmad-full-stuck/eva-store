@@ -1,0 +1,379 @@
+{
+  "key": "morvo-handmade",
+  "name": "MORVO Handmade",
+  "monogram": "M",
+  "tagline": "منتجات وقطع يدوية",
+  "eyebrow": "MORVO HANDMADE",
+  "storyTitle": "تفاصيل الاختيار تصنع الانطباع",
+  "storyText": "نموذج عرض أولي مخصص لـ MORVO Handmade. الصور والأسماء والأسعار أمثلة تصميمية قابلة للاستبدال بالبيانات المعتمدة من صاحب النشاط.",
+  "description": "تصور متجر إلكتروني مخصص لـ MORVO Handmade يعرض أقسام النشاط والمنتجات بطريقة واضحة ومريحة للتصفح.",
+  "note": "هذه معاينة تصميمية — الصور والمنتجات والأسعار أمثلة وليست مخزوناً فعلياً",
+  "demoNotice": "صور وأسعار ونماذج افتراضية لأغراض العرض فقط وتحتاج إلى اعتماد صاحب المتجر",
+  "location": "",
+  "hours": "",
+  "contactLabel": "تواصل مع المتجر",
+  "contactUrl": "https://www.instagram.com/morpoh_2/",
+  "instagram": "https://www.instagram.com/morpoh_2/",
+  "contactMode": "copy",
+  "phones": [],
+  "heroImage": "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?auto=format&fit=crop&w=1100&q=85",
+  "heroPosition": "center",
+  "theme": {
+    "bg": "#F4F0EA",
+    "ink": "#2D302D",
+    "surface": "#FFFFFF",
+    "muted": "#78818A",
+    "accent": "#94775B",
+    "line": "#E4DCD0",
+    "hero": "#EAE1D5",
+    "photo": "#E4DCD0",
+    "dark": "#2D302D",
+    "accentDark": "#94775B",
+    "accentSoft": "#F4F0EA",
+    "accentTint": "#E4DCD0",
+    "warm": "#94775B",
+    "highlight": "#E4DCD0"
+  },
+  "categories": [
+    "قطع يدوية",
+    "ديكور وهدايا",
+    "إكسسوارات",
+    "طلبات خاصة"
+  ],
+  "products": [
+    {
+      "id": "morvo-handmade-01",
+      "name": "قطعة يدوية مميزة",
+      "category": "قطع يدوية",
+      "price": 28000,
+      "image": "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "قطعة يدوية مميزة — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر MORVO Handmade.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "عاجي",
+        "opacity": "تفاصيل القطعة",
+        "finish": "التشطيب اليدوي",
+        "care": "العناية",
+        "use": "طريقة الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": true,
+      "compareAtPrice": 33000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "morvo-handmade-02",
+      "name": "قطعة ديكور",
+      "category": "ديكور وهدايا",
+      "price": 31000,
+      "image": "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "قطعة ديكور — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر MORVO Handmade.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "رمادي",
+        "opacity": "تفاصيل القطعة",
+        "finish": "التشطيب اليدوي",
+        "care": "العناية",
+        "use": "طريقة الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 36000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "morvo-handmade-03",
+      "name": "هدية بتفاصيل خاصة",
+      "category": "إكسسوارات",
+      "price": 34000,
+      "image": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "هدية بتفاصيل خاصة — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر MORVO Handmade.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "كحلي",
+        "opacity": "تفاصيل القطعة",
+        "finish": "التشطيب اليدوي",
+        "care": "العناية",
+        "use": "طريقة الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 39000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "morvo-handmade-04",
+      "name": "إكسسوار يدوي",
+      "category": "طلبات خاصة",
+      "price": 37000,
+      "image": "https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "إكسسوار يدوي — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر MORVO Handmade.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "بيج",
+        "opacity": "تفاصيل القطعة",
+        "finish": "التشطيب اليدوي",
+        "care": "العناية",
+        "use": "طريقة الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 42000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "morvo-handmade-05",
+      "name": "قطعة منزلية فنية",
+      "category": "قطع يدوية",
+      "price": 40000,
+      "image": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "قطعة منزلية فنية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر MORVO Handmade.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "أزرق",
+        "opacity": "تفاصيل القطعة",
+        "finish": "التشطيب اليدوي",
+        "care": "العناية",
+        "use": "طريقة الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 45000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "morvo-handmade-06",
+      "name": "تصميم حسب الطلب",
+      "category": "ديكور وهدايا",
+      "price": 43000,
+      "image": "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "تصميم حسب الطلب — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر MORVO Handmade.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "بني",
+        "opacity": "تفاصيل القطعة",
+        "finish": "التشطيب اليدوي",
+        "care": "العناية",
+        "use": "طريقة الاستخدام"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 48000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    }
+  ],
+  "heroFit": "cover",
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1100&q=85"
+  ],
+  "quantityUnit": "قطعة",
+  "quantityUnitEn": "item",
+  "demoMode": true
+}

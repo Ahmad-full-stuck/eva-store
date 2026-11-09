@@ -1,0 +1,379 @@
+{
+  "key": "almass-mobile",
+  "name": "الماس ستور",
+  "monogram": "◇",
+  "tagline": "هواتف وإلكترونيات",
+  "eyebrow": "الماس ستور",
+  "storyTitle": "تفاصيل الاختيار تصنع الانطباع",
+  "storyText": "نموذج عرض أولي مخصص لـ الماس ستور. الصور والأسماء والأسعار أمثلة تصميمية قابلة للاستبدال بالبيانات المعتمدة من صاحب النشاط.",
+  "description": "تصور متجر إلكتروني مخصص لـ الماس ستور يعرض أقسام النشاط والمنتجات بطريقة واضحة ومريحة للتصفح.",
+  "note": "هذه معاينة تصميمية — الصور والمنتجات والأسعار أمثلة وليست مخزوناً فعلياً",
+  "demoNotice": "صور وأسعار ونماذج افتراضية لأغراض العرض فقط وتحتاج إلى اعتماد صاحب المتجر",
+  "location": "",
+  "hours": "",
+  "contactLabel": "تواصل مع المتجر",
+  "contactUrl": "https://www.instagram.com/almass_mobile/",
+  "instagram": "https://www.instagram.com/almass_mobile/",
+  "contactMode": "copy",
+  "phones": [],
+  "heroImage": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+  "heroPosition": "center",
+  "theme": {
+    "bg": "#F5F3EE",
+    "ink": "#142B3B",
+    "surface": "#FFFFFF",
+    "muted": "#78818A",
+    "accent": "#B39458",
+    "line": "#E5E0D4",
+    "hero": "#EAE5D9",
+    "photo": "#E5E0D4",
+    "dark": "#142B3B",
+    "accentDark": "#B39458",
+    "accentSoft": "#F5F3EE",
+    "accentTint": "#E5E0D4",
+    "warm": "#B39458",
+    "highlight": "#E5E0D4"
+  },
+  "categories": [
+    "هواتف وأجهزة لوحية",
+    "صوتيات",
+    "أجهزة ذكية",
+    "ملحقات وشحن"
+  ],
+  "products": [
+    {
+      "id": "almass-mobile-01",
+      "name": "هاتف ذكي متقدم",
+      "category": "هواتف وأجهزة لوحية",
+      "price": 42000,
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "هاتف ذكي متقدم — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر الماس ستور.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل والسعة",
+        "weight": "الأداء",
+        "stretch": "عاجي",
+        "opacity": "الحالة",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": true,
+      "compareAtPrice": 47000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "almass-mobile-02",
+      "name": "جهاز لوحي",
+      "category": "صوتيات",
+      "price": 45000,
+      "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "جهاز لوحي — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر الماس ستور.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل والسعة",
+        "weight": "الأداء",
+        "stretch": "رمادي",
+        "opacity": "الحالة",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 50000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "almass-mobile-03",
+      "name": "سماعات لاسلكية",
+      "category": "أجهزة ذكية",
+      "price": 48000,
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "سماعات لاسلكية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر الماس ستور.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل والسعة",
+        "weight": "الأداء",
+        "stretch": "كحلي",
+        "opacity": "الحالة",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 53000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "almass-mobile-04",
+      "name": "ساعة ذكية",
+      "category": "ملحقات وشحن",
+      "price": 51000,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "ساعة ذكية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر الماس ستور.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل والسعة",
+        "weight": "الأداء",
+        "stretch": "بيج",
+        "opacity": "الحالة",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 56000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "almass-mobile-05",
+      "name": "شاحن سريع",
+      "category": "هواتف وأجهزة لوحية",
+      "price": 54000,
+      "image": "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "شاحن سريع — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر الماس ستور.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل والسعة",
+        "weight": "الأداء",
+        "stretch": "أزرق",
+        "opacity": "الحالة",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 59000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "almass-mobile-06",
+      "name": "حافظة حماية",
+      "category": "صوتيات",
+      "price": 57000,
+      "image": "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "حافظة حماية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر الماس ستور.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل والسعة",
+        "weight": "الأداء",
+        "stretch": "بني",
+        "opacity": "الحالة",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 62000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    }
+  ],
+  "heroFit": "cover",
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1100&q=85"
+  ],
+  "quantityUnit": "قطعة",
+  "quantityUnitEn": "item",
+  "demoMode": true
+}

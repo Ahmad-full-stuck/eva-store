@@ -1,0 +1,378 @@
+{
+  "key": "center-alsaa",
+  "name": "مركز الساعة",
+  "monogram": "S",
+  "tagline": "أجهزة وإكسسوارات",
+  "eyebrow": "مركز الساعة",
+  "storyTitle": "تفاصيل الاختيار تصنع الانطباع",
+  "storyText": "نموذج عرض أولي مخصص لـ مركز الساعة. الصور والأسماء والأسعار أمثلة تصميمية قابلة للاستبدال بالبيانات المعتمدة من صاحب النشاط.",
+  "description": "تصور متجر إلكتروني مخصص لـ مركز الساعة يعرض أقسام النشاط والمنتجات بطريقة واضحة ومريحة للتصفح.",
+  "note": "هذه معاينة تصميمية — الصور والمنتجات والأسعار أمثلة وليست مخزوناً فعلياً",
+  "demoNotice": "صور وأسعار ونماذج افتراضية لأغراض العرض فقط وتحتاج إلى اعتماد صاحب المتجر",
+  "location": "",
+  "hours": "",
+  "contactLabel": "تواصل مع المتجر",
+  "contactUrl": "https://www.instagram.com/a_lsaa2/",
+  "instagram": "https://www.instagram.com/a_lsaa2/",
+  "contactMode": "copy",
+  "phones": [],
+  "heroImage": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85",
+  "heroPosition": "center",
+  "theme": {
+    "bg": "#F3F3EE",
+    "ink": "#30342D",
+    "surface": "#FFFFFF",
+    "muted": "#78818A",
+    "accent": "#8A8152",
+    "line": "#E2E0D4",
+    "hero": "#EAE8DB",
+    "photo": "#E2E0D4",
+    "dark": "#30342D",
+    "accentDark": "#8A8152",
+    "accentSoft": "#F3F3EE",
+    "accentTint": "#E2E0D4",
+    "warm": "#8A8152",
+    "highlight": "#E2E0D4"
+  },
+  "categories": [
+    "أجهزة",
+    "إكسسوارات",
+    "ساعات ذكية"
+  ],
+  "products": [
+    {
+      "id": "center-alsaa-01",
+      "name": "هاتف ذكي · نموذج عرض",
+      "category": "أجهزة",
+      "price": 45000,
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1539874754764-5a96559165b0?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "هاتف ذكي · نموذج عرض — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز الساعة.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل",
+        "weight": "المواصفات",
+        "stretch": "عاجي",
+        "opacity": "حالة المنتج",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": true,
+      "compareAtPrice": 50000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "center-alsaa-02",
+      "name": "جهاز لوحي",
+      "category": "إكسسوارات",
+      "price": 48000,
+      "image": "https://images.unsplash.com/photo-1539874754764-5a96559165b0?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "جهاز لوحي — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز الساعة.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل",
+        "weight": "المواصفات",
+        "stretch": "رمادي",
+        "opacity": "حالة المنتج",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 53000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "center-alsaa-03",
+      "name": "ساعة ذكية",
+      "category": "ساعات ذكية",
+      "price": 51000,
+      "image": "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "ساعة ذكية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز الساعة.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل",
+        "weight": "المواصفات",
+        "stretch": "كحلي",
+        "opacity": "حالة المنتج",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 56000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "center-alsaa-04",
+      "name": "سماعات لاسلكية",
+      "category": "أجهزة",
+      "price": 54000,
+      "image": "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "سماعات لاسلكية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز الساعة.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل",
+        "weight": "المواصفات",
+        "stretch": "بيج",
+        "opacity": "حالة المنتج",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 59000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "center-alsaa-05",
+      "name": "شاحن سريع",
+      "category": "إكسسوارات",
+      "price": 57000,
+      "image": "https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "شاحن سريع — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز الساعة.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل",
+        "weight": "المواصفات",
+        "stretch": "أزرق",
+        "opacity": "حالة المنتج",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 62000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "center-alsaa-06",
+      "name": "ملحقات الهاتف",
+      "category": "ساعات ذكية",
+      "price": 60000,
+      "image": "https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1539874754764-5a96559165b0?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "ملحقات الهاتف — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز الساعة.",
+      "specs": {
+        "composition": "العلامة التجارية",
+        "width": "الموديل",
+        "weight": "المواصفات",
+        "stretch": "بني",
+        "opacity": "حالة المنتج",
+        "finish": "المزايا",
+        "care": "الضمان",
+        "use": "التوافق"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 65000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    }
+  ],
+  "heroFit": "cover",
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1539874754764-5a96559165b0?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=1100&q=85"
+  ],
+  "quantityUnit": "قطعة",
+  "quantityUnitEn": "item",
+  "demoMode": true
+}

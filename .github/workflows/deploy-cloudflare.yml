@@ -117,3 +117,39 @@ jobs:
       - name: Deploy MUKHTAR storefront Worker
         working-directory: artifacts/eva-worker
         run: pnpm exec wrangler deploy --config ../client-stores/mukhtar/wrangler.jsonc
+      - name: Deploy أقمشة حيدر طائف storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/hayder-taif/wrangler.jsonc
+      - name: Deploy Apple Center العامرية storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/apple-center-amiriya/wrangler.jsonc
+      - name: Deploy الماس ستور storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/almass-mobile/wrangler.jsonc
+      - name: Deploy الأوحد للهواتف النقالة storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/alawhad-mobile/wrangler.jsonc
+      - name: Deploy عالم القلعة storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/aalam-alqalaa/wrangler.jsonc
+      - name: Deploy 1989 Restaurant storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/nineteen89-rest/wrangler.jsonc
+      - name: Deploy شركة إخوان الصفا storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/alsifa-company/wrangler.jsonc
+      - name: Deploy SHAM Couture storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/sham-couture/wrangler.jsonc
+      - name: Deploy FINK Factory storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/fink-factory/wrangler.jsonc
+      - name: Deploy مركز ابل ستور storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/apple-store-98h/wrangler.jsonc
+      - name: Deploy مركز الساعة storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/center-alsaa/wrangler.jsonc
+      - name: Deploy MORVO Handmade storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/morvo-handmade/wrangler.jsonc

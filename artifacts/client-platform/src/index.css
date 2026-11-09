@@ -2260,3 +2260,17 @@ picture { display: contents; }
   background:linear-gradient(180deg,rgba(38,52,59,.02) 0%,rgba(38,52,59,.08) 34%,rgba(38,52,59,.52) 100%);
 }
 
+
+/* Shape tokens for the twelve new client previews */
+.tenant-app--hayder-taif{--tenant-radius-panel:26px;--tenant-radius-card:20px;--tenant-radius-media:18px;--tenant-radius-control:999px;--tenant-radius-small:14px;--tenant-radius-logo:18px;--tenant-radius-icon:16px}
+.tenant-app--apple-center-amiriya{--tenant-radius-panel:24px;--tenant-radius-card:18px;--tenant-radius-media:16px;--tenant-radius-control:999px;--tenant-radius-small:12px;--tenant-radius-logo:50%;--tenant-radius-icon:50%}
+.tenant-app--almass-mobile{--tenant-radius-panel:24px;--tenant-radius-card:18px;--tenant-radius-media:18px;--tenant-radius-control:14px;--tenant-radius-small:12px;--tenant-radius-logo:50%;--tenant-radius-icon:50%}
+.tenant-app--alawhad-mobile{--tenant-radius-panel:22px;--tenant-radius-card:18px;--tenant-radius-media:16px;--tenant-radius-control:14px;--tenant-radius-small:12px;--tenant-radius-logo:18px;--tenant-radius-icon:18px}
+.tenant-app--aalam-alqalaa{--tenant-radius-panel:22px;--tenant-radius-card:18px;--tenant-radius-media:16px;--tenant-radius-control:14px;--tenant-radius-small:12px;--tenant-radius-logo:16px;--tenant-radius-icon:16px}
+.tenant-app--nineteen89-rest{--tenant-radius-panel:28px;--tenant-radius-card:22px;--tenant-radius-media:20px;--tenant-radius-control:999px;--tenant-radius-small:16px;--tenant-radius-logo:50%;--tenant-radius-icon:50%}
+.tenant-app--alsifa-company{--tenant-radius-panel:18px;--tenant-radius-card:16px;--tenant-radius-media:14px;--tenant-radius-control:12px;--tenant-radius-small:10px;--tenant-radius-logo:14px;--tenant-radius-icon:14px}
+.tenant-app--sham-couture{--tenant-radius-panel:32px;--tenant-radius-card:24px;--tenant-radius-media:24px;--tenant-radius-control:999px;--tenant-radius-small:16px;--tenant-radius-logo:50%;--tenant-radius-icon:50%}
+.tenant-app--fink-factory{--tenant-radius-panel:16px;--tenant-radius-card:12px;--tenant-radius-media:8px;--tenant-radius-control:10px;--tenant-radius-small:8px;--tenant-radius-logo:12px;--tenant-radius-icon:12px}
+.tenant-app--apple-store-98h{--tenant-radius-panel:22px;--tenant-radius-card:18px;--tenant-radius-media:16px;--tenant-radius-control:999px;--tenant-radius-small:12px;--tenant-radius-logo:50%;--tenant-radius-icon:50%}
+.tenant-app--center-alsaa{--tenant-radius-panel:20px;--tenant-radius-card:16px;--tenant-radius-media:14px;--tenant-radius-control:12px;--tenant-radius-small:10px;--tenant-radius-logo:16px;--tenant-radius-icon:16px}
+.tenant-app--morvo-handmade{--tenant-radius-panel:30px;--tenant-radius-card:22px;--tenant-radius-media:20px;--tenant-radius-control:999px;--tenant-radius-small:16px;--tenant-radius-logo:50%;--tenant-radius-icon:50%}

@@ -1,0 +1,379 @@
+{
+  "key": "nineteen89-rest",
+  "name": "1989 Restaurant",
+  "monogram": "89",
+  "tagline": "برغر وسندويشات",
+  "eyebrow": "1989 RESTAURANT",
+  "storyTitle": "تفاصيل الاختيار تصنع الانطباع",
+  "storyText": "نموذج عرض أولي مخصص لـ 1989 Restaurant. الصور والأسماء والأسعار أمثلة تصميمية قابلة للاستبدال بالبيانات المعتمدة من صاحب النشاط.",
+  "description": "تصور متجر إلكتروني مخصص لـ 1989 Restaurant يعرض أقسام النشاط والمنتجات بطريقة واضحة ومريحة للتصفح.",
+  "note": "هذه معاينة تصميمية — الصور والمنتجات والأسعار أمثلة وليست مخزوناً فعلياً",
+  "demoNotice": "صور وأسعار ونماذج افتراضية لأغراض العرض فقط وتحتاج إلى اعتماد صاحب المتجر",
+  "location": "بغداد · زيونة · شارع الربيعي",
+  "hours": "",
+  "contactLabel": "تواصل مع المتجر",
+  "contactUrl": "https://www.instagram.com/1989.rest/",
+  "instagram": "https://www.instagram.com/1989.rest/",
+  "contactMode": "copy",
+  "phones": [],
+  "heroImage": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1100&q=85",
+  "heroPosition": "center",
+  "theme": {
+    "bg": "#F8F2E8",
+    "ink": "#282720",
+    "surface": "#FFFFFF",
+    "muted": "#78818A",
+    "accent": "#A44735",
+    "line": "#E8DCCE",
+    "hero": "#EFE1D1",
+    "photo": "#E8DCCE",
+    "dark": "#282720",
+    "accentDark": "#A44735",
+    "accentSoft": "#F8F2E8",
+    "accentTint": "#E8DCCE",
+    "warm": "#A44735",
+    "highlight": "#E8DCCE"
+  },
+  "categories": [
+    "برغر",
+    "ساندويشات",
+    "أطباق جانبية",
+    "وجبات دجاج"
+  ],
+  "products": [
+    {
+      "id": "nineteen89-rest-01",
+      "name": "برغر بغداد",
+      "category": "برغر",
+      "price": 6500,
+      "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "برغر بغداد — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر 1989 Restaurant.",
+      "specs": {
+        "composition": "المكونات",
+        "width": "حجم الوجبة",
+        "weight": "الوزن",
+        "stretch": "عاجي",
+        "opacity": "مسببات الحساسية",
+        "finish": "طريقة التقديم",
+        "care": "تعليمات الحفظ",
+        "use": "ملاحظات الطلب"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": true,
+      "compareAtPrice": 11500,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "nineteen89-rest-02",
+      "name": "برغر 1989",
+      "category": "ساندويشات",
+      "price": 9500,
+      "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1553909489-cd47e0ef937f?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "برغر 1989 — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر 1989 Restaurant.",
+      "specs": {
+        "composition": "المكونات",
+        "width": "حجم الوجبة",
+        "weight": "الوزن",
+        "stretch": "رمادي",
+        "opacity": "مسببات الحساسية",
+        "finish": "طريقة التقديم",
+        "care": "تعليمات الحفظ",
+        "use": "ملاحظات الطلب"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 14500,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "nineteen89-rest-03",
+      "name": "برغر دجاج",
+      "category": "أطباق جانبية",
+      "price": 12500,
+      "image": "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1553909489-cd47e0ef937f?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "برغر دجاج — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر 1989 Restaurant.",
+      "specs": {
+        "composition": "المكونات",
+        "width": "حجم الوجبة",
+        "weight": "الوزن",
+        "stretch": "كحلي",
+        "opacity": "مسببات الحساسية",
+        "finish": "طريقة التقديم",
+        "care": "تعليمات الحفظ",
+        "use": "ملاحظات الطلب"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 17500,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "nineteen89-rest-04",
+      "name": "ساندويش كرسبي",
+      "category": "وجبات دجاج",
+      "price": 15500,
+      "image": "https://images.unsplash.com/photo-1553909489-cd47e0ef937f?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "ساندويش كرسبي — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر 1989 Restaurant.",
+      "specs": {
+        "composition": "المكونات",
+        "width": "حجم الوجبة",
+        "weight": "الوزن",
+        "stretch": "بيج",
+        "opacity": "مسببات الحساسية",
+        "finish": "طريقة التقديم",
+        "care": "تعليمات الحفظ",
+        "use": "ملاحظات الطلب"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 20500,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "nineteen89-rest-05",
+      "name": "كبة أهلنا",
+      "category": "برغر",
+      "price": 18500,
+      "image": "https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "كبة أهلنا — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر 1989 Restaurant.",
+      "specs": {
+        "composition": "المكونات",
+        "width": "حجم الوجبة",
+        "weight": "الوزن",
+        "stretch": "أزرق",
+        "opacity": "مسببات الحساسية",
+        "finish": "طريقة التقديم",
+        "care": "تعليمات الحفظ",
+        "use": "ملاحظات الطلب"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 23500,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "nineteen89-rest-06",
+      "name": "تاجينة دجاج",
+      "category": "ساندويشات",
+      "price": 21500,
+      "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "تاجينة دجاج — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر 1989 Restaurant.",
+      "specs": {
+        "composition": "المكونات",
+        "width": "حجم الوجبة",
+        "weight": "الوزن",
+        "stretch": "بني",
+        "opacity": "مسببات الحساسية",
+        "finish": "طريقة التقديم",
+        "care": "تعليمات الحفظ",
+        "use": "ملاحظات الطلب"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 26500,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    }
+  ],
+  "heroFit": "cover",
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=1100&q=85"
+  ],
+  "quantityUnit": "وجبة",
+  "quantityUnitEn": "meal",
+  "demoMode": true
+}

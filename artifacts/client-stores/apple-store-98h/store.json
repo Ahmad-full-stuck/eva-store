@@ -1,0 +1,384 @@
+{
+  "key": "apple-store-98h",
+  "name": "مركز ابل ستور",
+  "monogram": "A",
+  "tagline": "أجهزة أبل والهواتف والإكسسوارات",
+  "eyebrow": "مركز ابل ستور",
+  "storyTitle": "تفاصيل الاختيار تصنع الانطباع",
+  "storyText": "نموذج عرض أولي مخصص لـ مركز ابل ستور. الصور والأسماء والأسعار أمثلة تصميمية قابلة للاستبدال بالبيانات المعتمدة من صاحب النشاط.",
+  "description": "تصور متجر إلكتروني مخصص لـ مركز ابل ستور يعرض أقسام النشاط والمنتجات بطريقة واضحة ومريحة للتصفح.",
+  "note": "هذه معاينة تصميمية — الصور والمنتجات والأسعار أمثلة وليست مخزوناً فعلياً",
+  "demoNotice": "صور وأسعار ونماذج افتراضية لأغراض العرض فقط وتحتاج إلى اعتماد صاحب المتجر",
+  "location": "البصرة · شارع الجزائر · مقابل الخيمة سابقاً",
+  "hours": "9 صباحاً – 12 ليلاً",
+  "contactLabel": "تواصل مع المتجر",
+  "contactUrl": "https://www.instagram.com/98h_iq/",
+  "instagram": "https://www.instagram.com/98h_iq/",
+  "contactMode": "copy",
+  "phones": [
+    {
+      "label": "اتصال المتجر",
+      "number": "07700647555"
+    }
+  ],
+  "heroImage": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+  "heroPosition": "center",
+  "theme": {
+    "bg": "#F5F6F7",
+    "ink": "#222A32",
+    "surface": "#FFFFFF",
+    "muted": "#78818A",
+    "accent": "#647E98",
+    "line": "#E1E5E9",
+    "hero": "#EBEFF3",
+    "photo": "#E1E5E9",
+    "dark": "#222A32",
+    "accentDark": "#647E98",
+    "accentSoft": "#F5F6F7",
+    "accentTint": "#E1E5E9",
+    "warm": "#647E98",
+    "highlight": "#E1E5E9"
+  },
+  "categories": [
+    "هواتف آيفون",
+    "أجهزة آيباد",
+    "إكسسوارات أبل",
+    "ساعات وسماعات"
+  ],
+  "products": [
+    {
+      "id": "apple-store-98h-01",
+      "name": "iPhone · فئة Pro",
+      "category": "هواتف آيفون",
+      "price": 450000,
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "iPhone · فئة Pro — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز ابل ستور.",
+      "specs": {
+        "composition": "الشركة المصنعة",
+        "width": "السعة والموديل",
+        "weight": "الذاكرة",
+        "stretch": "عاجي",
+        "opacity": "حالة الجهاز",
+        "finish": "المزايا والفحص",
+        "care": "الضمان",
+        "use": "تفاصيل الجهاز"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": true,
+      "compareAtPrice": 455000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "apple-store-98h-02",
+      "name": "iPhone · فئة Plus",
+      "category": "أجهزة آيباد",
+      "price": 453000,
+      "image": "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "iPhone · فئة Plus — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز ابل ستور.",
+      "specs": {
+        "composition": "الشركة المصنعة",
+        "width": "السعة والموديل",
+        "weight": "الذاكرة",
+        "stretch": "رمادي",
+        "opacity": "حالة الجهاز",
+        "finish": "المزايا والفحص",
+        "care": "الضمان",
+        "use": "تفاصيل الجهاز"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 458000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "apple-store-98h-03",
+      "name": "iPad Pro · M‑Series",
+      "category": "إكسسوارات أبل",
+      "price": 456000,
+      "image": "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "iPad Pro · M‑Series — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز ابل ستور.",
+      "specs": {
+        "composition": "الشركة المصنعة",
+        "width": "السعة والموديل",
+        "weight": "الذاكرة",
+        "stretch": "كحلي",
+        "opacity": "حالة الجهاز",
+        "finish": "المزايا والفحص",
+        "care": "الضمان",
+        "use": "تفاصيل الجهاز"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 461000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "apple-store-98h-04",
+      "name": "Apple Watch",
+      "category": "ساعات وسماعات",
+      "price": 459000,
+      "image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "Apple Watch — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز ابل ستور.",
+      "specs": {
+        "composition": "الشركة المصنعة",
+        "width": "السعة والموديل",
+        "weight": "الذاكرة",
+        "stretch": "بيج",
+        "opacity": "حالة الجهاز",
+        "finish": "المزايا والفحص",
+        "care": "الضمان",
+        "use": "تفاصيل الجهاز"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 464000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "apple-store-98h-05",
+      "name": "AirPods",
+      "category": "هواتف آيفون",
+      "price": 462000,
+      "image": "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "AirPods — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز ابل ستور.",
+      "specs": {
+        "composition": "الشركة المصنعة",
+        "width": "السعة والموديل",
+        "weight": "الذاكرة",
+        "stretch": "أزرق",
+        "opacity": "حالة الجهاز",
+        "finish": "المزايا والفحص",
+        "care": "الضمان",
+        "use": "تفاصيل الجهاز"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 467000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "apple-store-98h-06",
+      "name": "شاحن USB‑C",
+      "category": "أجهزة آيباد",
+      "price": 465000,
+      "image": "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "شاحن USB‑C — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر مركز ابل ستور.",
+      "specs": {
+        "composition": "الشركة المصنعة",
+        "width": "السعة والموديل",
+        "weight": "الذاكرة",
+        "stretch": "بني",
+        "opacity": "حالة الجهاز",
+        "finish": "المزايا والفحص",
+        "care": "الضمان",
+        "use": "تفاصيل الجهاز"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 470000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    }
+  ],
+  "heroFit": "cover",
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85"
+  ],
+  "quantityUnit": "قطعة",
+  "quantityUnitEn": "item",
+  "demoMode": true
+}

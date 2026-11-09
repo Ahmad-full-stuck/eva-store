@@ -1,0 +1,379 @@
+{
+  "key": "fink-factory",
+  "name": "FINK Factory",
+  "monogram": "F",
+  "tagline": "منحوتات وقطع فنية",
+  "eyebrow": "FINK FACTORY",
+  "storyTitle": "تفاصيل الاختيار تصنع الانطباع",
+  "storyText": "نموذج عرض أولي مخصص لـ FINK Factory. الصور والأسماء والأسعار أمثلة تصميمية قابلة للاستبدال بالبيانات المعتمدة من صاحب النشاط.",
+  "description": "تصور متجر إلكتروني مخصص لـ FINK Factory يعرض أقسام النشاط والمنتجات بطريقة واضحة ومريحة للتصفح.",
+  "note": "هذه معاينة تصميمية — الصور والمنتجات والأسعار أمثلة وليست مخزوناً فعلياً",
+  "demoNotice": "صور وأسعار ونماذج افتراضية لأغراض العرض فقط وتحتاج إلى اعتماد صاحب المتجر",
+  "location": "",
+  "hours": "",
+  "contactLabel": "تواصل مع المتجر",
+  "contactUrl": "https://www.instagram.com/fink_plant/",
+  "instagram": "https://www.instagram.com/fink_plant/",
+  "contactMode": "copy",
+  "phones": [],
+  "heroImage": "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=1100&q=85",
+  "heroPosition": "center",
+  "theme": {
+    "bg": "#F1F0EC",
+    "ink": "#292D2E",
+    "surface": "#FFFFFF",
+    "muted": "#78818A",
+    "accent": "#7D8173",
+    "line": "#E0DED7",
+    "hero": "#E5E3DB",
+    "photo": "#E0DED7",
+    "dark": "#292D2E",
+    "accentDark": "#7D8173",
+    "accentSoft": "#F1F0EC",
+    "accentTint": "#E0DED7",
+    "warm": "#7D8173",
+    "highlight": "#E0DED7"
+  },
+  "categories": [
+    "منحوتات فنية",
+    "قطع ديكور",
+    "أعمال جدارية",
+    "تنفيذ خاص"
+  ],
+  "products": [
+    {
+      "id": "fink-factory-01",
+      "name": "منحوتة تجريدية",
+      "category": "منحوتات فنية",
+      "price": 60000,
+      "image": "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1544967082-d9d25d867d66?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "منحوتة تجريدية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر FINK Factory.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "عاجي",
+        "opacity": "أسلوب العمل",
+        "finish": "التشطيب",
+        "care": "العناية",
+        "use": "المكان المقترح"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": true,
+      "compareAtPrice": 65000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "fink-factory-02",
+      "name": "قطعة ديكور",
+      "category": "قطع ديكور",
+      "price": 63000,
+      "image": "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1544967082-d9d25d867d66?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "قطعة ديكور — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر FINK Factory.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "رمادي",
+        "opacity": "أسلوب العمل",
+        "finish": "التشطيب",
+        "care": "العناية",
+        "use": "المكان المقترح"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 68000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "fink-factory-03",
+      "name": "مجسم هندسي",
+      "category": "أعمال جدارية",
+      "price": 66000,
+      "image": "https://images.unsplash.com/photo-1544967082-d9d25d867d66?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "مجسم هندسي — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر FINK Factory.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "كحلي",
+        "opacity": "أسلوب العمل",
+        "finish": "التشطيب",
+        "care": "العناية",
+        "use": "المكان المقترح"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 71000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "fink-factory-04",
+      "name": "قطعة جدارية",
+      "category": "تنفيذ خاص",
+      "price": 69000,
+      "image": "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "قطعة جدارية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر FINK Factory.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "بيج",
+        "opacity": "أسلوب العمل",
+        "finish": "التشطيب",
+        "care": "العناية",
+        "use": "المكان المقترح"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 74000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "fink-factory-05",
+      "name": "منحوتة صغيرة",
+      "category": "منحوتات فنية",
+      "price": 72000,
+      "image": "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "منحوتة صغيرة — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر FINK Factory.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "أزرق",
+        "opacity": "أسلوب العمل",
+        "finish": "التشطيب",
+        "care": "العناية",
+        "use": "المكان المقترح"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 77000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "fink-factory-06",
+      "name": "عمل فني حسب الطلب",
+      "category": "قطع ديكور",
+      "price": 75000,
+      "image": "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1100&q=85",
+      "images": [
+        "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=1100&q=85",
+        "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1100&q=85"
+      ],
+      "description": "عمل فني حسب الطلب — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر FINK Factory.",
+      "specs": {
+        "composition": "الخامة",
+        "width": "الأبعاد",
+        "weight": "الوزن",
+        "stretch": "بني",
+        "opacity": "أسلوب العمل",
+        "finish": "التشطيب",
+        "care": "العناية",
+        "use": "المكان المقترح"
+      },
+      "colors": [
+        {
+          "id": "tone-a",
+          "name": "عاجي",
+          "hex": "#E7DDCF",
+          "available": true,
+          "stockMeters": 8
+        },
+        {
+          "id": "tone-b",
+          "name": "كحلي",
+          "hex": "#344B5C",
+          "available": true,
+          "stockMeters": 8
+        }
+      ],
+      "colorsEnabled": true,
+      "stockMeters": 8,
+      "isFeatured": true,
+      "isNew": false,
+      "compareAtPrice": 80000,
+      "faqs": [
+        {
+          "question": "هل المنتج متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+        },
+        {
+          "question": "هل السعر المعروض معتمد؟",
+          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+        }
+      ],
+      "createdAt": "2026-11-09"
+    }
+  ],
+  "heroFit": "cover",
+  "productFit": "contain",
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1100&q=85",
+    "https://images.unsplash.com/photo-1544967082-d9d25d867d66?auto=format&fit=crop&w=1100&q=85"
+  ],
+  "quantityUnit": "قطعة",
+  "quantityUnitEn": "item",
+  "demoMode": true
+}

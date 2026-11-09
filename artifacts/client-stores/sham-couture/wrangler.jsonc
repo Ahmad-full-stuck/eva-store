@@ -1,0 +1,35 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sham-couture",
+  "main": "../shared/worker.js",
+  "compatibility_date": "2026-11-05",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+      "persist": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true
+    }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "ORDERS",
+      "id": "c2c6b234ff314ac78c7726f23c61799f"
+    }
+  ],
+  "assets": {
+    "directory": "../../client-platform/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  }
+}
