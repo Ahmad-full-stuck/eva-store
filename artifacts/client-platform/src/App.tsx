@@ -7,6 +7,7 @@ import { useStoreData } from '@/hooks/use-store-data'
 import { LangProvider, useT } from '@/lib/i18n'
 import { adaptTenantCopy } from '@/lib/site'
 import { useSiteContent } from '@/lib/site-content'
+import { VERTICAL_TENANT_KEYS } from '@/lib/store-brand'
 import { addCartItem, getStoredCart, getStoredWishlist, reconcileCart, removeCartItem, setStoredCart, setStoredWishlist, updateCartItem } from '@/lib/storage'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
@@ -199,9 +200,14 @@ function AppShell() {
   }
   const cartMeters = cart.reduce((sum, item) => sum + item.length, 0)
   const pageProps = { products, categories, wishlist, onWish: toggleWishlist, onAdd: addToCart }
+  const tenantRootClass = [
+    'app-shell',
+    content.tenantKey ? 'tenant-app tenant-app--' + content.tenantKey : '',
+    content.tenantKey && VERTICAL_TENANT_KEYS.has(content.tenantKey) ? 'tenant-vertical-client' : '',
+  ].filter(Boolean).join(' ')
 
   return (
-    <div className={`app-shell${content.tenantKey ? ` tenant-app tenant-app--${content.tenantKey}` : ""}`} dir={lang === 'en' ? 'ltr' : 'rtl'}>
+    <div className={tenantRootClass} dir={lang === 'en' ? 'ltr' : 'rtl'}>
       <style>{shellStyles}</style>
       <a className="skip-link" href="#main-content" onClick={skipToContent}>{t('core.skipLink')}</a>
       <SiteHeader routes={routes} products={products} cartMeters={cartMeters} wishlistCount={wishlist.length} />

@@ -2,8 +2,8 @@ import './tenant-vertical-home.css'
 import {
   ArrowLeft, ArrowUpLeft, BadgeCheck, Check, Clock3, Gift, Hammer,
   Headphones, Heart, Layers, MapPin, Monitor, Package, Palette,
-  Paintbrush, Plug, Ruler, ShieldCheck, Shirt, Smartphone, Sparkles,
-  Truck, Utensils, Watch, Wrench, type LucideIcon,
+  Paintbrush, Plug, Shirt, Smartphone, Sparkles,
+  Utensils, Watch, Wrench, type LucideIcon,
 } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product } from '@/types'
@@ -106,7 +106,7 @@ function ProductTile({
   onWish: (slug: string) => void
   unit: string
 }) {
-  const category = products.find((item) => item.id === product.id)?.categoryId
+  const category = product.categoryId
   return (
     <article className="vhome-product">
       <div className="vhome-product__media">

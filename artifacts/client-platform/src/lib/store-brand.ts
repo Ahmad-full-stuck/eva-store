@@ -6,6 +6,21 @@ export type StoreBrand = {
   catalogTitle: string; catalogIntro: string; catalogAction: string;
   specLabels: { composition:string; width:string; weight:string; stretch:string; opacity:string; finish:string; care:string; use:string };
 }
+export const VERTICAL_TENANT_KEYS = new Set([
+  'hayder-taif',
+  'apple-center-amiriya',
+  'almass-mobile',
+  'alawhad-mobile',
+  'aalam-alqalaa',
+  'nineteen89-rest',
+  'alsifa-company',
+  'sham-couture',
+  'fink-factory',
+  'apple-store-98h',
+  'center-alsaa',
+  'morvo-handmade'
+])
+
 export const STORE_BRANDS: Record<string, StoreBrand> = {
   laya: {
     key:'laya',mark:'L',kicker:'BRAND LAYA  /  WOMEN’S COLLECTION',
