@@ -1,565 +1,602 @@
-
-/* Bespoke vertical storefront compositions for the twelve new client previews.
-   These styles are intentionally scoped to TenantVerticalHome only. */
-.tenant-vertical-home.vhome{--vh-bg:var(--eva-bg);--vh-paper:var(--eva-surface);--vh-ink:var(--eva-ink);--vh-muted:var(--eva-muted);--vh-accent:var(--eva-rose);--vh-line:var(--eva-line);background:var(--vh-bg);color:var(--vh-ink);padding:28px 0 64px;overflow:hidden}
-.tenant-vertical-home .container-eva{width:min(1240px,calc(100% - 44px));margin-inline:auto}
-.tenant-vertical-home h1,.tenant-vertical-home h2,.tenant-vertical-home h3{color:var(--vh-ink);letter-spacing:-.035em}
-.tenant-vertical-home h1{font-size:clamp(38px,5.8vw,72px);line-height:1.2;font-weight:750;margin:14px 0}
-.tenant-vertical-home h1 em,.tenant-vertical-home h1 strong{font-style:normal;color:var(--vh-accent)}
-.tenant-vertical-home p{color:var(--vh-muted)}
-.tenant-vertical-home figure{margin:0;min-width:0}
-.tenant-vertical-home img{display:block;width:100%;height:100%;object-fit:cover}
-.tenant-vertical-home a{transition:transform .22s ease,color .22s ease,background-color .22s ease,border-color .22s ease}
-.tenant-vertical-home a:hover{color:var(--vh-accent)}
-.tenant-vertical-home .vhome-eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--vh-accent);font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
-.tenant-vertical-home .vhome-eyebrow:before{content:"";width:24px;height:1px;background:currentColor;opacity:.65}
-.tenant-vertical-home .vhome-primary,.tenant-vertical-home .vhome-secondary{min-height:48px;padding:0 19px;display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--vh-accent);border-radius:999px;font-size:11px;font-weight:750}
-.tenant-vertical-home .vhome-primary{background:var(--vh-accent);color:#fff}
-.tenant-vertical-home .vhome-primary:hover{background:var(--vh-ink);border-color:var(--vh-ink);color:white;transform:translateY(-2px)}
-.tenant-vertical-home .vhome-secondary{background:transparent;color:var(--vh-ink);border-color:var(--vh-line)}
-.tenant-vertical-home .vhome-secondary:hover{border-color:var(--vh-accent);transform:translateY(-2px)}
-.tenant-vertical-home .fabric-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
-.tenant-vertical-home .vhome-section{padding:54px 0 14px}
-.tenant-vertical-home .vhome-section-heading{display:flex;justify-content:space-between;align-items:end;gap:22px;margin-bottom:23px}
-.tenant-vertical-home .vhome-section-heading h2{font-size:clamp(25px,3.4vw,39px);line-height:1.35;margin:10px 0 4px}
-.tenant-vertical-home .vhome-section-heading p{font-size:12px;line-height:2;margin:0;max-width:620px}
-.tenant-vertical-home .vhome-text-link{display:inline-flex;align-items:center;gap:8px;color:var(--vh-accent);font-size:11px;font-weight:800;white-space:nowrap}
-.tenant-vertical-home .vhome-product-shelf{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.tenant-vertical-home .vhome-product-shelf .product-card{min-width:0;background:var(--vh-paper);border:1px solid var(--vh-line);box-shadow:0 12px 32px rgba(25,30,32,.045)}
-.tenant-vertical-home .vhome-product-shelf .product-card:hover{border-color:var(--vh-accent);box-shadow:0 18px 40px rgba(25,30,32,.09)}
-.tenant-vertical-home .vhome-product-shelf .product-card-media{aspect-ratio:1/1.12;border-radius:var(--tenant-radius-media,18px)}
-.tenant-vertical-home .vhome-product-shelf .product-card-body{padding:13px 3px 4px}
-.tenant-vertical-home .vhome-categories{display:grid;gap:10px}
-.tenant-vertical-home .vhome-category{min-width:0;display:flex;align-items:center;gap:12px;padding:14px 15px;border:1px solid var(--vh-line);background:var(--vh-paper);border-radius:var(--tenant-radius-card,18px);color:var(--vh-ink)}
-.tenant-vertical-home .vhome-category:hover{transform:translateY(-3px);border-color:var(--vh-accent);color:var(--vh-ink)}
-.tenant-vertical-home .vhome-category__index{color:var(--vh-accent);font-size:9px;font-weight:800;letter-spacing:.08em}
-.tenant-vertical-home .vhome-category__icon{width:38px;height:38px;display:grid;place-items:center;flex:none;border-radius:50%;background:color-mix(in srgb,var(--vh-accent) 10%,var(--vh-paper));color:var(--vh-accent)}
-.tenant-vertical-home .vhome-category__copy{display:grid;gap:2px;min-width:0}
-.tenant-vertical-home .vhome-category__copy strong{font-size:12px}
-.tenant-vertical-home .vhome-category__copy small{font-size:9px;line-height:1.8;color:var(--vh-muted)}
-.tenant-vertical-home .vhome-category__arrow{margin-inline-start:auto;flex:none;color:var(--vh-accent)}
-.tenant-vertical-home .vhome-feature-ribbon{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:35px 0 4px}
-.tenant-vertical-home .vhome-feature{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--vh-line);border-radius:var(--tenant-radius-card,18px);background:var(--vh-paper)}
-.tenant-vertical-home .vhome-feature>span{font-size:10px;font-weight:800;color:var(--vh-accent)}
-.tenant-vertical-home .vhome-feature>div{display:grid;gap:3px;min-width:0;flex:1}
-.tenant-vertical-home .vhome-feature strong{font-size:11px}
-.tenant-vertical-home .vhome-feature small{font-size:9px;color:var(--vh-muted);line-height:1.7}
-.tenant-vertical-home .vhome-feature>svg{color:var(--vh-accent);flex:none}
-.tenant-vertical-home .vhome-contact{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px 32px;margin-top:45px;background:var(--vh-paper);border:1px solid var(--vh-line);border-radius:var(--tenant-radius-panel,24px)}
-.tenant-vertical-home .vhome-contact h2{font-size:clamp(22px,3vw,32px);margin:9px 0 5px}
-.tenant-vertical-home .vhome-contact p{font-size:11px;line-height:2;margin:0;max-width:640px}
-.tenant-vertical-home .vhome-contact__button{display:inline-flex;align-items:center;gap:10px;padding:0 18px;min-height:46px;white-space:nowrap;border-radius:999px;background:var(--vh-accent);color:white;font-size:11px;font-weight:800}
-.tenant-vertical-home .vhome-contact__button:hover{background:var(--vh-ink);color:white;transform:translateY(-2px)}
-.tenant-vertical-home .vhome-demo{display:flex;align-items:center;gap:12px;margin-top:28px;padding:12px 15px;border:1px dashed var(--vh-line);border-radius:var(--tenant-radius-card,18px);background:color-mix(in srgb,var(--vh-paper) 68%,transparent)}
-.tenant-vertical-home .vhome-demo__mark{width:24px;height:24px;display:grid;place-items:center;flex:none;border-radius:50%;background:var(--vh-accent);color:white;font:700 12px Georgia,serif}
-.tenant-vertical-home .vhome-demo p{margin:0;font-size:9px;line-height:1.9}
-.tenant-vertical-home .vhome-demo strong{color:var(--vh-ink)}
-
-/* HAIDER TAIF — textile atelier / tactile material library */
-.vhome--fabric{--vh-bg:#F1ECE3;--vh-paper:#FCFAF5;--vh-ink:#37342E;--vh-muted:#777267;--vh-accent:#8C664C;--vh-line:#DED5C8}
-.fabric-masthead{display:grid;grid-template-columns:.92fr 1.08fr;gap:clamp(30px,6vw,82px);align-items:center;padding:22px 0 32px}
-.fabric-masthead__copy{padding:18px 0}
-.fabric-masthead__overline{margin:24px 0 0;color:var(--vh-accent)!important;font:italic 15px Georgia,serif;letter-spacing:.04em}
-.fabric-masthead h1{font-size:clamp(38px,5.7vw,72px);letter-spacing:-.055em}
-.fabric-masthead h1 em{display:block;margin-top:9px;font:italic 400 clamp(20px,2.6vw,32px)/1.6 Georgia,serif;color:#9A8069}
-.fabric-masthead__desc{max-width:470px;font-size:12px;line-height:2.2}
-.fabric-masthead__image{height:510px;position:relative;overflow:hidden;border-radius:4px 150px 4px 4px;background:#D8CFC1}
-.fabric-masthead__image img{object-position:center}
-.fabric-masthead__image figcaption{position:absolute;inset:auto 18px 17px;display:flex;justify-content:space-between;color:#fff;font:700 9px Georgia,serif;letter-spacing:.15em;text-shadow:0 1px 9px #333}
-.fabric-tags{display:flex;flex-wrap:wrap;gap:18px;margin-top:23px;color:#766D61;font-size:9px}
-.fabric-tags span{display:inline-flex;align-items:center;gap:6px}
-.fabric-swatchline{display:flex;align-items:center;gap:10px;padding:15px 0;border-block:1px solid var(--vh-line)}
-.fabric-swatchline>span{font:700 8px Georgia,serif;letter-spacing:.16em;color:var(--vh-accent);margin-inline-end:12px}
-.fabric-swatchline i{width:25px;height:25px;border-radius:50%;border:2px solid #FCFAF5;box-shadow:0 0 0 1px #D7CFC2}
-.fabric-swatchline small{margin-inline-start:auto;color:var(--vh-muted);font-size:9px}
-.vhome--fabric .vhome-categories--fabric{grid-template-columns:repeat(4,minmax(0,1fr))}
-.vhome--fabric .vhome-category{display:grid;grid-template-columns:auto auto;align-content:space-between;min-height:150px;padding:16px 18px;background:#F9F6EF;border:0;border-bottom:2px solid #C8B7A2;border-radius:0}
-.vhome--fabric .vhome-category__index{grid-column:1}
-.vhome--fabric .vhome-category__icon{grid-column:2;grid-row:1/3;justify-self:end;width:42px;height:42px;background:#EAE1D5}
-.vhome--fabric .vhome-category__copy{grid-column:1/-1;align-self:end}
-.vhome--fabric .vhome-category__arrow{display:none}
-.fabric-editorial{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(25px,6vw,76px);align-items:center;padding:58px 0 24px}
-.fabric-editorial img{height:330px;object-fit:cover;border-radius:140px 4px 4px 4px}
-.fabric-editorial h2{font:italic 400 clamp(29px,3vw,42px)/1.4 Georgia,serif;margin:14px 0}
-.fabric-editorial p{font-size:11px;line-height:2.2;max-width:450px}
-
-/* APPLE CENTER AMIRIYA — cool, clean device gallery */
-.vhome--apple-center{--vh-bg:#F5F7F9;--vh-paper:#FFFFFF;--vh-ink:#202C39;--vh-muted:#6F7C89;--vh-accent:#557B9E;--vh-line:#E0E7ED}
-.apple-center-hero{display:grid;grid-template-columns:.92fr 1.08fr;gap:50px;align-items:center;padding:28px 0 52px}
-.apple-center-hero__copy{padding:26px 0}
-.apple-center-hero h1{font-size:clamp(40px,5.4vw,66px);line-height:1.22}
-.apple-center-hero h1 strong{color:#698DAE}
-.apple-center-hero p{font-size:12px;line-height:2.2;max-width:440px}
-.apple-center-hero__device{height:490px;position:relative;overflow:hidden;background:#E7EDF3;border-radius:38px 38px 130px 38px}
-.apple-center-hero__device img{object-fit:cover;mix-blend-mode:multiply}
-.apple-center-hero__device figcaption{position:absolute;bottom:18px;inset-inline:20px;display:flex;justify-content:space-between;font-size:9px;letter-spacing:.12em;color:#fff;text-shadow:0 1px 8px #28323B}
-.apple-center-points{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
-.apple-center-points span{display:inline-flex;align-items:center;gap:6px;font-size:9px;color:#657585}
-.apple-center-points svg{color:#527D9D}
-.vhome--apple-center .vhome-categories--device{grid-template-columns:repeat(3,1fr)}
-.vhome--apple-center .vhome-category{min-height:100px;border-radius:14px}
-.vhome--apple-center .vhome-category__icon{border-radius:13px;background:#EEF3F7}
-.vhome--apple-center .vhome-product-shelf .product-card{border-radius:23px}
-.vhome--apple-center .product-card-media{background:#F0F3F6}
-
-/* ALMASS — gold-accented technology showroom */
-.vhome--diamond-tech{--vh-bg:#F2F0E9;--vh-paper:#FFFEFA;--vh-ink:#172D3B;--vh-muted:#66747A;--vh-accent:#B39458;--vh-line:#E1DACB}
-.diamond-tech-hero{padding:22px 27px 20px;background:#162E3D;color:#F9F5EC;border-radius:5px 5px 45px 5px;box-shadow:0 24px 48px rgba(19,40,53,.11)}
-.diamond-tech-hero__top,.diamond-tech-hero__foot{display:flex;justify-content:space-between;gap:15px;color:#D4BF93;font:700 9px Georgia,serif;letter-spacing:.18em}
-.diamond-tech-hero__body{display:grid;grid-template-columns:.9fr 1.1fr;gap:45px;align-items:center;padding:32px 0}
-.diamond-tech-hero__body>div{padding-inline-start:20px}
-.diamond-tech-hero h1{color:#FBF8F0;font-size:clamp(42px,5.6vw,70px)}
-.diamond-tech-hero h1 b{color:#D2B77F}
-.diamond-tech-hero p{color:#C7D0D2;font-size:12px;line-height:2.2;max-width:420px;margin-bottom:24px}
-.diamond-tech-hero__body figure{height:360px;position:relative;background:#E9E4DA;overflow:hidden;border-radius:50% 50% 4px 4px}
-.diamond-tech-hero__body figure img{object-fit:cover;mix-blend-mode:multiply}
-.diamond-tech-orbit{position:absolute;inset:17px 17px auto auto;width:61px;height:61px;border:1px solid #B39458;border-radius:50%;display:grid;place-items:center;color:#B39458;font-size:30px}
-.diamond-tech-hero__foot{padding-top:16px;border-top:1px solid rgba(255,255,255,.16);color:#BFC6C5}
-.vhome--diamond-tech .vhome-categories--ecosystem{grid-template-columns:repeat(4,1fr)}
-.vhome--diamond-tech .vhome-category{min-height:145px;display:grid;grid-template-columns:auto auto;background:#FFFEFA;border-radius:3px 22px 3px 22px}
-.vhome--diamond-tech .vhome-category__icon{grid-column:2;grid-row:1/3;justify-self:end;width:44px;height:44px;background:#F0EADD;color:#967A45}
-.vhome--diamond-tech .vhome-category__copy{grid-column:1/-1;align-self:end}
-.diamond-tech-promo{display:grid;grid-template-columns:1fr .8fr;gap:44px;align-items:center;margin-top:35px;padding:28px;background:#E7E3D9;border:1px solid #D9D0BF}
-.diamond-tech-promo h2{font-size:clamp(26px,3.3vw,40px);margin:12px 0}
-.diamond-tech-promo p{font-size:11px;line-height:2.1;max-width:510px}
-.diamond-tech-promo img{height:210px;object-fit:cover;border-radius:4px 90px 4px 4px}
-
-/* ALAWHAD — straightforward mobile catalog, products first */
-.vhome--alawhad{--vh-bg:#F5F6F7;--vh-paper:#FFFFFF;--vh-ink:#25313A;--vh-muted:#73808A;--vh-accent:#687F94;--vh-line:#DFE5E9}
-.alawhad-intro{display:grid;grid-template-columns:1fr .65fr;gap:40px;align-items:center;padding:35px 0 38px;border-bottom:1px solid var(--vh-line)}
-.alawhad-intro h1{font-size:clamp(42px,5.8vw,70px)}
-.alawhad-intro h1 b{color:#687F94}
-.alawhad-intro p{font-size:12px;line-height:2.2;max-width:510px}
-.alawhad-intro figure{height:330px;position:relative;overflow:hidden;border-radius:180px 180px 16px 16px;background:#E3E9ED}
-.alawhad-intro figure img{mix-blend-mode:multiply}
-.alawhad-intro figure span{position:absolute;bottom:16px;inset-inline:18px;color:#fff;text-shadow:0 2px 8px #27333c;font-size:9px;letter-spacing:.14em}
-.alawhad-quickbar{display:flex;align-items:center;gap:20px;padding:20px 0;border-bottom:1px solid var(--vh-line)}
-.alawhad-quickbar>strong{font-size:11px;white-space:nowrap}
-.alawhad-quickbar .vhome-categories{display:flex;flex-wrap:wrap;gap:8px}
-.alawhad-quickbar .vhome-category{padding:9px 14px;border-radius:999px}
-.alawhad-quickbar .vhome-category__index,.alawhad-quickbar .vhome-category__icon,.alawhad-quickbar .vhome-category__copy small,.alawhad-quickbar .vhome-category__arrow{display:none}
-.alawhad-quickbar .vhome-category__copy strong{font-size:10px}
-.alawhad-highlight{display:grid;grid-template-columns:.85fr 1.15fr;gap:30px;align-items:center;margin-top:40px;padding:24px;background:#E9EEF1;border-radius:3px 28px 3px 28px}
-.alawhad-highlight h2{font-size:clamp(24px,3vw,36px);margin:11px 0}
-.alawhad-highlight p{font-size:11px;line-height:2}
-.alawhad-highlight img{height:210px;border-radius:4px 24px 4px 24px}
-
-/* AL QALAA — multi-department technology house */
-.vhome--citadel{--vh-bg:#F3F1EA;--vh-paper:#FFFEFA;--vh-ink:#1B303D;--vh-muted:#6F7A7E;--vh-accent:#A9874D;--vh-line:#E0D9CB}
-.citadel-hero{display:grid;grid-template-columns:.85fr 1.15fr;gap:42px;align-items:center;padding:18px 0 40px}
-.citadel-hero__copy{padding-inline-start:20px}
-.citadel-hero h1{font-size:clamp(46px,6vw,76px)}
-.citadel-hero h1 b{color:#A9874D}
-.citadel-hero p{max-width:430px;font-size:12px;line-height:2.2;margin-bottom:24px}
-.citadel-hero figure{height:440px;position:relative;overflow:hidden;border-radius:0 0 0 125px;background:#E5E1D6}
-.citadel-hero figure img{mix-blend-mode:multiply}
-.citadel-hero figure figcaption{position:absolute;bottom:18px;inset-inline:20px;color:#fff;font:700 9px Georgia,serif;letter-spacing:.18em;text-shadow:0 1px 9px #333}
-.citadel-index{display:flex;align-items:center;gap:12px;margin-top:38px;color:#A9874D}
-.citadel-index strong{font:700 22px Georgia,serif}
-.citadel-index span{font:700 8px Georgia,serif;letter-spacing:.14em;color:var(--vh-muted)}
-.vhome--citadel .vhome-categories--departments{grid-template-columns:repeat(5,1fr)}
-.vhome--citadel .vhome-category{display:grid;grid-template-columns:auto auto;min-height:152px;border-radius:2px 20px 2px 20px}
-.vhome--citadel .vhome-category__icon{grid-column:2;grid-row:1/3;justify-self:end;background:#F0EADB}
-.vhome--citadel .vhome-category__copy{grid-column:1/-1;align-self:end}
-.citadel-duo{display:grid;grid-template-columns:1fr 1fr;gap:42px;align-items:center;margin-top:36px;padding:22px;background:#E7E4DA}
-.citadel-duo h2{font-size:clamp(26px,3.2vw,39px);margin:12px 0}
-.citadel-duo p{font-size:11px;line-height:2.1}
-.citadel-duo img{height:230px;object-fit:cover}
-
-/* 1989 RESTAURANT — bold menu and food photography */
-.vhome--restaurant{--vh-bg:#F8F2E8;--vh-paper:#FFFCF6;--vh-ink:#30251E;--vh-muted:#7C6C60;--vh-accent:#A44735;--vh-line:#E8DCCE}
-.restaurant-hero{height:520px;position:relative;overflow:hidden;background:#211C18;color:white;border-radius:3px 3px 90px 3px}
-.restaurant-hero>img{position:absolute;inset:0;object-fit:cover}
-.restaurant-hero__veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(24,18,14,.88),rgba(24,18,14,.55) 48%,rgba(24,18,14,.05))}
-.restaurant-hero__copy{position:absolute;inset:0 auto 0 0;width:min(590px,72%);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:42px 54px;color:#fff}
-.restaurant-hero__copy .vhome-eyebrow{color:#E6B792}
-.restaurant-hero h1{color:#fff;font-size:clamp(42px,5.6vw,68px)}
-.restaurant-hero h1 em{font-family:Georgia,serif;color:#F2BE9A}
-.restaurant-hero__copy p{color:#F3E9E0;font-size:12px;line-height:2.2;max-width:440px}
-.restaurant-stamp{width:62px;height:62px;display:grid;place-items:center;border:1px solid #E3B58D;border-radius:50%;color:#fff;font:700 17px Georgia,serif;margin-bottom:21px}
-.restaurant-stamp span{color:#F2BE9A}
-.restaurant-order-link{display:inline-flex;align-items:center;gap:10px;padding:13px 18px;margin-top:13px;background:#A44735;color:white;border-radius:999px;font-size:11px;font-weight:800}
-.restaurant-order-link:hover{background:#F2BE9A;color:#2C201A}
-.restaurant-hero__caption{position:absolute;bottom:23px;right:26px;color:#fff;font:700 8px Georgia,serif;letter-spacing:.2em}
-.vhome--restaurant .restaurant-menu{padding:46px 0 12px}
-.vhome--restaurant .vhome-categories--menu{display:flex;flex-wrap:wrap;gap:9px}
-.vhome--restaurant .vhome-category{padding:9px 16px;border-radius:999px;background:#F1E4D5;border-color:#E8D4C1}
-.vhome--restaurant .vhome-category__index,.vhome--restaurant .vhome-category__icon,.vhome--restaurant .vhome-category__copy small,.vhome--restaurant .vhome-category__arrow{display:none}
-.vhome--restaurant .vhome-category__copy strong{font-size:11px}
-.vhome--restaurant .vhome-product-shelf{grid-template-columns:repeat(3,minmax(0,1fr))}
-.vhome--restaurant .vhome-product-shelf .product-card{border-radius:22px;background:#FFFCF6}
-.vhome--restaurant .vhome-product-shelf .product-card-media{aspect-ratio:1.15/1}
-.restaurant-story{display:grid;grid-template-columns:1fr 1fr;gap:42px;align-items:center;margin-top:38px}
-.restaurant-story img{height:300px;border-radius:4px 90px 4px 4px}
-.restaurant-story h2{font-size:clamp(26px,3.1vw,38px);margin:12px 0}
-.restaurant-story p{font-size:11px;line-height:2.2}
-
-/* AL SAFA — structured B2B / procurement catalog */
-.vhome--industrial{--vh-bg:#F1F3F0;--vh-paper:#FCFDFC;--vh-ink:#2E3B3B;--vh-muted:#737E7A;--vh-accent:#A96843;--vh-line:#DDE4DF}
-.industrial-hero{display:grid;grid-template-columns:1fr .95fr;gap:48px;align-items:center;padding:26px 0 46px}
-.industrial-hero>div{padding:15px 0}
-.industrial-hero h1{font-size:clamp(42px,5.4vw,68px)}
-.industrial-hero h1 b{color:#A96843}
-.industrial-hero p{font-size:12px;line-height:2.25;max-width:530px}
-.industrial-hero figure{height:405px;position:relative;overflow:hidden;background:#DCE3DD;border-radius:3px 28px 3px 3px}
-.industrial-hero figure img{mix-blend-mode:multiply}
-.industrial-hero figure figcaption{position:absolute;bottom:18px;inset-inline:18px;color:white;font:700 8px Georgia,serif;letter-spacing:.16em}
-.industrial-specs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:28px;padding-top:14px;border-top:1px solid var(--vh-line)}
-.industrial-specs span{display:grid;gap:4px;color:var(--vh-accent);font:700 10px Georgia,serif}
-.industrial-specs b{color:var(--vh-ink);font-size:10px;font-weight:700;font-family:inherit}
-.vhome--industrial .vhome-categories--industrial{grid-template-columns:repeat(4,1fr)}
-.vhome--industrial .vhome-category{border-radius:4px;background:#FCFDFC;min-height:112px}
-.vhome--industrial .vhome-category__icon{border-radius:6px;background:#EDF1ED}
-.industrial-procurement{display:grid;grid-template-columns:1fr .82fr;gap:42px;align-items:center;margin:34px 0;padding:30px;background:#E6ECE7;border-left:4px solid #A96843}
-.industrial-procurement h2{font-size:clamp(25px,3vw,37px);margin:12px 0}
-.industrial-procurement p{font-size:11px;line-height:2.2}
-.industrial-procurement ul{display:grid;gap:10px;padding:0;margin:20px 0 0;list-style:none}
-.industrial-procurement li{display:flex;align-items:center;gap:9px;color:var(--vh-ink);font-size:10px}
-.industrial-procurement li svg{color:var(--vh-accent)}
-.industrial-procurement img{height:260px;object-fit:cover;border-radius:3px}
-
-/* SHAM COUTURE — fashion magazine / lookbook */
-.vhome--couture{--vh-bg:#F7F0F1;--vh-paper:#FFFAFA;--vh-ink:#3B2E35;--vh-muted:#806E76;--vh-accent:#A56D7D;--vh-line:#E9DCE1}
-.couture-cover{display:grid;grid-template-columns:.78fr 1.22fr;gap:36px;align-items:center;padding:12px 0 42px}
-.couture-cover__copy{padding:15px 0}
-.couture-cover h1{font-size:clamp(43px,5.5vw,70px);font-weight:650}
-.couture-cover h1 em{font:italic 400 clamp(24px,3.3vw,42px)/1.55 Georgia,serif;color:#A56D7D}
-.couture-cover p{font-size:12px;line-height:2.25}
-.couture-cover figure{height:530px;position:relative;overflow:hidden;border-radius:50% 50% 4px 4px;background:#E8DCE0}
-.couture-cover figure img{object-position:center 30%}
-.couture-cover figure figcaption{position:absolute;bottom:17px;inset-inline:18px;color:white;font:700 9px Georgia,serif;letter-spacing:.16em;text-shadow:0 1px 8px #333}
-.couture-link{display:inline-flex;align-items:center;gap:8px;margin-top:18px;color:var(--vh-accent);font-size:11px;font-weight:800;border-bottom:1px solid currentColor;padding-bottom:7px}
-.couture-cover__number{display:block;margin-top:48px;color:#9B858D;font:700 9px Georgia,serif;letter-spacing:.18em}
-.couture-lookbook{padding:22px 0 12px}
-.couture-lookbook__heading{text-align:center;margin-bottom:24px}
-.couture-lookbook__heading h2{font:italic 400 clamp(28px,3.5vw,42px)/1.4 Georgia,serif;margin-top:10px}
-.couture-lookbook__images{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
-.couture-lookbook__images figure:first-child{margin-top:40px}
-.couture-lookbook__images img{height:360px;object-fit:cover}
-.couture-lookbook__images figure:nth-child(2) img{height:300px}
-.couture-lookbook__images figcaption{padding:10px 0;color:#A56D7D;font:700 8px Georgia,serif;letter-spacing:.16em}
-.vhome--couture .vhome-product-shelf .product-card{border-radius:30px 30px 6px 6px;background:#FFFAFA}
-
-/* FINK FACTORY — contemporary art gallery wall */
-.vhome--gallery{--vh-bg:#F0EFEA;--vh-paper:#FAF9F5;--vh-ink:#2B302E;--vh-muted:#747A73;--vh-accent:#7D8173;--vh-line:#DADBD3}
-.gallery-intro{display:grid;grid-template-columns:.85fr 1.15fr;gap:45px;align-items:center;padding:28px 0 50px}
-.gallery-intro h1{font:500 clamp(44px,5.7vw,72px)/1.28 Georgia,serif}
-.gallery-intro h1 em{font-style:italic;color:#777E70}
-.gallery-intro p{font-size:12px;line-height:2.2}
-.gallery-visit{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:12px 0;border-bottom:1px solid var(--vh-accent);color:var(--vh-accent);font-size:11px;font-weight:800}
-.gallery-intro__art{height:430px;position:relative;background:#E5E3DA;padding:24px 24px 42px}
-.gallery-intro__art img{object-fit:contain;mix-blend-mode:multiply}
-.gallery-intro__art span{position:absolute;bottom:15px;left:18px;color:#767A6E;font:700 8px Georgia,serif;letter-spacing:.16em}
-.vhome--gallery .vhome-categories--gallery{grid-template-columns:repeat(4,1fr)}
-.vhome--gallery .vhome-category{display:grid;grid-template-columns:auto auto;min-height:125px;background:transparent;border:1px solid #DADBD3;border-radius:0}
-.vhome--gallery .vhome-category__icon{grid-column:2;grid-row:1/3;justify-self:end;border-radius:0;background:#E4E5DE}
-.vhome--gallery .vhome-category__copy{grid-column:1/-1;align-self:end}
-.gallery-wall{padding:48px 0 12px}
-.gallery-wall__heading{margin-bottom:24px}
-.gallery-wall__heading h2{font:500 clamp(30px,4vw,46px)/1.3 Georgia,serif;margin:10px 0}
-.gallery-wall__heading p{font-size:11px}
-.gallery-wall__grid{display:grid;grid-template-columns:1.15fr .85fr 1fr;grid-template-rows:220px 185px;gap:13px}
-.gallery-art{position:relative;display:block;overflow:hidden;background:#E3E2DA}
-.gallery-art img{object-fit:cover;transition:transform .5s}
-.gallery-art:hover img{transform:scale(1.035)}
-.gallery-art:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(23,25,22,.66))}
-.gallery-art span{position:absolute;z-index:1;bottom:12px;inset-inline:13px;color:white;font-size:9px}
-.gallery-art--0{grid-row:span 2}
-.gallery-art--1{grid-column:2;grid-row:span 2}
-.gallery-art--2{grid-column:3}
-.gallery-art--3{grid-column:3}
-.gallery-commission{display:grid;grid-template-columns:.8fr 1fr;gap:42px;align-items:center;margin-top:45px;padding:22px;background:#E5E5DE}
-.gallery-commission img{height:230px;object-fit:cover}
-.gallery-commission h2{font:500 clamp(26px,3.1vw,38px)/1.35 Georgia,serif;margin:12px 0}
-.gallery-commission p{font-size:11px;line-height:2.1}
-
-/* APPLE STORE 98H — minimalist product studio, deliberately different from Apple Center */
-.vhome--apple-studio{--vh-bg:#F8F9FB;--vh-paper:#FFFFFF;--vh-ink:#20252B;--vh-muted:#6C737C;--vh-accent:#526F8B;--vh-line:#E5E9ED}
-.apple-studio-hero{display:grid;grid-template-columns:.8fr 1.2fr;gap:34px;align-items:center;padding:36px 0 32px}
-.apple-studio-hero__copy h1{font-size:clamp(42px,5.5vw,70px);font-weight:650}
-.apple-studio-hero__copy h1 b{color:#526F8B}
-.apple-studio-hero__copy p{font-size:12px;line-height:2.2;max-width:430px}
-.apple-studio-hero figure{height:420px;position:relative;overflow:hidden;border-radius:30px;background:#EEF1F5}
-.apple-studio-hero figure img{mix-blend-mode:multiply;object-fit:cover}
-.apple-studio-hero figure span{position:absolute;bottom:17px;right:19px;color:#35485B;font:700 8px Georgia,serif;letter-spacing:.16em}
-.apple-studio-cta{display:inline-flex;align-items:center;gap:10px;padding:13px 17px;margin-top:18px;border:1px solid #526F8B;border-radius:8px;background:#526F8B;color:white;font-size:11px;font-weight:800}
-.apple-studio-shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:17px 0;border-block:1px solid var(--vh-line)}
-.apple-studio-shortcuts a{display:flex;align-items:center;gap:9px;padding:12px;background:#F0F3F6;border-radius:10px}
-.apple-studio-shortcuts a>span{color:#7890A7;font-size:9px;font-weight:800}
-.apple-studio-shortcuts strong{font-size:10px;flex:1}
-.apple-studio-shortcuts svg{color:#526F8B}
-.apple-studio-feature{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:42px 0 6px}
-.apple-studio-feature img{height:260px;border-radius:4px;object-fit:cover}
-.apple-studio-feature h2{font-size:clamp(25px,3vw,36px);margin:12px 0}
-.apple-studio-feature p{font-size:11px;line-height:2.2}
-.vhome--apple-studio .vhome-product-shelf .product-card{border-radius:16px;background:white;box-shadow:0 8px 28px rgba(32,50,68,.06)}
-
-/* CENTER ALSAA — refined timepiece boutique */
-.vhome--timepiece{--vh-bg:#F3F3EE;--vh-paper:#FBFBF7;--vh-ink:#29332E;--vh-muted:#717A70;--vh-accent:#8A8152;--vh-line:#DDDCCF}
-.timepiece-hero{display:grid;grid-template-columns:.85fr 1.15fr;gap:35px;align-items:center;padding:20px 0 42px}
-.timepiece-hero__copy{padding:14px 0}
-.timepiece-hero h1{font:500 clamp(47px,6vw,76px)/1.2 Georgia,serif}
-.timepiece-hero h1 em{font-style:italic;color:#8A8152}
-.timepiece-hero p{font-size:12px;line-height:2.2;max-width:420px}
-.timepiece-hero figure{height:450px;position:relative;overflow:hidden;background:#E7E5D9;border-radius:50% 50% 3px 3px}
-.timepiece-hero figure img{object-fit:contain;mix-blend-mode:multiply;padding:18px}
-.timepiece-hero figure figcaption{position:absolute;bottom:17px;inset-inline:18px;color:#59614F;font:700 8px Georgia,serif;letter-spacing:.16em}
-.timepiece-cta{display:inline-flex;align-items:center;gap:10px;margin-top:17px;padding:13px 18px;background:#303C35;color:white;border-radius:999px;font-size:10px;font-weight:800}
-.timepiece-note{display:flex;gap:16px;margin-top:34px;padding-top:14px;border-top:1px solid var(--vh-line);color:#85846E;font:700 8px Georgia,serif;letter-spacing:.15em}
-.vhome--timepiece .vhome-categories--timepiece{grid-template-columns:repeat(3,1fr)}
-.vhome--timepiece .vhome-category{min-height:108px;background:#FBFBF7;border-radius:4px}
-.vhome--timepiece .vhome-category__icon{background:#EFEEE4;color:#8A8152;border-radius:50%}
-.timepiece-product{display:grid;grid-template-columns:.9fr 1fr;gap:40px;align-items:center;margin-top:35px;padding:24px;background:#E9E8DE}
-.timepiece-product img{height:250px;object-fit:contain;mix-blend-mode:multiply}
-.timepiece-product h2{font:500 clamp(25px,3vw,36px)/1.4 Georgia,serif;margin:12px 0}
-.timepiece-product p{font-size:11px;line-height:2.2}
-
-/* MORVO — warm handmade studio and maker story */
-.vhome--handmade{--vh-bg:#F4F0E9;--vh-paper:#FCF9F3;--vh-ink:#36342E;--vh-muted:#7D756A;--vh-accent:#94775B;--vh-line:#DED5C8}
-.handmade-hero{display:grid;grid-template-columns:.88fr 1.12fr;gap:42px;align-items:center;padding:22px 0 48px}
-.handmade-hero__copy h1{font:500 clamp(44px,5.7vw,72px)/1.23 Georgia,serif}
-.handmade-hero__copy h1 em{font-style:italic;color:#94775B}
-.handmade-hero__copy p{font-size:12px;line-height:2.25;max-width:430px}
-.handmade-hero figure{height:480px;position:relative;overflow:hidden;border-radius:170px 170px 8px 8px;background:#E9E0D4}
-.handmade-hero figure img{mix-blend-mode:multiply}
-.handmade-hero figure figcaption{position:absolute;bottom:17px;inset-inline:18px;color:#4B473D;font:700 8px Georgia,serif;letter-spacing:.16em}
-.handmade-cta{display:inline-flex;align-items:center;gap:10px;padding:13px 18px;margin-top:17px;border-radius:999px;background:#94775B;color:#fff;font-size:11px;font-weight:800}
-.handmade-signature{margin-top:36px;color:#A38F78;font:700 8px Georgia,serif;letter-spacing:.17em}
-.handmade-story{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:24px;background:#EAE2D7}
-.handmade-story img{height:255px;border-radius:90px 4px 4px 4px}
-.handmade-story h2{font:italic 400 clamp(28px,3.4vw,42px)/1.35 Georgia,serif;margin:12px 0}
-.handmade-story p{font-size:11px;line-height:2.2}
-.vhome--handmade .vhome-categories--handmade{grid-template-columns:repeat(4,1fr)}
-.vhome--handmade .vhome-category{min-height:142px;display:grid;grid-template-columns:auto auto;border-radius:24px 4px 24px 4px;background:#FCF9F3}
-.vhome--handmade .vhome-category__icon{grid-column:2;grid-row:1/3;justify-self:end;background:#EEE5DA}
-.vhome--handmade .vhome-category__copy{grid-column:1/-1;align-self:end}
-.vhome--handmade .vhome-product-shelf .product-card{background:#FCF9F3;border-radius:24px 4px 24px 4px}
-
-/* Breakpoints: keep editorial compositions legible on tablet and one-thumb mobile */
-@media(max-width:980px){
- .tenant-vertical-home .vhome-product-shelf{grid-template-columns:repeat(2,minmax(0,1fr))}
- .vhome--fabric .vhome-categories--fabric,.vhome--diamond-tech .vhome-categories--ecosystem,.vhome--citadel .vhome-categories--departments,.vhome--industrial .vhome-categories--industrial,.vhome--gallery .vhome-categories--gallery,.vhome--handmade .vhome-categories--handmade{grid-template-columns:repeat(2,minmax(0,1fr))}
- .citadel-hero,.industrial-hero,.apple-center-hero,.fabric-masthead,.couture-cover,.gallery-intro,.timepiece-hero,.handmade-hero{gap:25px}
- .citadel-hero figure,.industrial-hero figure,.apple-center-hero__device,.fabric-masthead__image,.couture-cover figure,.gallery-intro__art,.timepiece-hero figure,.handmade-hero figure{height:370px}
+/* Unified premium design system for the twelve dedicated client previews.
+   All shared shell overrides are tenant-scoped; legacy Eva and earlier stores stay untouched. */
+.tenant-vertical-home.vhome {
+  --vh-bg: var(--eva-bg, #f5f4f0);
+  --vh-paper: var(--eva-surface, #fff);
+  --vh-ink: var(--eva-ink, #242a2d);
+  --vh-muted: var(--eva-muted, #747b80);
+  --vh-accent: var(--eva-rose, #71889a);
+  --vh-line: var(--eva-line, #e4e6e6);
+  --vh-soft: var(--eva-rose-soft, #edf0f2);
+  color: var(--vh-ink);
+  background: var(--vh-bg);
+  padding: clamp(18px, 3vw, 38px) 0 clamp(52px, 7vw, 88px);
+  overflow: clip;
 }
-@media(max-width:680px){
- .tenant-vertical-home.vhome{padding:14px 0 42px}
- .tenant-vertical-home .container-eva{width:calc(100% - 28px)}
- .tenant-vertical-home .vhome-section{padding:38px 0 8px}
- .tenant-vertical-home .vhome-section-heading{align-items:flex-start;flex-direction:column;gap:11px;margin-bottom:17px}
- .tenant-vertical-home .vhome-section-heading h2{font-size:25px}
- .tenant-vertical-home .vhome-section-heading p{font-size:10px}
- .tenant-vertical-home .vhome-product-shelf{gap:9px}
- .tenant-vertical-home .vhome-product-shelf .product-card{padding:7px;border-radius:16px}
- .tenant-vertical-home .vhome-product-shelf .product-card-media{aspect-ratio:1/1.12}
- .tenant-vertical-home .vhome-product-shelf .product-card-body{padding:8px 1px 2px}
- .tenant-vertical-home .vhome-contact{align-items:flex-start;flex-direction:column;padding:21px 17px;margin-top:30px;gap:15px}
- .tenant-vertical-home .vhome-contact__button{width:100%;justify-content:center}
- .tenant-vertical-home .vhome-feature-ribbon{grid-template-columns:1fr;gap:7px;margin-top:25px}
- .tenant-vertical-home .vhome-feature{padding:11px}
- .tenant-vertical-home .vhome-demo{align-items:flex-start;padding:10px}
- .tenant-vertical-home .vhome-demo p{font-size:8px}
- .fabric-masthead,.apple-center-hero,.alawhad-intro,.citadel-hero,.industrial-hero,.couture-cover,.gallery-intro,.apple-studio-hero,.timepiece-hero,.handmade-hero{grid-template-columns:1fr;gap:19px;padding:10px 0 28px}
- .fabric-masthead__copy,.apple-center-hero__copy,.citadel-hero__copy,.industrial-hero>div,.couture-cover__copy,.gallery-intro>div,.apple-studio-hero__copy,.timepiece-hero__copy,.handmade-hero__copy{padding:12px 0}
- .fabric-masthead h1,.apple-center-hero h1,.alawhad-intro h1,.citadel-hero h1,.industrial-hero h1,.couture-cover h1,.gallery-intro h1,.apple-studio-hero__copy h1,.timepiece-hero h1,.handmade-hero__copy h1{font-size:clamp(38px,11vw,54px)}
- .fabric-masthead__image,.apple-center-hero__device,.alawhad-intro figure,.citadel-hero figure,.industrial-hero figure,.couture-cover figure,.gallery-intro__art,.apple-studio-hero figure,.timepiece-hero figure,.handmade-hero figure{height:310px}
- .fabric-masthead__image{border-radius:4px 90px 4px 4px}
- .fabric-swatchline{gap:7px;flex-wrap:wrap}
- .fabric-swatchline>span{width:100%;margin:0}
- .fabric-swatchline i{width:22px;height:22px}
- .fabric-swatchline small{width:100%;margin:0}
- .fabric-editorial,.diamond-tech-promo,.alawhad-highlight,.citadel-duo,.industrial-procurement,.restaurant-story,.couture-lookbook__images,.gallery-commission,.apple-studio-feature,.timepiece-product,.handmade-story{grid-template-columns:1fr;gap:18px;margin-top:24px;padding:18px}
- .fabric-editorial{padding:32px 0 12px}
- .fabric-editorial img{height:220px;border-radius:80px 4px 4px 4px}
- .vhome--fabric .vhome-categories--fabric,.vhome--diamond-tech .vhome-categories--ecosystem,.vhome--citadel .vhome-categories--departments,.vhome--industrial .vhome-categories--industrial,.vhome--gallery .vhome-categories--gallery,.vhome--handmade .vhome-categories--handmade{grid-template-columns:repeat(2,minmax(0,1fr))}
- .vhome--fabric .vhome-category,.vhome--diamond-tech .vhome-category,.vhome--citadel .vhome-category,.vhome--handmade .vhome-category{min-height:122px;padding:11px}
- .diamond-tech-hero{padding:15px;border-radius:4px 4px 28px 4px}
- .diamond-tech-hero__body{grid-template-columns:1fr;gap:16px;padding:23px 0}
- .diamond-tech-hero__body>div{padding:0}
- .diamond-tech-hero h1{font-size:42px}
- .diamond-tech-hero__body figure{height:235px;border-radius:50% 50% 4px 4px}
- .diamond-tech-hero__top,.diamond-tech-hero__foot{font-size:7px;letter-spacing:.1em}
- .diamond-tech-promo{padding:16px}
- .diamond-tech-promo img,.alawhad-highlight img,.citadel-duo img,.industrial-procurement img,.restaurant-story img,.gallery-commission img,.apple-studio-feature img,.timepiece-product img,.handmade-story img{height:205px}
- .alawhad-intro{grid-template-columns:1fr}
- .alawhad-intro figure{width:100%;border-radius:130px 130px 12px 12px}
- .alawhad-quickbar{align-items:flex-start;flex-direction:column;gap:10px}
- .alawhad-quickbar .vhome-categories{width:100%}
- .alawhad-quickbar .vhome-category{padding:8px 11px}
- .citadel-hero figure{border-radius:0 0 0 70px}
- .citadel-index{margin-top:20px}
- .citadel-duo{padding:15px}
- .restaurant-hero{height:440px;border-radius:3px 3px 55px 3px}
- .restaurant-hero__veil{background:linear-gradient(90deg,rgba(24,18,14,.83),rgba(24,18,14,.34))}
- .restaurant-hero__copy{width:91%;padding:22px}
- .restaurant-hero h1{font-size:42px}
- .restaurant-hero__caption{right:14px;bottom:13px;font-size:7px}
- .vhome--restaurant .vhome-product-shelf{grid-template-columns:repeat(2,minmax(0,1fr))}
- .restaurant-story{padding:0;background:transparent}
- .industrial-specs{gap:5px}
- .industrial-specs b{font-size:9px}
- .industrial-procurement{border-left-width:3px}
- .couture-cover figure{height:360px;border-radius:50% 50% 4px 4px}
- .couture-cover__number{margin-top:23px}
- .couture-lookbook__images{padding:0;background:transparent}
- .couture-lookbook__images figure:first-child{margin-top:0}
- .couture-lookbook__images img,.couture-lookbook__images figure:nth-child(2) img{height:255px}
- .gallery-intro__art{height:300px;padding:12px 12px 34px}
- .gallery-wall__grid{grid-template-columns:1fr 1fr;grid-template-rows:200px 155px;gap:8px}
- .gallery-art--0{grid-row:span 2}
- .gallery-art--1{grid-column:2;grid-row:span 2}
- .gallery-art--2,.gallery-art--3{grid-column:auto}
- .apple-studio-hero figure{height:300px}
- .apple-studio-shortcuts{grid-template-columns:repeat(2,1fr);gap:7px}
- .apple-studio-shortcuts a{padding:10px}
- .apple-studio-feature{padding:26px 0 0;background:transparent}
- .timepiece-hero figure{height:320px;border-radius:50% 50% 3px 3px}
- .timepiece-note{gap:11px}
- .timepiece-product{padding:15px}
- .handmade-hero figure{height:330px;border-radius:130px 130px 8px 8px}
- .handmade-story{padding:14px}
+.tenant-vertical-home .container-eva {
+  width: min(1180px, calc(100% - 56px));
+  margin-inline: auto;
 }
-@media(max-width:390px){
- .tenant-vertical-home .vhome-product-shelf{grid-template-columns:repeat(2,minmax(0,1fr))}
- .vhome--restaurant .vhome-product-shelf{grid-template-columns:repeat(2,minmax(0,1fr))}
- .fabric-tags{gap:9px}
- .vhome--fabric .vhome-category__copy small{font-size:8px}
- .restaurant-hero__copy{width:100%;padding:18px}
- .restaurant-hero h1{font-size:37px}
+.tenant-vertical-home h1,
+.tenant-vertical-home h2,
+.tenant-vertical-home h3,
+.tenant-vertical-home p { margin-top: 0; }
+.tenant-vertical-home h1,
+.tenant-vertical-home h2,
+.tenant-vertical-home h3 { color: var(--vh-ink); }
+.tenant-vertical-home p { color: var(--vh-muted); }
+.tenant-vertical-home img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.tenant-vertical-home a { text-decoration: none; }
+.tenant-vertical-home figure { margin: 0; min-width: 0; }
+.tenant-vertical-home .vhome-eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  color: var(--vh-accent); font-size: 10px; font-weight: 800;
+  letter-spacing: .13em; line-height: 1.5; text-transform: uppercase;
 }
-@media(prefers-reduced-motion:reduce){
- .tenant-vertical-home *,.tenant-vertical-home *:before,.tenant-vertical-home *:after{transition-duration:.01ms!important;animation-duration:.01ms!important;scroll-behavior:auto!important}
+.tenant-vertical-home .vhome-eyebrow::before {
+  content: ""; width: 24px; height: 1px; background: currentColor; opacity: .7;
 }
-
-
-/* Catalog, product detail and shell finish: keep the brand language consistent after the home page. */
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page,:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page{padding-top:28px;padding-bottom:70px}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-heading{padding:22px 0 24px;border-bottom:1px solid var(--eva-line);margin-bottom:20px}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-heading h1{font-size:clamp(27px,3.8vw,42px);letter-spacing:-.035em}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-heading p{font-size:11px;color:var(--eva-muted)}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .chip-row{padding:12px 2px 15px}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .chip{border-radius:var(--tenant-radius-control,999px);border-color:var(--eva-line);background:var(--eva-surface);color:var(--eva-ink)}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .chip.chip-active{border-color:var(--eva-rose);background:var(--eva-rose);color:white}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .stats-bar{border-radius:var(--tenant-radius-panel,22px);background:var(--eva-surface);border-color:var(--eva-line);box-shadow:none}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .filter-sidebar,:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .filter-panel{border-color:var(--eva-line);background:var(--eva-surface);border-radius:var(--tenant-radius-panel,22px)}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-grid{gap:16px}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-card{border-color:var(--eva-line);background:var(--eva-surface);border-radius:var(--tenant-radius-card,18px)}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-detail-layout{gap:clamp(22px,4vw,52px);align-items:start}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .gallery-main{border-radius:var(--tenant-radius-panel,22px);background:var(--eva-surface);border:1px solid var(--eva-line)}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .gallery-thumbs button{border-radius:var(--tenant-radius-small,12px)}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-purchase{padding:clamp(17px,2.5vw,30px);background:var(--eva-surface);border:1px solid var(--eva-line);border-radius:var(--tenant-radius-panel,22px)}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-purchase-top h1{font-size:clamp(25px,3vw,37px);line-height:1.45}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .price-block{border-radius:var(--tenant-radius-card,18px);background:color-mix(in srgb,var(--eva-rose) 7%,var(--eva-surface));border:1px solid var(--eva-line)}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .detail-accordion{border-color:var(--eva-line);border-radius:var(--tenant-radius-card,18px);overflow:hidden}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .specs-grid>div{border-color:var(--eva-line);background:color-mix(in srgb,var(--eva-bg) 65%,var(--eva-surface))}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .related-track .product-card{border-radius:var(--tenant-radius-card,18px)}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .site-header{background:color-mix(in srgb,var(--eva-bg) 92%,transparent);border-color:var(--eva-line)}
-:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .site-footer{background:var(--eva-ink);border-radius:var(--tenant-radius-panel,22px) var(--tenant-radius-panel,22px) 0 0}
-
-/* Textile details stay tactile and editorial. */
-.tenant-app--hayder-taif .catalog-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.tenant-app--hayder-taif .catalog-page .product-card-media{aspect-ratio:1.12/1}
-.tenant-app--hayder-taif .product-page .product-detail-layout{grid-template-columns:1.08fr .92fr}
-.tenant-app--hayder-taif .product-page .gallery-main{border-radius:5px 110px 5px 5px!important;background:#EAE3D8}
-.tenant-app--hayder-taif .product-page .product-purchase{border-radius:5px!important;background:#FCFAF5}
-
-/* Apple Center: quiet device studio. */
-.tenant-app--apple-center-amiriya .catalog-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.tenant-app--apple-center-amiriya .catalog-page .product-card-media{aspect-ratio:1/1}
-.tenant-app--apple-center-amiriya .product-page .gallery-main{background:#EDF2F6}
-.tenant-app--apple-center-amiriya .product-page .product-purchase{box-shadow:0 18px 48px rgba(56,82,106,.07)}
-
-/* Almass: navy and brushed-gold technology showroom. */
-.tenant-app--almass-mobile .catalog-page .catalog-heading{padding:26px;background:#172E3D;border-radius:4px 4px 28px 4px}
-.tenant-app--almass-mobile .catalog-page .catalog-heading h1,.tenant-app--almass-mobile .catalog-page .catalog-heading p{color:#F7F4EC}
-.tenant-app--almass-mobile .catalog-page .catalog-heading .eyebrow{color:#D0B47A}
-.tenant-app--almass-mobile .catalog-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.tenant-app--almass-mobile .product-page .gallery-main{background:#E9E5DB}
-.tenant-app--almass-mobile .product-page .product-purchase{border-radius:4px 28px 4px 4px!important}
-
-/* Alawhad: clear utilitarian mobile retail. */
-.tenant-app--alawhad-mobile .catalog-page .catalog-heading{border-bottom:2px solid #D9E1E6}
-.tenant-app--alawhad-mobile .catalog-page .product-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-.tenant-app--alawhad-mobile .product-page .product-detail-layout{grid-template-columns:1fr .92fr}
-.tenant-app--alawhad-mobile .product-page .gallery-main{background:#EEF2F5}
-
-/* Al Qalaa: broad multi-department catalog. */
-.tenant-app--aalam-alqalaa .catalog-page .product-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-.tenant-app--aalam-alqalaa .catalog-page .chip-row .chip{border-radius:5px}
-.tenant-app--aalam-alqalaa .product-page .gallery-main{border-radius:0 0 0 78px!important;background:#E9E6DC}
-.tenant-app--aalam-alqalaa .product-page .product-purchase{border-radius:4px 22px 4px 22px!important}
-
-/* 1989: menu-first grid with broad food photography. */
-.tenant-app--nineteen89-rest .catalog-page .catalog-heading{padding:24px;background:#33251E;border-radius:4px 4px 38px 4px}
-.tenant-app--nineteen89-rest .catalog-page .catalog-heading h1,.tenant-app--nineteen89-rest .catalog-page .catalog-heading p{color:#FFF8EF}
-.tenant-app--nineteen89-rest .catalog-page .catalog-heading .eyebrow{color:#E8B995}
-.tenant-app--nineteen89-rest .catalog-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.tenant-app--nineteen89-rest .catalog-page .product-card-media{aspect-ratio:1.24/1}
-.tenant-app--nineteen89-rest .product-page .gallery-main{border-radius:4px 4px 54px 4px!important}
-.tenant-app--nineteen89-rest .product-page .product-purchase{border-radius:4px 30px 4px 4px!important}
-
-/* Al Safa: technical procurement catalog, squared but softened. */
-.tenant-app--alsifa-company .catalog-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.tenant-app--alsifa-company .catalog-page .product-card{border-radius:5px!important}
-.tenant-app--alsifa-company .catalog-page .product-card-media{aspect-ratio:1.2/1;border-radius:5px!important}
-.tenant-app--alsifa-company .product-page .gallery-main,.tenant-app--alsifa-company .product-page .product-purchase{border-radius:5px!important}
-.tenant-app--alsifa-company .product-page .specs-grid>div{border-radius:3px!important}
-
-/* SHAM Couture: portrait lookbook and magazine rhythm. */
-.tenant-app--sham-couture .catalog-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
-.tenant-app--sham-couture .catalog-page .product-card-media{aspect-ratio:3/4;border-radius:48% 48% 5px 5px!important}
-.tenant-app--sham-couture .product-page .product-detail-layout{grid-template-columns:1fr .9fr}
-.tenant-app--sham-couture .product-page .gallery-main{border-radius:48% 48% 5px 5px!important;background:#EFE4E7}
-.tenant-app--sham-couture .product-page .product-purchase{border-radius:28px 28px 5px 5px!important}
-
-/* FINK Factory: gallery wall rather than standard retail cards. */
-.tenant-app--fink-factory .catalog-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.tenant-app--fink-factory .catalog-page .product-card{border-radius:2px!important;background:#F9F8F3}
-.tenant-app--fink-factory .catalog-page .product-card-media{aspect-ratio:1/1;border-radius:2px!important;background:#E6E4DA}
-.tenant-app--fink-factory .catalog-page .product-card-image{object-fit:contain!important;mix-blend-mode:multiply}
-.tenant-app--fink-factory .product-page .gallery-main{border-radius:2px!important;background:#E6E4DA}
-.tenant-app--fink-factory .product-page .gallery-img{object-fit:contain!important}
-.tenant-app--fink-factory .product-page .product-purchase{border-radius:2px!important}
-
-/* Apple Store 98H: clean, modular product studio; not the Apple Center layout. */
-.tenant-app--apple-store-98h .catalog-page .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
-.tenant-app--apple-store-98h .catalog-page .product-card{box-shadow:0 9px 26px rgba(50,72,92,.055)}
-.tenant-app--apple-store-98h .catalog-page .product-card-media{aspect-ratio:1/1}
-.tenant-app--apple-store-98h .product-page .gallery-main{background:#EEF2F6;border-radius:20px!important}
-.tenant-app--apple-store-98h .product-page .product-purchase{border-radius:16px!important}
-
-/* Center Alsaa: timepiece boutique, olive and brass. */
-.tenant-app--center-alsaa .catalog-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.tenant-app--center-alsaa .catalog-page .product-card-media{aspect-ratio:1/1;background:#E9E8DE}
-.tenant-app--center-alsaa .catalog-page .product-card-image{object-fit:contain!important;mix-blend-mode:multiply}
-.tenant-app--center-alsaa .product-page .gallery-main{background:#E9E8DE;border-radius:50% 50% 4px 4px!important}
-.tenant-app--center-alsaa .product-page .gallery-img{object-fit:contain!important}
-.tenant-app--center-alsaa .product-page .product-purchase{border-radius:4px!important;background:#FBFBF7}
-
-/* MORVO: handmade object cards and warm gallery details. */
-.tenant-app--morvo-handmade .catalog-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.tenant-app--morvo-handmade .catalog-page .product-card{border-radius:26px 4px 26px 4px!important;background:#FCF9F3}
-.tenant-app--morvo-handmade .catalog-page .product-card-media{aspect-ratio:1/1.06;border-radius:26px 4px 4px 4px!important}
-.tenant-app--morvo-handmade .product-page .gallery-main{border-radius:100px 4px 4px 4px!important;background:#EAE1D5}
-.tenant-app--morvo-handmade .product-page .product-purchase{border-radius:26px 4px 26px 4px!important;background:#FCF9F3}
-
-/* Mobile catalogue remains intentional, not a squashed desktop grid. */
-@media(max-width:900px){
- .tenant-app--hayder-taif .catalog-page .product-grid,.tenant-app--apple-center-amiriya .catalog-page .product-grid,.tenant-app--almass-mobile .catalog-page .product-grid,.tenant-app--aalam-alqalaa .catalog-page .product-grid,.tenant-app--nineteen89-rest .catalog-page .product-grid,.tenant-app--alsifa-company .catalog-page .product-grid,.tenant-app--sham-couture .catalog-page .product-grid,.tenant-app--fink-factory .catalog-page .product-grid,.tenant-app--center-alsaa .catalog-page .product-grid,.tenant-app--morvo-handmade .catalog-page .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .tenant-app--alawhad-mobile .catalog-page .product-grid,.tenant-app--apple-store-98h .catalog-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tenant-vertical-home .vhome-hero {
+  display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  align-items: center; gap: clamp(28px, 6vw, 82px);
+  min-height: 490px; padding: clamp(24px, 4vw, 52px) 0 clamp(30px, 4vw, 48px);
 }
-@media(max-width:640px){
- :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page,:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page{padding-top:15px;padding-bottom:42px}
- :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .catalog-heading{padding:15px 0 17px}
- .tenant-app--almass-mobile .catalog-page .catalog-heading,.tenant-app--nineteen89-rest .catalog-page .catalog-heading{padding:18px}
- :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-detail-layout{grid-template-columns:1fr;gap:17px}
- :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-purchase{padding:16px}
- :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-grid{gap:9px}
- .tenant-app--alawhad-mobile .catalog-page .product-grid,.tenant-app--apple-store-98h .catalog-page .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .tenant-app--apple-center-amiriya .catalog-page .product-grid,.tenant-app--almass-mobile .catalog-page .product-grid,.tenant-app--aalam-alqalaa .catalog-page .product-grid,.tenant-app--nineteen89-rest .catalog-page .product-grid,.tenant-app--alsifa-company .catalog-page .product-grid,.tenant-app--sham-couture .catalog-page .product-grid,.tenant-app--fink-factory .catalog-page .product-grid,.tenant-app--center-alsaa .catalog-page .product-grid,.tenant-app--morvo-handmade .catalog-page .product-grid,.tenant-app--hayder-taif .catalog-page .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .tenant-app--sham-couture .catalog-page .product-card-media{aspect-ratio:3/4}
- :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .gallery-main{min-height:300px}
+.tenant-vertical-home .vhome-hero__copy { min-width: 0; padding-block: 12px; }
+.tenant-vertical-home .vhome-hero__overline {
+  display: block; margin-top: 24px; color: var(--vh-muted);
+  font-size: 10px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase;
 }
-@media(max-width:390px){
- .tenant-app--apple-center-amiriya .catalog-page .product-grid,.tenant-app--almass-mobile .catalog-page .product-grid,.tenant-app--nineteen89-rest .catalog-page .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tenant-vertical-home .vhome-hero h1 {
+  max-width: 660px; margin: 12px 0 17px;
+  font-size: clamp(38px, 4.7vw, 64px); font-weight: 760;
+  line-height: 1.18; letter-spacing: -.045em; text-wrap: balance;
+}
+.tenant-vertical-home .vhome-hero__description {
+  max-width: 540px; margin-bottom: 0; font-size: clamp(13px, 1.25vw, 15px);
+  line-height: 2.05; text-wrap: pretty;
+}
+.tenant-vertical-home .vhome-hero__actions {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px;
+}
+.tenant-vertical-home .vhome-button {
+  min-height: 48px; display: inline-flex; align-items: center; justify-content: center;
+  gap: 10px; padding: 0 20px; border: 1px solid transparent;
+  border-radius: 12px; font-size: 12px; font-weight: 750;
+  transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.tenant-vertical-home .vhome-button:hover { transform: translateY(-2px); }
+.tenant-vertical-home .vhome-button--primary { color: #fff; background: var(--vh-accent); border-color: var(--vh-accent); }
+.tenant-vertical-home .vhome-button--primary:hover { color: #fff; background: var(--vh-ink); border-color: var(--vh-ink); }
+.tenant-vertical-home .vhome-button--secondary { color: var(--vh-ink); border-color: var(--vh-line); background: transparent; }
+.tenant-vertical-home .vhome-button--secondary:hover { color: var(--vh-accent); border-color: var(--vh-accent); }
+.tenant-vertical-home .vhome-hero__meta {
+  display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 26px;
+  color: var(--vh-muted); font-size: 11px;
+}
+.tenant-vertical-home .vhome-hero__meta span { display: inline-flex; align-items: center; gap: 7px; }
+.tenant-vertical-home .vhome-hero__meta svg { color: var(--vh-accent); }
+.tenant-vertical-home .vhome-hero__visual {
+  position: relative; isolation: isolate; min-width: 0;
+  overflow: hidden; aspect-ratio: 1.13 / 1; border-radius: 24px;
+  background: var(--vh-soft); box-shadow: 0 24px 60px rgba(25, 32, 35, .09);
+}
+.tenant-vertical-home .vhome-hero__visual > img {
+  position: absolute; inset: 0; transition: transform .7s cubic-bezier(.2,.65,.25,1);
+}
+.tenant-vertical-home .vhome-hero__visual:hover > img { transform: scale(1.025); }
+.tenant-vertical-home .vhome-hero__visual::after {
+  content: ""; position: absolute; inset: 38% 0 0; z-index: 0;
+  background: linear-gradient(180deg, transparent, rgba(16, 22, 25, .62));
+}
+.tenant-vertical-home .vhome-hero__placeholder,
+.tenant-vertical-home .vhome-product__placeholder,
+.tenant-vertical-home .vhome-category-card__placeholder {
+  display: grid; width: 100%; height: 100%; place-items: center;
+  color: var(--vh-accent); background: var(--vh-soft);
+}
+.tenant-vertical-home .vhome-hero__placeholder span {
+  display: grid; width: 104px; height: 104px; place-items: center;
+  border: 1px solid color-mix(in srgb, var(--vh-accent) 42%, transparent);
+  border-radius: 50%; color: var(--vh-accent); font-size: 40px; font-weight: 800;
+}
+.tenant-vertical-home .vhome-hero__caption {
+  position: absolute; z-index: 1; inset-inline: 24px; bottom: 22px;
+  display: flex; align-items: end; justify-content: space-between; gap: 14px;
+  color: white;
+}
+.tenant-vertical-home .vhome-hero__caption span {
+  font-size: 9px; font-weight: 800; letter-spacing: .15em; opacity: .86;
+}
+.tenant-vertical-home .vhome-hero__caption strong {
+  max-width: 58%; color: white; font-size: 13px; font-weight: 750; text-align: end;
+}
+.tenant-vertical-home .vhome-hero__seal {
+  position: absolute; z-index: 1; top: 20px; inset-inline-end: 20px;
+  display: grid; width: 52px; height: 52px; place-items: center;
+  border: 1px solid rgba(255,255,255,.48); border-radius: 50%;
+  color: #fff; background: rgba(20,25,28,.16); backdrop-filter: blur(8px);
+  font-size: 15px; font-weight: 800;
+}
+.tenant-vertical-home .vhome-demo {
+  display: flex; align-items: flex-start; gap: 12px;
+  margin: 0 0 clamp(28px, 4vw, 52px); padding: 14px 17px;
+  border: 1px solid var(--vh-line); border-radius: 12px;
+  background: color-mix(in srgb, var(--vh-paper) 78%, var(--vh-bg));
+}
+.tenant-vertical-home .vhome-demo__icon {
+  flex: 0 0 23px; display: grid; width: 23px; height: 23px; place-items: center;
+  border-radius: 50%; color: var(--vh-accent); background: var(--vh-soft);
+  font-size: 12px; font-weight: 800;
+}
+.tenant-vertical-home .vhome-demo p { margin: 0; font-size: 11px; line-height: 1.9; }
+.tenant-vertical-home .vhome-demo strong { color: var(--vh-ink); font-weight: 750; }
+.tenant-vertical-home .vhome-section { padding: clamp(28px, 4vw, 50px) 0; }
+.tenant-vertical-home .vhome-heading {
+  display: flex; align-items: end; justify-content: space-between;
+  gap: 24px; margin-bottom: 22px;
+}
+.tenant-vertical-home .vhome-heading__copy { min-width: 0; }
+.tenant-vertical-home .vhome-heading h2 {
+  margin: 9px 0 5px; font-size: clamp(24px, 3vw, 36px);
+  line-height: 1.28; font-weight: 760; letter-spacing: -.035em;
+}
+.tenant-vertical-home .vhome-heading p {
+  max-width: 620px; margin: 0; font-size: 12px; line-height: 1.9;
+}
+.tenant-vertical-home .vhome-link {
+  display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px;
+  color: var(--vh-accent); font-size: 11px; font-weight: 800;
+}
+.tenant-vertical-home .vhome-link:hover { color: var(--vh-ink); }
+.tenant-vertical-home .vhome-category-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px;
+}
+.tenant-vertical-home .vhome-category-card {
+  display: flex; min-width: 0; flex-direction: column; overflow: hidden;
+  border: 1px solid var(--vh-line); border-radius: 17px;
+  color: var(--vh-ink); background: var(--vh-paper);
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+.tenant-vertical-home .vhome-category-card:hover {
+  transform: translateY(-3px); border-color: color-mix(in srgb, var(--vh-accent) 55%, var(--vh-line));
+  box-shadow: 0 14px 34px rgba(20, 28, 32, .07);
+}
+.tenant-vertical-home .vhome-category-card__media {
+  position: relative; display: block; aspect-ratio: 1.25 / 1;
+  overflow: hidden; background: var(--vh-soft);
+}
+.tenant-vertical-home .vhome-category-card__media img { transition: transform .45s ease; }
+.tenant-vertical-home .vhome-category-card:hover .vhome-category-card__media img { transform: scale(1.035); }
+.tenant-vertical-home .vhome-category-card__number {
+  position: absolute; top: 12px; inset-inline-start: 12px;
+  color: white; font-size: 10px; font-weight: 800;
+  text-shadow: 0 1px 8px rgba(0,0,0,.35);
+}
+.tenant-vertical-home .vhome-category-card__icon {
+  position: absolute; bottom: 12px; inset-inline-end: 12px;
+  display: grid; width: 36px; height: 36px; place-items: center;
+  border: 1px solid rgba(255,255,255,.46); border-radius: 11px;
+  color: white; background: rgba(24, 29, 31, .22); backdrop-filter: blur(7px);
+}
+.tenant-vertical-home .vhome-category-card__body {
+  display: flex; min-height: 116px; flex: 1; flex-direction: column;
+  align-items: flex-start; padding: 14px 14px 13px;
+}
+.tenant-vertical-home .vhome-category-card__body strong {
+  color: var(--vh-ink); font-size: 13px; font-weight: 780;
+}
+.tenant-vertical-home .vhome-category-card__body small {
+  display: -webkit-box; overflow: hidden; margin-top: 5px;
+  color: var(--vh-muted); font-size: 10px; line-height: 1.8;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.tenant-vertical-home .vhome-category-card__action {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: auto; padding-top: 11px; color: var(--vh-accent);
+  font-size: 10px; font-weight: 800;
+}
+.tenant-vertical-home .vhome-product-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px;
+}
+.tenant-vertical-home .vhome-product {
+  position: relative; min-width: 0; overflow: hidden;
+  border: 1px solid var(--vh-line); border-radius: 17px;
+  background: var(--vh-paper); transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.tenant-vertical-home .vhome-product:hover {
+  transform: translateY(-3px); border-color: color-mix(in srgb, var(--vh-accent) 55%, var(--vh-line));
+  box-shadow: 0 15px 35px rgba(20, 28, 32, .07);
+}
+.tenant-vertical-home .vhome-product__media {
+  position: relative; overflow: hidden; aspect-ratio: 1 / 1;
+  background: var(--vh-soft);
+}
+.tenant-vertical-home .vhome-product__media > a { display: block; width: 100%; height: 100%; }
+.tenant-vertical-home .vhome-product__media img { transition: transform .45s ease; }
+.tenant-vertical-home .vhome-product:hover .vhome-product__media img { transform: scale(1.035); }
+.tenant-vertical-home .vhome-product__wish {
+  position: absolute; z-index: 1; top: 10px; inset-inline-end: 10px;
+  display: grid; width: 38px; height: 38px; place-items: center;
+  border: 1px solid rgba(255,255,255,.7); border-radius: 50%;
+  color: var(--vh-ink); background: rgba(255,255,255,.9); cursor: pointer;
+}
+.tenant-vertical-home .vhome-product__wish.is-active { color: #b34454; }
+.tenant-vertical-home .vhome-product__flag {
+  position: absolute; top: 12px; inset-inline-start: 12px;
+  padding: 5px 8px; border-radius: 6px; color: white;
+  background: var(--vh-accent); font-size: 9px; font-weight: 800;
+}
+.tenant-vertical-home .vhome-product__content { padding: 13px 14px 12px; }
+.tenant-vertical-home .vhome-product__category {
+  display: block; overflow: hidden; color: var(--vh-muted);
+  font-size: 9px; line-height: 1.6; text-overflow: ellipsis; white-space: nowrap;
+}
+.tenant-vertical-home .vhome-product__name {
+  display: -webkit-box; min-height: 42px; overflow: hidden;
+  margin-top: 5px; color: var(--vh-ink); font-size: 13px;
+  font-weight: 750; line-height: 1.65; text-decoration: none;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.tenant-vertical-home .vhome-product__bottom {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-top: 9px; padding-top: 10px; border-top: 1px solid var(--vh-line);
+}
+.tenant-vertical-home .vhome-product__bottom strong {
+  overflow: hidden; color: var(--vh-ink); font-size: 11px;
+  font-weight: 800; text-overflow: ellipsis; white-space: nowrap;
+}
+.tenant-vertical-home .vhome-product__bottom small {
+  color: var(--vh-muted); font-size: 9px; font-weight: 500;
+}
+.tenant-vertical-home .vhome-product__open {
+  display: grid; flex: 0 0 30px; width: 30px; height: 30px;
+  place-items: center; border-radius: 50%;
+  color: var(--vh-accent); background: var(--vh-soft);
+}
+.tenant-vertical-home .vhome-editorial {
+  display: grid; grid-template-columns: .78fr 1.22fr; align-items: center;
+  gap: clamp(24px, 4vw, 54px); margin: clamp(34px, 5vw, 64px) 0;
+  padding: clamp(20px, 3vw, 34px); border: 1px solid var(--vh-line);
+  border-radius: 20px; background: var(--vh-paper);
+}
+.tenant-vertical-home .vhome-editorial__copy h2 {
+  margin: 11px 0 9px; font-size: clamp(22px, 2.6vw, 31px);
+  line-height: 1.4; letter-spacing: -.03em;
+}
+.tenant-vertical-home .vhome-editorial__copy p { font-size: 12px; line-height: 2; }
+.tenant-vertical-home .vhome-editorial__images {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; min-width: 0;
+}
+.tenant-vertical-home .vhome-editorial__images img {
+  aspect-ratio: 1.25 / 1; border-radius: 13px; background: var(--vh-soft);
+}
+.tenant-vertical-home .vhome-feature-strip {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--vh-line); border-radius: 16px; overflow: hidden;
+  background: var(--vh-paper);
+}
+.tenant-vertical-home .vhome-feature {
+  display: flex; align-items: center; gap: 12px; min-width: 0;
+  padding: 18px; border-inline-start: 1px solid var(--vh-line);
+}
+.tenant-vertical-home .vhome-feature:first-child { border-inline-start: 0; }
+.tenant-vertical-home .vhome-feature__icon {
+  display: grid; flex: 0 0 38px; width: 38px; height: 38px;
+  place-items: center; border-radius: 11px; color: var(--vh-accent); background: var(--vh-soft);
+}
+.tenant-vertical-home .vhome-feature__text { display: grid; min-width: 0; gap: 4px; }
+.tenant-vertical-home .vhome-feature__text strong { color: var(--vh-ink); font-size: 11px; }
+.tenant-vertical-home .vhome-feature__text small {
+  color: var(--vh-muted); font-size: 9px; line-height: 1.7;
+}
+.tenant-vertical-home .vhome-feature__index {
+  align-self: flex-start; margin-inline-start: auto;
+  color: var(--vh-accent); font-size: 9px; font-weight: 800;
+}
+.tenant-vertical-home .vhome-contact {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  margin-top: clamp(30px, 4vw, 52px); padding: clamp(24px, 4vw, 40px);
+  border-radius: 20px; color: white; background: var(--vh-ink);
+}
+.tenant-vertical-home .vhome-contact .vhome-eyebrow { color: color-mix(in srgb, white 78%, var(--vh-accent)); }
+.tenant-vertical-home .vhome-contact h2 {
+  margin: 10px 0 7px; color: white; font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.35; letter-spacing: -.03em;
+}
+.tenant-vertical-home .vhome-contact p {
+  max-width: 620px; margin: 0; color: rgba(255,255,255,.72);
+  font-size: 12px; line-height: 2;
+}
+.tenant-vertical-home .vhome-contact__hours {
+  display: inline-flex; align-items: center; gap: 7px; margin-top: 13px;
+  color: rgba(255,255,255,.72); font-size: 10px;
+}
+.tenant-vertical-home .vhome-button--light {
+  flex: 0 0 auto; color: var(--vh-ink); background: white; border-color: white;
+}
+.tenant-vertical-home .vhome-button--light:hover { color: var(--vh-ink); background: var(--vh-soft); }
+
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) { background: var(--eva-bg); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .announcement-bar {
+  min-height: 30px; padding: 4px 16px; gap: 10px;
+  color: rgba(255,255,255,.84); background: var(--eva-ink);
+  font-size: 10px; line-height: 1.5; box-shadow: none; backdrop-filter: none;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .announcement-bar a { color: white; font-weight: 750; text-underline-offset: 3px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .site-header {
+  top: 0; margin: 0; border: 0; border-bottom: 1px solid var(--eva-line);
+  border-radius: 0; background: color-mix(in srgb, var(--eva-bg) 94%, white);
+  box-shadow: 0 5px 18px rgba(20,28,32,.035); backdrop-filter: blur(12px);
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-inner { width: min(1180px, calc(100% - 56px)); min-height: 74px; gap: 24px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .logo-symbol { border-radius: 13px; background: var(--eva-rose); box-shadow: none; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .logo-copy strong { color: var(--eva-ink); font-size: 14px; font-weight: 800; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .logo-copy small { color: var(--eva-muted); font-size: 9px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .desktop-nav { gap: clamp(12px, 1.7vw, 23px); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .desktop-nav a { color: var(--eva-muted); font-size: 11px; font-weight: 650; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .desktop-nav a:hover, :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .desktop-nav a.is-active { color: var(--eva-rose); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .desktop-nav a:after { bottom: -8px; height: 2px; border-radius: 5px; background: var(--eva-rose); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-actions { gap: 5px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-actions .icon-button,
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-actions .cart-button {
+  min-width: 40px; min-height: 40px; border: 1px solid var(--eva-line);
+  border-radius: 12px; color: var(--eva-ink); background: var(--eva-surface);
+  box-shadow: none;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-actions .cart-button {
+  display: inline-flex; align-items: center; gap: 7px; padding: 0 13px;
+  color: white; border-color: var(--eva-rose); background: var(--eva-rose);
+  font-size: 11px; font-weight: 750;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .mobile-quick-nav { border-top: 1px solid var(--eva-line); background: var(--eva-surface); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .mobile-quick-nav-track { width: min(1180px, calc(100% - 28px)); gap: 8px; margin-inline: auto; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .mobile-quick-nav a {
+  min-height: 42px; padding: 0 13px; border-radius: 9px;
+  color: var(--eva-muted); font-size: 10px; font-weight: 700;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .mobile-quick-nav a.is-active { color: var(--eva-rose); background: var(--eva-rose-soft); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .site-footer {
+  margin: 0; border: 0; border-radius: 0; color: rgba(255,255,255,.78);
+  background: var(--eva-ink); backdrop-filter: none;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-grid { width: min(1180px, calc(100% - 56px)); gap: 28px; padding-block: 42px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-grid h2 { color: white; font-size: 12px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-grid a, :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-grid p, :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-grid .footer-delivery-note { color: rgba(255,255,255,.67); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-grid a:hover { color: white; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-bottom { border-top: 1px solid rgba(255,255,255,.12); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-bottom .container-eva { width: min(1180px, calc(100% - 56px)); }
+
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page,
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page {
+  width: min(1180px, calc(100% - 56px)); margin-inline: auto;
+  padding-block: 28px 72px;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .breadcrumbs,
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .breadcrumbs { color: var(--eva-muted); font-size: 10px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .catalog-heading {
+  padding: 25px 0 23px; margin-bottom: 18px;
+  border-bottom: 1px solid var(--eva-line);
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .catalog-heading h1 {
+  color: var(--eva-ink); font-size: clamp(27px, 3vw, 39px);
+  line-height: 1.3; letter-spacing: -.035em;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .catalog-heading p { color: var(--eva-muted); font-size: 11px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .catalog-heading .eyebrow { color: var(--eva-rose); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .chip-row { gap: 8px; margin-block: 10px 18px; padding: 4px 0 9px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .chip {
+  min-height: 40px; padding: 0 15px; border: 1px solid var(--eva-line);
+  border-radius: 10px; color: var(--eva-ink); background: var(--eva-surface);
+  box-shadow: none; font-size: 10px;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .chip.chip-active { color: white; border-color: var(--eva-rose); background: var(--eva-rose); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .catalog-layout { gap: 22px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .filter-sidebar,
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .filter-panel,
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .stats-bar {
+  border: 1px solid var(--eva-line); border-radius: 15px;
+  background: var(--eva-surface); box-shadow: none;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 15px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-card {
+  padding: 8px; border: 1px solid var(--eva-line); border-radius: 15px;
+  background: var(--eva-surface); box-shadow: none; backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-card:hover {
+  transform: translateY(-2px); border-color: var(--eva-rose);
+  box-shadow: 0 12px 28px rgba(20,28,32,.06);
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-card-media {
+  overflow: hidden; aspect-ratio: 1/1; border-radius: 10px; background: var(--eva-rose-soft);
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-card-body { padding: 11px 3px 3px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-name { color: var(--eva-ink); font-size: 12px; line-height: 1.7; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-type { color: var(--eva-muted); font-size: 9px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-price { color: var(--eva-ink); font-size: 11px; font-weight: 800; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-price small { color: var(--eva-muted); font-size: 9px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .add-button { min-height: 36px; border-radius: 9px; color: white; background: var(--eva-rose); box-shadow: none; font-size: 10px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-wish { width: 36px; height: 36px; background: rgba(255,255,255,.92); color: var(--eva-ink); }
+
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-detail-layout { grid-template-columns: minmax(0,1.08fr) minmax(330px,.92fr); gap: clamp(22px,4vw,50px); align-items: start; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .gallery-main {
+  overflow: hidden; border: 1px solid var(--eva-line); border-radius: 18px;
+  background: var(--eva-surface); box-shadow: none;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-purchase {
+  padding: clamp(19px,2.6vw,30px); border: 1px solid var(--eva-line);
+  border-radius: 18px; background: var(--eva-surface); box-shadow: none;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-purchase-top h1 {
+  color: var(--eva-ink); font-size: clamp(25px,2.8vw,36px); line-height: 1.45;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .price-block {
+  border: 1px solid var(--eva-line); border-radius: 12px;
+  background: var(--eva-rose-soft); box-shadow: none;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .detail-add { min-height: 48px; border-radius: 11px; background: var(--eva-rose); box-shadow: none; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .detail-accordion { border-color: var(--eva-line); border-radius: 12px; }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .specs-grid > div {
+  border-color: var(--eva-line); border-radius: 9px; background: var(--eva-bg);
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .related-track .product-card {
+  border: 1px solid var(--eva-line); border-radius: 15px; background: var(--eva-surface); box-shadow: none;
+}
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .compare-table { border-color: var(--eva-line); }
+:is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .compare-table th { background: var(--eva-bg); color: var(--eva-ink); }
+
+.tenant-vertical-home.vhome--restaurant .vhome-hero__visual { aspect-ratio: 1.18 / 1; }
+.tenant-vertical-home.vhome--restaurant .vhome-hero__visual::after { inset: 28% 0 0; }
+.tenant-vertical-home.vhome--restaurant .vhome-hero__visual img { object-position: center; }
+.tenant-vertical-home.vhome--fashion .vhome-hero__visual { aspect-ratio: .98 / 1.08; }
+.tenant-vertical-home.vhome--fashion .vhome-category-card__media { aspect-ratio: .95 / 1; }
+.tenant-vertical-home.vhome--fabric .vhome-category-card__media { aspect-ratio: 1.35 / 1; }
+.tenant-vertical-home.vhome--gallery .vhome-hero__visual { background: color-mix(in srgb, var(--vh-accent) 13%, var(--vh-paper)); }
+.tenant-vertical-home.vhome--gallery .vhome-hero__visual img { object-fit: contain; padding: 5%; }
+.tenant-vertical-home.vhome--industrial .vhome-hero__visual { border-radius: 12px; }
+.tenant-vertical-home.vhome--handmade .vhome-category-card { border-radius: 20px; }
+
+@media (max-width: 1050px) {
+  .tenant-vertical-home .vhome-category-grid,
+  .tenant-vertical-home .vhome-product-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .desktop-nav { gap: 12px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .desktop-nav a { font-size: 10px; }
+}
+@media (max-width: 820px) {
+  .tenant-vertical-home .container-eva { width: min(100% - 36px, 720px); }
+  .tenant-vertical-home .vhome-hero {
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    min-height: 0; gap: 24px; padding-block: 24px 34px;
+  }
+  .tenant-vertical-home .vhome-hero h1 { font-size: clamp(32px, 5vw, 46px); }
+  .tenant-vertical-home .vhome-hero__visual { aspect-ratio: .95 / 1; border-radius: 19px; }
+  .tenant-vertical-home .vhome-category-grid,
+  .tenant-vertical-home .vhome-product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+  .tenant-vertical-home .vhome-feature-strip { grid-template-columns: 1fr; }
+  .tenant-vertical-home .vhome-feature { border-inline-start: 0; border-top: 1px solid var(--vh-line); }
+  .tenant-vertical-home .vhome-feature:first-child { border-top: 0; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-inner { width: calc(100% - 32px); min-height: 66px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .desktop-nav { display: none; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .mobile-quick-nav { display: block; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-grid { width: calc(100% - 36px); grid-template-columns: repeat(2,minmax(0,1fr)); gap: 26px 20px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page,
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page { width: calc(100% - 36px); }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .catalog-layout { display: block; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .filter-sidebar { display: none; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-detail-layout { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px; }
+}
+@media (max-width: 620px) {
+  .tenant-vertical-home.vhome { padding-top: 10px; }
+  .tenant-vertical-home .container-eva { width: calc(100% - 28px); }
+  .tenant-vertical-home .vhome-hero {
+    display: flex; flex-direction: column-reverse; align-items: stretch;
+    gap: 20px; padding-block: 13px 26px;
+  }
+  .tenant-vertical-home .vhome-hero__visual {
+    width: 100%; aspect-ratio: 1.32 / 1; border-radius: 16px;
+  }
+  .tenant-vertical-home .vhome-hero__copy { padding: 0 2px; }
+  .tenant-vertical-home .vhome-hero__overline { margin-top: 15px; font-size: 9px; }
+  .tenant-vertical-home .vhome-hero h1 {
+    margin: 8px 0 10px; font-size: clamp(31px, 8.2vw, 43px);
+    line-height: 1.28; letter-spacing: -.04em;
+  }
+  .tenant-vertical-home .vhome-hero__description { font-size: 12px; line-height: 1.95; }
+  .tenant-vertical-home .vhome-hero__actions { gap: 8px; margin-top: 18px; }
+  .tenant-vertical-home .vhome-button { min-height: 45px; padding-inline: 14px; border-radius: 10px; font-size: 11px; }
+  .tenant-vertical-home .vhome-hero__meta { gap: 8px 14px; margin-top: 16px; font-size: 10px; }
+  .tenant-vertical-home .vhome-hero__caption { inset-inline: 15px; bottom: 14px; }
+  .tenant-vertical-home .vhome-hero__caption strong { font-size: 11px; }
+  .tenant-vertical-home .vhome-hero__seal { top: 13px; inset-inline-end: 13px; width: 42px; height: 42px; font-size: 13px; }
+  .tenant-vertical-home .vhome-demo { gap: 9px; margin-bottom: 18px; padding: 11px 12px; border-radius: 10px; }
+  .tenant-vertical-home .vhome-demo p { font-size: 10px; }
+  .tenant-vertical-home .vhome-section { padding: 27px 0; }
+  .tenant-vertical-home .vhome-heading { align-items: end; gap: 10px; margin-bottom: 15px; }
+  .tenant-vertical-home .vhome-heading h2 { margin: 7px 0 4px; font-size: 23px; }
+  .tenant-vertical-home .vhome-heading p { font-size: 10px; line-height: 1.8; }
+  .tenant-vertical-home .vhome-heading .vhome-link { gap: 4px; font-size: 9px; }
+  .tenant-vertical-home .vhome-category-grid,
+  .tenant-vertical-home .vhome-product-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+  .tenant-vertical-home .vhome-category-card { border-radius: 12px; }
+  .tenant-vertical-home .vhome-category-card__media { aspect-ratio: 1.12 / 1; }
+  .tenant-vertical-home .vhome-category-card__body { min-height: 102px; padding: 10px 10px 9px; }
+  .tenant-vertical-home .vhome-category-card__body strong { font-size: 11px; }
+  .tenant-vertical-home .vhome-category-card__body small { font-size: 9px; }
+  .tenant-vertical-home .vhome-category-card__icon { width: 30px; height: 30px; bottom: 8px; inset-inline-end: 8px; }
+  .tenant-vertical-home .vhome-category-card__icon svg { width: 15px; height: 15px; }
+  .tenant-vertical-home .vhome-product { border-radius: 12px; }
+  .tenant-vertical-home .vhome-product__media { aspect-ratio: 1 / 1; }
+  .tenant-vertical-home .vhome-product__content { padding: 10px 10px 9px; }
+  .tenant-vertical-home .vhome-product__name { min-height: 38px; font-size: 11px; line-height: 1.65; }
+  .tenant-vertical-home .vhome-product__bottom strong { font-size: 10px; }
+  .tenant-vertical-home .vhome-product__bottom small { font-size: 8px; }
+  .tenant-vertical-home .vhome-product__wish { width: 34px; height: 34px; top: 7px; inset-inline-end: 7px; }
+  .tenant-vertical-home .vhome-product__flag { top: 9px; inset-inline-start: 9px; font-size: 8px; }
+  .tenant-vertical-home .vhome-editorial {
+    grid-template-columns: 1fr; gap: 15px; margin-block: 22px;
+    padding: 15px; border-radius: 14px;
+  }
+  .tenant-vertical-home .vhome-editorial__copy h2 { margin: 7px 0; font-size: 21px; }
+  .tenant-vertical-home .vhome-editorial__copy p { margin-bottom: 8px; font-size: 11px; }
+  .tenant-vertical-home .vhome-editorial__images { gap: 8px; }
+  .tenant-vertical-home .vhome-editorial__images img { border-radius: 9px; }
+  .tenant-vertical-home .vhome-feature { gap: 10px; padding: 13px; }
+  .tenant-vertical-home .vhome-contact {
+    align-items: flex-start; flex-direction: column; gap: 16px;
+    margin-top: 20px; padding: 21px 17px; border-radius: 15px;
+  }
+  .tenant-vertical-home .vhome-contact h2 { margin: 8px 0 6px; font-size: 22px; }
+  .tenant-vertical-home .vhome-contact p { font-size: 11px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .announcement-bar { min-height: 27px; gap: 6px; font-size: 9px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .announcement-msg-left { display: none; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .announcement-dot:last-of-type { display: none; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-inner { width: calc(100% - 24px); min-height: 60px; gap: 7px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .logo-symbol { width: 36px; height: 36px; min-width: 36px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .logo-copy strong { font-size: 12px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .logo-copy small { font-size: 8px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-actions { gap: 2px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-actions .icon-button,
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-actions .cart-button { min-width: 35px; min-height: 35px; border-radius: 10px; padding: 0 8px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-actions .cart-button span { display: none; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-actions .cart-button svg { width: 16px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .mobile-quick-nav-track { width: calc(100% - 16px); gap: 4px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .mobile-quick-nav a { min-height: 39px; padding-inline: 9px; font-size: 9px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-grid { grid-template-columns: repeat(2,minmax(0,1fr)); padding-block: 30px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-top { padding-top: 27px; gap: 12px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .footer-bottom .container-eva { width: calc(100% - 28px); }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page,
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page { width: calc(100% - 28px); padding-block: 17px 58px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .catalog-heading { padding-block: 17px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .catalog-heading h1 { font-size: 26px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-card { padding: 6px; border-radius: 12px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-card-media { border-radius: 8px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-card-body { padding: 9px 2px 2px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-name { font-size: 11px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .product-price { font-size: 10px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .catalog-page .add-button { min-height: 34px; padding-inline: 8px; font-size: 9px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-detail-layout { grid-template-columns: minmax(0,1fr); gap: 16px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .gallery-main { border-radius: 13px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-purchase { padding: 16px; border-radius: 13px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .product-page .product-purchase-top h1 { font-size: 24px; }
+}
+@media (max-width: 370px) {
+  .tenant-vertical-home .container-eva { width: calc(100% - 22px); }
+  .tenant-vertical-home .vhome-hero h1 { font-size: 29px; }
+  .tenant-vertical-home .vhome-button { padding-inline: 11px; font-size: 10px; }
+  .tenant-vertical-home .vhome-category-grid,
+  .tenant-vertical-home .vhome-product-grid { gap: 7px; }
+  .tenant-vertical-home .vhome-category-card__body,
+  .tenant-vertical-home .vhome-product__content { padding-inline: 8px; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-inner { width: calc(100% - 18px); }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .logo-copy small { display: none; }
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .header-actions .tracking-header { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tenant-vertical-home *,
+  .tenant-vertical-home *::before,
+  .tenant-vertical-home *::after,
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .site-header,
+  :is(.tenant-app--hayder-taif,.tenant-app--apple-center-amiriya,.tenant-app--almass-mobile,.tenant-app--alawhad-mobile,.tenant-app--aalam-alqalaa,.tenant-app--nineteen89-rest,.tenant-app--alsifa-company,.tenant-app--sham-couture,.tenant-app--fink-factory,.tenant-app--apple-store-98h,.tenant-app--center-alsaa,.tenant-app--morvo-handmade) .site-header * { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
