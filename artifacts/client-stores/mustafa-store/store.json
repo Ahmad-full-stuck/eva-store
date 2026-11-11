@@ -1,0 +1,262 @@
+{
+  "key": "mustafa-store",
+  "name": "مركز مصطفى ستور",
+  "monogram": "M",
+  "tagline": "هواتف · بيع وشراء · صيانة",
+  "eyebrow": "MUSTAFA STORE / MOSUL · MOBILE",
+  "heroTitle": "تقنية أقرب. واختيار أوضح.",
+  "heroText": "من الهواتف إلى الإكسسوارات وخدمات الصيانة، استكشف الخيارات وتعرّف على التفاصيل، ثم تواصل مباشرة مع مركز مصطفى ستور لتأكيد السعر والتوفر وخيارات الأقساط.",
+  "storyTitle": "من اختيار الجهاز إلى العناية به",
+  "storyText": "في مركز مصطفى ستور، تجد تجربة تجمع بيع وشراء الهواتف والإكسسوارات وخدمات الصيانة، مع إمكانية الاستفسار عن خيارات الأقساط وشروطها المعتمدة. اختر ما تبحث عنه وتواصل مع المركز لتأكيد التفاصيل.",
+  "description": "تصور متجر إلكتروني مخصص لمركز مصطفى ستور في الموصل، ينظم الهواتف والإكسسوارات والخدمات ويجعل تفاصيل التواصل واضحة.",
+  "note": "تصفح النماذج واستفسر من المركز عن الموديل والسعر والتوفر وخيارات الأقساط.",
+  "demoNotice": "معاينة تصميمية لمركز مصطفى ستور — صور المنتجات والأسماء والأسعار أمثلة توضيحية وليست مخزوناً فعلياً.",
+  "location": "الموصل · المجموعة الثقافية · مقابل باب خروج محطة الوقود",
+  "contactLabel": "تواصل عبر واتساب",
+  "contactUrl": "https://wa.me/9647716600044",
+  "instagram": "https://www.instagram.com/m.center.iq/",
+  "contactMode": "copy",
+  "phones": [
+    {
+      "label": "اتصل بمركز مصطفى ستور",
+      "number": "07716600044"
+    }
+  ],
+  "heroImage": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=88",
+  "heroPosition": "center",
+  "theme": {
+    "bg": "#F5F5F3",
+    "ink": "#15171A",
+    "surface": "#FFFFFF",
+    "muted": "#73777E",
+    "accent": "#D7193F",
+    "line": "#E3E4E6",
+    "hero": "#ECEEF0",
+    "photo": "#E7E9EB",
+    "dark": "#111316",
+    "accentDark": "#B81432",
+    "accentSoft": "#FCEDEF",
+    "accentTint": "#F3D9DE",
+    "warm": "#C21A38",
+    "highlight": "#EFC0C9",
+    "success": "#37835E"
+  },
+  "categories": [
+    "هواتف آيفون",
+    "هواتف أندرويد",
+    "إكسسوارات وحماية",
+    "صوتيات وأجهزة ذكية",
+    "الصيانة والخدمات"
+  ],
+  "products": [
+    {
+      "id": "mustafa-iphone-18-pro-max",
+      "name": "iPhone 18 Pro Max",
+      "category": "هواتف آيفون",
+      "price": 0,
+      "image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1200&q=88",
+      "images": [
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=88",
+        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1200&q=88"
+      ],
+      "description": "نموذج توضيحي لعرض هاتف من فئة Pro Max. تُراجع السعة واللون والحالة والتوفر والسعر مباشرة مع مركز مصطفى ستور.",
+      "specs": {
+        "composition": "Apple",
+        "width": "Pro Max · السعة حسب المتوفر",
+        "weight": "تُؤكد مع المركز",
+        "stretch": "حسب اللون المتاح",
+        "opacity": "تُحدد حالة الجهاز عند الاستفسار",
+        "finish": "مواصفات وفحص الجهاز عند التأكيد",
+        "care": "تُراجع شروط الضمان مع المركز",
+        "use": "تفاصيل النسخة والتوفر تُؤكد قبل الشراء"
+      },
+      "colors": [],
+      "colorsEnabled": false,
+      "stockMeters": 0,
+      "isFeatured": true,
+      "isNew": true,
+      "faqs": [
+        {
+          "question": "هل الجهاز متوفر حالياً؟",
+          "answer": "هذه معاينة تصميمية؛ يجب تأكيد الموديل والسعة والتوفر مباشرة مع المركز."
+        }
+      ],
+      "createdAt": "2026-11-11"
+    },
+    {
+      "id": "mustafa-iphone-17-pro-max",
+      "name": "iPhone 17 Pro Max",
+      "category": "هواتف آيفون",
+      "price": 0,
+      "image": "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1200&q=88",
+      "images": [
+        "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1200&q=88"
+      ],
+      "description": "نموذج لعرض هاتف من فئة Pro Max مع مساحة واضحة للموديل والسعة واللون وحالة الجهاز.",
+      "specs": {
+        "composition": "Apple",
+        "width": "Pro Max · السعة حسب المتوفر",
+        "weight": "تُؤكد مع المركز",
+        "stretch": "حسب اللون المتاح",
+        "opacity": "تُحدد حالة الجهاز عند الاستفسار",
+        "finish": "تفاصيل الفحص والمزايا عند التأكيد",
+        "care": "تُراجع شروط الضمان مع المركز",
+        "use": "تأكيد النسخة والتوفر قبل الشراء"
+      },
+      "colors": [],
+      "colorsEnabled": false,
+      "stockMeters": 0,
+      "isFeatured": true,
+      "isNew": false,
+      "faqs": [
+        {
+          "question": "هل السعر معتمد؟",
+          "answer": "السعر النهائي يُؤكد مباشرة مع مركز مصطفى ستور."
+        }
+      ],
+      "createdAt": "2026-11-11"
+    },
+    {
+      "id": "mustafa-iphone-17",
+      "name": "iPhone 17",
+      "category": "هواتف آيفون",
+      "price": 0,
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=88",
+      "images": [
+        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1200&q=88"
+      ],
+      "description": "مثال بصري لطريقة عرض موديلات آيفون المختلفة، مع تأكيد السعة واللون والسعر والتوفر من المركز.",
+      "specs": {
+        "composition": "Apple",
+        "width": "iPhone 17 · السعة حسب المتوفر",
+        "weight": "تُؤكد مع المركز",
+        "stretch": "حسب اللون المتاح",
+        "opacity": "تُحدد حالة الجهاز عند الاستفسار",
+        "finish": "المواصفات وفق النسخة المعروضة",
+        "care": "تُراجع شروط الضمان مع المركز",
+        "use": "تُؤكد تفاصيل النسخة قبل الشراء"
+      },
+      "colors": [],
+      "colorsEnabled": false,
+      "stockMeters": 0,
+      "isFeatured": true,
+      "isNew": true,
+      "faqs": [
+        {
+          "question": "هل هذه مواصفات النسخة المتوفرة؟",
+          "answer": "الاسم والصورة توضيحيان، وتُعتمد المواصفات بعد تأكيد النسخة الفعلية من المركز."
+        }
+      ],
+      "createdAt": "2026-11-11"
+    },
+    {
+      "id": "mustafa-samsung-galaxy",
+      "name": "Samsung Galaxy · فئة S",
+      "category": "هواتف أندرويد",
+      "price": 0,
+      "image": "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=1200&q=88",
+      "images": [
+        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1200&q=88"
+      ],
+      "description": "نموذج توضيحي لقسم هواتف أندرويد. يُحدد الموديل والسعة والذاكرة واللون بحسب الأجهزة المتوفرة لدى المركز.",
+      "specs": {
+        "composition": "Samsung",
+        "width": "فئة S · الموديل حسب المتوفر",
+        "weight": "تُؤكد الذاكرة والسعة",
+        "stretch": "حسب اللون المتاح",
+        "opacity": "تُحدد حالة الجهاز عند الاستفسار",
+        "finish": "المزايا والمواصفات وفق النسخة",
+        "care": "تُراجع شروط الضمان مع المركز",
+        "use": "تأكيد الموديل والتوفر قبل الشراء"
+      },
+      "colors": [],
+      "colorsEnabled": false,
+      "stockMeters": 0,
+      "isFeatured": true,
+      "isNew": false,
+      "faqs": [
+        {
+          "question": "ما موديلات أندرويد المتاحة؟",
+          "answer": "تواصل مع المركز لمعرفة الموديلات المتوفرة حالياً."
+        }
+      ],
+      "createdAt": "2026-11-11"
+    },
+    {
+      "id": "mustafa-wireless-audio",
+      "name": "سماعات لاسلكية",
+      "category": "صوتيات وأجهزة ذكية",
+      "price": 0,
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=88",
+      "images": [
+        "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1200&q=88"
+      ],
+      "description": "مثال توضيحي لقسم الصوتيات والملحقات الذكية. تُؤكد العلامة والموديل والتوافق والتوفر من المركز.",
+      "specs": {
+        "composition": "حسب العلامة المتاحة",
+        "width": "الموديل يُؤكد عند الاستفسار",
+        "weight": "حسب المنتج",
+        "stretch": "حسب اللون المتاح",
+        "opacity": "تُراجع حالة المنتج",
+        "finish": "التوافق والميزات حسب الموديل",
+        "care": "تُراجع شروط الضمان مع المركز",
+        "use": "التوافق مع الجهاز يُؤكد قبل الشراء"
+      },
+      "colors": [],
+      "colorsEnabled": false,
+      "stockMeters": 0,
+      "isFeatured": false,
+      "isNew": false,
+      "faqs": [
+        {
+          "question": "هل السماعات متوافقة مع كل الهواتف؟",
+          "answer": "يجب التأكد من نوع السماعة والتوافق مع الجهاز قبل الشراء."
+        }
+      ],
+      "createdAt": "2026-11-11"
+    },
+    {
+      "id": "mustafa-phone-accessories",
+      "name": "إكسسوارات وحماية الهاتف",
+      "category": "إكسسوارات وحماية",
+      "price": 0,
+      "image": "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1200&q=88",
+      "images": [
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=88"
+      ],
+      "description": "تصور لقسم الإكسسوارات وحماية الأجهزة، مع إمكانية استعراض الملحقات والتأكد من توافقها مع موديل الهاتف.",
+      "specs": {
+        "composition": "حسب نوع الإكسسوار",
+        "width": "التوافق حسب موديل الهاتف",
+        "weight": "حسب المنتج",
+        "stretch": "حسب اللون المتاح",
+        "opacity": "تُراجع تفاصيل المنتج",
+        "finish": "الحماية والتغليف وفق المنتج",
+        "care": "اتبع إرشادات الاستخدام",
+        "use": "تأكد من توافق الإكسسوار مع جهازك"
+      },
+      "colors": [],
+      "colorsEnabled": false,
+      "stockMeters": 0,
+      "isFeatured": false,
+      "isNew": false,
+      "faqs": [
+        {
+          "question": "كيف أتأكد من توافق الإكسسوار؟",
+          "answer": "اختر موديل هاتفك واسأل المركز عن القطعة المتوافقة قبل الطلب."
+        }
+      ],
+      "createdAt": "2026-11-11"
+    }
+  ],
+  "heroSlides": [
+    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=88",
+    "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1200&q=88",
+    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=88"
+  ],
+  "heroFit": "cover",
+  "productFit": "contain",
+  "quantityUnit": "قطعة",
+  "quantityUnitEn": "item",
+  "demoMode": true
+}

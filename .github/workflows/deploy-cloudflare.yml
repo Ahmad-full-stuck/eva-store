@@ -153,3 +153,6 @@ jobs:
       - name: Deploy MORVO Handmade storefront Worker
         working-directory: artifacts/eva-worker
         run: pnpm exec wrangler deploy --config ../client-stores/morvo-handmade/wrangler.jsonc
+      - name: Deploy مركز مصطفى ستور storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/mustafa-store/wrangler.jsonc

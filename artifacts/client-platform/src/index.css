@@ -2274,3 +2274,17 @@ picture { display: contents; }
 .tenant-app--apple-store-98h{--tenant-radius-panel:22px;--tenant-radius-card:18px;--tenant-radius-media:16px;--tenant-radius-control:999px;--tenant-radius-small:12px;--tenant-radius-logo:50%;--tenant-radius-icon:50%}
 .tenant-app--center-alsaa{--tenant-radius-panel:20px;--tenant-radius-card:16px;--tenant-radius-media:14px;--tenant-radius-control:12px;--tenant-radius-small:10px;--tenant-radius-logo:16px;--tenant-radius-icon:16px}
 .tenant-app--morvo-handmade{--tenant-radius-panel:30px;--tenant-radius-card:22px;--tenant-radius-media:20px;--tenant-radius-control:999px;--tenant-radius-small:16px;--tenant-radius-logo:50%;--tenant-radius-icon:50%}
+
+
+.tenant-app--mustafa-store .announcement-bar{color:#fff;background:linear-gradient(90deg,#111316,#24272d 72%,#17191d);border-bottom:1px solid rgba(215,25,63,.55)}
+.tenant-app--mustafa-store .announcement-bar a{color:#ffd9df}
+.tenant-app--mustafa-store .announcement-dot{background:#e22a49}
+.tenant-app--mustafa-store .site-header{background:rgba(255,255,255,.94);border-bottom:1px solid #e7e8ea;box-shadow:0 9px 28px rgba(20,22,26,.055)}
+.tenant-app--mustafa-store .logo{gap:10px}
+.tenant-app--mustafa-store .logo-symbol{width:44px;height:44px;overflow:hidden;padding:1px;border:1px solid #d7193f;border-radius:50%;background:#fff;box-shadow:0 3px 12px rgba(215,25,63,.10)}
+.tenant-app--mustafa-store .logo-symbol img{display:block;width:100%;height:100%;object-fit:contain}
+.tenant-app--mustafa-store .logo-copy strong{color:#15171a;font-weight:800}
+.tenant-app--mustafa-store .logo-copy small{color:#70757c}
+.tenant-app--mustafa-store .desktop-nav a:hover,.tenant-app--mustafa-store .desktop-nav a.is-active{color:#d7193f}
+.tenant-app--mustafa-store .desktop-nav a:after{background:#d7193f}
+.tenant-app--mustafa-store .header-actions .icon-button,.tenant-app--mustafa-store .header-actions .cart-button{border-color:#e3e4e6}

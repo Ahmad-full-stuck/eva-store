@@ -195,7 +195,9 @@ export function TenantVerticalHome({ products, wishlist, onWish }: TenantVertica
   const shopName = content.shortName || content.shopName || brand.title
   const heroImage = content.storyImage || content.heroSlides?.[0] || products[0]?.image || ''
   const unit = content.quantityUnit || 'قطعة'
-  const variant = key === 'nineteen89-rest'
+  const variant = key === 'mustafa-store'
+    ? 'mustafa'
+    : key === 'nineteen89-rest'
     ? 'restaurant'
     : key === 'sham-couture'
       ? 'fashion'
@@ -261,8 +263,8 @@ export function TenantVerticalHome({ products, wishlist, onWish }: TenantVertica
         <section className="vhome-section vhome-products-section">
           <SectionHeading
             eyebrow={variant === 'restaurant' ? 'FROM THE MENU' : variant === 'fabric' ? 'SELECTED MATERIALS' : 'FEATURED SELECTION'}
-            title={variant === 'restaurant' ? 'مختارات من المنيو' : variant === 'fabric' ? 'خامات مختارة' : 'مختارات من التشكيلة'}
-            description="نماذج توضيحية لطريقة عرض المنتجات والصور والأسعار والتفاصيل ضمن متجر مستقل."
+            title={variant === 'mustafa' ? 'هواتف وإكسسوارات مختارة' : variant === 'restaurant' ? 'مختارات من المنيو' : variant === 'fabric' ? 'خامات مختارة' : 'مختارات من التشكيلة'}
+            description={variant === 'mustafa' ? 'نماذج لتجربة عرض الهواتف والملحقات. يُؤكد الموديل والسعر والتوفر مباشرة مع المركز.' : 'نماذج توضيحية لطريقة عرض المنتجات والصور والأسعار والتفاصيل ضمن متجر مستقل.'}
           />
           <ProductGrid products={products} wishlist={wishlist} onWish={onWish} unit={unit} />
         </section>
