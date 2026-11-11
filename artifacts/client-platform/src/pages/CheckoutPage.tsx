@@ -184,6 +184,8 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [liveMessage, setLiveMessage] = useState('')
   const totals = getCartTotals(cart)
   const siteContent = useSiteContent()
+  const isPieceStore = siteContent.tenantKey === 'mustafa-store'
+  const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : formatMeters(value)
   const boxRef = useRef<HTMLDivElement>(null)
   const restored = useRef(false)
 
@@ -234,7 +236,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
             {cart.map((item) => (
               <div className="tenant-demo-checkout__item" key={item.product.id + ':' + item.color.id}>
                 <SmartImage src={item.product.image} alt={item.product.name} sizes="64px" />
-                <span><strong>{item.product.name}</strong><small>{item.color.name} · {formatMeters(item.length)}</small></span>
+                <span><strong>{item.product.name}</strong><small>{item.color.name} · {formatQuantity(item.length)}</small></span>
                 <b>{formatPrice(item.product.price * item.length)}</b>
               </div>
             ))}
@@ -606,7 +608,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
                 <SmartImage src={item.product.image} alt="" sizes="64px" />
                 <div>
                   <strong>{item.product.name}</strong>
-                  <span>{item.color.name} · {formatMeters(item.length)}</span>
+                  <span>{item.color.name} · {formatQuantity(item.length)}</span>
                 </div>
                 <b>{formatPrice(item.product.price * item.length)}</b>
               </div>

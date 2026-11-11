@@ -5,7 +5,7 @@ import type { CartItem } from '@/types'
 import { availableMeters, formatDinar, formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
 import { useT } from '@/lib/i18n'
 import { typeLabelsEn } from '@/lib/strings/product'
-import { useStoreSettings } from '@/lib/site-content'
+import { useSiteContent, useStoreSettings } from '@/lib/site-content'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 interface CartPageProps {
@@ -82,6 +82,9 @@ const glassStyles = `
 
 export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   const { t, lang } = useT()
+  const content = useSiteContent()
+  const isPieceStore = content.tenantKey === 'mustafa-store'
+  const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : formatMeters(value)
   const settings = useStoreSettings()
   const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
   const totals = getCartTotals(cart)
@@ -102,7 +105,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
 
   const handleUpdate = (item: CartItem, nextLength: number) => {
     onUpdate(orderKey(item), nextLength)
-    setAnnouncement(t('cart.updated').replace('{name}', item.product.name).replace('{meters}', formatMeters(nextLength)))
+    setAnnouncement(t('cart.updated').replace('{name}', item.product.name).replace('{meters}', formatQuantity(nextLength)))
   }
 
   const handleRemove = (item: CartItem) => {
@@ -141,7 +144,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         <div>
           <span className="eyebrow">{t('cart.eyebrow')}</span>
           <h1>{t('cart.title')}</h1>
-          <p>{t('cart.inCart').replace('{meters}', formatMeters(meters))}</p>
+          <p>{t('cart.inCart').replace('{meters}', formatQuantity(meters))}</p>
         </div>
         <Link href="/catalog" className="underlined-link">{t('cart.continue')} <ArrowLeft size={15} /></Link>
       </div>
@@ -163,7 +166,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
                       <span className="product-type">{lang === 'en' ? typeLabelsEn[item.product.type] || item.product.type : item.product.type}</span>
                       <Link href={`/product/${item.product.slug}`} className="product-name">{item.product.name}</Link>
                       <div className="cart-item-chips">
-                        <span className="chip glass-pill">{formatPrice(item.product.price)} / {t('cart.perMeter')}</span>
+                        <span className="chip glass-pill">{formatPrice(item.product.price)} / {isPieceStore ? 'قطعة' : t('cart.perMeter')}</span>
                       </div>
                     </div>
                     <div className="cart-item-tools">
@@ -174,11 +177,11 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
                   <div className="cart-item-bottom">
                     <div className="quantity-control compact">
                       <button type="button" onClick={() => handleUpdate(item, item.length - 1)} disabled={item.length <= 1} aria-label={t('cart.decreaseAria').replace('{name}', item.product.name)}><Minus size={15} /></button>
-                      <output aria-label={t('cart.qtyAria').replace('{name}', item.product.name)}>{formatMeters(item.length)}</output>
+                      <output aria-label={t('cart.qtyAria').replace('{name}', item.product.name)}>{formatQuantity(item.length)}</output>
                       <button type="button" onClick={() => handleUpdate(item, item.length + 1)} disabled={item.length >= maxMeters} aria-label={t('cart.increaseAria').replace('{name}', item.product.name)}><Plus size={15} /></button>
                     </div>
                     <div className="cart-item-total">
-                      <small>{formatMeters(item.length)} × {formatPrice(item.product.price)}</small>
+                      <small>{formatQuantity(item.length)} × {formatPrice(item.product.price)}</small>
                       <strong>{formatPrice(lineTotal)}</strong>
                     </div>
                   </div>

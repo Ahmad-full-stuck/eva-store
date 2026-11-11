@@ -2288,3 +2288,81 @@ picture { display: contents; }
 .tenant-app--mustafa-store .desktop-nav a:hover,.tenant-app--mustafa-store .desktop-nav a.is-active{color:#d7193f}
 .tenant-app--mustafa-store .desktop-nav a:after{background:#d7193f}
 .tenant-app--mustafa-store .header-actions .icon-button,.tenant-app--mustafa-store .header-actions .cart-button{border-color:#e3e4e6}
+
+
+.tenant-app--mustafa-store{--eva-bg:#F4F5F6;--eva-surface:#fff;--eva-surface-strong:#fff;--eva-ink:#17191D;--eva-muted:#69717B;--eva-line:#E2E5E9;--eva-line-strong:#D4D9DE;--eva-rose:#C91F3A;--eva-rose-dark:#A91731;--eva-rose-soft:#FCECEF;--eva-rose-tint:#F3D9DE;--eva-orange:#B68A45;--eva-blush:#E6BBC3;--eva-charcoal:#111318;--glass-bg:#fff;--glass-bg-strong:#fff;--glass-border:#E2E5E9;--glass-shadow:0 12px 34px #1113180E;color:#17191D;background:#F4F5F6}
+.tenant-app--mustafa-store .announcement-bar{min-height:28px;padding:4px 12px;color:#F7F7F8;background:#121419;border-bottom:1px solid #C91F3A9E;font-size:9px;gap:10px}
+.tenant-app--mustafa-store .announcement-bar a{color:#FFB5C1}.tenant-app--mustafa-store .announcement-dot{width:4px;height:4px;background:#E2435C}
+.tenant-app--mustafa-store .site-header{background:#FFFFFFF5;border-bottom:1px solid #E5E7EA;box-shadow:0 6px 24px #1113180B;backdrop-filter:blur(18px)}
+.tenant-app--mustafa-store .header-inner{min-height:72px;gap:clamp(15px,2vw,28px)}.tenant-app--mustafa-store .logo{gap:11px}
+.tenant-app--mustafa-store .logo-symbol{width:46px;height:46px;overflow:hidden;padding:1px;border:1px solid #D5D8DC;border-radius:50%;background:#fff;box-shadow:0 3px 12px #11131812}
+.tenant-app--mustafa-store .logo-symbol img{display:block;width:100%;height:100%;object-fit:contain}.tenant-app--mustafa-store .logo-copy strong{color:#17191D;font-size:15px;font-weight:850}
+.tenant-app--mustafa-store .logo-copy small{margin-top:4px;color:#7C838B;font-size:9px}
+.tenant-app--mustafa-store .desktop-nav{gap:clamp(13px,1.8vw,23px)}.tenant-app--mustafa-store .desktop-nav a{color:#686F78;font-size:11px;font-weight:700}
+.tenant-app--mustafa-store .desktop-nav a:hover,.tenant-app--mustafa-store .desktop-nav a.is-active{color:#C91F3A}.tenant-app--mustafa-store .desktop-nav a:after{height:2px;background:#C91F3A}
+.tenant-app--mustafa-store .header-actions{gap:5px}.tenant-app--mustafa-store .header-actions .icon-button{width:38px;height:38px;min-height:38px;border:1px solid #E6E8EB;border-radius:12px;color:#30353C;background:#fff}
+.tenant-app--mustafa-store .header-actions .icon-button:hover{color:#C91F3A;border-color:#E8B9C2;background:#FFF8F9}
+.tenant-app--mustafa-store .header-actions .cart-button{min-height:39px;padding:8px 13px;border:1px solid #C91F3A;border-radius:12px;color:#fff;background:#C91F3A;box-shadow:0 6px 15px #C91F3A26;font-size:10px}
+.tenant-app--mustafa-store .header-actions .cart-button:hover{background:#A91731}.tenant-app--mustafa-store .favorite-header span,.tenant-app--mustafa-store .cart-button b{background:#17191D;border-color:#fff}
+.tenant-app--mustafa-store .mobile-quick-nav{border-top:1px solid #F0F1F3;background:#fff}.tenant-app--mustafa-store .mobile-quick-nav-track{width:min(100% - 28px,620px);gap:7px;padding:7px 0 9px;scrollbar-width:none}
+.tenant-app--mustafa-store .mobile-quick-nav-track::-webkit-scrollbar{display:none}.tenant-app--mustafa-store .mobile-quick-nav a{min-height:34px;padding:7px 12px;border:1px solid #E8EAED;border-radius:10px;color:#626A73;background:#F8F9FA;font-size:9px;font-weight:750;white-space:nowrap}
+.tenant-app--mustafa-store .mobile-quick-nav a.is-active{color:#fff;border-color:#17191D;background:#17191D}.tenant-app--mustafa-store .mobile-quick-nav a.is-active svg{color:#F18495}
+.tenant-app--mustafa-store .button-primary,.tenant-app--mustafa-store .cart-button,.tenant-app--mustafa-store .add-button{color:#fff!important;background:#C91F3A!important;border-color:#C91F3A!important;box-shadow:0 7px 16px #C91F3A21}
+.tenant-app--mustafa-store .button-primary:hover,.tenant-app--mustafa-store .cart-button:hover,.tenant-app--mustafa-store .add-button:hover{background:#A91731!important;border-color:#A91731!important}
+.tenant-app--mustafa-store .button-outline,.tenant-app--mustafa-store .button-quiet{color:#252A31;border-color:#DCE0E4;background:#fff}
+.tenant-app--mustafa-store .breadcrumbs{color:#9299A1;font-size:10px}.tenant-app--mustafa-store .breadcrumbs a:hover{color:#C91F3A}
+.tenant-app--mustafa-store .catalog-page,.tenant-app--mustafa-store .product-page,.tenant-app--mustafa-store .cart-page,.tenant-app--mustafa-store .info-page{padding-top:26px;padding-bottom:76px}
+.tenant-app--mustafa-store .catalog-heading{padding:32px 0 22px}.tenant-app--mustafa-store .catalog-heading h1,.tenant-app--mustafa-store .page-title-row h1{color:#17191D;font-size:clamp(29px,3.6vw,42px);font-weight:850;letter-spacing:-.04em}
+.tenant-app--mustafa-store .catalog-heading p{color:#737B84}.tenant-app--mustafa-store .catalog-sort select,.tenant-app--mustafa-store .catalog-search,.tenant-app--mustafa-store .filter-sidebar,.tenant-app--mustafa-store .stats-bar{border:1px solid #E3E6E9;background:#fff;box-shadow:0 7px 20px #11131809;backdrop-filter:none}
+.tenant-app--mustafa-store .catalog-search{border-radius:13px}.tenant-app--mustafa-store .chip{color:#424952;border-color:#E1E4E8;background:#fff;box-shadow:none;backdrop-filter:none}
+.tenant-app--mustafa-store .chip-active,.tenant-app--mustafa-store .chip.is-active,.tenant-app--mustafa-store .chip[aria-pressed=true]{color:#fff;border-color:#C91F3A;background:#C91F3A;box-shadow:0 5px 13px #C91F3A1F}
+.tenant-app--mustafa-store .filter-trigger{color:#C91F3A;border-color:#F0C8D0;background:#FFF4F6}
+.tenant-app--mustafa-store .product-grid{gap:17px}.tenant-app--mustafa-store .product-card{padding:9px;border:1px solid #E3E6E9;border-radius:16px;background:#fff;box-shadow:0 8px 22px #1113180B;backdrop-filter:none}
+.tenant-app--mustafa-store .product-card:hover{background:#fff;box-shadow:0 14px 30px #11131813}.tenant-app--mustafa-store .product-card-media{border:0;border-radius:11px;background:linear-gradient(145deg,#F2F4F6,#E9EDF0);aspect-ratio:1/1}
+.tenant-app--mustafa-store .product-card-image,.tenant-app--mustafa-store .card-image-layer img{object-fit:contain;padding:9%;mix-blend-mode:multiply}
+.tenant-app--mustafa-store .product-card-body{padding:12px 3px 3px}.tenant-app--mustafa-store .product-type{color:#C91F3A;font-size:9px;font-weight:800}
+.tenant-app--mustafa-store .product-name{color:#24282F;font-size:12px;font-weight:800;line-height:1.65}.tenant-app--mustafa-store .product-price{color:#20242B;font-size:11px;font-weight:800}
+.tenant-app--mustafa-store .product-detail-layout{grid-template-columns:minmax(0,1.02fr) minmax(340px,.98fr);gap:clamp(26px,4vw,54px);padding-top:25px}
+.tenant-app--mustafa-store .gallery-main{aspect-ratio:1/1;max-height:none;border:1px solid #E3E6E9;border-radius:20px;background:linear-gradient(145deg,#F2F4F6,#E9EDF0);box-shadow:0 14px 34px #1113180F}
+.tenant-app--mustafa-store .gallery-img{object-fit:contain;padding:8%;mix-blend-mode:multiply}.tenant-app--mustafa-store .gallery-thumbs button{border:1px solid #E1E5E9;border-radius:10px;background:#F0F2F4}
+.tenant-app--mustafa-store .gallery-thumbs button.is-active{border:2px solid #C91F3A}
+.tenant-app--mustafa-store .product-purchase{padding:24px;border:1px solid #E3E6E9;border-radius:19px;background:#fff;box-shadow:0 14px 34px #1113180B}
+.tenant-app--mustafa-store .product-purchase h1{color:#17191D;font-size:clamp(27px,3.2vw,38px);font-weight:850;line-height:1.3;letter-spacing:-.04em}.tenant-app--mustafa-store .product-description{color:#737B84;line-height:1.9}
+.tenant-app--mustafa-store .detail-wish{color:#C91F3A;border:1px solid #F0CFD5;background:#FFF7F8;backdrop-filter:none}.tenant-app--mustafa-store .price-block strong{color:#C91F3A;font-size:23px}
+.tenant-app--mustafa-store .quantity-control,.tenant-app--mustafa-store .meters-input-row{border-color:#E0E4E8;background:#F9FAFB}.tenant-app--mustafa-store .quantity-control button{color:#C91F3A}
+.tenant-app--mustafa-store .quantity-control output{color:#20242B;font-weight:850}.tenant-app--mustafa-store .detail-add{min-height:49px;border-radius:12px}
+.tenant-app--mustafa-store .detail-perks{color:#6F7780}.tenant-app--mustafa-store .detail-perks svg{color:#C91F3A}
+.tenant-app--mustafa-store .specs-grid>div,.tenant-app--mustafa-store .product-faq-list>div{border-color:#E9ECEF}
+.tenant-app--mustafa-store .cart-items,.tenant-app--mustafa-store .order-summary,.tenant-app--mustafa-store .checkout-summary{border:1px solid #E3E6E9;border-radius:17px;background:#fff;box-shadow:0 10px 28px #1113180B;backdrop-filter:none}
+.tenant-app--mustafa-store .cart-item{border-color:#E9ECEF}.tenant-app--mustafa-store .cart-item:hover{background:#FAFBFC;backdrop-filter:none}
+.tenant-app--mustafa-store .cart-item-image{border:1px solid #E5E8EB;border-radius:12px;background:#F0F2F4}.tenant-app--mustafa-store .cart-item-image img{object-fit:contain;padding:6%;mix-blend-mode:multiply}
+.tenant-app--mustafa-store .contact-layout{gap:42px}.tenant-app--mustafa-store .contact-methods a{border-color:#E3E6E9;background:#fff}.tenant-app--mustafa-store .contact-methods a>svg:first-child{color:#C91F3A}
+.tenant-app--mustafa-store input,.tenant-app--mustafa-store textarea,.tenant-app--mustafa-store select{border-color:#DDE1E5;background:#fff}
+.tenant-app--mustafa-store input:focus,.tenant-app--mustafa-store textarea:focus,.tenant-app--mustafa-store select:focus{border-color:#C91F3A;box-shadow:0 0 0 3px #C91F3A1A}
+.tenant-app--mustafa-store .site-footer{color:#E6E8EB;background:linear-gradient(145deg,#242830,#111318 75%);border-top:3px solid #C91F3A;backdrop-filter:none}
+.tenant-app--mustafa-store .footer-brand p,.tenant-app--mustafa-store .footer-grid a{color:#AEB5BE}.tenant-app--mustafa-store .footer-grid h2{color:#fff}.tenant-app--mustafa-store .footer-grid a:hover{color:#FF9BAA}
+.tenant-app--mustafa-store .mobile-sticky-buy{border-top:1px solid #E3E6E9;background:#FFFFFFF7;box-shadow:0 -8px 24px #11131812;backdrop-filter:blur(16px)}
+@media(max-width:820px){
+ .tenant-app--mustafa-store .header-inner{min-height:62px;gap:8px}.tenant-app--mustafa-store .logo{gap:8px}.tenant-app--mustafa-store .logo-symbol{width:38px;height:38px}
+ .tenant-app--mustafa-store .logo-copy strong{font-size:12px}.tenant-app--mustafa-store .logo-copy small{font-size:8px}.tenant-app--mustafa-store .header-actions{gap:3px}
+ .tenant-app--mustafa-store .header-actions .icon-button{width:35px;height:35px;min-height:35px;border-radius:10px}
+ .tenant-app--mustafa-store .header-actions .cart-button{width:37px;min-width:37px;height:37px;min-height:37px;justify-content:center;padding:0;border-radius:10px}
+ .tenant-app--mustafa-store .header-actions .cart-button span{display:none}.tenant-app--mustafa-store .header-actions .cart-button b{position:absolute;top:-4px;left:-4px;min-width:16px;height:16px;font-size:8px}
+ .tenant-app--mustafa-store .mobile-quick-nav-track{width:calc(100% - 24px)}
+ .tenant-app--mustafa-store .catalog-page,.tenant-app--mustafa-store .product-page,.tenant-app--mustafa-store .cart-page,.tenant-app--mustafa-store .info-page{width:calc(100% - 28px);padding-top:17px;padding-bottom:58px}
+ .tenant-app--mustafa-store .catalog-heading{align-items:flex-start;flex-direction:column;gap:13px;padding:24px 0 17px}.tenant-app--mustafa-store .catalog-heading h1{font-size:27px}
+ .tenant-app--mustafa-store .catalog-page .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tenant-app--mustafa-store .product-card{padding:7px;border-radius:13px}
+ .tenant-app--mustafa-store .product-card-media{border-radius:9px}.tenant-app--mustafa-store .product-card-body{padding:9px 2px 2px}
+ .tenant-app--mustafa-store .product-name{font-size:10px}.tenant-app--mustafa-store .product-price{font-size:9px}
+ .tenant-app--mustafa-store .product-detail-layout{grid-template-columns:minmax(0,1fr);gap:15px;padding-top:16px}.tenant-app--mustafa-store .product-gallery{position:static}
+ .tenant-app--mustafa-store .gallery-main{aspect-ratio:1.04/1;border-radius:15px}.tenant-app--mustafa-store .product-purchase{padding:16px;border-radius:15px}.tenant-app--mustafa-store .product-purchase h1{font-size:25px}
+ .tenant-app--mustafa-store .cart-layout,.tenant-app--mustafa-store .checkout-layout,.tenant-app--mustafa-store .contact-layout{grid-template-columns:minmax(0,1fr);gap:16px}
+ .tenant-app--mustafa-store .order-summary,.tenant-app--mustafa-store .checkout-summary{position:static}
+ .tenant-app--mustafa-store .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:25px 18px;padding-top:34px;padding-bottom:30px}.tenant-app--mustafa-store .footer-grid>div:last-child{grid-column:1/-1}
+}
+@media(max-width:420px){
+ .tenant-app--mustafa-store .announcement-bar{font-size:8px;gap:6px}.tenant-app--mustafa-store .logo-copy small{display:none}.tenant-app--mustafa-store .header-actions .lang-toggle{display:none}
+ .tenant-app--mustafa-store .mobile-quick-nav a{min-height:32px;padding-inline:10px;font-size:8px}.tenant-app--mustafa-store .product-purchase-top{gap:8px}
+ .tenant-app--mustafa-store .product-purchase h1{font-size:23px}.tenant-app--mustafa-store .cart-item{grid-template-columns:84px 1fr;gap:12px;padding:13px 7px}
+ .tenant-app--mustafa-store .cart-item-image{height:96px}
+}
