@@ -32,7 +32,7 @@
 .aalam-float-card b,.aalam-float-card small{display:block}
 .aalam-float-card b{font-size:11px;color:var(--aq-ink)}
 .aalam-float-card small{margin-top:2px;color:var(--aq-muted);font-size:9px}
-.aalam-proofbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;overflow:hidden;margin:6px 0 26px;border:1px solid var(--aq-line);border-radius:19px;background:var(--aq-line);box-shadow:0 13px 32px rgba(21,36,61,.035)}
+.aalam-proofbar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;overflow:hidden;margin:6px 0 26px;border:1px solid var(--aq-line);border-radius:19px;background:var(--aq-line);box-shadow:0 13px 32px rgba(21,36,61,.035)}
 .aalam-proofbar>div{display:flex;min-height:88px;flex-direction:column;justify-content:center;gap:2px;padding:15px 20px;background:rgba(255,255,255,.78)}
 .aalam-proofbar strong{color:var(--aq-ink);font-size:22px;font-weight:800}
 .aalam-proofbar span{color:var(--aq-muted);font-size:10px}
@@ -84,6 +84,7 @@ html[data-aalam-theme="dark"] .aalam-category-card,html[data-aalam-theme="dark"]
 html[data-aalam-theme="dark"] .aalam-category-card__icon,html[data-aalam-theme="dark"] .aalam-branchline__mark{background:#2A2032;border-color:#553244;color:#F08A9D}
 html[data-aalam-theme="dark"] .aalam-product-grid .product-card-media{background:linear-gradient(150deg,#1B304B,#13243B)}
 html[data-aalam-theme="dark"] .aalam-category-card__index{color:#899BB2}
+.aalam-proofbar>div:last-child svg{display:block;margin-bottom:2px;color:var(--aq-accent)}
 @media(max-width:980px){.aalam-hero{grid-template-columns:1fr;gap:24px}.aalam-hero__visual{min-height:420px}.aalam-category-grid,.aalam-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.aalam-assurance{grid-template-columns:1fr}}
 @media(max-width:600px){.aalam-container{width:min(100% - 28px,1220px)}.aalam-hero{padding-top:10px}.aalam-hero h1{font-size:clamp(37px,10vw,52px)}.aalam-hero__visual{min-height:330px;border-radius:23px}.aalam-hero__visual>img{padding:28px 22px}.aalam-float-card{top:75px;inset-inline-start:10px;padding:8px 10px}.aalam-hero__caption{inset-inline:12px;bottom:12px}.aalam-proofbar{grid-template-columns:repeat(2,minmax(0,1fr));border-radius:15px}.aalam-proofbar>div{min-height:72px;padding:12px 14px}.aalam-section__heading{align-items:flex-start;flex-direction:column;gap:9px}.aalam-category-grid{gap:9px}.aalam-category-card{min-height:173px;padding:14px}.aalam-product-grid{gap:9px}.aalam-assurance{margin:28px 0;padding:21px 17px;border-radius:20px}.aalam-branchline{align-items:flex-start;flex-wrap:wrap;padding:16px}.aalam-branchline .aalam-button{width:100%;margin-inline-start:0}}
 @media(prefers-reduced-motion:reduce){.aalam-storefront *{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
