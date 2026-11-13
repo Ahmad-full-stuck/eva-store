@@ -85,7 +85,7 @@ export function AalamAlqalaaPoliciesPage() {
         <div className="aalam-policy-page__contact">
           <span className="aalam-policy-page__pin"><MapPin size={20}/></span>
           <div><strong>تحتاج توضيحاً قبل الشراء؟</strong><p>{content.location || 'خمسة فروع في بغداد · توصيل إلى جميع محافظات العراق'}</p></div>
-          <Link to="/contact">تواصل مع المتجر</Link>
+          <Link href="/contact">تواصل مع المتجر</Link>
         </div>
       </div>
     </main>
