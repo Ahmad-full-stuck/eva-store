@@ -240,7 +240,7 @@ function MustafaStoreHome({products,wishlist,onWish}:{products:Product[];wishlis
  </div></main>
 }
 
-export function TenantVerticalHome({ products, wishlist, onWish }: TenantVerticalHomeProps) {
+export function TenantVerticalHome({ products, wishlist, onWish, onAdd }: TenantVerticalHomeProps) {
   const content = useSiteContent()
   if (content.tenantKey === 'aalam-alqalaa') return <AalamAlqalaaHome products={products} wishlist={wishlist} onWish={onWish} onAdd={onAdd} />
   if (content.tenantKey === 'mustafa-store') return <MustafaStoreHome products={products} wishlist={wishlist} onWish={onWish} />
