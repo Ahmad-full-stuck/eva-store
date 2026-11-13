@@ -5,7 +5,11 @@ import './smart-image.css'
 
 const DEFAULT_WIDTHS = [320, 640]
 
-const isLocalFabric = (src: string) => /^(fabrics\\/[\\w-]+|products\\/[\\w-]+\\/[\\w-]+|home\\/[\\w-]+)\\.jpe?g$/i.test(src)
+const isLocalFabric = (src: string) => {
+  const localDirectory = src.startsWith('fabrics/') || src.startsWith('products/') || src.startsWith('home/')
+  const extension = src.slice(src.lastIndexOf('.') + 1).toLowerCase()
+  return localDirectory && (extension === 'jpg' || extension === 'jpeg')
+}
 
 type SmartImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'srcSet' | 'width' | 'height'> & {
   src: string
@@ -95,7 +99,9 @@ export function SmartImage({
   }
 
   const dir = src.slice(0, src.lastIndexOf('/') + 1)
-  const fileBase = src.slice(src.lastIndexOf('/') + 1).replace(/\\.[a-z]+$/i, '')
+  const fileName = src.slice(src.lastIndexOf('/') + 1)
+  const extensionIndex = fileName.lastIndexOf('.')
+  const fileBase = extensionIndex >= 0 ? fileName.slice(0, extensionIndex) : fileName
   const srcSet = available.map((width) => `${dir}${fileBase}-${width}.webp ${width}w`).join(', ')
 
   return (
