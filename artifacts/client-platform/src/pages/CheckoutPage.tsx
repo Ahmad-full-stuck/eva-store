@@ -184,7 +184,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [liveMessage, setLiveMessage] = useState('')
   const totals = getCartTotals(cart)
   const siteContent = useSiteContent()
-  const isPieceStore = siteContent.tenantKey === 'mustafa-store'
+  const isPieceStore = siteContent.tenantKey === 'mustafa-store' || siteContent.tenantKey === 'aalam-alqalaa'
   const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : formatMeters(value)
   const boxRef = useRef<HTMLDivElement>(null)
   const restored = useRef(false)
@@ -390,7 +390,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   }
 
   // احتياط: إن تعذّر حفظ الطلب في الخادم يُسجَّل محلياً ويُرسل تلقائياً عند عودة الاتصال.
-  const orderSuccessText = (orderNumber: string) => content.tenantKey === 'aalam-alqalaa'
+  const orderSuccessText = (orderNumber: string) => siteContent.tenantKey === 'aalam-alqalaa'
     ? `تم استلام طلبك ${orderNumber}. سيتواصل فريق عالم القلعة لتأكيد السعر والتوفر ورسوم التوصيل قبل الاعتماد.`
     : t('co.orderSuccess').replace('{number}', orderNumber)
 
@@ -499,12 +499,12 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
       <div className="checkout-top">
         <div>
           <span className="eyebrow">{t('co.eyebrow')}</span>
-          <h1>{content.tenantKey === 'aalam-alqalaa' ? 'تأكيد طلبك' : t('co.title')}</h1>
+          <h1>{siteContent.tenantKey === 'aalam-alqalaa' ? 'تأكيد طلبك' : t('co.title')}</h1>
         </div>
         <Link href={`/cart${location.includes('?') ? location.slice(location.indexOf('?')) : ''}`} className="underlined-link"><ArrowRight size={15} />{t('co.backToCart')}</Link>
       </div>
       <ul className="order-trust">
-        {content.tenantKey === 'aalam-alqalaa' ? <>
+        {siteContent.tenantKey === 'aalam-alqalaa' ? <>
           <li><Check size={15} />السعر والتوفر يُؤكدان قبل اعتماد الطلب</li>
           <li><ShieldCheck size={15} />ضمان ذهبي لمدة سنة وفق الشروط</li>
           <li><ShieldCheck size={15} />توصيل إلى جميع محافظات العراق</li>
@@ -631,13 +631,13 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
           </div>
           <div className="summary-line">
             <span>{t('co.delivery')} <small>{t('co.estimated')}</small></span>
-            <strong>{content.tenantKey === 'aalam-alqalaa' ? 'عند التأكيد' : totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('co.free')}</strong>
+            <strong>{siteContent.tenantKey === 'aalam-alqalaa' ? 'عند التأكيد' : totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('co.free')}</strong>
           </div>
           <div className="summary-total">
             <span>{t('co.total')}</span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
-          <div className="checkout-secure"><Check size={15} />{content.tenantKey === 'aalam-alqalaa' ? 'لا يُعتمد السعر أو التوفر أو أجور التوصيل إلا بعد تواصل فريق المتجر معك.' : t('co.notSentNote')}</div>
+          <div className="checkout-secure"><Check size={15} />{siteContent.tenantKey === 'aalam-alqalaa' ? 'لا يُعتمد السعر أو التوفر أو أجور التوصيل إلا بعد تواصل فريق المتجر معك.' : t('co.notSentNote')}</div>
         </aside>
       </form>
     </main>
