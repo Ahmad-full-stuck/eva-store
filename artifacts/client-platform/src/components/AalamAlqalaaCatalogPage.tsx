@@ -157,9 +157,11 @@ export function AalamAlqalaaCatalogPage({ products, wishlist, status, onWish, on
           ) : (
             <div className="aalam-catalog__empty">
               <span><Search size={24} /></span>
-              <h3>ما لقينا منتجات تطابق بحثك</h3>
-              <p>جرّب كلمة ثانية أو اعرض كل منتجات عالم القلعة.</p>
-              <button type="button" onClick={() => { setSearchInput(''); selectCategory('') }}>عرض كل المنتجات <ArrowLeft size={16} /></button>
+              <h3>{activeCategory && !searchInput.trim() ? 'هذا القسم قيد الإضافة إلى الكتالوج' : 'ما لقينا منتجات تطابق بحثك'}</h3>
+              <p>{activeCategory && !searchInput.trim() ? 'تواصل مع عالم القلعة للاستفسار عن المنتجات المتوفرة في هذا القسم.' : 'جرّب كلمة ثانية أو اعرض كل منتجات عالم القلعة.'}</p>
+              {activeCategory && !searchInput.trim()
+                ? <Link href="/contact" className="aalam-catalog__empty-link">استفسر عن هذا القسم <ArrowLeft size={16} /></Link>
+                : <button type="button" onClick={() => { setSearchInput(''); selectCategory('') }}>عرض كل المنتجات <ArrowLeft size={16} /></button>}
             </div>
           )}
         </section>
