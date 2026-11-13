@@ -37,7 +37,7 @@ const normalize = (value: string) => value
 export function AalamAlqalaaCatalogPage({ products, wishlist, status, onWish, onAdd }: AalamAlqalaaCatalogProps) {
   const { lang } = useT()
   const brand = getStoreBrand('aalam-alqalaa')
-  const [location, setLocation] = useLocation()
+  const [, setLocation] = useLocation()
   const searchParams = useSearch()
   const initialParams = new URLSearchParams(searchParams.replace(/^\?/, ''))
   const [activeCategory, setActiveCategory] = useState(initialParams.get('category') || '')
@@ -53,7 +53,8 @@ export function AalamAlqalaaCatalogPage({ products, wishlist, status, onWish, on
     const params = new URLSearchParams()
     if (nextCategory) params.set('category', nextCategory)
     if (nextSearch.trim()) params.set('search', nextSearch.trim())
-    setLocation('/catalog' + (params.size ? '?' + params.toString() : ''))
+    const query = params.toString()
+    setLocation('/catalog' + (query ? '?' + query : ''))
   }
 
   const shown = useMemo(() => {
