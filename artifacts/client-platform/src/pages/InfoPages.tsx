@@ -1202,6 +1202,7 @@ function OrderStatusPanel({ order }: { order: StoredOrder }) {
 
 export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) {
   const { t } = useT()
+  const content = useSiteContent()
   const trimmed = orderNumber.trim()
   const [copied, setCopied] = useState(false)
   const orders = useMemo(readOrders, [])
@@ -1271,8 +1272,8 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
         <div className="glass glass-card confirmation-panel">
           <div className="confirmation-mark"><Check size={30} /></div>
           <span className="eyebrow">{t('confirm.eyebrow')}</span>
-          <h1>{t('confirm.title')}</h1>
-          <p>{t('confirm.text')}</p>
+          <h1>{content.tenantKey === 'aalam-alqalaa' ? 'تم استلام طلبك' : t('confirm.title')}</h1>
+          <p>{content.tenantKey === 'aalam-alqalaa' ? 'سيتواصل فريق عالم القلعة لتأكيد السعر والتوفر ورسوم التوصيل، ثم يعتمد الطلب معك. رقم طلبك محفوظ ويمكنك استخدامه للمتابعة.' : t('confirm.text')}</p>
           <div className="confirmation-number">
             <small>{t('confirm.orderNumber')}</small>
             <div className="order-number-row">
@@ -1316,7 +1317,7 @@ export function OrderConfirmationPage({ orderNumber }: { orderNumber: string }) 
             <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><Search size={16} />{t('confirm.track')}</Link>
             <Link href={`/order-tracking?order=${encodeURIComponent(order.orderNumber)}`} className="button button-outline"><PackageCheck size={16} />{t('confirm.trackStatus')}</Link>
           </div>
-          <div className="confirmation-trust"><Truck size={17} /><span>{t('confirm.trust')}</span></div>
+          <div className="confirmation-trust"><Truck size={17} /><span>{content.tenantKey === 'aalam-alqalaa' ? 'التوصيل متاح لكل العراق، وتُحدد رسومه عند التأكيد.' : t('confirm.trust')}</span></div>
         </div>
       </main>
     </>
