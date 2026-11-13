@@ -1,4 +1,5 @@
 import './tenant-vertical-home.css'
+import { AalamAlqalaaHome } from '@/components/AalamAlqalaaHome'
 import {
   ArrowLeft, ArrowUpLeft, BadgeCheck, Check, Clock3, CreditCard, Gift, Hammer,
   Headphones, Heart, Layers, MapPin, Monitor, Package, Palette,
@@ -241,6 +242,7 @@ function MustafaStoreHome({products,wishlist,onWish}:{products:Product[];wishlis
 
 export function TenantVerticalHome({ products, wishlist, onWish }: TenantVerticalHomeProps) {
   const content = useSiteContent()
+  if (content.tenantKey === 'aalam-alqalaa') return <AalamAlqalaaHome products={products} wishlist={wishlist} onWish={onWish} onAdd={onAdd} />
   if (content.tenantKey === 'mustafa-store') return <MustafaStoreHome products={products} wishlist={wishlist} onWish={onWish} />
   const key = content.tenantKey || ''
   const brand = getStoreBrand(key)
