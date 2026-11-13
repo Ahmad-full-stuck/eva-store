@@ -390,12 +390,16 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   }
 
   // احتياط: إن تعذّر حفظ الطلب في الخادم يُسجَّل محلياً ويُرسل تلقائياً عند عودة الاتصال.
+  const orderSuccessText = (orderNumber: string) => content.tenantKey === 'aalam-alqalaa'
+    ? `تم استلام طلبك ${orderNumber}. سيتواصل فريق عالم القلعة لتأكيد السعر والتوفر ورسوم التوصيل قبل الاعتماد.`
+    : t('co.orderSuccess').replace('{number}', orderNumber)
+
   const completeStaticOrder = (payload: OrderPayload): void => {
     const orderNumber = createLocalOrderNumber()
     saveLocalOrder(orderNumber, 'received', payload)
     notifyByEmail(payload, orderNumber)
     setSubmitState('idle')
-    setLiveMessage(t('co.orderSuccess').replace('{number}', orderNumber))
+    setLiveMessage(orderSuccessText(orderNumber))
     onComplete(orderNumber)
   }
 
@@ -467,7 +471,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
         saveLocalOrder(serverNumber, 'received', payload)
         setPendingOrderNumber('')
         setSubmitState('idle')
-        setLiveMessage(t('co.orderSuccess').replace('{number}', serverNumber))
+        setLiveMessage(orderSuccessText(serverNumber))
         onComplete(serverNumber)
         return
       } catch (error) {
@@ -627,13 +631,13 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
           </div>
           <div className="summary-line">
             <span>{t('co.delivery')} <small>{t('co.estimated')}</small></span>
-            <strong>{totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('co.free')}</strong>
+            <strong>{content.tenantKey === 'aalam-alqalaa' ? 'عند التأكيد' : totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('co.free')}</strong>
           </div>
           <div className="summary-total">
             <span>{t('co.total')}</span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
-          <div className="checkout-secure"><Check size={15} />{t('co.notSentNote')}</div>
+          <div className="checkout-secure"><Check size={15} />{content.tenantKey === 'aalam-alqalaa' ? 'لا يُعتمد السعر أو التوفر أو أجور التوصيل إلا بعد تواصل فريق المتجر معك.' : t('co.notSentNote')}</div>
         </aside>
       </form>
     </main>
