@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { ArrowLeft, BatteryCharging, CarFront, Headphones, House, Monitor, Search, Smartphone, Watch, X } from 'lucide-react'
-import { useLocation, useSearch } from 'wouter'
+import { Link, useLocation, useSearch } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { ProductCard, ProductGridSkeleton } from '@/components/ProductCard'
 import { useT } from '@/lib/i18n'
