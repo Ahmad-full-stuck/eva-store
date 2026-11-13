@@ -83,7 +83,7 @@ const glassStyles = `
 export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   const { t, lang } = useT()
   const content = useSiteContent()
-  const isPieceStore = content.tenantKey === 'mustafa-store'
+  const isPieceStore = content.tenantKey === 'mustafa-store' || content.tenantKey === 'aalam-alqalaa'
   const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : formatMeters(value)
   const settings = useStoreSettings()
   const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
