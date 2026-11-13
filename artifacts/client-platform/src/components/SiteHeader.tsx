@@ -74,10 +74,14 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
   const [searchOpen, setSearchOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const content = useSiteContent()
+  const isPieceStore = content.tenantKey === 'mustafa-store' || content.tenantKey === 'aalam-alqalaa'
   const [aalamTheme, setAalamTheme] = useState<'light' | 'dark'>(() => {
     try { return window.localStorage.getItem('aalam-alqalaa-theme') === 'dark' ? 'dark' : 'light' } catch { return 'light' }
   })
   const { lang, setLang, t } = useT()
+  const cartQuantityLabel = isPieceStore
+    ? (lang === 'en' ? `${cartMeters} ${cartMeters === 1 ? 'item' : 'items'}` : `${cartMeters} ${cartMeters === 1 ? 'قطعة' : 'قطع'}`)
+    : formatMeters(cartMeters)
   const pathname = location.split('?')[0]
 
   const withRoutes = <T extends NavItem>(items: T[]): T[] =>
@@ -168,10 +172,10 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
               <Heart size={19} />
               {wishlistCount > 0 && <span>{wishlistCount}</span>}
             </Link>
-            <Link href="/cart" className="cart-button" onClick={navigate} aria-label={t('header.cartAria').replace('{meters}', formatMeters(cartMeters))}>
+            <Link href="/cart" className="cart-button" onClick={navigate} aria-label={t('header.cartAria').replace('{meters}', cartQuantityLabel)}>
               <ShoppingBag size={17} />
               <span>{t('core.toastCart')}</span>
-              {cartMeters > 0 && <b>{formatMeters(cartMeters)}</b>}
+              {cartMeters > 0 && <b>{cartQuantityLabel}</b>}
             </Link>
             <button type="button" className="icon-button menu-toggle" onClick={() => setMenuOpen(true)} aria-label={t('header.openMenu')} aria-haspopup="dialog" aria-expanded={menuOpen}>
               <Menu size={20} />

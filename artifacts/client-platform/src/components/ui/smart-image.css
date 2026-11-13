@@ -1,0 +1,67 @@
+.smart-image-fallback{
+  --smart-image-bg:linear-gradient(145deg,#F0F4F8,#E2EAF2);
+  --smart-image-ink:#62748B;
+  position:relative;
+  isolation:isolate;
+  display:grid !important;
+  width:100%;
+  height:100%;
+  min-width:0;
+  min-height:100%;
+  place-items:center;
+  align-content:center;
+  gap:8px;
+  overflow:hidden;
+  padding:12px !important;
+  border-radius:inherit;
+  color:var(--smart-image-ink);
+  background:var(--smart-image-bg);
+}
+.smart-image-fallback::before{
+  content:"";
+  position:absolute;
+  inset:12%;
+  z-index:-1;
+  border:1px solid color-mix(in srgb,var(--smart-image-ink) 12%,transparent);
+  border-radius:28px;
+  background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.75),transparent 70%);
+}
+.smart-image-fallback__mark{
+  display:grid;
+  width:48px;
+  height:48px;
+  place-items:center;
+  border:1px solid color-mix(in srgb,var(--smart-image-ink) 16%,transparent);
+  border-radius:16px;
+  color:var(--smart-image-ink);
+  background:rgba(255,255,255,.64);
+  box-shadow:0 8px 24px rgba(21,36,61,.07),inset 0 1px 0 rgba(255,255,255,.9);
+}
+.smart-image-fallback__label{
+  color:var(--smart-image-ink);
+  font-size:10px;
+  font-weight:650;
+  line-height:1.5;
+  text-align:center;
+}
+.product-card-media .smart-image-fallback__label,
+.gallery-thumbs .smart-image-fallback__label{display:none}
+.product-card-media .smart-image-fallback__mark{width:42px;height:42px}
+.gallery-thumbs .smart-image-fallback{padding:4px !important}
+.gallery-thumbs .smart-image-fallback__mark{width:29px;height:29px;border-radius:10px}
+.gallery-thumbs .smart-image-fallback__mark svg{width:16px;height:16px}
+.aalam-hero__visual .smart-image-fallback__mark{width:64px;height:64px;border-radius:20px}
+.aalam-hero__visual .smart-image-fallback__mark svg{width:32px;height:32px}
+html[data-aalam-theme="dark"] .smart-image-fallback{
+  --smart-image-bg:linear-gradient(145deg,#1B304B,#13243B);
+  --smart-image-ink:#B8C8DC;
+}
+html[data-aalam-theme="dark"] .smart-image-fallback__mark{
+  border-color:rgba(184,200,220,.2);
+  color:#E5ECF5;
+  background:rgba(31,53,78,.84);
+}
+@media(max-width:560px){
+  .product-card-media .smart-image-fallback__mark{width:36px;height:36px}
+  .product-card-media .smart-image-fallback__mark svg{width:21px;height:21px}
+}

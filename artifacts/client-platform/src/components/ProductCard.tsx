@@ -149,8 +149,6 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
                   if (next) {
                     node.dataset.attempt = String(attempt + 1)
                     node.src = next
-                  } else {
-                    node.style.display = 'none'
                   }
                 }}
               />

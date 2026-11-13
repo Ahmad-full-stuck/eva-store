@@ -2,6 +2,7 @@ import { ArrowLeft, BadgeCheck, BatteryCharging, CarFront, Check, ChevronLeft, G
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { ProductCard } from '@/components/ProductCard'
+import { SmartImage } from '@/components/ui/SmartImage'
 import { useSiteContent } from '@/lib/site-content'
 import { getStoreBrand } from '@/lib/store-brand'
 import './aalam-alqalaa-home.css'
@@ -50,7 +51,9 @@ export function AalamAlqalaaHome({ products, wishlist, onWish, onAdd }: AalamAlq
             </div>
           </div>
           <div className="aalam-hero__visual">
-            {heroImage && <img src={heroImage} alt="منتجات عالم القلعة" fetchPriority="high" decoding="async" />}
+            {heroImage
+              ? <SmartImage src={heroImage} alt="منتجات عالم القلعة" className="aalam-hero__image" sizes="(max-width: 720px) 92vw, 48vw" intrinsicWidth={1200} intrinsicHeight={900} priority />
+              : <div className="aalam-hero__image-fallback" aria-hidden="true"><img src="/aalam-alqalaa-mark.svg" alt="" /></div>}
             <div className="aalam-hero__overlay" />
             <span className="aalam-hero__seal"><img src="/aalam-alqalaa-mark.svg" alt="" /> CASTLE WORLD</span>
             <div className="aalam-hero__caption">
