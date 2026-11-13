@@ -1,4 +1,4 @@
-import { ArrowLeft, BadgeCheck, BatteryCharging, CarFront, Check, ChevronLeft, Headphones, House, MapPin, Monitor, ShieldCheck, Smartphone, Truck, Watch } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, BatteryCharging, CarFront, Check, ChevronLeft, Gift, Headphones, House, MapPin, Monitor, ShieldCheck, Smartphone, Truck, Watch } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { ProductCard } from '@/components/ProductCard'
@@ -36,7 +36,7 @@ export function AalamAlqalaaHome({ products, wishlist, onWish, onAdd }: AalamAlq
         <section className="aalam-hero">
           <div className="aalam-hero__copy">
             <span className="aalam-eyebrow"><i /> CASTLE WORLD <b>·</b> منذ 2004</span>
-            <span className="aalam-hero__micro">أجهزة أصلية · خيارات متعددة · خدمة واضحة</span>
+            <span className="aalam-hero__micro">أجهزة أصلية · أسعار واضحة · خدمة موثوقة</span>
             <h1>تقنية تثق بها<br /><em>واختيار أسهل.</em></h1>
             <p>من الهواتف والأجهزة الذكية إلى الصوتيات والطاقة والملحقات، اكتشف عالم المنتجات في مكان واحد، واسألنا عن السعر والتوفر قبل إتمام طلبك.</p>
             <div className="aalam-hero__actions">
@@ -69,6 +69,7 @@ export function AalamAlqalaaHome({ products, wishlist, onWish, onAdd }: AalamAlq
           <div><strong>5</strong><span>فروع في بغداد</span></div>
           <div><strong>كل العراق</strong><span>توصيل للمحافظات</span></div>
           <div><strong>سنة</strong><span>ضمان ذهبي وفق الشروط</span></div>
+          <div><strong><Gift size={19} /></strong><span>مسابقات وهدايا أسبوعية</span></div>
         </section>
 
         <section className="aalam-section">
@@ -116,6 +117,7 @@ export function AalamAlqalaaHome({ products, wishlist, onWish, onAdd }: AalamAlq
             <div><span><BadgeCheck size={20} /></span><b>أجهزة وملحقات أصلية</b><small>تشكيلة من علامات تقنية معروفة</small></div>
             <div><span><ShieldCheck size={20} /></span><b>ضمان واضح</b><small>راجع الشروط المعتمدة لكل منتج</small></div>
             <div><span><Truck size={20} /></span><b>خدمة إلى كل العراق</b><small>توصيل إلى جميع المحافظات</small></div>
+            <div><span><Gift size={20} /></span><b>مسابقات وهدايا أسبوعية</b><small>تابع حسابنا لمعرفة الجديد</small></div>
           </div>
         </section>
 
