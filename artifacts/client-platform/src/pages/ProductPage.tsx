@@ -25,7 +25,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const content = useSiteContent()
   const hostKey = typeof window !== 'undefined' ? window.location.hostname.split('.')[0] : ''
   const brand = getStoreBrand(content.tenantKey || hostKey)
-  const isPieceStore = content.tenantKey === 'mustafa-store'
+  const isPieceStore = content.tenantKey === 'mustafa-store' || content.tenantKey === 'aalam-alqalaa'
   const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : metersLabel(value)
   const product = products.find((item) => item.slug === slug)
   const [activeImage, setActiveImage] = useState(0)
