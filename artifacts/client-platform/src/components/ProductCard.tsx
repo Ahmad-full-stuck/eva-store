@@ -181,7 +181,7 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
             <p className="product-type">{lang === 'en' ? typeLabelEn(product.type) : product.type}</p>
             <Link href={detailPath} className="product-name">{product.name}</Link>
           </div>
-          <span className="product-price">{formatPrice(product.price)}<small>{t('card.perMeter')}</small></span>
+          <span className="product-price">{formatPrice(product.price)}<small>{content.tenantKey === 'aalam-alqalaa' ? '/ قطعة' : t('card.perMeter')}</small></span>
         </div>
         <div className="product-card-footer">
           <button
