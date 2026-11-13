@@ -25,7 +25,8 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const content = useSiteContent()
   const hostKey = typeof window !== 'undefined' ? window.location.hostname.split('.')[0] : ''
   const brand = getStoreBrand(content.tenantKey || hostKey)
-  const isPieceStore = content.tenantKey === 'mustafa-store' || content.tenantKey === 'aalam-alqalaa'
+  const isAalamStore = content.tenantKey === 'aalam-alqalaa'
+  const isPieceStore = content.tenantKey === 'mustafa-store' || isAalamStore
   const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : metersLabel(value)
   const product = products.find((item) => item.slug === slug)
   const [activeImage, setActiveImage] = useState(0)
@@ -155,7 +156,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   }
 
   return <main className="container-eva product-page">
-    <div className="breadcrumbs"><Link href="/">{t('pd.breadcrumbHome')}</Link><span>›</span><Link href="/catalog">{t('pd.breadcrumbFabrics')}</Link><span>›</span><span>{product.name}</span></div>
+    <div className="breadcrumbs"><Link href="/">{t('pd.breadcrumbHome')}</Link><span>›</span><Link href="/catalog">{isAalamStore ? 'المنتجات' : t('pd.breadcrumbFabrics')}</Link><span>›</span><span>{product.name}</span></div>
     <div className="product-detail-layout">
       <section className="product-gallery" aria-label={t('pd.galleryAria').replace('{name}', product.name)}>
         <div
@@ -201,21 +202,21 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         })}</div>
       </section>
       <section className="product-purchase">
-        {content.tenantKey && <div className="tenant-demo-note tenant-demo-note--inline" role="note"><span className="tenant-demo-note__mark">i</span><div><strong>منتج تجريبي</strong><p>{content.announcementLeft || "الصورة والسعر والمواصفات للتوضيح فقط، وليست بيانات بيع معتمدة."}</p></div></div>}
+        {content.tenantKey && !isAalamStore && <div className="tenant-demo-note tenant-demo-note--inline" role="note"><span className="tenant-demo-note__mark">i</span><div><strong>منتج تجريبي</strong><p>{content.announcementLeft || "الصورة والسعر والمواصفات للتوضيح فقط، وليست بيانات بيع معتمدة."}</p></div></div>}
         <div className="product-purchase-top"><div><span className="eyebrow">{lang === 'en' ? typeLabelsEn[product.type] || product.type : product.type}</span><h1>{product.name}</h1><p className="product-description">{product.description}</p></div><button type="button" className={`detail-wish ${wishlist.includes(product.slug) ? 'is-active' : ''}`} onClick={() => onWish(product.slug)} aria-label={wishlist.includes(product.slug) ? t('pd.wishRemove') : t('pd.wishAdd')} aria-pressed={wishlist.includes(product.slug)}><Heart size={20} fill={wishlist.includes(product.slug) ? 'currentColor' : 'none'} /></button></div>
         <div className="price-block"><span>{isPieceStore ? 'السعر للقطعة' : t('pd.pricePerMeter')}</span><strong>{formatPrice(product.price)}</strong>{product.compareAtPrice && <del>{formatPrice(product.compareAtPrice)}</del>}</div>
         <div className="detail-divider" />
-        <div className="quantity-heading"><div><strong>{isPieceStore ? 'الكمية' : t('pd.qtyHeading')}</strong><small>{isPieceStore ? 'حدد عدد القطع المطلوبة' : t('pd.qtyHint')}</small></div><span>{isPieceStore ? 'كمية توضيحية' : t('pd.availability')}</span></div>
+        <div className="quantity-heading"><div><strong>{isPieceStore ? 'الكمية' : t('pd.qtyHeading')}</strong><small>{isPieceStore ? 'حدد عدد القطع المطلوبة' : t('pd.qtyHint')}</small></div><span>{isAalamStore ? 'الطلب بالقطعة' : isPieceStore ? 'الكمية' : t('pd.availability')}</span></div>
         <div className="quantity-control"><button type="button" onClick={decrease} disabled={length <= 1} aria-label={isPieceStore ? 'تقليل الكمية' : t('pd.decreaseHalf')}><Minus size={17} /></button><output aria-live="polite">{formatQuantity(length)}</output><button type="button" onClick={increase} disabled={length >= maxLength} aria-label={isPieceStore ? 'زيادة الكمية' : t('pd.increaseHalf')}><Plus size={17} /></button></div>
         <label className="meters-input-row"><input className="meters-input" type="number" inputMode="decimal" min={1} max={Math.max(1, Math.floor(maxLength))} step={1} value={length} onChange={(event) => {
           const next = Number(event.target.value)
           if (!Number.isFinite(next)) return
           setLength(Math.min(Math.max(1, Math.round(next)), Math.max(1, Math.floor(maxLength))))
-        }} aria-label={t('pd.metersInputAria')} /><em>{isPieceStore ? 'قطعة' : t('pd.unitMeters')}</em></label>
+        }} aria-label={isPieceStore ? (lang === 'en' ? 'Enter item quantity' : 'أدخل عدد القطع') : t('pd.metersInputAria')} /><em>{isPieceStore ? 'قطعة' : t('pd.unitMeters')}</em></label>
         <div className="line-total"><span>{isPieceStore ? `الإجمالي لـ ${formatQuantity(length)}` : t('pd.lineTotal').replace('{meters}', metersLabel(length)).replace('{price}', formatPrice(product.price))}</span><strong>{formatPrice(product.price * length)}</strong></div>
         <button ref={addBtnRef} type="button" className="button button-primary detail-add" onClick={add} disabled={maxLength <= 0}><ShoppingBag size={17} />{maxLength <= 0 ? t('pd.unavailable') : isPieceStore ? 'أضف للسلة' : t('pd.addCart')}<ArrowLeft size={16} /></button>
         {justAdded && maxLength > 0 && <div className="add-confirm" role="status"><span><Check size={16} />{t('pd.addedToast').replace('{meters}', formatQuantity(length)).replace('{name}', product.name)}</span><Link href="/checkout" className="button button-primary">{t('pd.checkoutNow')} <ArrowLeft size={15} /></Link></div>}
-        <div className="detail-perks"><div><ShieldCheck size={17} /><span>{t('pd.perkDelivery')}</span></div><div><Zap size={17} /><span>{t('pd.perkOneBox')}</span></div></div>
+        <div className="detail-perks">{isAalamStore ? <><div><ShieldCheck size={17} /><span>الضمان حسب شروط المنتج</span></div><div><Zap size={17} /><span>توصيل إلى جميع محافظات العراق</span></div></> : <><div><ShieldCheck size={17} /><span>{t('pd.perkDelivery')}</span></div><div><Zap size={17} /><span>{t('pd.perkOneBox')}</span></div></>}</div>
         <div className="detail-accordions"><Accordion id="specs" title={t('pd.specsTitle')} open={openSection === 'specs'} onToggle={() => setOpenSection(openSection === 'specs' ? '' : 'specs')}><div className="specs-grid"><Spec label={brand.specLabels.composition || t('pd.spec.composition')} value={product.specs.composition} /><Spec label={brand.specLabels.width || t('pd.spec.width')} value={product.specs.width} /><Spec label={brand.specLabels.weight || t('pd.spec.weight')} value={product.specs.weight} /><Spec label={brand.specLabels.stretch || t('pd.spec.stretch')} value={product.specs.stretch} /><Spec label={brand.specLabels.opacity || t('pd.spec.opacity')} value={product.specs.opacity} /><Spec label={brand.specLabels.finish || t('pd.spec.finish')} value={product.specs.finish} /><Spec label={brand.specLabels.use || t('pd.spec.use')} value={product.specs.use} /><Spec label={brand.specLabels.care || t('pd.spec.care')} value={product.specs.care} /></div></Accordion><Accordion id="faq" title={t('pd.faqTitle')} open={openSection === 'faq'} onToggle={() => setOpenSection(openSection === 'faq' ? '' : 'faq')}><div className="product-faq-list">{faqItems.map((item) => <div key={item.question}><strong>{item.question}</strong><p>{item.answer}</p></div>)}</div></Accordion><Accordion id="shipping" title={t('pd.shippingTitle')} open={openSection === 'shipping'} onToggle={() => setOpenSection(openSection === 'shipping' ? '' : 'shipping')}><p className="accordion-text">{t('pd.shippingText')}</p></Accordion></div>
       </section>
     </div>
