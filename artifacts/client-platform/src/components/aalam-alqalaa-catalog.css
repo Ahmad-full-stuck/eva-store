@@ -1,0 +1,60 @@
+.aalam-catalog{--ac-ink:#15243D;--ac-muted:#687990;--ac-accent:#8E304B;--ac-line:#DCE3ED;--ac-surface:#FCFDFF;color:var(--ac-ink);padding:26px 0 80px}
+.aalam-catalog__container{width:min(1220px,calc(100% - 48px));margin:0 auto}
+.aalam-catalog__hero{position:relative;overflow:hidden;padding:clamp(28px,4vw,48px);border:1px solid rgba(255,255,255,.88);border-radius:28px;background:radial-gradient(60% 110% at 0% 0%,rgba(142,48,75,.09),transparent 60%),linear-gradient(135deg,#FDFEFF,#E9EFF7);box-shadow:0 24px 60px rgba(21,36,61,.07)}
+.aalam-catalog__hero:after{content:"CW";position:absolute;inset-inline-end:3%;top:-35%;color:rgba(21,36,61,.035);font-size:clamp(180px,25vw,330px);font-weight:850;letter-spacing:-.1em;pointer-events:none}
+.aalam-catalog__eyebrow{position:relative;z-index:1;display:flex;align-items:center;gap:9px;color:var(--ac-accent);font-size:10px;font-weight:850;letter-spacing:.13em}
+.aalam-catalog__eyebrow>span{width:8px;height:8px;border-radius:50%;background:var(--ac-accent);box-shadow:0 0 0 5px rgba(142,48,75,.1)}
+.aalam-catalog__eyebrow b{color:var(--ac-muted);font-weight:500}
+.aalam-catalog__hero h1{position:relative;z-index:1;margin:15px 0;color:var(--ac-ink);font-size:clamp(34px,4.4vw,58px);font-weight:850;line-height:1.22;letter-spacing:-.05em}
+.aalam-catalog__hero h1 em{color:var(--ac-accent);font-style:normal}
+.aalam-catalog__hero>p{position:relative;z-index:1;max-width:670px;margin:0;color:var(--ac-muted);font-size:13px;line-height:2}
+.aalam-catalog__proof{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:20px;color:var(--ac-muted);font-size:10px;font-weight:700}
+.aalam-catalog__proof i{width:4px;height:4px;border-radius:50%;background:var(--ac-accent);opacity:.7}
+.aalam-catalog__tools{position:relative;margin-top:24px;padding:18px;border:1px solid rgba(255,255,255,.9);border-radius:22px;background:rgba(255,255,255,.66);box-shadow:0 14px 36px rgba(21,36,61,.055);backdrop-filter:blur(18px) saturate(150%)}
+.aalam-catalog__search{display:flex;align-items:center;gap:10px;min-height:54px;padding:6px 8px 6px 16px;border:1px solid var(--ac-line);border-radius:15px;background:#fff}
+.aalam-catalog__search>svg{flex:0 0 auto;color:var(--ac-muted)}
+.aalam-catalog__search input{min-width:0;flex:1;border:0;outline:0;color:var(--ac-ink);background:transparent;font:inherit;font-size:12px}
+.aalam-catalog__search input::placeholder{color:#8A98AA}
+.aalam-catalog__search button{display:grid;min-width:36px;height:36px;place-items:center;border:0;border-radius:10px;color:var(--ac-muted);background:transparent;cursor:pointer}
+.aalam-catalog__search button:hover{color:var(--ac-accent);background:#F5E9ED}
+.aalam-catalog__search button.aalam-catalog__search-submit{display:inline-flex;min-width:66px;padding:0 17px;color:#fff;background:var(--ac-accent);font-size:11px;font-weight:800}
+.aalam-catalog__chips{display:flex;gap:8px;overflow-x:auto;padding:14px 2px 2px;scrollbar-width:thin;scroll-snap-type:x proximity}
+.aalam-catalog__chips button{display:inline-flex;flex:0 0 auto;align-items:center;gap:7px;min-height:40px;padding:0 13px;border:1px solid var(--ac-line);border-radius:999px;color:var(--ac-muted);background:rgba(255,255,255,.76);font:inherit;font-size:10px;font-weight:700;cursor:pointer;scroll-snap-align:start;transition:all .18s}
+.aalam-catalog__chips button span{display:grid;min-width:21px;height:21px;place-items:center;padding:0 5px;border-radius:999px;color:var(--ac-muted);background:#EDF1F6;font-size:9px}
+.aalam-catalog__chips button.is-active{color:#fff;border-color:var(--ac-accent);background:var(--ac-accent);box-shadow:0 8px 20px rgba(142,48,75,.14)}
+.aalam-catalog__chips button.is-active span{color:#fff;background:rgba(255,255,255,.2)}
+.aalam-catalog__results{padding-top:38px}
+.aalam-catalog__heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:20px}
+.aalam-catalog__heading>div>span{color:var(--ac-accent);font-size:10px;font-weight:850;letter-spacing:.12em}
+.aalam-catalog__heading h2{margin:7px 0 0;color:var(--ac-ink);font-size:clamp(22px,3vw,32px);font-weight:850}
+.aalam-catalog__heading>p{margin:0;padding:7px 12px;border:1px solid var(--ac-line);border-radius:999px;color:var(--ac-muted);background:rgba(255,255,255,.64);font-size:10px}
+.aalam-catalog__grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.aalam-catalog__grid .product-card.glass-card{border:1px solid var(--ac-line);border-radius:19px;background:linear-gradient(155deg,rgba(255,255,255,.95),rgba(245,248,252,.88));box-shadow:0 14px 34px rgba(21,36,61,.055);backdrop-filter:blur(14px) saturate(145%)}
+.aalam-catalog__grid .product-card.glass-card:hover{border-color:rgba(142,48,75,.4);box-shadow:0 22px 44px rgba(21,36,61,.1)}
+.aalam-catalog__grid .product-card-media{background:linear-gradient(150deg,#EDF2F8,#E3EAF3)}
+.aalam-catalog__grid .product-card-image{object-fit:contain;padding:8px}
+.aalam-catalog__empty{display:grid;justify-items:center;padding:58px 20px;border:1px dashed var(--ac-line);border-radius:22px;background:rgba(255,255,255,.55);text-align:center}
+.aalam-catalog__empty>span{display:grid;width:52px;height:52px;place-items:center;border-radius:17px;color:var(--ac-accent);background:#F5E9ED}
+.aalam-catalog__empty h3{margin:14px 0 5px;color:var(--ac-ink);font-size:17px}
+.aalam-catalog__empty p{margin:0;color:var(--ac-muted);font-size:11px}
+.aalam-catalog__empty button{display:inline-flex;align-items:center;gap:8px;min-height:42px;margin-top:18px;padding:0 15px;border:0;border-radius:12px;color:#fff;background:var(--ac-accent);font:inherit;font-size:11px;font-weight:800;cursor:pointer}
+.aalam-catalog__note{display:flex;gap:13px;margin-top:36px;padding:15px 18px;border:1px solid var(--ac-line);border-radius:15px;background:rgba(255,255,255,.58)}
+.aalam-catalog__note>span{flex:0 0 auto;color:var(--ac-accent);font-size:10px;font-weight:850}
+.aalam-catalog__note p{margin:0;color:var(--ac-muted);font-size:10px;line-height:1.9}
+html[data-aalam-theme="dark"] .aalam-catalog{--ac-ink:#EEF3FA;--ac-muted:#A9B8CC;--ac-accent:#E17A8D;--ac-line:#293B54;--ac-surface:#12233A}
+html[data-aalam-theme="dark"] .aalam-catalog__hero{border-color:#2C405B;background:radial-gradient(60% 110% at 0% 0%,rgba(142,48,75,.19),transparent 60%),linear-gradient(135deg,#142942,#0D1B2E);box-shadow:0 24px 60px rgba(0,0,0,.2)}
+html[data-aalam-theme="dark"] .aalam-catalog__hero:after{color:rgba(220,232,247,.035)}
+html[data-aalam-theme="dark"] .aalam-catalog__tools,html[data-aalam-theme="dark"] .aalam-catalog__note,html[data-aalam-theme="dark"] .aalam-catalog__heading>p{border-color:#293B54;background:rgba(18,35,58,.72)}
+html[data-aalam-theme="dark"] .aalam-catalog__search{border-color:#344963;background:#102039}
+html[data-aalam-theme="dark"] .aalam-catalog__search input{color:#EEF3FA}
+html[data-aalam-theme="dark"] .aalam-catalog__search input::placeholder{color:#8295AF}
+html[data-aalam-theme="dark"] .aalam-catalog__chips button{border-color:#344963;color:#B6C4D6;background:#142841}
+html[data-aalam-theme="dark"] .aalam-catalog__chips button span{color:#B9C8DA;background:#203A58}
+html[data-aalam-theme="dark"] .aalam-catalog__chips button.is-active{color:#fff;border-color:#E17A8D;background:#8F3A51}
+html[data-aalam-theme="dark"] .aalam-catalog__grid .product-card.glass-card{border-color:#293B54;background:linear-gradient(155deg,rgba(23,42,66,.94),rgba(14,29,48,.9))}
+html[data-aalam-theme="dark"] .aalam-catalog__grid .product-card-media{background:linear-gradient(150deg,#1B304B,#13243B)}
+html[data-aalam-theme="dark"] .aalam-catalog__empty{border-color:#344963;background:rgba(18,35,58,.62)}
+@media(max-width:980px){.aalam-catalog__grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:720px){.aalam-catalog__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.aalam-catalog{padding-top:13px}.aalam-catalog__container{width:calc(100% - 28px)}.aalam-catalog__hero{padding:23px 19px;border-radius:21px}.aalam-catalog__hero h1{font-size:clamp(33px,9vw,46px)}.aalam-catalog__tools{padding:12px;border-radius:17px}.aalam-catalog__search{gap:7px;padding-inline:10px}.aalam-catalog__search input{font-size:11px}.aalam-catalog__search button.aalam-catalog__search-submit{min-width:51px;padding:0 11px}.aalam-catalog__chips button{min-height:38px;padding-inline:11px;font-size:9px}.aalam-catalog__heading{align-items:flex-start}.aalam-catalog__grid{gap:9px}.aalam-catalog__note{gap:9px;padding:13px}.aalam-catalog__note p{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.aalam-catalog *{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}

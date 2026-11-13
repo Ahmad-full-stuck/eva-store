@@ -78,6 +78,7 @@ export const adaptTenantCopy = (source: string, lang: 'ar' | 'en' = 'ar'): strin
       ['opacity', 'details'],
     ]
     : [
+      ['المتجر الإلكتروني', siteConfig.name],
       ['إيفا ستور للأقمشة', siteConfig.name],
       ['إيفا ستور', siteConfig.shortName],
       ['معرض الخامات', 'كتالوج المنتجات'],

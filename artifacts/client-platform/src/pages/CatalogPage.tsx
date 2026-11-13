@@ -9,6 +9,7 @@ import { Modal } from '@/components/Modal'
 import { prefetchImages, thumbUrl } from '@/lib/prefetch'
 import { useSiteContent } from '@/lib/site-content'
 import { getStoreBrand } from '@/lib/store-brand'
+import { AalamAlqalaaCatalogPage } from '@/components/AalamAlqalaaCatalogPage'
 
 interface CatalogPageProps {
   products: Product[]
@@ -379,6 +380,8 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
 
   const sidePanel = renderFilterPanel('side')
   const drawerPanel = renderFilterPanel('drawer')
+
+  if (content.tenantKey === 'aalam-alqalaa') return <AalamAlqalaaCatalogPage products={products} wishlist={wishlist} status={status} onWish={onWish} onAdd={onAdd} />
 
   if (products.length === 0) {
     return (

@@ -124,7 +124,7 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
   const soldOut = !addColor || isSoldOut(product)
   const lowStock = !soldOut && product.stockMeters > 0 && product.stockMeters <= 3
   const wishLabel = wished ? t('card.wishRemove').replace('{name}', product.name) : t('card.wishAdd').replace('{name}', product.name)
-  const addLabel = t('card.addHalfAria').replace('{name}', product.name)
+  const addLabel = content.tenantKey === 'aalam-alqalaa' ? `إضافة ${product.name} إلى السلة` : t('card.addHalfAria').replace('{name}', product.name)
   const detailPath = `/product/${product.slug}`
 
   return (
@@ -158,7 +158,7 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
           </span>
         </Link>
         <div className="product-card-badges">
-          {content.tenantKey && <span className="badge badge-muted">نموذج توضيحي</span>}
+          {content.tenantKey && content.tenantKey !== 'aalam-alqalaa' && <span className="badge badge-muted">نموذج توضيحي</span>}
           {product.categoryId === 'style' && <span className="badge badge-muted">{t('card.badgeStyle')}</span>}
           {product.isNew && <span className="badge badge-accent">{t('card.badgeNew')}</span>}
           {lowStock && <span className="badge badge-warm">{t('card.badgeLow')}</span>}
@@ -191,7 +191,7 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
             onClick={() => addColor && onAdd(product, addColor, 1)}
             aria-label={addLabel}
           >
-            {soldOut ? t('card.soldOut') : <><ShoppingBag size={14} aria-hidden="true" /><span>{t('card.addHalf')}</span></>}
+            {soldOut ? t('card.soldOut') : <><ShoppingBag size={14} aria-hidden="true" /><span>{content.tenantKey === 'aalam-alqalaa' ? 'أضف للسلة' : t('card.addHalf')}</span></>}
           </button>
         </div>
       </div>

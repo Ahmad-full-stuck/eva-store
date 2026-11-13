@@ -1,0 +1,33 @@
+.aalam-policy-page{--ap-ink:#15243D;--ap-muted:#687990;--ap-accent:#8E304B;--ap-line:#DCE3ED;color:var(--ap-ink);padding:36px 0 82px}
+.aalam-policy-page__container{width:min(100% - 48px,1080px);margin:0 auto}
+.aalam-policy-page__eyebrow{display:flex;align-items:center;gap:9px;color:var(--ap-accent);font-size:10px;font-weight:850;letter-spacing:.12em}
+.aalam-policy-page__eyebrow>span{width:8px;height:8px;border-radius:50%;background:var(--ap-accent);box-shadow:0 0 0 5px rgba(142,48,75,.1)}
+.aalam-policy-page h1{margin:15px 0 10px;color:var(--ap-ink);font-size:clamp(31px,4.5vw,52px);font-weight:850;letter-spacing:-.045em;line-height:1.2}
+.aalam-policy-page__intro{max-width:750px;margin:0;color:var(--ap-muted);font-size:13px;line-height:2}
+.aalam-policy-page__highlights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:27px 0 30px}
+.aalam-policy-page__highlights>div{display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;align-items:center;column-gap:11px;padding:16px;border:1px solid var(--ap-line);border-radius:17px;background:linear-gradient(150deg,rgba(255,255,255,.86),rgba(245,248,252,.78));box-shadow:0 12px 28px rgba(21,36,61,.04)}
+.aalam-policy-page__highlights span{grid-row:1/3;display:grid;width:40px;height:40px;place-items:center;border-radius:13px;color:var(--ap-accent);background:#F5E9ED}
+.aalam-policy-page__highlights strong{color:var(--ap-ink);font-size:13px}
+.aalam-policy-page__highlights small{color:var(--ap-muted);font-size:9px}
+.aalam-policy-page__list{display:grid;gap:12px}
+.aalam-policy-card{overflow:hidden;border:1px solid var(--ap-line);border-radius:18px;background:rgba(255,255,255,.74);box-shadow:0 14px 34px rgba(21,36,61,.045);backdrop-filter:blur(16px) saturate(140%)}
+.aalam-policy-card summary{display:flex;align-items:center;gap:13px;padding:18px 20px;cursor:pointer;list-style:none}
+.aalam-policy-card summary::-webkit-details-marker{display:none}
+.aalam-policy-card__icon{display:grid;width:42px;height:42px;flex:0 0 42px;place-items:center;border-radius:13px;color:var(--ap-accent);background:#F5E9ED}
+.aalam-policy-card summary>span:nth-child(2){display:grid;gap:4px;flex:1}
+.aalam-policy-card summary strong{color:var(--ap-ink);font-size:13px}
+.aalam-policy-card summary small{color:var(--ap-muted);font-size:10px;line-height:1.8}
+.aalam-policy-card summary>b{display:grid;width:29px;height:29px;place-items:center;border:1px solid var(--ap-line);border-radius:50%;color:var(--ap-accent);font-size:18px;font-weight:500}
+.aalam-policy-card[open] summary>b{transform:rotate(45deg)}
+.aalam-policy-card ul{display:grid;gap:9px;margin:0;padding:0 76px 20px 25px;color:var(--ap-muted);font-size:11px;line-height:1.9}
+.aalam-policy-card li::marker{color:var(--ap-accent)}
+.aalam-policy-page__contact{display:flex;align-items:center;gap:13px;margin-top:26px;padding:18px;border:1px solid var(--ap-line);border-radius:17px;background:rgba(255,255,255,.7)}
+.aalam-policy-page__pin{display:grid;width:42px;height:42px;flex:0 0 42px;place-items:center;border-radius:13px;color:var(--ap-accent);background:#F5E9ED}
+.aalam-policy-page__contact>div{flex:1}
+.aalam-policy-page__contact strong{color:var(--ap-ink);font-size:12px}
+.aalam-policy-page__contact p{margin:3px 0 0;color:var(--ap-muted);font-size:10px}
+.aalam-policy-page__contact>a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border-radius:11px;color:#fff;background:var(--ap-accent);font-size:10px;font-weight:800}
+html[data-aalam-theme="dark"] .aalam-policy-page{--ap-ink:#EEF3FA;--ap-muted:#A9B8CC;--ap-accent:#E17A8D;--ap-line:#293B54}
+html[data-aalam-theme="dark"] .aalam-policy-page__highlights>div,html[data-aalam-theme="dark"] .aalam-policy-card,html[data-aalam-theme="dark"] .aalam-policy-page__contact{border-color:#293B54;background:linear-gradient(150deg,rgba(23,42,66,.94),rgba(14,29,48,.9));box-shadow:0 14px 34px rgba(0,0,0,.15)}
+html[data-aalam-theme="dark"] .aalam-policy-page__highlights span,html[data-aalam-theme="dark"] .aalam-policy-card__icon,html[data-aalam-theme="dark"] .aalam-policy-page__pin{color:#F08A9D;background:#2A2032}
+@media(max-width:680px){.aalam-policy-page__container{width:calc(100% - 28px)}.aalam-policy-page__highlights{grid-template-columns:1fr}.aalam-policy-page__highlights>div{padding:13px}.aalam-policy-card summary{padding:15px 13px;gap:10px}.aalam-policy-card__icon{width:37px;height:37px;flex-basis:37px}.aalam-policy-card ul{padding:0 58px 18px 18px}.aalam-policy-page__contact{align-items:flex-start;flex-wrap:wrap}.aalam-policy-page__contact>a{width:100%}}

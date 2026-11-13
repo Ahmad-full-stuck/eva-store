@@ -495,14 +495,20 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
       <div className="checkout-top">
         <div>
           <span className="eyebrow">{t('co.eyebrow')}</span>
-          <h1>{t('co.title')}</h1>
+          <h1>{content.tenantKey === 'aalam-alqalaa' ? 'تأكيد طلبك' : t('co.title')}</h1>
         </div>
         <Link href={`/cart${location.includes('?') ? location.slice(location.indexOf('?')) : ''}`} className="underlined-link"><ArrowRight size={15} />{t('co.backToCart')}</Link>
       </div>
       <ul className="order-trust">
-        <li><Check size={15} />{t('co.trustNoAccount')}</li>
-        <li><ShieldCheck size={15} />{t('co.trustCod')}</li>
-        <li><ShieldCheck size={15} />{t('co.trustRecorded')}</li>
+        {content.tenantKey === 'aalam-alqalaa' ? <>
+          <li><Check size={15} />السعر والتوفر يُؤكدان قبل اعتماد الطلب</li>
+          <li><ShieldCheck size={15} />ضمان ذهبي لمدة سنة وفق الشروط</li>
+          <li><ShieldCheck size={15} />توصيل إلى جميع محافظات العراق</li>
+        </> : <>
+          <li><Check size={15} />{t('co.trustNoAccount')}</li>
+          <li><ShieldCheck size={15} />{t('co.trustCod')}</li>
+          <li><ShieldCheck size={15} />{t('co.trustRecorded')}</li>
+        </>}
       </ul>
       <div className="sr-only" role="status" aria-live="polite">{liveMessage}</div>
       <form className="checkout-layout" onSubmit={submitOrder} noValidate>

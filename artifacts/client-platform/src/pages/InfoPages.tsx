@@ -7,6 +7,7 @@ import { useT } from '@/lib/i18n'
 import { guideFaqsEn, quickGuideAnswersEn } from '@/lib/strings/info'
 import { fallbackCategories, fallbackProducts, guideQuestions, quickGuideAnswers } from '@/lib/fallback-data'
 import { apiUrl, siteConfig } from '@/lib/site'
+import { AalamAlqalaaPoliciesPage } from '@/components/AalamAlqalaaPoliciesPage'
 import { sendSimpleEmail } from '@/lib/email'
 import { useSiteContent } from '@/lib/site-content'
 import { mergeAdminCategories, mergeAdminProducts } from '@/components/AdminSecret'
@@ -880,6 +881,7 @@ const policies: PolicyContent[] = [
 
 export function PoliciesPage() {
   const { t } = useT()
+  const content = useSiteContent()
   const [location] = useLocation()
   const [active, setActive] = useState<string | null>('terms')
 
@@ -898,6 +900,8 @@ export function PoliciesPage() {
     setActive(id)
     window.setTimeout(() => document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: 'smooth' }), 60)
   }
+
+  if (content.tenantKey === 'aalam-alqalaa') return <AalamAlqalaaPoliciesPage />
 
   return (
     <>
