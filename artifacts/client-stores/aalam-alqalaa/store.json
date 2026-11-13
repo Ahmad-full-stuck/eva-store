@@ -370,6 +370,100 @@
       ],
       "createdAt": "2026-11-13",
       "sourceUrl": "https://aalam-alqalaa.iq/ar/product/yesido-magnetic-neckband-earphones-ar/"
+    },
+    {
+      "id": "aalam-xiaomi-robot-vacuum-x20-pro",
+      "name": "مكنسة روبوت شاومي إكس 20 برو",
+      "category": "المنزل والحياة الذكية",
+      "price": 0,
+      "image": "https://aalam-alqalaa.iq/wp-content/uploads/2026/01/D102GL--600x573.jpg",
+      "images": [
+        "https://aalam-alqalaa.iq/wp-content/uploads/2026/01/D102GL--300x287.jpg"
+      ],
+      "description": "مكنسة ذكية تجمع الشفط والمسح مع محطة Omni للتفريغ التلقائي وغسل الممسحة وتجفيفها بالهواء الساخن. رقم الموديل D102GL.",
+      "specs": {
+        "composition": "Xiaomi",
+        "width": "Robot Vacuum X20 Pro · D102GL",
+        "weight": "بطارية 5,200mAh · حتى 160 دقيقة تقريباً",
+        "stretch": "حسب خيارات المنتج",
+        "opacity": "حسب التوفر",
+        "finish": "شفط حتى 7,000Pa · ملاحة LDS · تجنب عوائق Structured Light · رفع الممسحة 10mm عند السجاد",
+        "care": "راجع شروط الضمان المعتمدة للمنتج",
+        "use": "محطة Omni · خزان ماء نظيف 4L · خزان ماء متسخ 3.8L · كيس غبار 2.5L"
+      },
+      "colors": [
+        {
+          "id": "standard",
+          "name": "حسب خيارات المنتج",
+          "hex": "#8E304B",
+          "available": true,
+          "stockMeters": 0
+        }
+      ],
+      "colorsEnabled": false,
+      "stockMeters": 0,
+      "isFeatured": true,
+      "isNew": false,
+      "faqs": [
+        {
+          "question": "هل تعمل مع تطبيق الهاتف؟",
+          "answer": "يمكن التحكم بها عبر تطبيق Mi Home / Xiaomi Home، وتختلف بعض الوظائف بحسب الإعداد والتوافق."
+        },
+        {
+          "question": "هل السعر والتوفر مؤكدان؟",
+          "answer": "تواصل مع فريق عالم القلعة لتأكيد السعر والتوفر الحالي قبل إتمام الطلب."
+        }
+      ],
+      "createdAt": "2026-11-13",
+      "sourceUrl": "https://aalam-alqalaa.iq/ar/product/xiaomi-robot-vacuum-x20-pro-ar/"
+    },
+    {
+      "id": "aalam-promate-patrolpack-3",
+      "name": "عدة سيارة متعددة الوظائف 4 في 1 من بروميت",
+      "category": "إلكترونيات السيارة والتنقل",
+      "price": 0,
+      "image": "https://aalam-alqalaa.iq/wp-content/uploads/2026/02/PatrolPack-3Ecom_1_800x-600x600.webp",
+      "images": [
+        "https://aalam-alqalaa.iq/wp-content/uploads/2026/02/PatrolPack-3Ecom_2_800x-600x600.webp",
+        "https://aalam-alqalaa.iq/wp-content/uploads/2026/02/PatrolPack-3Ecom_3_800x-600x600.webp",
+        "https://aalam-alqalaa.iq/wp-content/uploads/2026/02/PatrolPack-3Ecom_4_800x-600x600.webp"
+      ],
+      "description": "جهاز طوارئ متعدد الوظائف للسيارة يجمع تشغيل البطارية 12V، ومنفاخ إطارات، وباور بنك، ومصباح LED.",
+      "specs": {
+        "composition": "Promate",
+        "width": "PatrolPack-3",
+        "weight": "بطارية 12,000mAh · 44.4Wh",
+        "stretch": "أسود",
+        "opacity": "حسب التوفر",
+        "finish": "تيار بدء 600A وذروة 1,200A · منفاخ حتى 150PSI مع TPMS · مصباح 270 lumens",
+        "care": "راجع شروط الضمان المعتمدة للمنتج",
+        "use": "USB-C · منافذ USB-A · خرج DC حتى 160W · مخصص لأنظمة 12V"
+      },
+      "colors": [
+        {
+          "id": "standard",
+          "name": "أسود",
+          "hex": "#20242A",
+          "available": true,
+          "stockMeters": 0
+        }
+      ],
+      "colorsEnabled": false,
+      "stockMeters": 0,
+      "isFeatured": true,
+      "isNew": false,
+      "faqs": [
+        {
+          "question": "هل يناسب جميع السيارات؟",
+          "answer": "الجهاز مخصص لأنظمة 12V فقط. تحقق من توافق سيارتك وتعليمات التشغيل قبل الاستخدام."
+        },
+        {
+          "question": "هل السعر والتوفر مؤكدان؟",
+          "answer": "تواصل مع فريق عالم القلعة لتأكيد السعر والتوفر الحالي قبل إتمام الطلب."
+        }
+      ],
+      "createdAt": "2026-11-13",
+      "sourceUrl": "https://aalam-alqalaa.iq/ar/product/promate-1200a-12v-4-in-1-multifunction-car-kit-ar/"
     }
   ],
   "quantityUnit": "قطعة",
