@@ -143,6 +143,37 @@ function AppShell() {
   }, [content.theme])
 
   useEffect(() => {
+    if (content.tenantKey !== 'aalam-alqalaa') return
+    const title = document.title
+    const description = document.querySelector<HTMLMetaElement>('meta[name="description"]')
+    const previousDescription = description?.content
+    const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]')
+    const previousIcon = icon?.href
+    const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+    const previousThemeColor = themeColor?.content
+    const ogTitle = document.querySelector<HTMLMetaElement>('meta[property="og:title"]')
+    const previousOgTitle = ogTitle?.content
+    const ogDescription = document.querySelector<HTMLMetaElement>('meta[property="og:description"]')
+    const previousOgDescription = ogDescription?.content
+
+    document.title = 'عالم القلعة | هواتف وإلكترونيات وأجهزة ذكية'
+    if (description) description.content = 'عالم القلعة منذ 2004. اكتشف الهواتف والأجهزة الذكية والصوتيات والطاقة والملحقات، مع ضمان ذهبي وتوصيل إلى جميع محافظات العراق.'
+    if (icon) icon.href = '/aalam-alqalaa-mark.svg'
+    if (themeColor) themeColor.content = '#15243D'
+    if (ogTitle) ogTitle.content = document.title
+    if (ogDescription) ogDescription.content = description?.content || ''
+
+    return () => {
+      document.title = title
+      if (description && previousDescription !== undefined) description.content = previousDescription
+      if (icon && previousIcon) icon.href = previousIcon
+      if (themeColor && previousThemeColor) themeColor.content = previousThemeColor
+      if (ogTitle && previousOgTitle) ogTitle.content = previousOgTitle
+      if (ogDescription && previousOgDescription) ogDescription.content = previousOgDescription
+    }
+  }, [content.tenantKey])
+
+  useEffect(() => {
     if (status === 'loading') return
     setCart((current) => reconcileCart(current, products))
   }, [products, status])
