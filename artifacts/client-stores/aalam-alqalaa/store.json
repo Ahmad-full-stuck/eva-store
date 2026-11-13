@@ -1,380 +1,389 @@
 {
   "key": "aalam-alqalaa",
   "name": "عالم القلعة",
-  "monogram": "♜",
-  "tagline": "هواتف وإلكترونيات وأجهزة ذكية",
-  "eyebrow": "عالم القلعة",
-  "storyTitle": "تفاصيل الاختيار تصنع الانطباع",
-  "storyText": "نموذج عرض أولي مخصص لـ عالم القلعة. الصور والأسماء والأسعار أمثلة تصميمية قابلة للاستبدال بالبيانات المعتمدة من صاحب النشاط.",
-  "description": "تصور متجر إلكتروني مخصص لـ عالم القلعة يعرض أقسام النشاط والمنتجات بطريقة واضحة ومريحة للتصفح.",
-  "note": "هذه معاينة تصميمية — الصور والمنتجات والأسعار أمثلة وليست مخزوناً فعلياً",
-  "demoNotice": "صور وأسعار ونماذج افتراضية لأغراض العرض فقط وتحتاج إلى اعتماد صاحب المتجر",
-  "location": "فروع بغداد · الكاظمية والمنصور والربيعي والأعظمية والدورة",
-  "hours": "",
-  "contactLabel": "تواصل مع المتجر",
+  "monogram": "CW",
+  "tagline": "أجهزة أصلية · ضمان واضح · منذ 2004",
+  "eyebrow": "CASTLE WORLD  /  SINCE 2004",
+  "storyTitle": "ثقة تُبنى من التفاصيل",
+  "storyText": "منذ عام 2004، تعمل عالم القلعة على توفير الأجهزة الإلكترونية والملحقات الأصلية مع معلومات واضحة وخيارات متنوعة وخدمة تمتد إلى جميع محافظات العراق.",
+  "description": "وجهتك للأجهزة الإلكترونية والهواتف والملحقات الأصلية، بتجربة مرتبة تساعدك على استكشاف المنتجات ومراجعة تفاصيلها والتواصل لتأكيد السعر والتوفر.",
+  "note": "الأسعار والتوفر يتغيران؛ تواصل معنا لتأكيد التفاصيل قبل إتمام الطلب.",
+  "demoNotice": "السعر والتوفر وتفاصيل الضمان تُؤكد مع فريق عالم القلعة قبل إتمام الطلب.",
+  "location": "خمسة فروع في بغداد · توصيل إلى جميع محافظات العراق",
+  "hours": "تواصل مع فريق المتجر لمعرفة أوقات العمل",
+  "contactLabel": "تواصل مع عالم القلعة",
   "contactUrl": "https://www.instagram.com/aalam.alqalaa/",
   "instagram": "https://www.instagram.com/aalam.alqalaa/",
-  "contactMode": "copy",
+  "contactMode": "link",
   "phones": [],
-  "heroImage": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+  "heroImage": "https://aalam-alqalaa.iq/wp-content/uploads/2026/01/92c9629aca813c5182f109deb13f604eb33c578e4faef9ffe3e98dd0b9bc61c8.jpg_1-300x300.webp",
   "heroPosition": "center",
+  "heroFit": "contain",
+  "productFit": "contain",
+  "heroSlides": [
+    "https://aalam-alqalaa.iq/wp-content/uploads/2026/01/92c9629aca813c5182f109deb13f604eb33c578e4faef9ffe3e98dd0b9bc61c8.jpg_1-300x300.webp",
+    "https://aalam-alqalaa.iq/wp-content/uploads/2025/12/iq-ar-galaxy-a36-5g-sm-a366-sm-a366bzammea-545302521-300x240.jpeg",
+    "https://cdn-ak.f.st-hatena.com/images/fotolife/k/kobonemi/20231117/20231117015952.png"
+  ],
   "theme": {
-    "bg": "#F5F3EE",
-    "ink": "#142B3B",
-    "surface": "#FFFFFF",
-    "muted": "#78818A",
-    "accent": "#B39458",
-    "line": "#E5E0D4",
-    "hero": "#EAE5D9",
-    "photo": "#E5E0D4",
-    "dark": "#142B3B",
-    "accentDark": "#B39458",
-    "accentSoft": "#F5F3EE",
-    "accentTint": "#E5E0D4",
-    "warm": "#B39458",
-    "highlight": "#E5E0D4"
+    "bg": "#F2F5F9",
+    "ink": "#15243D",
+    "surface": "#FCFDFF",
+    "surfaceStrong": "#FFFFFF",
+    "muted": "#69788E",
+    "accent": "#8E304B",
+    "accentDark": "#642238",
+    "line": "#DCE3ED",
+    "lineStrong": "#C8D3E1",
+    "hero": "#E6EDF6",
+    "photo": "#DDE6F1",
+    "dark": "#101C32",
+    "accentSoft": "#F5E9ED",
+    "accentTint": "#E8D5DC",
+    "warm": "#607EA4",
+    "highlight": "#C6D5E7",
+    "success": "#3F7A68"
   },
   "categories": [
-    "هواتف وأجهزة لوحية",
-    "كمبيوتر ومستلزمات",
-    "ساعات ذكية",
-    "صوتيات",
-    "طاقة وشحن"
+    "الهواتف والأجهزة اللوحية",
+    "الكمبيوتر ومستلزماته",
+    "الأجهزة القابلة للارتداء",
+    "الصوتيات",
+    "الطاقة والشحن",
+    "المنزل والحياة الذكية",
+    "إلكترونيات السيارة والتنقل"
   ],
   "products": [
     {
-      "id": "aalam-alqalaa-01",
-      "name": "هاتف ذكي رائد",
-      "category": "هواتف وأجهزة لوحية",
-      "price": 42000,
-      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
+      "id": "aalam-tecno-spark-40-pro",
+      "name": "تكنو سبارك 40 برو",
+      "category": "الهواتف والأجهزة اللوحية",
+      "price": 0,
+      "image": "https://aalam-alqalaa.iq/wp-content/uploads/2026/01/92c9629aca813c5182f109deb13f604eb33c578e4faef9ffe3e98dd0b9bc61c8.jpg_1-300x300.webp",
       "images": [
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1100&q=85",
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1100&q=85"
+        "https://aalam-alqalaa.iq/wp-content/uploads/2026/01/79acf61c260a0547afb7021fa6c63231b11e4a1b791e983ccb265c70101c3238.jpg_1-300x300.webp",
+        "https://aalam-alqalaa.iq/wp-content/uploads/2026/01/3c2c7e582f6fbd8c7616f19c52a2fa2948522b7841e98d86178e8d18b9012223.jpg_1-300x300.webp"
       ],
-      "description": "هاتف ذكي رائد — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر عالم القلعة.",
+      "description": "هاتف Tecno Spark 40 Pro بشاشة AMOLED قياس 6.78 بوصة ومعدل تحديث 144Hz، مع معالج Helio G100 Ultimate وبطارية 5200mAh.",
       "specs": {
-        "composition": "العلامة التجارية",
-        "width": "الموديل والسعة",
-        "weight": "الأداء",
-        "stretch": "عاجي",
-        "opacity": "الحالة",
-        "finish": "المزايا",
-        "care": "الضمان",
-        "use": "التوافق"
+        "composition": "Tecno",
+        "width": "Spark 40 Pro",
+        "weight": "8GB RAM · 256GB Storage",
+        "stretch": "حسب خيارات المنتج",
+        "opacity": "حسب اللون المتاح",
+        "finish": "AMOLED 1.5K · 144Hz · 50MP",
+        "care": "راجع شروط الضمان المعتمدة",
+        "use": "MediaTek Helio G100 Ultimate · 5200mAh"
       },
       "colors": [
         {
-          "id": "tone-a",
-          "name": "عاجي",
-          "hex": "#E7DDCF",
+          "id": "standard",
+          "name": "حسب خيارات المنتج",
+          "hex": "#8E304B",
           "available": true,
-          "stockMeters": 8
-        },
-        {
-          "id": "tone-b",
-          "name": "كحلي",
-          "hex": "#344B5C",
-          "available": true,
-          "stockMeters": 8
+          "stockMeters": 1
         }
       ],
-      "colorsEnabled": true,
-      "stockMeters": 8,
+      "colorsEnabled": false,
+      "stockMeters": 0,
+      "isFeatured": true,
+      "isNew": false,
+      "faqs": [
+        {
+          "question": "هل السعر والتوفر مؤكدان؟",
+          "answer": "تواصل مع فريق عالم القلعة لتأكيد السعر والتوفر الحالي قبل إتمام الطلب."
+        },
+        {
+          "question": "كيف أعرف تفاصيل الضمان؟",
+          "answer": "تختلف تفاصيل الضمان حسب المنتج ونوعه. اطلب شروط الضمان المعتمدة للمنتج قبل الشراء."
+        }
+      ],
+      "createdAt": "2026-11-13",
+      "sourceUrl": "https://aalam-alqalaa.iq/ar/product/spark-40-pro-ar/"
+    },
+    {
+      "id": "aalam-redmi-note-15-pro-4g",
+      "name": "ريدمي نوت 15 برو 4G",
+      "category": "الهواتف والأجهزة اللوحية",
+      "price": 0,
+      "image": "https://aalam-alqalaa.iq/wp-content/uploads/2026/02/Redmi-Note-15-Pro-4G-a-300x300.webp",
+      "images": [
+        "https://aalam-alqalaa.iq/wp-content/uploads/2026/02/2146912_xiaomi-redmi-note-15-pro-677-4g-8-256gb-gleccserkek-300x300.webp",
+        "https://aalam-alqalaa.iq/wp-content/uploads/2026/02/2146913_xiaomi-redmi-note-15-pro-677-4g-8-256gb-gleccserkek-300x300.webp"
+      ],
+      "description": "ريدمي نوت 15 برو 4G من شاومي. راجع خيارات السعة واللون والسعر المتاح مباشرة مع المتجر.",
+      "specs": {
+        "composition": "Xiaomi · Redmi",
+        "width": "Redmi Note 15 Pro 4G",
+        "weight": "تختلف السعة حسب الخيار",
+        "stretch": "حسب خيارات المنتج",
+        "opacity": "حسب اللون المتاح",
+        "finish": "هاتف ذكي من سلسلة Redmi Note",
+        "care": "راجع شروط الضمان المعتمدة",
+        "use": "تأكد من السعة والإصدار قبل الطلب"
+      },
+      "colors": [
+        {
+          "id": "standard",
+          "name": "حسب خيارات المنتج",
+          "hex": "#8E304B",
+          "available": true,
+          "stockMeters": 1
+        }
+      ],
+      "colorsEnabled": false,
+      "stockMeters": 0,
       "isFeatured": true,
       "isNew": true,
-      "compareAtPrice": 47000,
       "faqs": [
         {
-          "question": "هل المنتج متوفر حالياً؟",
-          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+          "question": "هل السعر والتوفر مؤكدان؟",
+          "answer": "تواصل مع فريق عالم القلعة لتأكيد السعر والتوفر الحالي قبل إتمام الطلب."
         },
         {
-          "question": "هل السعر المعروض معتمد؟",
-          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+          "question": "كيف أعرف تفاصيل الضمان؟",
+          "answer": "تختلف تفاصيل الضمان حسب المنتج ونوعه. اطلب شروط الضمان المعتمدة للمنتج قبل الشراء."
         }
       ],
-      "createdAt": "2026-11-09"
+      "createdAt": "2026-11-13",
+      "sourceUrl": "https://aalam-alqalaa.iq/ar/product/redmi-note-15-pro-4g-ar/"
     },
     {
-      "id": "aalam-alqalaa-02",
-      "name": "جهاز لوحي",
-      "category": "كمبيوتر ومستلزمات",
-      "price": 45000,
-      "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1100&q=85",
+      "id": "aalam-samsung-galaxy-a36-5g",
+      "name": "سامسونج جالاكسي A36 5G",
+      "category": "الهواتف والأجهزة اللوحية",
+      "price": 0,
+      "image": "https://aalam-alqalaa.iq/wp-content/uploads/2025/12/iq-ar-galaxy-a36-5g-sm-a366-sm-a366bzammea-545302521-300x240.jpeg",
       "images": [
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1100&q=85",
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85"
+        "https://aalam-alqalaa.iq/wp-content/uploads/2025/12/iq-ar-galaxy-a36-5g-sm-a366-sm-a366bzkmmea-545302589-300x240.jpeg",
+        "https://aalam-alqalaa.iq/wp-content/uploads/2025/12/iq-ar-galaxy-a36-5g-sm-a366-sm-a366bzkmmea-545302576-300x240.jpeg"
       ],
-      "description": "جهاز لوحي — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر عالم القلعة.",
+      "description": "Galaxy A36 5G بشاشة Super AMOLED قياس 6.7 بوصة ومعدل تحديث 120Hz، ومعالج Snapdragon 6 Gen 3 وبطارية 5000mAh.",
       "specs": {
-        "composition": "العلامة التجارية",
-        "width": "الموديل والسعة",
-        "weight": "الأداء",
-        "stretch": "رمادي",
-        "opacity": "الحالة",
-        "finish": "المزايا",
-        "care": "الضمان",
-        "use": "التوافق"
+        "composition": "Samsung",
+        "width": "Galaxy A36 5G",
+        "weight": "8GB RAM · 128GB / 256GB",
+        "stretch": "حسب خيارات المنتج",
+        "opacity": "حسب اللون والسعة",
+        "finish": "Super AMOLED · 120Hz · 50MP",
+        "care": "راجع شروط الضمان المعتمدة",
+        "use": "Snapdragon 6 Gen 3 · 5000mAh"
       },
       "colors": [
         {
-          "id": "tone-a",
-          "name": "عاجي",
-          "hex": "#E7DDCF",
+          "id": "standard",
+          "name": "حسب خيارات المنتج",
+          "hex": "#8E304B",
           "available": true,
-          "stockMeters": 8
-        },
-        {
-          "id": "tone-b",
-          "name": "كحلي",
-          "hex": "#344B5C",
-          "available": true,
-          "stockMeters": 8
+          "stockMeters": 1
         }
       ],
-      "colorsEnabled": true,
-      "stockMeters": 8,
+      "colorsEnabled": false,
+      "stockMeters": 0,
       "isFeatured": true,
       "isNew": false,
-      "compareAtPrice": 50000,
       "faqs": [
         {
-          "question": "هل المنتج متوفر حالياً؟",
-          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+          "question": "هل السعر والتوفر مؤكدان؟",
+          "answer": "تواصل مع فريق عالم القلعة لتأكيد السعر والتوفر الحالي قبل إتمام الطلب."
         },
         {
-          "question": "هل السعر المعروض معتمد؟",
-          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+          "question": "كيف أعرف تفاصيل الضمان؟",
+          "answer": "تختلف تفاصيل الضمان حسب المنتج ونوعه. اطلب شروط الضمان المعتمدة للمنتج قبل الشراء."
         }
       ],
-      "createdAt": "2026-11-09"
+      "createdAt": "2026-11-13",
+      "sourceUrl": "https://aalam-alqalaa.iq/ar/product/سامسونج-جالاكسي-أي-36-فايف-جي-ar/"
     },
     {
-      "id": "aalam-alqalaa-03",
-      "name": "حاسوب محمول",
-      "category": "ساعات ذكية",
-      "price": 48000,
-      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1100&q=85",
-      "images": [
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85",
-        "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85"
-      ],
-      "description": "حاسوب محمول — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر عالم القلعة.",
+      "id": "aalam-anker-maggo-5000",
+      "name": "ANKER MagGo Power Bank 5000mAh",
+      "category": "الطاقة والشحن",
+      "price": 0,
+      "image": "https://cdn-ak.f.st-hatena.com/images/fotolife/k/kobonemi/20231117/20231117015952.png",
+      "images": [],
+      "description": "بنك طاقة مغناطيسي من Anker بسعة 5000mAh وشحن لاسلكي حتى 7.5W مع حامل قابل للطي ومنفذ USB-C.",
       "specs": {
-        "composition": "العلامة التجارية",
-        "width": "الموديل والسعة",
-        "weight": "الأداء",
-        "stretch": "كحلي",
-        "opacity": "الحالة",
-        "finish": "المزايا",
-        "care": "الضمان",
-        "use": "التوافق"
+        "composition": "Anker",
+        "width": "MagGo A1618",
+        "weight": "5000mAh",
+        "stretch": "أسود / أبيض حسب التوفر",
+        "opacity": "حسب التوفر",
+        "finish": "Magnetic Wireless 7.5W · Foldable Stand",
+        "care": "راجع شروط الضمان المعتمدة",
+        "use": "USB-C · متوافق مع أجهزة iPhone المدعومة"
       },
       "colors": [
         {
-          "id": "tone-a",
-          "name": "عاجي",
-          "hex": "#E7DDCF",
+          "id": "standard",
+          "name": "حسب خيارات المنتج",
+          "hex": "#8E304B",
           "available": true,
-          "stockMeters": 8
-        },
-        {
-          "id": "tone-b",
-          "name": "كحلي",
-          "hex": "#344B5C",
-          "available": true,
-          "stockMeters": 8
+          "stockMeters": 1
         }
       ],
-      "colorsEnabled": true,
-      "stockMeters": 8,
+      "colorsEnabled": false,
+      "stockMeters": 0,
       "isFeatured": true,
       "isNew": false,
-      "compareAtPrice": 53000,
       "faqs": [
         {
-          "question": "هل المنتج متوفر حالياً؟",
-          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+          "question": "هل السعر والتوفر مؤكدان؟",
+          "answer": "تواصل مع فريق عالم القلعة لتأكيد السعر والتوفر الحالي قبل إتمام الطلب."
         },
         {
-          "question": "هل السعر المعروض معتمد؟",
-          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+          "question": "كيف أعرف تفاصيل الضمان؟",
+          "answer": "تختلف تفاصيل الضمان حسب المنتج ونوعه. اطلب شروط الضمان المعتمدة للمنتج قبل الشراء."
         }
       ],
-      "createdAt": "2026-11-09"
+      "createdAt": "2026-11-13",
+      "sourceUrl": "https://aalam-alqalaa.iq/en/product/anker-maggo-power-bank-5000mah-7-5w-stand/"
     },
     {
-      "id": "aalam-alqalaa-04",
-      "name": "ساعة ذكية",
-      "category": "صوتيات",
-      "price": 51000,
-      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1100&q=85",
-      "images": [
-        "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85",
-        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85"
-      ],
-      "description": "ساعة ذكية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر عالم القلعة.",
+      "id": "aalam-apple-pencil-usbc",
+      "name": "Apple Pencil USB-C",
+      "category": "الهواتف والأجهزة اللوحية",
+      "price": 0,
+      "image": "https://www.bhphotovideo.com/images/images2500x2500/apple_muwa3am_a_pencil_usb_c_1791228.jpg",
+      "images": [],
+      "description": "قلم Apple Pencil بمنفذ USB-C للرسم وتدوين الملاحظات على أجهزة iPad المتوافقة.",
       "specs": {
-        "composition": "العلامة التجارية",
-        "width": "الموديل والسعة",
-        "weight": "الأداء",
-        "stretch": "بيج",
-        "opacity": "الحالة",
-        "finish": "المزايا",
-        "care": "الضمان",
-        "use": "التوافق"
+        "composition": "Apple",
+        "width": "Apple Pencil USB-C",
+        "weight": "قلم رقمي",
+        "stretch": "أبيض",
+        "opacity": "حسب التوفر",
+        "finish": "USB-C · دقة عالية · دعم الميل",
+        "care": "راجع شروط الضمان المعتمدة",
+        "use": "تحقق من توافقه مع طراز iPad قبل الطلب"
       },
       "colors": [
         {
-          "id": "tone-a",
-          "name": "عاجي",
-          "hex": "#E7DDCF",
+          "id": "standard",
+          "name": "حسب خيارات المنتج",
+          "hex": "#8E304B",
           "available": true,
-          "stockMeters": 8
-        },
-        {
-          "id": "tone-b",
-          "name": "كحلي",
-          "hex": "#344B5C",
-          "available": true,
-          "stockMeters": 8
+          "stockMeters": 1
         }
       ],
-      "colorsEnabled": true,
-      "stockMeters": 8,
+      "colorsEnabled": false,
+      "stockMeters": 0,
       "isFeatured": true,
       "isNew": false,
-      "compareAtPrice": 56000,
       "faqs": [
         {
-          "question": "هل المنتج متوفر حالياً؟",
-          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+          "question": "هل السعر والتوفر مؤكدان؟",
+          "answer": "تواصل مع فريق عالم القلعة لتأكيد السعر والتوفر الحالي قبل إتمام الطلب."
         },
         {
-          "question": "هل السعر المعروض معتمد؟",
-          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+          "question": "كيف أعرف تفاصيل الضمان؟",
+          "answer": "تختلف تفاصيل الضمان حسب المنتج ونوعه. اطلب شروط الضمان المعتمدة للمنتج قبل الشراء."
         }
       ],
-      "createdAt": "2026-11-09"
+      "createdAt": "2026-11-13",
+      "sourceUrl": "https://aalam-alqalaa.iq/ar/product/apple-pencil-usb-c-ar/"
     },
     {
-      "id": "aalam-alqalaa-05",
-      "name": "سماعات لاسلكية",
-      "category": "طاقة وشحن",
-      "price": 54000,
-      "image": "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1100&q=85",
-      "images": [
-        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85",
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85"
-      ],
-      "description": "سماعات لاسلكية — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر عالم القلعة.",
+      "id": "aalam-70mai-t800",
+      "name": "70mai Dash Cam 4K T800",
+      "category": "إلكترونيات السيارة والتنقل",
+      "price": 0,
+      "image": "https://www.dasher.com.my/cdn/shop/files/4K_1000_1000.jpg?v=1766480845&width=1214",
+      "images": [],
+      "description": "كاميرا سيارة 70mai T800 بثلاث قنوات، مع تسجيل 4K أمامي وخلفي و1080p للمقصورة وتقنية HDR.",
       "specs": {
-        "composition": "العلامة التجارية",
-        "width": "الموديل والسعة",
-        "weight": "الأداء",
-        "stretch": "أزرق",
-        "opacity": "الحالة",
-        "finish": "المزايا",
-        "care": "الضمان",
-        "use": "التوافق"
+        "composition": "70mai",
+        "width": "Dash Cam 4K T800",
+        "weight": "تسجيل ثلاثي القنوات",
+        "stretch": "أسود",
+        "opacity": "حسب التوفر",
+        "finish": "Dual 4K · Three-Channel HDR",
+        "care": "راجع شروط الضمان المعتمدة",
+        "use": "Sony STARVIS 2 · GPS · Wi-Fi · دعم microSD"
       },
       "colors": [
         {
-          "id": "tone-a",
-          "name": "عاجي",
-          "hex": "#E7DDCF",
+          "id": "standard",
+          "name": "حسب خيارات المنتج",
+          "hex": "#8E304B",
           "available": true,
-          "stockMeters": 8
-        },
-        {
-          "id": "tone-b",
-          "name": "كحلي",
-          "hex": "#344B5C",
-          "available": true,
-          "stockMeters": 8
+          "stockMeters": 1
         }
       ],
-      "colorsEnabled": true,
-      "stockMeters": 8,
+      "colorsEnabled": false,
+      "stockMeters": 0,
       "isFeatured": true,
       "isNew": false,
-      "compareAtPrice": 59000,
       "faqs": [
         {
-          "question": "هل المنتج متوفر حالياً؟",
-          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+          "question": "هل السعر والتوفر مؤكدان؟",
+          "answer": "تواصل مع فريق عالم القلعة لتأكيد السعر والتوفر الحالي قبل إتمام الطلب."
         },
         {
-          "question": "هل السعر المعروض معتمد؟",
-          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+          "question": "كيف أعرف تفاصيل الضمان؟",
+          "answer": "تختلف تفاصيل الضمان حسب المنتج ونوعه. اطلب شروط الضمان المعتمدة للمنتج قبل الشراء."
         }
       ],
-      "createdAt": "2026-11-09"
+      "createdAt": "2026-11-13",
+      "sourceUrl": "https://aalam-alqalaa.iq/ar/shop/"
     },
     {
-      "id": "aalam-alqalaa-06",
-      "name": "بنك طاقة",
-      "category": "هواتف وأجهزة لوحية",
-      "price": 57000,
-      "image": "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1100&q=85",
-      "images": [
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1100&q=85"
-      ],
-      "description": "بنك طاقة — نموذج توضيحي لعرض الصور والتفاصيل ضمن متجر عالم القلعة.",
+      "id": "aalam-yesido-ysp21",
+      "name": "سماعة يسيدو مغناطيسية حول الرقبة",
+      "category": "الصوتيات",
+      "price": 0,
+      "image": "https://icdn.tradew.com/file/202308/1575939/jpg/8254501.jpg?x-oss-process=image%2Fquality%2CQ_90",
+      "images": [],
+      "description": "سماعة بلوتوث بتصميم حول الرقبة وسماعات مغناطيسية، مناسبة للاستخدام اليومي والتنقل.",
       "specs": {
-        "composition": "العلامة التجارية",
-        "width": "الموديل والسعة",
-        "weight": "الأداء",
-        "stretch": "بني",
-        "opacity": "الحالة",
-        "finish": "المزايا",
-        "care": "الضمان",
-        "use": "التوافق"
+        "composition": "Yesido",
+        "width": "سماعة حول الرقبة",
+        "weight": "خفيفة",
+        "stretch": "أسود",
+        "opacity": "حسب التوفر",
+        "finish": "Bluetooth · Magnetic Earbuds",
+        "care": "راجع شروط الضمان المعتمدة",
+        "use": "تحقق من رقم الموديل والتوافق قبل الطلب"
       },
       "colors": [
         {
-          "id": "tone-a",
-          "name": "عاجي",
-          "hex": "#E7DDCF",
+          "id": "standard",
+          "name": "حسب خيارات المنتج",
+          "hex": "#8E304B",
           "available": true,
-          "stockMeters": 8
-        },
-        {
-          "id": "tone-b",
-          "name": "كحلي",
-          "hex": "#344B5C",
-          "available": true,
-          "stockMeters": 8
+          "stockMeters": 1
         }
       ],
-      "colorsEnabled": true,
-      "stockMeters": 8,
-      "isFeatured": true,
+      "colorsEnabled": false,
+      "stockMeters": 0,
+      "isFeatured": false,
       "isNew": false,
-      "compareAtPrice": 62000,
       "faqs": [
         {
-          "question": "هل المنتج متوفر حالياً؟",
-          "answer": "هذه معاينة تصميمية والمنتج المعروض مثال فقط ويجب تأكيد المخزون الفعلي مع المتجر."
+          "question": "هل السعر والتوفر مؤكدان؟",
+          "answer": "تواصل مع فريق عالم القلعة لتأكيد السعر والتوفر الحالي قبل إتمام الطلب."
         },
         {
-          "question": "هل السعر المعروض معتمد؟",
-          "answer": "السعر توضيحي لأغراض العرض فقط ويُستبدل بالسعر الذي يعتمده صاحب المتجر."
+          "question": "كيف أعرف تفاصيل الضمان؟",
+          "answer": "تختلف تفاصيل الضمان حسب المنتج ونوعه. اطلب شروط الضمان المعتمدة للمنتج قبل الشراء."
         }
       ],
-      "createdAt": "2026-11-09"
+      "createdAt": "2026-11-13",
+      "sourceUrl": "https://aalam-alqalaa.iq/ar/product/yesido-magnetic-neckband-earphones-ar/"
     }
-  ],
-  "heroFit": "cover",
-  "productFit": "contain",
-  "heroSlides": [
-    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=85",
-    "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1100&q=85",
-    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1100&q=85"
   ],
   "quantityUnit": "قطعة",
   "quantityUnitEn": "item",
-  "demoMode": true
+  "catalogLabel": "المنتجات",
+  "catalogTitle": "تشكيلة عالم القلعة",
+  "catalogIntro": "اكتشف الأجهزة والملحقات حسب الفئة. الأسعار والتوفر النهائيان يؤكدان مع فريق المتجر.",
+  "catalogAction": "تصفح المنتجات",
+  "deliveryNote": "توصيل إلى جميع محافظات العراق",
+  "paymentNote": "تُؤكد طريقة الدفع والتفاصيل قبل إتمام الطلب",
+  "demoMode": false,
+  "heroTitle": "تقنية تثق بها… واختيار أسهل",
+  "heroText": "من الهواتف والأجهزة الذكية إلى الصوتيات والطاقة والملحقات، اكتشف عالم المنتجات في مكان واحد.",
+  "statsDeliveryValue": 18,
+  "statsTrustValue": 5,
+  "statsTrustSuffix": "فروع"
 }
