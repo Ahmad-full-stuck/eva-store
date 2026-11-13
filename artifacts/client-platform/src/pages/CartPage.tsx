@@ -192,7 +192,9 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         </section>
         <aside className="order-summary glass glass-strong" aria-label={t('cart.summary')}>
           <h2>{t('cart.summary')}</h2>
-          {remaining > 0 ? (
+          {content.tenantKey === 'aalam-alqalaa' ? (
+            <div className="delivery-progress"><b>رسوم التوصيل تُحدد عند تأكيد الطلب</b></div>
+          ) : remaining > 0 ? (
             <div className="delivery-progress">
               <div className="delivery-progress-head">
                 <span>{t('cart.freeAt').replace('{amount}', formatDinar(freeFrom))}</span>
@@ -212,14 +214,14 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
           </div>
           <div className="summary-line">
             <span>{t('cart.delivery')} <small>{t('cart.estimated')}</small></span>
-            <strong>{totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('cart.free')}</strong>
+            <strong>{content.tenantKey === 'aalam-alqalaa' ? 'عند التأكيد' : totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('cart.free')}</strong>
           </div>
           <div className="summary-total">
             <span>{t('cart.total')}</span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
           <Link href="/checkout" className="button button-primary summary-button">{t('cart.checkout')} <ArrowLeft size={16} /></Link>
-          <p className="summary-note">{t('cart.summaryNote')}</p>
+          <p className="summary-note">{content.tenantKey === 'aalam-alqalaa' ? 'هذا طلب مبدئي؛ يؤكد الفريق السعر والتوفر ورسوم التوصيل معك قبل اعتماد الشراء.' : t('cart.summaryNote')}</p>
           <div className="summary-trust"><ShieldCheck size={16} /><span>{t('cart.savedNote')}</span></div>
         </aside>
       </div>
