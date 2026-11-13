@@ -224,7 +224,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
     )
   }
 
-  if (siteContent.tenantKey) {
+  if (siteContent.tenantKey && siteContent.tenantKey !== 'aalam-alqalaa') {
     return (
       <main className="container-eva tenant-demo-checkout">
         <div className="breadcrumbs"><Link href="/">{t('co.breadcrumbHome')}</Link><span>›</span><span>تأكيد الطلب</span></div>
