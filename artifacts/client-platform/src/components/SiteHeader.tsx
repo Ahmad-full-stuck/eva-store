@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BookOpen, ChevronLeft, Heart, Home, Info, Languages, Menu, MessageCircle, PackageSearch, Search, ShieldCheck, ShoppingBag, Shirt, X } from 'lucide-react'
+import { BookOpen, ChevronLeft, Heart, Home, Info, Languages, Menu, MessageCircle, Moon, PackageSearch, Search, ShieldCheck, ShoppingBag, Shirt, Sun, X } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
 import { formatMeters } from '@/lib/catalog'
@@ -74,6 +74,9 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
   const [searchOpen, setSearchOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const content = useSiteContent()
+  const [aalamTheme, setAalamTheme] = useState<'light' | 'dark'>(() => {
+    try { return window.localStorage.getItem('aalam-alqalaa-theme') === 'dark' ? 'dark' : 'light' } catch { return 'light' }
+  })
   const { lang, setLang, t } = useT()
   const pathname = location.split('?')[0]
 
@@ -95,6 +98,16 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
     if (target === '/catalog' && pathname.startsWith('/product/')) return true
     return false
   }
+
+  useEffect(() => {
+    if (content.tenantKey !== 'aalam-alqalaa') {
+      delete document.documentElement.dataset.aalamTheme
+      return
+    }
+    document.documentElement.dataset.aalamTheme = aalamTheme
+    try { window.localStorage.setItem('aalam-alqalaa-theme', aalamTheme) } catch { /* private browsing */ }
+    return () => { delete document.documentElement.dataset.aalamTheme }
+  }, [aalamTheme, content.tenantKey])
 
   const navigate = () => {
     setMenuOpen(false)
@@ -143,6 +156,11 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
             >
               <Languages size={19} />
             </button>
+            {content.tenantKey === 'aalam-alqalaa' && (
+              <button type="button" className="icon-button aalam-theme-toggle" onClick={() => setAalamTheme((value) => value === 'light' ? 'dark' : 'light')} aria-label={aalamTheme === 'dark' ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن'} aria-pressed={aalamTheme === 'dark'} title={aalamTheme === 'dark' ? 'الوضع الفاتح' : 'الوضع الداكن'}>
+                {aalamTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+            )}
             <Link href="/order-tracking" className="icon-button tracking-header" onClick={navigate} aria-label={t('header.nav.tracking')} title={t('header.nav.tracking')}>
               <PackageSearch size={19} />
             </Link>
