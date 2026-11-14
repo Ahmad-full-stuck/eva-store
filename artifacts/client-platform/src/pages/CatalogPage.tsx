@@ -3,7 +3,7 @@ import { ArrowLeft, Check, ChevronLeft, ChevronRight, Filter, Layers, Package, S
 import { Link, useLocation, useSearch } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
 import { useT } from '@/lib/i18n'
-import { formatPrice, isSoldOut, normalizeArabic } from '@/lib/catalog'
+import { formatPrice, isSoldOut, isPieceBasedStore, normalizeArabic } from '@/lib/catalog'
 import { ProductCard, ProductGridSkeleton } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
 import { prefetchImages, thumbUrl } from '@/lib/prefetch'
