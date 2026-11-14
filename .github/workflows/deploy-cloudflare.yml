@@ -156,3 +156,33 @@ jobs:
       - name: Deploy مركز مصطفى ستور storefront Worker
         working-directory: artifacts/eva-worker
         run: pnpm exec wrangler deploy --config ../client-stores/mustafa-store/wrangler.jsonc
+      - name: Deploy RG Team · account 3 storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/rg-team-iq3/wrangler.jsonc
+      - name: Deploy RG Team storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/rg-team-iq/wrangler.jsonc
+      - name: Deploy Ironman Babel storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/ironman-babel/wrangler.jsonc
+      - name: Deploy Diamond Accessories storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/accessories-iq/wrangler.jsonc
+      - name: Deploy Shams Golden storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/shams-golden1/wrangler.jsonc
+      - name: Deploy AZ Supps · القزاز storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/az-supps/wrangler.jsonc
+      - name: Deploy مركز موبايلي يمي storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/mobaelk/wrangler.jsonc
+      - name: Deploy KN Fashion Woman storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/kn-fashion-woman/wrangler.jsonc
+      - name: Deploy A Center Kirkuk storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/a-center-kirkuk/wrangler.jsonc
+      - name: Deploy رزان للإكسسوارات storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/razan-accessories2/wrangler.jsonc
