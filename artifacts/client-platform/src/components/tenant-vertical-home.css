@@ -726,13 +726,13 @@
 }
 .tenant-vertical-home .vhome-product__buy:hover:not(:disabled) { background:var(--vh-ink); border-color:var(--vh-ink); }
 .tenant-vertical-home .vhome-product__buy:disabled { opacity:.46; cursor:not-allowed; }
-.tenant-vertical-home.vhome--mustafa .ms-product-card__footer { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-.tenant-vertical-home.vhome--mustafa .ms-product-card__buy {
+.mustafa-storefront .ms-product-card__footer { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mustafa-storefront .ms-product-card__buy {
   display:inline-flex; min-height:34px; align-items:center; justify-content:center; gap:6px;
   padding:0 11px; border:1px solid #d7193f; border-radius:9px; color:#fff; background:#d7193f;
   font:inherit; font-size:10px; font-weight:800; cursor:pointer;
 }
-.tenant-vertical-home.vhome--mustafa .ms-product-card__buy:disabled { opacity:.48; cursor:not-allowed; }
+.mustafa-storefront .ms-product-card__buy:disabled { opacity:.48; cursor:not-allowed; }
 @media (max-width:620px) {
   .tenant-vertical-home .vhome-product__buy { min-height:32px; padding-inline:8px; font-size:9px; }
   .tenant-vertical-home .vhome-product__bottom { gap:5px; }
