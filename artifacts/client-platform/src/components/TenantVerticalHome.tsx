@@ -11,6 +11,7 @@ import type { Product } from '@/types'
 import { formatPrice } from '@/lib/catalog'
 import { getStoreBrand } from '@/lib/store-brand'
 import { useSiteContent } from '@/lib/site-content'
+import { SmartImage } from '@/components/ui/SmartImage'
 
 interface TenantVerticalHomeProps {
   products: Product[]
@@ -78,7 +79,7 @@ function CategoryGrid({
             className="vhome-category-card"
           >
             <span className="vhome-category-card__media">
-              {image ? <img src={image} alt="" loading="lazy" decoding="async" /> : <span className="vhome-category-card__placeholder"><Icon size={30} /></span>}
+              {image ? <SmartImage src={image} alt="" sizes="(max-width: 820px) 44vw, 24vw" /> : <span className="vhome-category-card__placeholder"><Icon size={30} /></span>}
               <span className="vhome-category-card__number">{String(index + 1).padStart(2, '0')}</span>
               <span className="vhome-category-card__icon"><Icon size={18} strokeWidth={1.7} /></span>
             </span>
@@ -115,7 +116,7 @@ function ProductTile({
       <div className="vhome-product__media">
         <Link href={'/product/' + product.slug} aria-label={'تفاصيل ' + product.name}>
           {product.image
-            ? <img src={product.image} alt={product.name} loading="lazy" decoding="async" />
+            ? <SmartImage src={product.image} alt={product.name} sizes="(max-width: 820px) 44vw, 24vw" />
             : <span className="vhome-product__placeholder"><Package size={30} /></span>}
         </Link>
         <button
@@ -212,14 +213,14 @@ function FeatureStrip({ brand }: { brand: ReturnType<typeof getStoreBrand> }) {
 function MustafaCategoryCard({category,product,index}:{category:ReturnType<typeof getStoreBrand>['categories'][number];product?:Product;index:number}){
  const Icon=categoryIcons[category.icon]||Smartphone;
  return <Link href={'/catalog?category='+encodeURIComponent(category.id)} className="ms-category-card">
-  <span className="ms-category-card__media">{product?.image?<img src={product.image} alt="" loading="lazy" decoding="async"/>:<span className="ms-category-card__fallback"><Icon size={34}/></span>}
+  <span className="ms-category-card__media">{product?.image?<SmartImage src={product.image} alt="" sizes="(max-width: 820px) 44vw, 24vw"/>:<span className="ms-category-card__fallback"><Icon size={34}/></span>}
    <span className="ms-category-card__number">0{index+1}</span><span className="ms-category-card__arrow"><ArrowLeft size={17}/></span>
   </span><span className="ms-category-card__body"><strong>{category.label}</strong><small>{category.description}</small></span>
  </Link>
 }
 function MustafaProductCard({product,wished,onWish,onAdd}:{product:Product;wished:boolean;onWish:(slug:string)=>void;onAdd:TenantVerticalHomeProps['onAdd']}){
  return <article className="ms-product-card"><div className="ms-product-card__media">
-  <Link href={'/product/'+product.slug} aria-label={'تفاصيل '+product.name}>{product.image?<img src={product.image} alt={product.name} loading="lazy" decoding="async"/>:<span className="ms-product-card__fallback"><Smartphone size={34}/></span>}</Link>
+  <Link href={'/product/'+product.slug} aria-label={'تفاصيل '+product.name}>{product.image?<SmartImage src={product.image} alt={product.name} sizes="(max-width: 820px) 44vw, 24vw"/>:<span className="ms-product-card__fallback"><Smartphone size={34}/></span>}</Link>
   <span className="ms-product-card__category">{product.categoryId||product.type}</span>
   <button type="button" className={'ms-product-card__wish'+(wished?' is-active':'')} onClick={()=>onWish(product.slug)} aria-label={wished?'إزالة من المفضلة':'إضافة إلى المفضلة'} aria-pressed={wished}><Heart size={17} fill={wished?'currentColor':'none'}/></button>
  </div><div className="ms-product-card__body"><Link href={'/product/'+product.slug} className="ms-product-card__name">{product.name}</Link>
@@ -239,7 +240,7 @@ function MustafaStoreHome({products,wishlist,onWish,onAdd}:{products:Product[];w
    <p>هواتف وأجهزة وإكسسوارات وخدمات صيانة، بتجربة واضحة تساعدك على استكشاف الخيارات والتواصل مع المركز لتأكيد التفاصيل.</p>
    <div className="ms-hero__actions"><Link href="/catalog" className="ms-button ms-button--primary">تصفح الأجهزة <ArrowLeft size={17}/></Link><a href={content.contactUrl||'https://www.instagram.com/m.center.iq/'} target="_blank" rel="noopener noreferrer" className="ms-button ms-button--quiet"><PhoneCall size={17}/> تواصل مع المركز</a></div>
    <div className="ms-hero__meta"><span><MapPin size={15}/> الموصل · المجموعة الثقافية</span><span><BadgeCheck size={15}/> تأكيد السعر والتوفر قبل الشراء</span></div>
-  </div><figure className="ms-hero__visual">{heroImage?<img src={heroImage} alt="هاتف ذكي — صورة توضيحية" fetchPriority="high" decoding="async"/>:<div className="ms-hero__placeholder"><Smartphone size={70}/></div>}
+  </div><figure className="ms-hero__visual">{heroImage?<SmartImage src={heroImage} alt="هاتف ذكي — صورة توضيحية" sizes="(max-width: 820px) 92vw, 48vw" priority/>:<div className="ms-hero__placeholder"><Smartphone size={70}/></div>}
    <div className="ms-visual__top"><span className="ms-visual__label"><i/> TECHNOLOGY, MADE CLEAR</span><span className="ms-visual__index">01 <b>/</b> 04</span></div>
    <div className="ms-visual__bottom"><span>مركز مصطفى ستور</span><strong>اختيار أوضح. تجربة أسهل.</strong></div><span className="ms-visual__orbit" aria-hidden="true"/>
   </figure></section>
@@ -311,7 +312,7 @@ export function TenantVerticalHome({ products, wishlist, onWish, onAdd }: Tenant
           </div>
           <figure className="vhome-hero__visual">
             {heroImage
-              ? <img src={heroImage} alt={'صورة من ' + shopName} fetchPriority="high" decoding="async" />
+              ? <SmartImage src={heroImage} alt={'صورة من ' + shopName} sizes="(max-width: 820px) 92vw, 48vw" priority/>
               : <div className="vhome-hero__placeholder"><span>{brand.mark}</span></div>}
             <figcaption className="vhome-hero__caption">
               <span>{brand.artLabel}</span>
@@ -354,8 +355,8 @@ export function TenantVerticalHome({ products, wishlist, onWish, onAdd }: Tenant
               <Link href="/catalog" className="vhome-link">اكتشف المزيد<ArrowLeft size={16} /></Link>
             </div>
             <div className="vhome-editorial__images">
-              {content.heroSlides?.[1] && <img src={content.heroSlides[1]} alt={'تفاصيل من ' + shopName} loading="lazy" decoding="async" />}
-              {content.heroSlides?.[2] && <img src={content.heroSlides[2]} alt={'صورة إضافية من ' + shopName} loading="lazy" decoding="async" />}
+              {content.heroSlides?.[1] && <SmartImage src={content.heroSlides[1]} alt={'تفاصيل من ' + shopName} sizes="(max-width: 820px) 88vw, 38vw" />}
+              {content.heroSlides?.[2] && <SmartImage src={content.heroSlides[2]} alt={'صورة إضافية من ' + shopName} sizes="(max-width: 820px) 88vw, 38vw" />}
             </div>
           </section>
         )}
