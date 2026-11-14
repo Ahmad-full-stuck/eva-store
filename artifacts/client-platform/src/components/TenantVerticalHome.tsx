@@ -60,11 +60,9 @@ function SectionHeading({
 function CategoryGrid({
   brand,
   products,
-  fallbackImage,
 }: {
   brand: ReturnType<typeof getStoreBrand>
   products: Product[]
-  fallbackImage: string
 }) {
   return (
     <div className="vhome-category-grid">
@@ -154,11 +152,13 @@ function ProductGrid({
   products,
   wishlist,
   onWish,
+  onAdd,
   unit,
 }: {
   products: Product[]
   wishlist: string[]
   onWish: (slug: string) => void
+  onAdd: (product: Product, color: Product['colors'][number], length: number) => void
   unit: string
 }) {
   const featured = products.filter((product) => product.isFeatured)
@@ -202,19 +202,63 @@ function FeatureStrip({ brand }: { brand: ReturnType<typeof getStoreBrand> }) {
 function MustafaCategoryCard({category,product,index}:{category:ReturnType<typeof getStoreBrand>['categories'][number];product?:Product;index:number}){
  const Icon=categoryIcons[category.icon]||Smartphone;
  return <Link href={'/catalog?category='+encodeURIComponent(category.id)} className="ms-category-card">
-  <span className="ms-category-card__media">{product?.image?<img src={product.image} alt="" loading="lazy" decoding="async"/>:<span className="ms-category-card__fallback"><Icon size={34}/></span>}
+  <span className="ms-category-card__media">{product?.image?<SmartImage src={product.image} alt={category.label} sizes="(max-width: 680px) 46vw, 22vw"/>:<span className="ms-category-card__fallback"><Icon size={34}/></span>}
    <span className="ms-category-card__number">0{index+1}</span><span className="ms-category-card__arrow"><ArrowLeft size={17}/></span>
   </span><span className="ms-category-card__body"><strong>{category.label}</strong><small>{category.description}</small></span>
  </Link>
 }
-function MustafaProductCard({product,wished,onWish}:{product:Product;wished:boolean;onWish:(slug:string)=>void}){
- return <article className="ms-product-card"><div className="ms-product-card__media">
-  <Link href={'/product/'+product.slug} aria-label={'تفاصيل '+product.name}>{product.image?<SmartImage src={product.image} alt={product.name} sizes="(max-width: 680px) 46vw, 22vw"/>:<span className="ms-product-card__fallback"><Smartphone size={34}/></span>}</Link>
-  <span className="ms-product-card__category">{product.categoryId||product.type}</span>
-  <button type="button" className={'ms-product-card__wish'+(wished?' is-active':'')} onClick={()=>onWish(product.slug)} aria-label={wished?'إزالة من المفضلة':'إضافة إلى المفضلة'} aria-pressed={wished}><Heart size={17} fill={wished?'currentColor':'none'}/></button>
- </div><div className="ms-product-card__body"><Link href={'/product/'+product.slug} className="ms-product-card__name">{product.name}</Link>
-  <div className="ms-product-card__footer"><span>السعر عند الاستفسار</span><Link href={'/product/'+product.slug} className="ms-product-card__open" aria-label={'تفاصيل '+product.name}>التفاصيل <ArrowLeft size={15}/></Link><button type="button" className="ms-product-card__buy" disabled={!canAdd} onClick={()=>color&&onAdd(product,color,1)}><ShoppingBag size={14}/>{canAdd?'أضف للسلة':'غير متوفر'}</button></div>
- </div></article>
+function MustafaProductCard({
+  product,
+  wished,
+  onWish,
+  onAdd,
+}: {
+  product: Product
+  wished: boolean
+  onWish: (slug: string) => void
+  onAdd: (product: Product, color: Product['colors'][number], length: number) => void
+}) {
+  const color = product.colors.find((item) => item.available) || product.colors[0]
+  const canAdd = Boolean(color) && !isSoldOut(product)
+  return (
+    <article className="ms-product-card">
+      <div className="ms-product-card__media">
+        <Link href={'/product/' + product.slug} aria-label={'تفاصيل ' + product.name}>
+          {product.image
+            ? <SmartImage src={product.image} alt={product.name} sizes="(max-width: 680px) 46vw, 22vw" />
+            : <span className="ms-product-card__fallback"><Smartphone size={34} /></span>}
+        </Link>
+        <span className="ms-product-card__category">{product.categoryId || product.type}</span>
+        <button
+          type="button"
+          className={'ms-product-card__wish' + (wished ? ' is-active' : '')}
+          onClick={() => onWish(product.slug)}
+          aria-label={wished ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}
+          aria-pressed={wished}
+        >
+          <Heart size={17} fill={wished ? 'currentColor' : 'none'} />
+        </button>
+      </div>
+      <div className="ms-product-card__body">
+        <Link href={'/product/' + product.slug} className="ms-product-card__name">{product.name}</Link>
+        <div className="ms-product-card__footer">
+          <span>السعر عند الاستفسار</span>
+          <Link href={'/product/' + product.slug} className="ms-product-card__open" aria-label={'تفاصيل ' + product.name}>
+            التفاصيل <ArrowLeft size={15} />
+          </Link>
+          <button
+            type="button"
+            className="ms-product-card__buy"
+            disabled={!canAdd}
+            onClick={() => { if (color) onAdd(product, color, 1) }}
+            aria-label={canAdd ? 'أضف ' + product.name + ' إلى السلة' : 'المنتج غير متوفر'}
+          >
+            <ShoppingBag size={14} />{canAdd ? 'أضف للسلة' : 'غير متوفر'}
+          </button>
+        </div>
+      </div>
+    </article>
+  )
 }
 function MustafaStoreHome({products,wishlist,onWish,onAdd}:{products:Product[];wishlist:string[];onWish:(slug:string)=>void;onAdd:(product:Product,color:Product['colors'][number],length:number)=>void}){
  const content=useSiteContent();const brand=getStoreBrand('mustafa-store');
@@ -228,7 +272,7 @@ function MustafaStoreHome({products,wishlist,onWish,onAdd}:{products:Product[];w
    <p>هواتف وأجهزة وإكسسوارات وخدمات صيانة، بتجربة واضحة تساعدك على استكشاف الخيارات والتواصل مع المركز لتأكيد التفاصيل.</p>
    <div className="ms-hero__actions"><Link href="/catalog" className="ms-button ms-button--primary">تصفح الأجهزة <ArrowLeft size={17}/></Link><a href={content.contactUrl||'https://www.instagram.com/m.center.iq/'} target="_blank" rel="noopener noreferrer" className="ms-button ms-button--quiet"><PhoneCall size={17}/> تواصل مع المركز</a></div>
    <div className="ms-hero__meta"><span><MapPin size={15}/> الموصل · المجموعة الثقافية</span><span><BadgeCheck size={15}/> تأكيد السعر والتوفر قبل الشراء</span></div>
-  </div><figure className="ms-hero__visual">{heroImage?<img src={heroImage} alt="هاتف ذكي — صورة توضيحية" fetchPriority="high" decoding="async"/>:<div className="ms-hero__placeholder"><Smartphone size={70}/></div>}
+  </div><figure className="ms-hero__visual">{heroImage?<SmartImage src={heroImage} alt="هاتف ذكي — صورة توضيحية" sizes="(max-width: 700px) 100vw, 48vw"/>:<div className="ms-hero__placeholder"><Smartphone size={70}/></div>}
    <div className="ms-visual__top"><span className="ms-visual__label"><i/> TECHNOLOGY, MADE CLEAR</span><span className="ms-visual__index">01 <b>/</b> 04</span></div>
    <div className="ms-visual__bottom"><span>مركز مصطفى ستور</span><strong>اختيار أوضح. تجربة أسهل.</strong></div><span className="ms-visual__orbit" aria-hidden="true"/>
   </figure></section>
