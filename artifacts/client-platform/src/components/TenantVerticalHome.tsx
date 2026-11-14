@@ -272,18 +272,20 @@ export function TenantVerticalHome({ products, wishlist, onWish, onAdd }: Tenant
   const variant = key === 'mustafa-store'
     ? 'mustafa'
     : key === 'nineteen89-rest'
-    ? 'restaurant'
-    : key === 'sham-couture'
-      ? 'fashion'
-      : key === 'hayder-taif'
-        ? 'fabric'
-        : key === 'fink-factory'
-          ? 'gallery'
-          : key === 'alsifa-company'
-            ? 'industrial'
-            : key === 'morvo-handmade'
-              ? 'handmade'
-              : 'technology'
+      ? 'restaurant'
+      : ['sham-couture','kn-fashion-woman','accessories-iq','shams-golden1','razan-accessories2'].includes(key)
+        ? 'fashion'
+        : ['rg-team-iq3','rg-team-iq','ironman-babel','az-supps'].includes(key)
+          ? 'supplements'
+          : key === 'hayder-taif'
+            ? 'fabric'
+            : key === 'fink-factory'
+              ? 'gallery'
+              : key === 'alsifa-company'
+                ? 'industrial'
+                : key === 'morvo-handmade'
+                  ? 'handmade'
+                  : 'technology'
 
   return (
     <main className={'tenant-vertical-home vhome vhome--' + variant}>
