@@ -5,6 +5,7 @@ import { useT } from '@/lib/i18n'
 import { typeLabelsEn } from '@/lib/strings/catalog'
 import { ProductCard } from '@/components/ProductCard'
 import { GlassStyles } from '@/pages/InfoPages'
+import { useSiteContent } from '@/lib/site-content'
 
 interface FavoritesPageProps {
   products: Product[]
@@ -31,6 +32,7 @@ const fallbackSuggestions = [
 
 export function FavoritesPage({ products, categories, wishlist, onWish, onAdd }: FavoritesPageProps) {
   const { t, lang } = useT()
+  const content = useSiteContent()
   const favoriteProducts = products.filter((product) => wishlist.includes(product.slug))
   const suggestedCategories = categories.length > 0
     ? categories.slice(0, 5).map((category) => ({ id: category.id, label: category.name }))
@@ -47,8 +49,8 @@ export function FavoritesPage({ products, categories, wishlist, onWish, onAdd }:
             <h1>{t('fav.emptyTitle')}</h1>
             <p>{t('fav.emptyHint')}</p>
             <div className="empty-actions">
-              <Link href="/catalog" className="button button-primary">{t('fav.browse')} <ArrowLeft size={16} /></Link>
-              <Link href="/fabric-guide" className="button button-outline">{t('fav.guide')} <ArrowLeft size={16} /></Link>
+              <Link href="/catalog" className="button button-primary">{content.tenantKey ? 'تصفح المنتجات' : t('fav.browse')} <ArrowLeft size={16} /></Link>
+              {!content.tenantKey && <Link href="/fabric-guide" className="button button-outline">{t('fav.guide')} <ArrowLeft size={16} /></Link>}
             </div>
             <div className="local-orders">
               <span>{t('fav.suggested')}</span>
