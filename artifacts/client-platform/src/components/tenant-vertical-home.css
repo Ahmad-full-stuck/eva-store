@@ -84,6 +84,17 @@
   position: absolute; inset: 0; transition: transform .7s cubic-bezier(.2,.65,.25,1);
 }
 .tenant-vertical-home .vhome-hero__visual:hover > img { transform: scale(1.025); }
+/* Device boxes and supplement tubs need full-product framing, not fashion-style cropping. */
+.tenant-vertical-home.vhome--technology .vhome-hero__visual > img,
+.tenant-vertical-home.vhome--supplements .vhome-hero__visual > img { object-fit: contain; padding: 6%; }
+.tenant-vertical-home.vhome--technology .vhome-category-card__media > img,
+.tenant-vertical-home.vhome--supplements .vhome-category-card__media > img,
+.tenant-vertical-home.vhome--technology .vhome-product__media img,
+.tenant-vertical-home.vhome--supplements .vhome-product__media img { object-fit: contain; padding: 8%; background: var(--vh-paper); }
+.tenant-vertical-home.vhome--technology .vhome-hero__visual,
+.tenant-vertical-home.vhome--supplements .vhome-hero__visual { background: var(--vh-paper); }
+.tenant-vertical-home.vhome--supplements .vhome-hero__visual { border: 1px solid var(--vh-line); }
+
 .tenant-vertical-home .vhome-hero__visual::after {
   content: ""; position: absolute; inset: 38% 0 0; z-index: 0;
   background: linear-gradient(180deg, transparent, rgba(16, 22, 25, .62));
@@ -696,6 +707,7 @@
 .ms-product-card__add{display:flex;align-items:center;justify-content:center;width:100%;min-height:42px;margin-top:11px;padding:9px 12px;border:0;border-radius:11px;color:#fff;background:#C91F3A;font:inherit;font-size:11px;font-weight:850;cursor:pointer;transition:opacity .18s ease,transform .18s ease}
 .ms-product-card__add:hover{opacity:.92;transform:translateY(-1px)}
 .ms-product-card__add:disabled{opacity:.45;cursor:not-allowed}
+.ms-product-card__media img{object-fit:contain;padding:10px;background:var(--eva-surface, #fff)}
 .ms-service-section{display:grid;grid-template-columns:.82fr 1.18fr;align-items:center;gap:clamp(28px,5vw,70px);margin-top:clamp(50px,6vw,76px);padding:clamp(24px,3vw,36px);border:1px solid #E4E7EA;border-radius:22px;background:#fff;box-shadow:0 12px 32px #14181D0A}
 .ms-feature-list{display:grid}.ms-feature{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:13px;padding:15px 2px;border-bottom:1px solid #EEF0F2}.ms-feature:last-child{border-bottom:0}
 .ms-feature__icon{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;color:#C91F3A;background:#FCECEF}
