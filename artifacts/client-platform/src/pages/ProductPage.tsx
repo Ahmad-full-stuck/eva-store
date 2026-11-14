@@ -119,7 +119,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   }, [product?.id])
   const faqItems = product?.faqs.length ? product.faqs : [{ question: t('pd.faqQ1'), answer: t('pd.faqA1') }]
 
-  if (!product || !product.colors.length) return <ProductMissing />
+  if (!product || !product.colors.length) return <ProductMissing isTenantStore={Boolean(content.tenantKey)} />
 
   const startSwipe = (x: number, y: number) => { touchStart.current = { x, y } }
   const goTo = (index: number) => {
@@ -220,24 +220,24 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         <button ref={addBtnRef} type="button" className="button button-primary detail-add" onClick={add} disabled={maxLength <= 0}><ShoppingBag size={17} />{maxLength <= 0 ? t('pd.unavailable') : isPieceStore ? 'أضف للسلة' : t('pd.addCart')}<ArrowLeft size={16} /></button>
         {justAdded && maxLength > 0 && <div className="add-confirm" role="status"><span><Check size={16} />{t('pd.addedToast').replace('{meters}', formatQuantity(length)).replace('{name}', product.name)}</span><Link href="/checkout" className="button button-primary">{t('pd.checkoutNow')} <ArrowLeft size={15} /></Link></div>}
         <div className="detail-perks">{isAalamStore ? <><div><ShieldCheck size={17} /><span>الضمان حسب شروط المنتج</span></div><div><Zap size={17} /><span>توصيل إلى جميع محافظات العراق</span></div></> : content.tenantKey ? <><div><ShieldCheck size={17} /><span>تأكيد السعر والتوفر مع المتجر</span></div><div><Zap size={17} /><span>تفاصيل التوصيل تُحدد عند التأكيد</span></div></> : <><div><ShieldCheck size={17} /><span>{t('pd.perkDelivery')}</span></div><div><Zap size={17} /><span>{t('pd.perkOneBox')}</span></div></>}</div>
-        <div className="detail-accordions"><Accordion id="specs" title={t('pd.specsTitle')} open={openSection === 'specs'} onToggle={() => setOpenSection(openSection === 'specs' ? '' : 'specs')}><div className="specs-grid"><Spec label={brand.specLabels.composition || t('pd.spec.composition')} value={product.specs.composition} /><Spec label={brand.specLabels.width || t('pd.spec.width')} value={product.specs.width} /><Spec label={brand.specLabels.weight || t('pd.spec.weight')} value={product.specs.weight} /><Spec label={brand.specLabels.stretch || t('pd.spec.stretch')} value={product.specs.stretch} /><Spec label={brand.specLabels.opacity || t('pd.spec.opacity')} value={product.specs.opacity} /><Spec label={brand.specLabels.finish || t('pd.spec.finish')} value={product.specs.finish} /><Spec label={brand.specLabels.use || t('pd.spec.use')} value={product.specs.use} /><Spec label={brand.specLabels.care || t('pd.spec.care')} value={product.specs.care} /></div></Accordion><Accordion id="faq" title={t('pd.faqTitle')} open={openSection === 'faq'} onToggle={() => setOpenSection(openSection === 'faq' ? '' : 'faq')}><div className="product-faq-list">{faqItems.map((item) => <div key={item.question}><strong>{item.question}</strong><p>{item.answer}</p></div>)}</div></Accordion><Accordion id="shipping" title={t('pd.shippingTitle')} open={openSection === 'shipping'} onToggle={() => setOpenSection(openSection === 'shipping' ? '' : 'shipping')}><p className="accordion-text">{t('pd.shippingText')}</p></Accordion></div>
+        <div className="detail-accordions"><Accordion id="specs" title={content.tenantKey ? 'مواصفات المنتج' : t('pd.specsTitle')} open={openSection === 'specs'} onToggle={() => setOpenSection(openSection === 'specs' ? '' : 'specs')}><div className="specs-grid"><Spec label={brand.specLabels.composition || t('pd.spec.composition')} value={product.specs.composition} /><Spec label={brand.specLabels.width || t('pd.spec.width')} value={product.specs.width} /><Spec label={brand.specLabels.weight || t('pd.spec.weight')} value={product.specs.weight} /><Spec label={brand.specLabels.stretch || t('pd.spec.stretch')} value={product.specs.stretch} /><Spec label={brand.specLabels.opacity || t('pd.spec.opacity')} value={product.specs.opacity} /><Spec label={brand.specLabels.finish || t('pd.spec.finish')} value={product.specs.finish} /><Spec label={brand.specLabels.use || t('pd.spec.use')} value={product.specs.use} /><Spec label={brand.specLabels.care || t('pd.spec.care')} value={product.specs.care} /></div></Accordion><Accordion id="faq" title={content.tenantKey ? 'تفاصيل وأسئلة المنتج' : t('pd.faqTitle')} open={openSection === 'faq'} onToggle={() => setOpenSection(openSection === 'faq' ? '' : 'faq')}><div className="product-faq-list">{faqItems.map((item) => <div key={item.question}><strong>{item.question}</strong><p>{item.answer}</p></div>)}</div></Accordion><Accordion id="shipping" title={content.tenantKey ? 'التوصيل والتأكيد' : t('pd.shippingTitle')} open={openSection === 'shipping'} onToggle={() => setOpenSection(openSection === 'shipping' ? '' : 'shipping')}><p className="accordion-text">{content.tenantKey ? 'يتم تأكيد توفر المنتج والسعر ومنطقة التوصيل ورسومها مع المتجر قبل اعتماد أي طلب.' : t('pd.shippingText')}</p></Accordion></div>
       </section>
     </div>
-    {related.length > 0 && <section className="related-section"><div className="section-heading"><div><span className="eyebrow">{t('pd.relatedEyebrow')}</span><h2>{t('pd.relatedTitle')}</h2></div><div className="section-heading-actions">{related.length > 3 && <div className="related-nav" aria-label={t('pd.relatedNavAria')}><button type="button" onClick={() => scrollRelated('prev')} aria-label={t('pd.relatedPrevAria')}><ChevronRight size={17} /></button><button type="button" onClick={() => scrollRelated('next')} aria-label={t('pd.relatedNextAria')}><ChevronLeft size={17} /></button></div>}<Link href={`/catalog?category=${encodeURIComponent(product.categoryId)}`} className="underlined-link">{t('pd.viewCategory')} <ArrowLeft size={15} /></Link></div></div><div className="related-track" ref={relatedTrackRef}>{related.map((item) => <ProductCard key={item.id} product={item} wished={wishlist.includes(item.slug)} onWish={onWish} onAdd={onAdd} />)}</div></section>}
+    {related.length > 0 && <section className="related-section"><div className="section-heading"><div><span className="eyebrow">{content.tenantKey ? 'MORE FROM THIS CATEGORY' : t('pd.relatedEyebrow')}</span><h2>{content.tenantKey ? 'منتجات من الفئة نفسها' : t('pd.relatedTitle')}</h2></div><div className="section-heading-actions">{related.length > 3 && <div className="related-nav" aria-label={t('pd.relatedNavAria')}><button type="button" onClick={() => scrollRelated('prev')} aria-label={t('pd.relatedPrevAria')}><ChevronRight size={17} /></button><button type="button" onClick={() => scrollRelated('next')} aria-label={t('pd.relatedNextAria')}><ChevronLeft size={17} /></button></div>}<Link href={`/catalog?category=${encodeURIComponent(product.categoryId)}`} className="underlined-link">{t('pd.viewCategory')} <ArrowLeft size={15} /></Link></div></div><div className="related-track" ref={relatedTrackRef}>{related.map((item) => <ProductCard key={item.id} product={item} wished={wishlist.includes(item.slug)} onWish={onWish} onAdd={onAdd} />)}</div></section>}
     {(() => {
       const siblings = related.slice(0, 2)
-      const others = products.filter((item) => item.slug !== product.slug && item.categoryId !== product.categoryId)
+      const others = products.filter((item) => item.slug !== product.slug && item.categoryId === product.categoryId)
       const compareList = [product, ...siblings, ...others].slice(0, 4)
       if (compareList.length < 2) return null
       const allRows: { label: string; value: (item: Product) => string }[] = [
-        { label: t('pd.comparePrice'), value: (item) => formatPrice(item.price) },
-        { label: t('pd.spec.composition'), value: (item) => item.specs.composition },
-        { label: t('pd.spec.width'), value: (item) => item.specs.width },
-        { label: t('pd.spec.weight'), value: (item) => item.specs.weight },
-        { label: t('pd.spec.stretch'), value: (item) => item.specs.stretch },
-        { label: t('pd.spec.opacity'), value: (item) => item.specs.opacity },
-        { label: t('pd.spec.finish'), value: (item) => item.specs.finish },
-        { label: t('pd.spec.care'), value: (item) => item.specs.care },
+        ...(!content.tenantKey ? [{ label: t('pd.comparePrice'), value: (item: Product) => formatPrice(item.price) }] : []),
+        { label: content.tenantKey ? brand.specLabels.composition : t('pd.spec.composition'), value: (item) => item.specs.composition },
+        { label: content.tenantKey ? brand.specLabels.width : t('pd.spec.width'), value: (item) => item.specs.width },
+        { label: content.tenantKey ? brand.specLabels.weight : t('pd.spec.weight'), value: (item) => item.specs.weight },
+        { label: content.tenantKey ? brand.specLabels.stretch : t('pd.spec.stretch'), value: (item) => item.specs.stretch },
+        { label: content.tenantKey ? brand.specLabels.opacity : t('pd.spec.opacity'), value: (item) => item.specs.opacity },
+        { label: content.tenantKey ? brand.specLabels.finish : t('pd.spec.finish'), value: (item) => item.specs.finish },
+        { label: content.tenantKey ? brand.specLabels.care : t('pd.spec.care'), value: (item) => item.specs.care },
       ]
       const compareRows = allRows.filter((row) => compareList.some((item) => {
         const value = row.value(item)
@@ -245,12 +245,12 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
       }))
       return (
         <section className="compare-section">
-          <div className="section-heading"><div><span className="eyebrow">{t('pd.compareEyebrow')}</span><h2>{t('pd.compareTitle')}</h2></div></div>
+          <div className="section-heading"><div><span className="eyebrow">{content.tenantKey ? 'PRODUCT COMPARISON' : t('pd.compareEyebrow')}</span><h2>{content.tenantKey ? 'مقارنة المنتجات من الفئة نفسها' : t('pd.compareTitle')}</h2></div></div>
           <div className="compare-scroll" tabIndex={0} role="region" aria-label={t('pd.compareTableAria')}>
             <table className="compare-table">
               <thead>
                 <tr>
-                  <th scope="col">{t('pd.compareSpec')}</th>
+                  <th scope="col">{content.tenantKey ? 'المواصفة' : t('pd.compareSpec')}</th>
                   {compareList.map((item) => <th key={item.id} scope="col" className={item.slug === product.slug ? 'is-current' : ''}>{item.name}</th>)}
                 </tr>
               </thead>
@@ -272,7 +272,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
       )
     })()}
     <div className={`mobile-sticky-buy ${showStickyBuy ? 'is-visible' : ''}`}><span><small>{formatQuantity(length)}</small><strong>{formatPrice(product.price * length)}</strong></span>{justAdded ? <Link href="/checkout" className="button button-primary">{t('pd.checkout')} <ArrowLeft size={15} /></Link> : <button type="button" className="button button-primary" onClick={add} disabled={maxLength <= 0}>{isPieceStore ? `أضف ${formatQuantity(length)} إلى السلة` : t('pd.addLength').replace('{meters}', formatQuantity(length))}</button>}</div>
-    <Modal open={zoomOpen} onClose={() => setZoomOpen(false)} title={t('pd.zoomTitle').replace('{name}', product.name)} className="image-modal"><button type="button" className="modal-close" onClick={() => setZoomOpen(false)} aria-label={t('pd.closeImage')}>×</button><img src={(gallery[activeImage] === product.video ? product.image : gallery[activeImage]) || product.image} alt={t('pd.zoomAlt').replace('{name}', product.name)} decoding="async" /></Modal>
+    <Modal open={zoomOpen} onClose={() => setZoomOpen(false)} title={t('pd.zoomTitle').replace('{name}', product.name)} className="image-modal"><button type="button" className="modal-close" onClick={() => setZoomOpen(false)} aria-label={t('pd.closeImage')}>×</button><SmartImage src={(gallery[activeImage] === product.video ? product.image : gallery[activeImage]) || product.image} alt={t('pd.zoomAlt').replace('{name}', product.name)} sizes="92vw" priority /></Modal>
   </main>
 }
 
@@ -281,4 +281,4 @@ function Spec({ label, value }: { label: string; value: string }) {
   return <div><span>{label}</span><strong>{value}</strong></div>
 }
 function Accordion({ id, title, open, onToggle, children }: { id: string; title: string; open: boolean; onToggle: () => void; children: React.ReactNode }) { return <section className={`detail-accordion ${open ? 'is-open' : ''}`}><button type="button" onClick={onToggle} aria-expanded={open} aria-controls={`accordion-${id}`}><strong>{title}</strong><ChevronDown size={17} /></button>{open && <div id={`accordion-${id}`}>{children}</div>}</section> }
-function ProductMissing() { const { t } = useT(); return <main className="container-eva empty-state page-empty"><div className="empty-icon">404</div><h1>{t('pd.missingTitle')}</h1><p>{t('pd.missingText')}</p><Link href="/catalog" className="button button-primary">{t('pd.backToFabrics')} <ArrowLeft size={16} /></Link></main> }
+function ProductMissing({ isTenantStore = false }: { isTenantStore?: boolean }) { const { t } = useT(); return <main className="container-eva empty-state page-empty"><div className="empty-icon">404</div><h1>{t('pd.missingTitle')}</h1><p>{t('pd.missingText')}</p><Link href="/catalog" className="button button-primary">{isTenantStore ? 'العودة إلى المنتجات' : t('pd.backToFabrics')} <ArrowLeft size={16} /></Link></main> }
