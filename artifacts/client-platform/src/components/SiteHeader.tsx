@@ -89,7 +89,13 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
       const matched = routes.find((route) => route.id === item.id)
       const path = matched ? matched.path : item.path
       const label = matched ? matched.label : t(item.label)
-      return { ...item, path, label: lang === 'en' ? routeLabelsEn[item.id] ?? label : label }
+      const tenantLabel: Record<string, string> = {
+        home: 'الرئيسية', catalog: 'المنتجات', favorites: 'المفضلة',
+        tracking: 'تتبع الطلب', about: 'من نحن', contact: 'تواصل',
+        policies: 'السياسات',
+      }
+      const displayLabel = content.tenantKey && lang === 'ar' ? tenantLabel[item.id] || label : label
+      return { ...item, path, label: lang === 'en' ? routeLabelsEn[item.id] ?? label : displayLabel }
     })
 
   const navItems = withRoutes(primaryNav)
