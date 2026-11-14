@@ -2,7 +2,7 @@ import { Heart, Plus, ShoppingBag } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
 import { useT } from '@/lib/i18n'
-import { useSiteContent } from '@/lib/site-content'
+import { useSiteContent, isDiscreteQuantityStore } from '@/lib/site-content'
 import { formatPrice, isSoldOut } from '@/lib/catalog'
 import { typeLabelEn } from '@/lib/strings/catalog'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -120,11 +120,12 @@ injectStyles('eva-glass-styles', glassStyles)
 export function ProductCard({ product, wished, onWish, onAdd, priority = false }: ProductCardProps) {
   const { t, lang } = useT()
   const content = useSiteContent()
+  const isPieceStore = isDiscreteQuantityStore(content)
   const addColor = product.colors.find((color) => color.available && color.stockMeters > 0) || product.colors[0]
   const soldOut = !addColor || isSoldOut(product)
   const lowStock = !soldOut && product.stockMeters > 0 && product.stockMeters <= 3
   const wishLabel = wished ? t('card.wishRemove').replace('{name}', product.name) : t('card.wishAdd').replace('{name}', product.name)
-  const addLabel = content.tenantKey === 'aalam-alqalaa' ? `إضافة ${product.name} إلى السلة` : t('card.addHalfAria').replace('{name}', product.name)
+  const addLabel = isPieceStore ? `إضافة ${product.name} إلى السلة` : t('card.addHalfAria').replace('{name}', product.name)
   const detailPath = `/product/${product.slug}`
 
   return (
@@ -179,7 +180,7 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
             <p className="product-type">{lang === 'en' ? typeLabelEn(product.type) : product.type}</p>
             <Link href={detailPath} className="product-name">{product.name}</Link>
           </div>
-          <span className="product-price">{formatPrice(product.price)}<small>{content.tenantKey === 'aalam-alqalaa' ? '/ قطعة' : t('card.perMeter')}</small></span>
+          <span className="product-price">{formatPrice(product.price)}<small>{isPieceStore ? `/ ${content.quantityUnit || 'قطعة'}` : t('card.perMeter')}</small></span>
         </div>
         <div className="product-card-footer">
           <button
@@ -189,7 +190,7 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
             onClick={() => addColor && onAdd(product, addColor, 1)}
             aria-label={addLabel}
           >
-            {soldOut ? t('card.soldOut') : <><ShoppingBag size={14} aria-hidden="true" /><span>{content.tenantKey === 'aalam-alqalaa' ? 'أضف للسلة' : t('card.addHalf')}</span></>}
+            {soldOut ? t('card.soldOut') : <><ShoppingBag size={14} aria-hidden="true" /><span>{isPieceStore ? 'أضف للسلة' : t('card.addHalf')}</span></>}
           </button>
         </div>
       </div>
