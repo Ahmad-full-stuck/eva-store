@@ -152,6 +152,32 @@ export const defaultSiteContent: SiteContent = {
   statsTrustValue: 1,
 }
 
+
+/** Piece-based prospect storefronts must not inherit the fabric-by-meter quantity UI. */
+export const isDiscreteQuantityStore = (
+  content: Pick<SiteContent, 'tenantKey' | 'quantityUnit' | 'quantityUnitEn'>,
+  fallback = false,
+): boolean => {
+  if (!content.tenantKey) return fallback
+  const unit = `${content.quantityUnit || ''} ${content.quantityUnitEn || ''}`.toLowerCase()
+  return !/(متر|meter|metre|yard|ياردة)/i.test(unit)
+}
+
+export const formatDiscreteQuantity = (
+  value: number,
+  content: Pick<SiteContent, 'quantityUnit' | 'quantityUnitEn'>,
+  lang: 'ar' | 'en' = 'ar',
+): string => {
+  const count = Math.max(1, Math.round(Number.isFinite(value) ? value : 1))
+  if (lang === 'en') {
+    const unit = content.quantityUnitEn || 'item'
+    return `${count.toLocaleString('en-US')} ${count === 1 ? unit : unit.endsWith('s') ? unit : unit + 's'}`
+  }
+  const unit = content.quantityUnit || 'قطعة'
+  const label = unit === 'قطعة' ? (count === 1 ? 'قطعة' : 'قطع') : unit
+  return `${count.toLocaleString('ar-IQ')} ${label}`
+}
+
 const readJson = <T,>(key: string, fallback: T): T => {
   try {
     const raw = window.localStorage.getItem(key)
