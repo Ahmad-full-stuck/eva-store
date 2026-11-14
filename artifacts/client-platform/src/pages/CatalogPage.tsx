@@ -526,7 +526,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
           {status === 'loading' && products.length === 0
             ? <ProductGridSkeleton />
             : shown.length === 0
-              ? <EmptyResults onClear={clearFilters} />
+              ? <EmptyResults onClear={clearFilters} isPieceStore={isPieceStore} />
               : (
                 <>
                   <div className="product-grid">
@@ -714,14 +714,14 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
   )
 }
 
-function EmptyResults({ onClear }: { onClear: () => void }) {
+function EmptyResults({ onClear, isPieceStore = false }: { onClear: () => void; isPieceStore?: boolean }) {
   const { t } = useT()
   return (
     <div className="empty-state glass-card" role="status">
       <div className="empty-icon"><Search size={23} aria-hidden="true" /></div>
-      <h2>{t('cat.emptyTitle')}</h2>
-      <p>{t('cat.emptyHint')}</p>
-      <button type="button" className="button button-primary" onClick={onClear}>{t('cat.emptyAction')}</button>
+      <h2>{isPieceStore ? 'ما لقينا منتجات تطابق بحثك' : t('cat.emptyTitle')}</h2>
+      <p>{isPieceStore ? 'جرّب كلمة بحث ثانية أو أزل أحد الفلاتر حتى تظهر لك بقية المنتجات.' : t('cat.emptyHint')}</p>
+      <button type="button" className="button button-primary" onClick={onClear}>{isPieceStore ? 'عرض كل المنتجات' : t('cat.emptyAction')}</button>
     </div>
   )
 }
