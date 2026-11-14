@@ -9,7 +9,7 @@ import { ProductCard } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
 import { SmartImage } from '@/components/ui/SmartImage'
 import { prefetchImages } from '@/lib/prefetch'
-import { useSiteContent } from '@/lib/site-content'
+import { useSiteContent, isDiscreteQuantityStore, formatDiscreteQuantity } from '@/lib/site-content'
 import { getStoreBrand } from '@/lib/store-brand'
 
 interface ProductPageProps {
@@ -26,8 +26,10 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const hostKey = typeof window !== 'undefined' ? window.location.hostname.split('.')[0] : ''
   const brand = getStoreBrand(content.tenantKey || hostKey)
   const isAalamStore = content.tenantKey === 'aalam-alqalaa'
-  const isPieceStore = content.tenantKey === 'mustafa-store' || isAalamStore
-  const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : metersLabel(value)
+  const isPieceStore = isDiscreteQuantityStore(content)
+  const quantityStep = isPieceStore ? 1 : 0.5
+  const minQuantity = isPieceStore ? 1 : 0.5
+  const formatQuantity = (value: number) => isPieceStore ? formatDiscreteQuantity(value, content, lang) : metersLabel(value)
   const product = products.find((item) => item.slug === slug)
   const [activeImage, setActiveImage] = useState(0)
   const [length, setLength] = useState(1)
@@ -141,8 +143,8 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     else return
     event.preventDefault()
   }
-  const increase = () => setLength((current) => Math.min(maxLength, Math.round((current + 1) * 10) / 10))
-  const decrease = () => setLength((current) => Math.max(1, Math.round(current - 1)))
+  const increase = () => setLength((current) => Math.min(maxLength, Math.round((current + quantityStep) * 10) / 10))
+  const decrease = () => setLength((current) => Math.max(minQuantity, Math.round((current - quantityStep) * 10) / 10))
   const add = () => {
     onAdd(product, product.colors[0], length)
     setJustAdded(true)
@@ -156,7 +158,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   }
 
   return <main className="container-eva product-page">
-    <div className="breadcrumbs"><Link href="/">{t('pd.breadcrumbHome')}</Link><span>›</span><Link href="/catalog">{isAalamStore ? 'المنتجات' : t('pd.breadcrumbFabrics')}</Link><span>›</span><span>{product.name}</span></div>
+    <div className="breadcrumbs"><Link href="/">{t('pd.breadcrumbHome')}</Link><span>›</span><Link href="/catalog">{isPieceStore ? 'المنتجات' : t('pd.breadcrumbFabrics')}</Link><span>›</span><span>{product.name}</span></div>
     <div className="product-detail-layout">
       <section className="product-gallery" aria-label={t('pd.galleryAria').replace('{name}', product.name)}>
         <div
@@ -208,10 +210,11 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         <div className="detail-divider" />
         <div className="quantity-heading"><div><strong>{isPieceStore ? 'الكمية' : t('pd.qtyHeading')}</strong><small>{isPieceStore ? 'حدد عدد القطع المطلوبة' : t('pd.qtyHint')}</small></div><span>{isAalamStore ? 'الطلب بالقطعة' : isPieceStore ? 'الكمية' : t('pd.availability')}</span></div>
         <div className="quantity-control"><button type="button" onClick={decrease} disabled={length <= 1} aria-label={isPieceStore ? 'تقليل الكمية' : t('pd.decreaseHalf')}><Minus size={17} /></button><output aria-live="polite">{formatQuantity(length)}</output><button type="button" onClick={increase} disabled={length >= maxLength} aria-label={isPieceStore ? 'زيادة الكمية' : t('pd.increaseHalf')}><Plus size={17} /></button></div>
-        <label className="meters-input-row"><input className="meters-input" type="number" inputMode="decimal" min={1} max={Math.max(1, Math.floor(maxLength))} step={1} value={length} onChange={(event) => {
+        <label className="meters-input-row"><input className="meters-input" type="number" inputMode="decimal" min={minQuantity} max={Math.max(minQuantity, Math.floor(maxLength / quantityStep) * quantityStep)} step={quantityStep} value={length} onChange={(event) => {
           const next = Number(event.target.value)
           if (!Number.isFinite(next)) return
-          setLength(Math.min(Math.max(1, Math.round(next)), Math.max(1, Math.floor(maxLength))))
+          const snapped = Math.round(next / quantityStep) * quantityStep
+          setLength(Math.min(Math.max(minQuantity, snapped), Math.max(minQuantity, Math.floor(maxLength / quantityStep) * quantityStep)))
         }} aria-label={isPieceStore ? (lang === 'en' ? 'Enter item quantity' : 'أدخل عدد القطع') : t('pd.metersInputAria')} /><em>{isPieceStore ? 'قطعة' : t('pd.unitMeters')}</em></label>
         <div className="line-total"><span>{isPieceStore ? `الإجمالي لـ ${formatQuantity(length)}` : t('pd.lineTotal').replace('{meters}', metersLabel(length)).replace('{price}', formatPrice(product.price))}</span><strong>{formatPrice(product.price * length)}</strong></div>
         <button ref={addBtnRef} type="button" className="button button-primary detail-add" onClick={add} disabled={maxLength <= 0}><ShoppingBag size={17} />{maxLength <= 0 ? t('pd.unavailable') : isPieceStore ? 'أضف للسلة' : t('pd.addCart')}<ArrowLeft size={16} /></button>
