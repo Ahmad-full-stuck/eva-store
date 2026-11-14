@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { BookOpen, ChevronLeft, Heart, Home, Info, Languages, Menu, MessageCircle, Moon, PackageSearch, Search, ShieldCheck, ShoppingBag, Shirt, Sun, X } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
-import { formatMeters } from '@/lib/catalog'
+import { formatMeters, isPieceBasedStore } from '@/lib/catalog'
 import { useSiteContent, sectionVisible } from '@/lib/site-content'
 import { useT } from '@/lib/i18n'
 import { routeLabelsEn } from '@/lib/strings/header'
@@ -74,7 +74,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
   const [searchOpen, setSearchOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const content = useSiteContent()
-  const isPieceStore = content.tenantKey === 'mustafa-store' || content.tenantKey === 'aalam-alqalaa'
+  const isPieceStore = isPieceBasedStore(content.tenantKey)
   const [aalamTheme, setAalamTheme] = useState<'light' | 'dark'>(() => {
     try { return window.localStorage.getItem('aalam-alqalaa-theme') === 'dark' ? 'dark' : 'light' } catch { return 'light' }
   })
@@ -88,8 +88,10 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
     items.filter((item) => !(content.tenantKey && item.id === 'guide')).map((item) => {
       const matched = routes.find((route) => route.id === item.id)
       const path = matched ? matched.path : item.path
-      const label = matched ? matched.label : t(item.label)
-      return { ...item, path, label: lang === 'en' ? routeLabelsEn[item.id] ?? label : label }
+      const label = item.id === 'catalog' && content.tenantKey
+        ? (lang === 'en' ? 'Products' : content.catalogLabel || 'المنتجات')
+        : matched ? matched.label : t(item.label)
+      return { ...item, path, label: item.id === 'catalog' && content.tenantKey ? label : lang === 'en' ? routeLabelsEn[item.id] ?? label : label }
     })
 
   const navItems = withRoutes(primaryNav)
