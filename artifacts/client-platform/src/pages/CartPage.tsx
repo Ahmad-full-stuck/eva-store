@@ -5,7 +5,7 @@ import type { CartItem } from '@/types'
 import { availableMeters, formatDinar, formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
 import { useT } from '@/lib/i18n'
 import { typeLabelsEn } from '@/lib/strings/product'
-import { useSiteContent, useStoreSettings } from '@/lib/site-content'
+import { useSiteContent, useStoreSettings, isDiscreteQuantityStore, formatDiscreteQuantity } from '@/lib/site-content'
 import { SmartImage } from '@/components/ui/SmartImage'
 
 interface CartPageProps {
@@ -83,8 +83,10 @@ const glassStyles = `
 export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   const { t, lang } = useT()
   const content = useSiteContent()
-  const isPieceStore = content.tenantKey === 'mustafa-store' || content.tenantKey === 'aalam-alqalaa'
-  const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : formatMeters(value)
+  const isPieceStore = isDiscreteQuantityStore(content)
+  const quantityStep = isPieceStore ? 1 : 0.5
+  const minQuantity = isPieceStore ? 1 : 0.5
+  const formatQuantity = (value: number) => isPieceStore ? formatDiscreteQuantity(value, content, lang) : formatMeters(value)
   const settings = useStoreSettings()
   const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
   const totals = getCartTotals(cart)
@@ -104,7 +106,10 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   }, [cart.length])
 
   const handleUpdate = (item: CartItem, nextLength: number) => {
-    onUpdate(orderKey(item), nextLength)
+    const maxQuantity = availableMeters(item.product, item.color)
+    const snapped = Math.round(nextLength / quantityStep) * quantityStep
+    const safeQuantity = Math.min(maxQuantity, Math.max(minQuantity, snapped))
+    onUpdate(orderKey(item), safeQuantity)
     setAnnouncement(t('cart.updated').replace('{name}', item.product.name).replace('{meters}', formatQuantity(nextLength)))
   }
 
@@ -176,9 +181,9 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
                   </div>
                   <div className="cart-item-bottom">
                     <div className="quantity-control compact">
-                      <button type="button" onClick={() => handleUpdate(item, item.length - 1)} disabled={item.length <= 1} aria-label={t('cart.decreaseAria').replace('{name}', item.product.name)}><Minus size={15} /></button>
+                      <button type="button" onClick={() => handleUpdate(item, item.length - quantityStep)} disabled={item.length <= minQuantity} aria-label={t('cart.decreaseAria').replace('{name}', item.product.name)}><Minus size={15} /></button>
                       <output aria-label={t('cart.qtyAria').replace('{name}', item.product.name)}>{formatQuantity(item.length)}</output>
-                      <button type="button" onClick={() => handleUpdate(item, item.length + 1)} disabled={item.length >= maxMeters} aria-label={t('cart.increaseAria').replace('{name}', item.product.name)}><Plus size={15} /></button>
+                      <button type="button" onClick={() => handleUpdate(item, item.length + quantityStep)} disabled={item.length >= maxMeters} aria-label={t('cart.increaseAria').replace('{name}', item.product.name)}><Plus size={15} /></button>
                     </div>
                     <div className="cart-item-total">
                       <small>{formatQuantity(item.length)} × {formatPrice(item.product.price)}</small>
@@ -192,7 +197,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         </section>
         <aside className="order-summary glass glass-strong" aria-label={t('cart.summary')}>
           <h2>{t('cart.summary')}</h2>
-          {content.tenantKey === 'aalam-alqalaa' ? (
+          {content.tenantKey ? (
             <div className="delivery-progress"><b>رسوم التوصيل تُحدد عند تأكيد الطلب</b></div>
           ) : remaining > 0 ? (
             <div className="delivery-progress">
@@ -214,14 +219,14 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
           </div>
           <div className="summary-line">
             <span>{t('cart.delivery')} <small>{t('cart.estimated')}</small></span>
-            <strong>{content.tenantKey === 'aalam-alqalaa' ? 'عند التأكيد' : totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('cart.free')}</strong>
+            <strong>{content.tenantKey ? 'يُحدد عند التأكيد' : totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('cart.free')}</strong>
           </div>
           <div className="summary-total">
             <span>{t('cart.total')}</span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
           <Link href="/checkout" className="button button-primary summary-button">{t('cart.checkout')} <ArrowLeft size={16} /></Link>
-          <p className="summary-note">{content.tenantKey === 'aalam-alqalaa' ? 'هذا طلب مبدئي؛ يؤكد الفريق السعر والتوفر ورسوم التوصيل معك قبل اعتماد الشراء.' : t('cart.summaryNote')}</p>
+          <p className="summary-note">{content.tenantKey ? 'هذه معاينة للمتجر؛ السعر والتوفر ورسوم التوصيل تُعتمد من المتجر قبل الإطلاق.' : t('cart.summaryNote')}</p>
           <div className="summary-trust"><ShieldCheck size={16} /><span>{t('cart.savedNote')}</span></div>
         </aside>
       </div>
