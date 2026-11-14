@@ -85,7 +85,7 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
   const pathname = location.split('?')[0]
 
   const withRoutes = <T extends NavItem>(items: T[]): T[] =>
-    items.filter((item) => !(content.tenantKey && item.id === 'guide')).map((item) => {
+    items.filter((item) => !(content.tenantKey && ['guide', 'tracking'].includes(item.id))).map((item) => {
       const matched = routes.find((route) => route.id === item.id)
       const path = matched ? matched.path : item.path
       const label = matched ? matched.label : t(item.label)
@@ -171,9 +171,9 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
                 {aalamTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
               </button>
             )}
-            <Link href="/order-tracking" className="icon-button tracking-header" onClick={navigate} aria-label={t('header.nav.tracking')} title={t('header.nav.tracking')}>
+            {!content.tenantKey && <Link href="/order-tracking" className="icon-button tracking-header" onClick={navigate} aria-label={t('header.nav.tracking')} title={t('header.nav.tracking')}>
               <PackageSearch size={19} />
-            </Link>
+            </Link>}
             <Link href="/favorites" className="icon-button favorite-header" onClick={navigate} aria-label={t('header.favoritesAria').replace('{count}', String(wishlistCount))}>
               <Heart size={19} />
               {wishlistCount > 0 && <span>{wishlistCount}</span>}
