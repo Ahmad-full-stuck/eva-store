@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Check, ChevronDown, ChevronLeft, ChevronRight, Heart, Minus, Plus, ShieldCheck, ShoppingBag, Zap, ZoomIn } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Product, ProductColor } from '@/types'
-import { formatMeters, formatPrice, isSoldOut, metersLabel } from '@/lib/catalog'
+import { formatPrice, isSoldOut, metersLabel, isPieceBasedStore, formatStoreQuantity } from '@/lib/catalog'
 import { useT } from '@/lib/i18n'
 import { typeLabelsEn } from '@/lib/strings/product'
 import { ProductCard } from '@/components/ProductCard'
@@ -26,8 +26,8 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const hostKey = typeof window !== 'undefined' ? window.location.hostname.split('.')[0] : ''
   const brand = getStoreBrand(content.tenantKey || hostKey)
   const isAalamStore = content.tenantKey === 'aalam-alqalaa'
-  const isPieceStore = content.tenantKey === 'mustafa-store' || isAalamStore
-  const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : metersLabel(value)
+  const isPieceStore = isPieceBasedStore(content.tenantKey)
+  const formatQuantity = (value: number) => formatStoreQuantity(value, content.tenantKey)
   const product = products.find((item) => item.slug === slug)
   const [activeImage, setActiveImage] = useState(0)
   const [length, setLength] = useState(1)
@@ -117,7 +117,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   }, [product?.id])
   const faqItems = product?.faqs.length ? product.faqs : [{ question: t('pd.faqQ1'), answer: t('pd.faqA1') }]
 
-  if (!product || !product.colors.length) return <ProductMissing />
+  if (!product) return <ProductMissing />
 
   const startSwipe = (x: number, y: number) => { touchStart.current = { x, y } }
   const goTo = (index: number) => {
@@ -144,7 +144,9 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   const increase = () => setLength((current) => Math.min(maxLength, Math.round((current + 1) * 10) / 10))
   const decrease = () => setLength((current) => Math.max(1, Math.round(current - 1)))
   const add = () => {
-    onAdd(product, product.colors[0], length)
+    const selectedColor = product.colors[0]
+    if (!selectedColor) return
+    onAdd(product, selectedColor, length)
     setJustAdded(true)
   }
   const scrollRelated = (direction: 'next' | 'prev') => {
@@ -156,7 +158,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
   }
 
   return <main className="container-eva product-page">
-    <div className="breadcrumbs"><Link href="/">{t('pd.breadcrumbHome')}</Link><span>›</span><Link href="/catalog">{isAalamStore ? 'المنتجات' : t('pd.breadcrumbFabrics')}</Link><span>›</span><span>{product.name}</span></div>
+    <div className="breadcrumbs"><Link href="/">{t('pd.breadcrumbHome')}</Link><span>›</span><Link href="/catalog">{content.tenantKey ? (content.catalogLabel || 'المنتجات') : t('pd.breadcrumbFabrics')}</Link><span>›</span><span>{product.name}</span></div>
     <div className="product-detail-layout">
       <section className="product-gallery" aria-label={t('pd.galleryAria').replace('{name}', product.name)}>
         <div
@@ -202,7 +204,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         })}</div>
       </section>
       <section className="product-purchase">
-        {content.tenantKey && !isAalamStore && <div className="tenant-demo-note tenant-demo-note--inline" role="note"><span className="tenant-demo-note__mark">i</span><div><strong>منتج تجريبي</strong><p>{content.announcementLeft || "الصورة والسعر والمواصفات للتوضيح فقط، وليست بيانات بيع معتمدة."}</p></div></div>}
+        {content.tenantKey && !isAalamStore && <div className="tenant-demo-note tenant-demo-note--inline" role="note"><span className="tenant-demo-note__mark">i</span><div><strong>معاينة تصميمية</strong><p>{content.announcementLeft || "الصورة والسعر والمواصفات للتوضيح فقط، وليست بيانات بيع معتمدة."}</p></div></div>}
         <div className="product-purchase-top"><div><span className="eyebrow">{lang === 'en' ? typeLabelsEn[product.type] || product.type : product.type}</span><h1>{product.name}</h1><p className="product-description">{product.description}</p></div><button type="button" className={`detail-wish ${wishlist.includes(product.slug) ? 'is-active' : ''}`} onClick={() => onWish(product.slug)} aria-label={wishlist.includes(product.slug) ? t('pd.wishRemove') : t('pd.wishAdd')} aria-pressed={wishlist.includes(product.slug)}><Heart size={20} fill={wishlist.includes(product.slug) ? 'currentColor' : 'none'} /></button></div>
         <div className="price-block"><span>{isPieceStore ? 'السعر للقطعة' : t('pd.pricePerMeter')}</span><strong>{formatPrice(product.price)}</strong>{product.compareAtPrice && <del>{formatPrice(product.compareAtPrice)}</del>}</div>
         <div className="detail-divider" />
@@ -216,8 +218,8 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         <div className="line-total"><span>{isPieceStore ? `الإجمالي لـ ${formatQuantity(length)}` : t('pd.lineTotal').replace('{meters}', metersLabel(length)).replace('{price}', formatPrice(product.price))}</span><strong>{formatPrice(product.price * length)}</strong></div>
         <button ref={addBtnRef} type="button" className="button button-primary detail-add" onClick={add} disabled={maxLength <= 0}><ShoppingBag size={17} />{maxLength <= 0 ? t('pd.unavailable') : isPieceStore ? 'أضف للسلة' : t('pd.addCart')}<ArrowLeft size={16} /></button>
         {justAdded && maxLength > 0 && <div className="add-confirm" role="status"><span><Check size={16} />{t('pd.addedToast').replace('{meters}', formatQuantity(length)).replace('{name}', product.name)}</span><Link href="/checkout" className="button button-primary">{t('pd.checkoutNow')} <ArrowLeft size={15} /></Link></div>}
-        <div className="detail-perks">{isAalamStore ? <><div><ShieldCheck size={17} /><span>الضمان حسب شروط المنتج</span></div><div><Zap size={17} /><span>توصيل إلى جميع محافظات العراق</span></div></> : <><div><ShieldCheck size={17} /><span>{t('pd.perkDelivery')}</span></div><div><Zap size={17} /><span>{t('pd.perkOneBox')}</span></div></>}</div>
-        <div className="detail-accordions"><Accordion id="specs" title={t('pd.specsTitle')} open={openSection === 'specs'} onToggle={() => setOpenSection(openSection === 'specs' ? '' : 'specs')}><div className="specs-grid"><Spec label={brand.specLabels.composition || t('pd.spec.composition')} value={product.specs.composition} /><Spec label={brand.specLabels.width || t('pd.spec.width')} value={product.specs.width} /><Spec label={brand.specLabels.weight || t('pd.spec.weight')} value={product.specs.weight} /><Spec label={brand.specLabels.stretch || t('pd.spec.stretch')} value={product.specs.stretch} /><Spec label={brand.specLabels.opacity || t('pd.spec.opacity')} value={product.specs.opacity} /><Spec label={brand.specLabels.finish || t('pd.spec.finish')} value={product.specs.finish} /><Spec label={brand.specLabels.use || t('pd.spec.use')} value={product.specs.use} /><Spec label={brand.specLabels.care || t('pd.spec.care')} value={product.specs.care} /></div></Accordion><Accordion id="faq" title={t('pd.faqTitle')} open={openSection === 'faq'} onToggle={() => setOpenSection(openSection === 'faq' ? '' : 'faq')}><div className="product-faq-list">{faqItems.map((item) => <div key={item.question}><strong>{item.question}</strong><p>{item.answer}</p></div>)}</div></Accordion><Accordion id="shipping" title={t('pd.shippingTitle')} open={openSection === 'shipping'} onToggle={() => setOpenSection(openSection === 'shipping' ? '' : 'shipping')}><p className="accordion-text">{t('pd.shippingText')}</p></Accordion></div>
+        <div className="detail-perks">{isPieceStore ? <><div><ShieldCheck size={17} /><span>تأكيد تفاصيل المنتج قبل الطلب</span></div><div><Zap size={17} /><span>تُراجع خيارات التوصيل مع المتجر</span></div></> : <><div><ShieldCheck size={17} /><span>{t('pd.perkDelivery')}</span></div><div><Zap size={17} /><span>{t('pd.perkOneBox')}</span></div></>}</div>
+        <div className="detail-accordions"><Accordion id="specs" title={t('pd.specsTitle')} open={openSection === 'specs'} onToggle={() => setOpenSection(openSection === 'specs' ? '' : 'specs')}><div className="specs-grid"><Spec label={brand.specLabels.composition || t('pd.spec.composition')} value={product.specs.composition} /><Spec label={brand.specLabels.width || t('pd.spec.width')} value={product.specs.width} /><Spec label={brand.specLabels.weight || t('pd.spec.weight')} value={product.specs.weight} /><Spec label={brand.specLabels.stretch || t('pd.spec.stretch')} value={product.specs.stretch} /><Spec label={brand.specLabels.opacity || t('pd.spec.opacity')} value={product.specs.opacity} /><Spec label={brand.specLabels.finish || t('pd.spec.finish')} value={product.specs.finish} /><Spec label={brand.specLabels.use || t('pd.spec.use')} value={product.specs.use} /><Spec label={brand.specLabels.care || t('pd.spec.care')} value={product.specs.care} /></div></Accordion><Accordion id="faq" title={t('pd.faqTitle')} open={openSection === 'faq'} onToggle={() => setOpenSection(openSection === 'faq' ? '' : 'faq')}><div className="product-faq-list">{faqItems.map((item) => <div key={item.question}><strong>{item.question}</strong><p>{item.answer}</p></div>)}</div></Accordion><Accordion id="shipping" title={t('pd.shippingTitle')} open={openSection === 'shipping'} onToggle={() => setOpenSection(openSection === 'shipping' ? '' : 'shipping')}><p className="accordion-text">{isPieceStore ? 'تُؤكد تكلفة التوصيل والمدة المتوقعة مع المتجر قبل اعتماد الطلب.' : t('pd.shippingText')}</p></Accordion></div>
       </section>
     </div>
     {related.length > 0 && <section className="related-section"><div className="section-heading"><div><span className="eyebrow">{t('pd.relatedEyebrow')}</span><h2>{t('pd.relatedTitle')}</h2></div><div className="section-heading-actions">{related.length > 3 && <div className="related-nav" aria-label={t('pd.relatedNavAria')}><button type="button" onClick={() => scrollRelated('prev')} aria-label={t('pd.relatedPrevAria')}><ChevronRight size={17} /></button><button type="button" onClick={() => scrollRelated('next')} aria-label={t('pd.relatedNextAria')}><ChevronLeft size={17} /></button></div>}<Link href={`/catalog?category=${encodeURIComponent(product.categoryId)}`} className="underlined-link">{t('pd.viewCategory')} <ArrowLeft size={15} /></Link></div></div><div className="related-track" ref={relatedTrackRef}>{related.map((item) => <ProductCard key={item.id} product={item} wished={wishlist.includes(item.slug)} onWish={onWish} onAdd={onAdd} />)}</div></section>}

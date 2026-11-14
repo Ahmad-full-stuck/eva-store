@@ -114,3 +114,20 @@ export const getOrderNumber = (payload: unknown): string | null => {
   }
   return null
 }
+
+
+/** Item-based storefronts use integer item quantities, never fabric meters. */
+const PIECE_BASED_STORES = new Set([
+  'rg-team-iq3', 'rg-team-iq', 'ironman-babel', 'az-supps',
+  'almass-mobile', 'mobaelk', 'apple-center-amiriya', 'mustafa-store', 'a-center-kirkuk',
+  'accessories-iq', 'shams-golden1', 'kn-fashion-woman', 'razan-accessories2', 'aalam-alqalaa',
+])
+
+export const isPieceBasedStore = (tenantKey?: string): boolean => Boolean(tenantKey && PIECE_BASED_STORES.has(tenantKey))
+
+export const formatStoreQuantity = (value: number, tenantKey?: string): string => {
+  if (!isPieceBasedStore(tenantKey)) return formatMeters(value)
+  const count = Math.max(0, Math.round(value))
+  const number = count.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ')
+  return getCurrentLang() === 'en' ? `${number} ${count === 1 ? 'item' : 'items'}` : `${number} ${count === 1 ? 'قطعة' : 'قطع'}`
+}

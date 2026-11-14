@@ -3,7 +3,7 @@ import { ArrowLeft, Check, ChevronLeft, ChevronRight, Filter, Layers, Package, S
 import { Link, useLocation, useSearch } from 'wouter'
 import type { Category, Product, ProductColor } from '@/types'
 import { useT } from '@/lib/i18n'
-import { formatPrice, isSoldOut, normalizeArabic } from '@/lib/catalog'
+import { formatPrice, isSoldOut, isPieceBasedStore, normalizeArabic } from '@/lib/catalog'
 import { ProductCard, ProductGridSkeleton } from '@/components/ProductCard'
 import { Modal } from '@/components/Modal'
 import { prefetchImages, thumbUrl } from '@/lib/prefetch'
@@ -179,6 +179,7 @@ const matchesQuery = (product: Product, query: string, categories: Category[]): 
 export function CatalogPage({ products, categories, status, wishlist, onWish, onAdd }: CatalogPageProps) {
   const { t } = useT()
   const content = useSiteContent()
+  const isPieceStore = isPieceBasedStore(content.tenantKey)
   const hostKey = typeof window !== 'undefined' ? window.location.hostname.split('.')[0] : ''
   const brand = getStoreBrand(content.tenantKey || hostKey)
   const [location, navigate] = useLocation()
@@ -375,6 +376,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       onMin={changeMin}
       onMax={changeMax}
       onClear={clearFilters}
+      isPieceStore={isPieceStore}
     />
   )
 
@@ -405,15 +407,15 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       <div className="breadcrumbs">
         <Link href="/">{t('cat.breadcrumbHome')}</Link>
         <span>›</span>
-        <span>{t('cat.breadcrumbFabrics')}</span>
+        <span>{isPieceStore ? 'المنتجات' : t('cat.breadcrumbFabrics')}</span>
         {activeCategory && <><span>›</span><span>{activeCategory.name}</span></>}
       </div>
 
       <div className="catalog-heading">
         <div>
-          <span className="eyebrow">{t('cat.eyebrow')}</span>
-          <h1>{activeCategory ? activeCategory.name : t('cat.allFabricsTitle')}</h1>
-          <p>{t('cat.countFabrics').replace('{n}', String(products.length))} · {statusLabel}</p>
+          <span className="eyebrow">{isPieceStore ? brand.kicker : t('cat.eyebrow')}</span>
+          <h1>{activeCategory ? activeCategory.name : isPieceStore ? brand.catalogTitle : t('cat.allFabricsTitle')}</h1>
+          <p>{isPieceStore ? `${products.length} منتج ضمن التشكيلة` : t('cat.countFabrics').replace('{n}', String(products.length))} · {statusLabel}</p>
         </div>
         <div className="catalog-sort">
           <label htmlFor="catalog-sort">{t('cat.sortBy')}</label>
@@ -464,7 +466,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       </div>
 
       <div className="catalog-layout">
-        <aside className="filter-sidebar" aria-label={t('cat.filterFabrics')}>{sidePanel}</aside>
+        <aside className="filter-sidebar" aria-label={isPieceStore ? 'تصفية المنتجات' : t('cat.filterFabrics')}>{sidePanel}</aside>
         <section ref={resultsRef} className="catalog-results" aria-label={t('cat.resultsAria')}>
           <form className="catalog-search" onSubmit={submitSearch} role="search">
             <Search size={18} aria-hidden="true" />
@@ -524,7 +526,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
           {status === 'loading' && products.length === 0
             ? <ProductGridSkeleton />
             : shown.length === 0
-              ? <EmptyResults onClear={clearFilters} />
+              ? <EmptyResults onClear={clearFilters} isPieceStore={isPieceStore} />
               : (
                 <>
                   <div className="product-grid">
@@ -568,7 +570,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
         </section>
       </div>
 
-      <Modal open={filterOpen} onClose={() => setFilterOpen(false)} title={t('cat.filterFabrics')} variant="bottom" className="filter-drawer">
+      <Modal open={filterOpen} onClose={() => setFilterOpen(false)} title={isPieceStore ? 'تصفية المنتجات' : t('cat.filterFabrics')} variant="bottom" className="filter-drawer">
         <div className="drawer-header">
           <h2>{t('cat.filterResultsTitle')}</h2>
           <button type="button" className="icon-button" onClick={() => setFilterOpen(false)} aria-label={t('cat.closeFilter')}>
@@ -586,6 +588,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
 
 interface FilterPanelProps {
   scope: string
+  isPieceStore: boolean
   categories: Category[]
   categoryId: string
   activeCategoryId: string
@@ -602,6 +605,7 @@ interface FilterPanelProps {
 
 function FilterPanel({
   scope,
+  isPieceStore,
   categories,
   categoryId,
   activeCategoryId,
@@ -619,12 +623,12 @@ function FilterPanel({
   return (
     <div className="filter-panel">
       <div className="filter-panel-title">
-        <strong><Filter size={14} aria-hidden="true" />{t('cat.filterPanelTitle')}</strong>
+        <strong><Filter size={14} aria-hidden="true" />{isPieceStore ? 'تصفية المنتجات' : t('cat.filterPanelTitle')}</strong>
         <button type="button" onClick={onClear} disabled={!hasFilters}>{t('cat.clearAll')}</button>
       </div>
 
       <fieldset>
-        <legend>{t('cat.fabricType')}</legend>
+        <legend>{isPieceStore ? 'فئة المنتج' : t('cat.fabricType')}</legend>
         <label className="filter-option">
           <input type="radio" name={`category-${scope}`} checked={!categoryId} onChange={() => onChange({ category: null })} />
           <span>{t('cat.allCategories')}</span>
@@ -642,7 +646,7 @@ function FilterPanel({
         ))}
       </fieldset>
 
-      <fieldset>
+      {!isPieceStore && <fieldset>
         <legend>{t('cat.stretchLegend')}</legend>
         {STRETCH_OPTIONS.map((option) => (
           <label className="filter-option" key={`${scope}-${option.value}`}>
@@ -655,7 +659,7 @@ function FilterPanel({
             <span>{t(option.labelKey)}</span>
           </label>
         ))}
-      </fieldset>
+      </fieldset>}
 
       <fieldset>
         <legend>{t('cat.priceRange')}</legend>
@@ -692,7 +696,7 @@ function FilterPanel({
       </label>
 
       <button type="button" className="filter-browse" onClick={onClear} disabled={!hasFilters}>
-        {t('cat.showAllFabrics')} <ArrowLeft size={14} aria-hidden="true" />
+        {isPieceStore ? 'عرض كل المنتجات' : t('cat.showAllFabrics')} <ArrowLeft size={14} aria-hidden="true" />
       </button>
     </div>
   )
@@ -710,14 +714,14 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
   )
 }
 
-function EmptyResults({ onClear }: { onClear: () => void }) {
+function EmptyResults({ onClear, isPieceStore = false }: { onClear: () => void; isPieceStore?: boolean }) {
   const { t } = useT()
   return (
     <div className="empty-state glass-card" role="status">
       <div className="empty-icon"><Search size={23} aria-hidden="true" /></div>
-      <h2>{t('cat.emptyTitle')}</h2>
-      <p>{t('cat.emptyHint')}</p>
-      <button type="button" className="button button-primary" onClick={onClear}>{t('cat.emptyAction')}</button>
+      <h2>{isPieceStore ? 'ما لقينا منتجات تطابق بحثك' : t('cat.emptyTitle')}</h2>
+      <p>{isPieceStore ? 'جرّب كلمة بحث ثانية أو أزل أحد الفلاتر حتى تظهر لك بقية المنتجات.' : t('cat.emptyHint')}</p>
+      <button type="button" className="button button-primary" onClick={onClear}>{isPieceStore ? 'عرض كل المنتجات' : t('cat.emptyAction')}</button>
     </div>
   )
 }
