@@ -5,6 +5,7 @@ import type { Product } from '@/types'
 import { useT } from '@/lib/i18n'
 import { matchesProductSearch, formatPrice } from '@/lib/catalog'
 import { typeLabelEn } from '@/lib/strings/catalog'
+import { useSiteContent } from '@/lib/site-content'
 import { Modal } from './Modal'
 import { SmartImage } from '@/components/ui/SmartImage'
 
@@ -25,9 +26,22 @@ const suggestions: { query: string; labelKey: string }[] = [
 
 export function SearchDialog({ open, onClose, products }: SearchDialogProps) {
   const { t, lang } = useT()
+  const content = useSiteContent()
   const [query, setQuery] = useState('')
   const [, setLocation] = useLocation()
   const results = query.trim().length > 1 ? products.filter((product) => matchesProductSearch(product, query)).slice(0, 7) : []
+  const prospectSuggestions = content.tenantKey ? (
+    ['rg-team-iq3','rg-team-iq','ironman-babel','az-supps'].includes(content.tenantKey)
+      ? ['بروتين','كرياتين','فيتامينات']
+      : ['apple-center-amiriya','almass-mobile','mobaelk','a-center-kirkuk','mustafa-store'].includes(content.tenantKey)
+        ? ['iPhone','Samsung','سماعات']
+        : content.tenantKey === 'kn-fashion-woman'
+          ? ['فساتين','أطقم نسائية','حقائب']
+          : ['قلائد','أقراط','ساعات']
+  ) : null
+  const activeSuggestions = prospectSuggestions
+    ? prospectSuggestions.map((query) => ({ query, label: query }))
+    : suggestions.map((item) => ({ query: item.query, label: t(item.labelKey) }))
 
   const close = () => {
     setQuery('')
@@ -63,7 +77,7 @@ export function SearchDialog({ open, onClose, products }: SearchDialogProps) {
           {query && <button type="button" className="clear-search" onClick={() => setQuery('')} aria-label={t('search.clear')}><X size={16} /></button>}
           <button type="submit" className="button button-primary button-small">{t('search.submit')}</button>
         </form>
-        {!query && <div className="search-suggestions"><span>{t('search.popular')}</span>{suggestions.map((suggestion) => <button type="button" key={suggestion.query} onClick={() => pickSuggestion(suggestion.query)}>{t(suggestion.labelKey)}</button>)}</div>}
+        {!query && <div className="search-suggestions"><span>{t('search.popular')}</span>{activeSuggestions.map((suggestion) => <button type="button" key={suggestion.query} onClick={() => pickSuggestion(suggestion.query)}>{suggestion.label}</button>)}</div>}
         {query && <div className="search-results" aria-live="polite">
           <p className="search-results-count">{results.length ? t('search.resultsCount').replace('{n}', String(results.length)) : t('search.noResults')}</p>
           {results.map((product) => <Link key={product.id} href={`/product/${product.slug}`} className="search-result-item" onClick={close}>
