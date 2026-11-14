@@ -415,16 +415,18 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
           <h1>{activeCategory ? activeCategory.name : content.tenantKey ? (content.catalogLabel || 'كل المنتجات') : t('cat.allFabricsTitle')}</h1>
           <p>{content.tenantKey ? `${products.length.toLocaleString('ar-IQ')} منتجات في المتجر` : t('cat.countFabrics').replace('{n}', String(products.length))} · {statusLabel}</p>
         </div>
-        <div className="catalog-sort">
-          <label htmlFor="catalog-sort">{t('cat.sortBy')}</label>
-          <select
-            id="catalog-sort"
-            value={sort}
-            onChange={(event) => updateParams({ sort: event.target.value === 'featured' ? null : event.target.value })}
-          >
-            {SORT_OPTIONS.filter((option) => !content.tenantKey || option.value === 'featured').map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}
-          </select>
-        </div>
+        {!content.tenantKey && (
+          <div className="catalog-sort">
+            <label htmlFor="catalog-sort">{t('cat.sortBy')}</label>
+            <select
+              id="catalog-sort"
+              value={sort}
+              onChange={(event) => updateParams({ sort: event.target.value === 'featured' ? null : event.target.value })}
+            >
+              {SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}
+            </select>
+          </div>
+        )}
       </div>
 
       <div className="chip-row" role="group" aria-label={t('cat.chipsAria')}>
