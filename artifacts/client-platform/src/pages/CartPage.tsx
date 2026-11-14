@@ -125,8 +125,8 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
         <div className="glass glass-card empty-card" tabIndex={-1} ref={emptyRef}>
           <div className="empty-icon"><ShoppingBag size={26} /></div>
-          <h1>{t('cart.emptyTitle')}</h1>
-          <p>{t('cart.emptyText')}</p>
+          <h1>{content.tenantKey ? 'سلتك فارغة حالياً' : t('cart.emptyTitle')}</h1>
+          <p>{content.tenantKey ? 'عندما تضيف منتجاً إلى السلة ستجده هنا لمراجعة الكمية والتفاصيل.' : t('cart.emptyText')}</p>
           <Link href="/catalog" className="button button-primary">{content.tenantKey ? 'تصفح المنتجات' : t('cart.browse')} <ArrowLeft size={16} /></Link>
         </div>
       </main>
@@ -149,7 +149,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         <div>
           <span className="eyebrow">{t('cart.eyebrow')}</span>
           <h1>{content.tenantKey ? 'سلة التسوق' : t('cart.title')}</h1>
-          <p>{t('cart.inCart').replace('{meters}', formatQuantity(meters))}</p>
+          <p>{content.tenantKey ? `عدد المنتجات في السلة: ${formatQuantity(meters)}` : t('cart.inCart').replace('{meters}', formatQuantity(meters))}</p>
         </div>
         <Link href="/catalog" className="underlined-link">{content.tenantKey ? 'متابعة التسوق' : t('cart.continue')} <ArrowLeft size={15} /></Link>
       </div>
