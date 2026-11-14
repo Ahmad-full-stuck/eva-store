@@ -226,8 +226,8 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
     {related.length > 0 && <section className="related-section"><div className="section-heading"><div><span className="eyebrow">{content.tenantKey ? 'MORE FROM THIS CATEGORY' : t('pd.relatedEyebrow')}</span><h2>{content.tenantKey ? 'منتجات من الفئة نفسها' : t('pd.relatedTitle')}</h2></div><div className="section-heading-actions">{related.length > 3 && <div className="related-nav" aria-label={t('pd.relatedNavAria')}><button type="button" onClick={() => scrollRelated('prev')} aria-label={t('pd.relatedPrevAria')}><ChevronRight size={17} /></button><button type="button" onClick={() => scrollRelated('next')} aria-label={t('pd.relatedNextAria')}><ChevronLeft size={17} /></button></div>}<Link href={`/catalog?category=${encodeURIComponent(product.categoryId)}`} className="underlined-link">{t('pd.viewCategory')} <ArrowLeft size={15} /></Link></div></div><div className="related-track" ref={relatedTrackRef}>{related.map((item) => <ProductCard key={item.id} product={item} wished={wishlist.includes(item.slug)} onWish={onWish} onAdd={onAdd} />)}</div></section>}
     {(() => {
       const siblings = related.slice(0, 2)
-      const others = products.filter((item) => item.slug !== product.slug && item.categoryId === product.categoryId)
-      const compareList = [product, ...siblings, ...others].slice(0, 4)
+      const others = products.filter((item) => item.slug !== product.slug && item.categoryId !== product.categoryId)
+      const compareList = (content.tenantKey ? [product, ...related] : [product, ...siblings, ...others]).slice(0, 4)
       if (compareList.length < 2) return null
       const allRows: { label: string; value: (item: Product) => string }[] = [
         ...(!content.tenantKey ? [{ label: t('pd.comparePrice'), value: (item: Product) => formatPrice(item.price) }] : []),
