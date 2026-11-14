@@ -6,7 +6,7 @@ import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/
 import { useT } from '@/lib/i18n'
 import { apiUrl } from '@/lib/site'
 import { governorates } from '@/lib/fallback-data'
-import { useSiteContent } from '@/lib/site-content'
+import { useSiteContent, isDiscreteQuantityStore, formatDiscreteQuantity } from '@/lib/site-content'
 import { sendOrderEmail } from '@/lib/email'
 import { queuePendingOrder } from '@/lib/api'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -184,8 +184,8 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [liveMessage, setLiveMessage] = useState('')
   const totals = getCartTotals(cart)
   const siteContent = useSiteContent()
-  const isPieceStore = siteContent.tenantKey === 'mustafa-store' || siteContent.tenantKey === 'aalam-alqalaa'
-  const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : formatMeters(value)
+  const isPieceStore = isDiscreteQuantityStore(siteContent)
+  const formatQuantity = (value: number) => isPieceStore ? formatDiscreteQuantity(value, siteContent, lang) : formatMeters(value)
   const boxRef = useRef<HTMLDivElement>(null)
   const restored = useRef(false)
 
