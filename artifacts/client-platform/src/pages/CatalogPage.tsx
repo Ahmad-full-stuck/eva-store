@@ -508,11 +508,17 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
           )}
 
           <div className="stats-bar glass-card" role="status">
-            <span className="stat-item"><Layers size={14} aria-hidden="true" />{t('cat.statShow')} <strong>{shown.length}</strong> {t('cat.statOfTotal').replace('{total}', String(products.length))}</span>
-            <span className="stat-divider" aria-hidden="true" />
-            <span className="stat-item"><Tag size={14} aria-hidden="true" />{t('cat.statAvgPrice')} <strong>{shown.length ? formatPrice(averagePrice) : '—'}</strong></span>
-            <span className="stat-divider" aria-hidden="true" />
-            <span className="stat-item"><Package size={14} aria-hidden="true" />{t('cat.statAvailable')} <strong>{availableCount}</strong></span>
+            {content.tenantKey ? (
+              <span className="stat-item"><Layers size={14} aria-hidden="true" />يعرض المتجر <strong>{shown.length}</strong> من <strong>{products.length}</strong> منتج</span>
+            ) : (
+              <>
+                <span className="stat-item"><Layers size={14} aria-hidden="true" />{t('cat.statShow')} <strong>{shown.length}</strong> {t('cat.statOfTotal').replace('{total}', String(products.length))}</span>
+                <span className="stat-divider" aria-hidden="true" />
+                <span className="stat-item"><Tag size={14} aria-hidden="true" />{t('cat.statAvgPrice')} <strong>{shown.length ? formatPrice(averagePrice) : '—'}</strong></span>
+                <span className="stat-divider" aria-hidden="true" />
+                <span className="stat-item"><Package size={14} aria-hidden="true" />{t('cat.statAvailable')} <strong>{availableCount}</strong></span>
+              </>
+            )}
             {pageCount > 1 && (
               <>
                 <span className="stat-divider" aria-hidden="true" />
@@ -720,12 +726,13 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
 
 function EmptyResults({ onClear }: { onClear: () => void }) {
   const { t } = useT()
+  const content = useSiteContent()
   return (
     <div className="empty-state glass-card" role="status">
       <div className="empty-icon"><Search size={23} aria-hidden="true" /></div>
-      <h2>{t('cat.emptyTitle')}</h2>
-      <p>{t('cat.emptyHint')}</p>
-      <button type="button" className="button button-primary" onClick={onClear}>{t('cat.emptyAction')}</button>
+      <h2>{content.tenantKey ? 'ما لقينا منتجات مطابقة' : t('cat.emptyTitle')}</h2>
+      <p>{content.tenantKey ? 'جرّب كلمة بحث مختلفة أو ارجع إلى كل فئات المنتجات.' : t('cat.emptyHint')}</p>
+      <button type="button" className="button button-primary" onClick={onClear}>{content.tenantKey ? 'عرض كل المنتجات' : t('cat.emptyAction')}</button>
     </div>
   )
 }
