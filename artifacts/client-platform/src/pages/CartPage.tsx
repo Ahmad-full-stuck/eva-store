@@ -110,7 +110,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
     const snapped = Math.round(nextLength / quantityStep) * quantityStep
     const safeQuantity = Math.min(maxQuantity, Math.max(minQuantity, snapped))
     onUpdate(orderKey(item), safeQuantity)
-    setAnnouncement(t('cart.updated').replace('{name}', item.product.name).replace('{meters}', formatQuantity(nextLength)))
+    setAnnouncement(t('cart.updated').replace('{name}', item.product.name).replace('{meters}', formatQuantity(safeQuantity)))
   }
 
   const handleRemove = (item: CartItem) => {
@@ -127,7 +127,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
           <div className="empty-icon"><ShoppingBag size={26} /></div>
           <h1>{t('cart.emptyTitle')}</h1>
           <p>{t('cart.emptyText')}</p>
-          <Link href="/catalog" className="button button-primary">{t('cart.browse')} <ArrowLeft size={16} /></Link>
+          <Link href="/catalog" className="button button-primary">{content.tenantKey ? 'تصفح المنتجات' : t('cart.browse')} <ArrowLeft size={16} /></Link>
         </div>
       </main>
     )
@@ -143,15 +143,15 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
       <div className="breadcrumbs">
         <Link href="/">{t('cart.home')}</Link>
         <span>›</span>
-        <span>{t('cart.crumb')}</span>
+        <span>{content.tenantKey ? 'سلة التسوق' : t('cart.crumb')}</span>
       </div>
       <div className="page-title-row">
         <div>
           <span className="eyebrow">{t('cart.eyebrow')}</span>
-          <h1>{t('cart.title')}</h1>
+          <h1>{content.tenantKey ? 'سلة التسوق' : t('cart.title')}</h1>
           <p>{t('cart.inCart').replace('{meters}', formatQuantity(meters))}</p>
         </div>
-        <Link href="/catalog" className="underlined-link">{t('cart.continue')} <ArrowLeft size={15} /></Link>
+        <Link href="/catalog" className="underlined-link">{content.tenantKey ? 'متابعة التسوق' : t('cart.continue')} <ArrowLeft size={15} /></Link>
       </div>
       <div className="cart-layout">
         <section className="cart-items glass glass-card" aria-label={t('cart.itemsAria')} tabIndex={-1} ref={itemsRef}>
@@ -171,7 +171,7 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
                       <span className="product-type">{lang === 'en' ? typeLabelsEn[item.product.type] || item.product.type : item.product.type}</span>
                       <Link href={`/product/${item.product.slug}`} className="product-name">{item.product.name}</Link>
                       <div className="cart-item-chips">
-                        <span className="chip glass-pill">{formatPrice(item.product.price)} / {isPieceStore ? 'قطعة' : t('cart.perMeter')}</span>
+                        <span className="chip glass-pill">{formatPrice(item.product.price)} / {isPieceStore ? (content.quantityUnit || 'قطعة') : t('cart.perMeter')}</span>
                       </div>
                     </div>
                     <div className="cart-item-tools">
