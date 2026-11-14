@@ -306,7 +306,7 @@ export function TenantVerticalHome({ products, wishlist, onWish, onAdd }: Tenant
     ? 'mustafa'
     : key === 'nineteen89-rest'
     ? 'restaurant'
-    : key === 'sham-couture'
+    : ['sham-couture', 'kn-fashion-woman', 'accessories-iq', 'shams-golden1', 'razan-accessories2'].includes(key)
       ? 'fashion'
       : key === 'hayder-taif'
         ? 'fabric'
@@ -342,7 +342,7 @@ export function TenantVerticalHome({ products, wishlist, onWish, onAdd }: Tenant
           </div>
           <figure className="vhome-hero__visual">
             {heroImage
-              ? <img src={heroImage} alt={'صورة من ' + shopName} fetchPriority="high" decoding="async" />
+              ? <SmartImage src={heroImage} alt={'صورة من ' + shopName} sizes="(max-width: 700px) 100vw, 48vw" priority />
               : <div className="vhome-hero__placeholder"><span>{brand.mark}</span></div>}
             <figcaption className="vhome-hero__caption">
               <span>{brand.artLabel}</span>
@@ -385,8 +385,8 @@ export function TenantVerticalHome({ products, wishlist, onWish, onAdd }: Tenant
               <Link href="/catalog" className="vhome-link">اكتشف المزيد<ArrowLeft size={16} /></Link>
             </div>
             <div className="vhome-editorial__images">
-              {content.heroSlides?.[1] && <img src={content.heroSlides[1]} alt={'تفاصيل من ' + shopName} loading="lazy" decoding="async" />}
-              {content.heroSlides?.[2] && <img src={content.heroSlides[2]} alt={'صورة إضافية من ' + shopName} loading="lazy" decoding="async" />}
+              {content.heroSlides?.[1] && <SmartImage src={content.heroSlides[1]} alt={'تفاصيل من ' + shopName} sizes="(max-width: 700px) 48vw, 24vw" />}
+              {content.heroSlides?.[2] && <SmartImage src={content.heroSlides[2]} alt={'صورة إضافية من ' + shopName} sizes="(max-width: 700px) 48vw, 24vw" />}
             </div>
           </section>
         )}
