@@ -730,14 +730,14 @@ export function ContactPage() {
                   <MessageCircle size={19} /><span><strong>التواصل عبر الحساب الرسمي</strong><small>افتح قناة التواصل المعتمدة للمتجر</small></span><ArrowLeft size={15} />
                 </a>
               )}
-              {siteConfig.phone && (
-                <a href={"tel:" + siteConfig.phone} aria-label="اتصل بالمتجر">
-                  <Send size={19} /><span><strong>اتصال مباشر</strong><small dir="ltr">{siteConfig.phone}</small></span><ArrowLeft size={15} />
+              {content.phone && (
+                <a href={"tel:" + content.phone} aria-label="اتصل بالمتجر">
+                  <Send size={19} /><span><strong>اتصال مباشر</strong><small dir="ltr">{content.phone}</small></span><ArrowLeft size={15} />
                 </a>
               )}
-              <Link href="/order-tracking" aria-label={t('contact.method2Aria')}>
+              {!content.tenantKey && <Link href="/order-tracking" aria-label={t('contact.method2Aria')}>
                 <PackageCheck size={19} /><span><strong>{t('contact.method2Title')}</strong><small>{t('contact.method2Text')}</small></span><ArrowLeft size={15} />
-              </Link>
+              </Link>}
               {!content.tenantKey && <Link href="/fabric-guide" aria-label={t('contact.method3Aria')}>
                 <Ruler size={19} /><span><strong>{t('contact.method3Title')}</strong><small>{t('contact.method3Text')}</small></span><ArrowLeft size={15} />
               </Link>}
@@ -902,6 +902,38 @@ export function PoliciesPage() {
   }
 
   if (content.tenantKey === 'aalam-alqalaa') return <AalamAlqalaaPoliciesPage />
+
+  if (content.tenantKey) {
+    const tenantPolicyItems = [
+      { title: 'تفاصيل الطلب', text: 'قبل اعتماد أي طلب، راجع اسم المنتج والمواصفات والكمية مع المتجر، وتأكد من السعر النهائي والتوفر.' },
+      { title: 'التوصيل', text: 'منطقة التوصيل والمدة والرسوم وموعد التسليم تُحدد من المتجر حسب المنتج والعنوان قبل تأكيد الطلب.' },
+      { title: 'الاستبدال والإرجاع', text: 'شروط الاستبدال أو الإرجاع تعتمد على طبيعة المنتج وسياسة المتجر، ويجب توضيحها للعميل قبل اعتماد الشراء.' },
+      { title: 'الخصوصية والبيانات', text: 'تفاصيل جمع بيانات التواصل واستخدامها وحفظها يجب أن يعتمدها صاحب المتجر ويضيفها قبل إطلاق النسخة النهائية.' },
+    ]
+    return (
+      <>
+        <GlassStyles />
+        <main className="container-eva info-page policies-page">
+          <div className="breadcrumbs"><Link href="/">{t('policies.crumbHome')}</Link><span>›</span><span>معلومات الطلب</span></div>
+          <section className="info-heading">
+            <span className="eyebrow"><ShieldCheck size={14} />{content.shortName || content.shopName}</span>
+            <h1>معلومات الطلب والتعامل</h1>
+            <p>معلومات توضيحية لمعاينة المتجر. يعتمد صاحب المتجر شروط البيع والتوصيل والاستبدال والخصوصية النهائية قبل إطلاق الموقع.</p>
+          </section>
+          <div className="policy-accordions">
+            {tenantPolicyItems.map((item, index) => (
+              <details className="glass-card policy-accordion" key={item.title} open={index === 0}>
+                <summary><span>{String(index + 1).padStart(2, '0')}</span><strong>{item.title}</strong><ChevronDown size={18} /></summary>
+                <div className="policy-body"><p>{item.text}</p></div>
+              </details>
+            ))}
+          </div>
+          <p className="policy-highlight"><ShieldCheck size={15} />هذه ليست شروطاً معتمدة أو وعداً تجارياً؛ تُستكمل بالتفاصيل الرسمية لصاحب المتجر.</p>
+          <div className="center-action"><Link href="/contact" className="button button-primary">تواصل مع المتجر <ArrowLeft size={16} /></Link></div>
+        </main>
+      </>
+    )
+  }
 
   return (
     <>
