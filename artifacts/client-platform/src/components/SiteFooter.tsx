@@ -24,7 +24,7 @@ const infoItems = [
 export function SiteFooter({ routes, categories }: SiteFooterProps) {
   const { lang, t } = useT()
   const content = useSiteContent()
-  const infoRoutes = infoItems.filter((item) => !(content.tenantKey && item.path === '/fabric-guide')).map((item) => {
+  const infoRoutes = infoItems.filter((item) => !(content.tenantKey && ['/fabric-guide','/order-tracking'].includes(item.path))).map((item) => {
     const matched = routes.find((route) => route.path === item.path)
     const label = matched?.label || t(item.label)
     return { ...item, id: item.path, label: lang === 'en' && matched ? routeLabelsEn[matched.id] ?? label : label }
@@ -56,7 +56,7 @@ export function SiteFooter({ routes, categories }: SiteFooterProps) {
         <div className="footer-col">
           <h2>{t('foot.colContact')}</h2>
           <Link href="/contact"><MessageCircle size={15} />{t('foot.contactForm')}</Link>
-          <Link href="/order-tracking"><PackageSearch size={15} />{t('foot.trackStatus')}</Link>
+          {!content.tenantKey && <Link href="/order-tracking"><PackageSearch size={15} />{t('foot.trackStatus')}</Link>}
         </div>
         <div className="footer-col">
           <h2>{t('foot.colServiceArea')}</h2>
