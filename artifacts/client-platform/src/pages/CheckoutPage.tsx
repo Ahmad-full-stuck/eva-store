@@ -218,7 +218,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
           <div className="empty-icon"><Check size={25} /></div>
           <h1>{t('co.emptyTitle')}</h1>
           <p>{t('co.emptyText')}</p>
-          <Link href="/catalog" className="button button-primary">{t('co.backToFabrics')} <ArrowLeft size={16} /></Link>
+          <Link href="/catalog" className="button button-primary">{siteContent.tenantKey ? 'العودة إلى المنتجات' : t('co.backToFabrics')} <ArrowLeft size={16} /></Link>
         </div>
       </main>
     )
