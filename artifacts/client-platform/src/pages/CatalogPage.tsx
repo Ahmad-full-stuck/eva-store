@@ -405,15 +405,15 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       <div className="breadcrumbs">
         <Link href="/">{t('cat.breadcrumbHome')}</Link>
         <span>›</span>
-        <span>{t('cat.breadcrumbFabrics')}</span>
+        <span>{content.tenantKey ? 'المنتجات' : t('cat.breadcrumbFabrics')}</span>
         {activeCategory && <><span>›</span><span>{activeCategory.name}</span></>}
       </div>
 
       <div className="catalog-heading">
         <div>
           <span className="eyebrow">{t('cat.eyebrow')}</span>
-          <h1>{activeCategory ? activeCategory.name : t('cat.allFabricsTitle')}</h1>
-          <p>{t('cat.countFabrics').replace('{n}', String(products.length))} · {statusLabel}</p>
+          <h1>{activeCategory ? activeCategory.name : content.tenantKey ? (content.catalogLabel || 'كل المنتجات') : t('cat.allFabricsTitle')}</h1>
+          <p>{content.tenantKey ? `${products.length.toLocaleString('ar-IQ')} منتجات في المتجر` : t('cat.countFabrics').replace('{n}', String(products.length))} · {statusLabel}</p>
         </div>
         <div className="catalog-sort">
           <label htmlFor="catalog-sort">{t('cat.sortBy')}</label>
@@ -422,7 +422,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
             value={sort}
             onChange={(event) => updateParams({ sort: event.target.value === 'featured' ? null : event.target.value })}
           >
-            {SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}
+            {SORT_OPTIONS.filter((option) => !content.tenantKey || option.value === 'featured').map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}
           </select>
         </div>
       </div>
@@ -464,7 +464,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
       </div>
 
       <div className="catalog-layout">
-        <aside className="filter-sidebar" aria-label={t('cat.filterFabrics')}>{sidePanel}</aside>
+        <aside className="filter-sidebar" aria-label={content.tenantKey ? 'تصفية المنتجات' : t('cat.filterFabrics')}>{sidePanel}</aside>
         <section ref={resultsRef} className="catalog-results" aria-label={t('cat.resultsAria')}>
           <form className="catalog-search" onSubmit={submitSearch} role="search">
             <Search size={18} aria-hidden="true" />
@@ -616,6 +616,8 @@ function FilterPanel({
   onClear,
 }: FilterPanelProps) {
   const { t } = useT()
+  const content = useSiteContent()
+  const isTenantStore = Boolean(content.tenantKey)
   return (
     <div className="filter-panel">
       <div className="filter-panel-title">
@@ -624,7 +626,7 @@ function FilterPanel({
       </div>
 
       <fieldset>
-        <legend>{t('cat.fabricType')}</legend>
+        <legend>{isTenantStore ? 'فئات المنتجات' : t('cat.fabricType')}</legend>
         <label className="filter-option">
           <input type="radio" name={`category-${scope}`} checked={!categoryId} onChange={() => onChange({ category: null })} />
           <span>{t('cat.allCategories')}</span>
@@ -642,57 +644,63 @@ function FilterPanel({
         ))}
       </fieldset>
 
-      <fieldset>
-        <legend>{t('cat.stretchLegend')}</legend>
-        {STRETCH_OPTIONS.map((option) => (
-          <label className="filter-option" key={`${scope}-${option.value}`}>
-            <input
-              type="radio"
-              name={`stretch-${scope}`}
-              checked={stretch === option.value}
-              onChange={() => onChange({ stretch: option.value === 'all' ? null : option.value === 'stretch' ? '1' : '0' })}
-            />
-            <span>{t(option.labelKey)}</span>
-          </label>
-        ))}
-      </fieldset>
+      {STRETCH_OPTIONS.length > 0 && (
+        <fieldset>
+          <legend>{t('cat.stretchLegend')}</legend>
+          {STRETCH_OPTIONS.map((option) => (
+            <label className="filter-option" key={`${scope}-${option.value}`}>
+              <input
+                type="radio"
+                name={`stretch-${scope}`}
+                checked={stretch === option.value}
+                onChange={() => onChange({ stretch: option.value === 'all' ? null : option.value === 'stretch' ? '1' : '0' })}
+              />
+              <span>{t(option.labelKey)}</span>
+            </label>
+          ))}
+        </fieldset>
+      )}
 
-      <fieldset>
-        <legend>{t('cat.priceRange')}</legend>
-        <div className="price-fields">
-          <label>
-            <span>{t('cat.priceFrom')}</span>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={minInput}
-              onChange={(event) => onMin(event.target.value)}
-              placeholder={t('cat.minPricePlaceholder')}
-              aria-label={t('cat.minPriceAria')}
-            />
-          </label>
-          <span aria-hidden="true">—</span>
-          <label>
-            <span>{t('cat.priceTo')}</span>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={maxInput}
-              onChange={(event) => onMax(event.target.value)}
-              placeholder={t('cat.maxPricePlaceholder')}
-              aria-label={t('cat.maxPriceAria')}
-            />
-          </label>
-        </div>
-      </fieldset>
+      {!isTenantStore && (
+        <fieldset>
+          <legend>{t('cat.priceRange')}</legend>
+          <div className="price-fields">
+            <label>
+              <span>{t('cat.priceFrom')}</span>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={minInput}
+                onChange={(event) => onMin(event.target.value)}
+                placeholder={t('cat.minPricePlaceholder')}
+                aria-label={t('cat.minPriceAria')}
+              />
+            </label>
+            <span aria-hidden="true">—</span>
+            <label>
+              <span>{t('cat.priceTo')}</span>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={maxInput}
+                onChange={(event) => onMax(event.target.value)}
+                placeholder={t('cat.maxPricePlaceholder')}
+                aria-label={t('cat.maxPriceAria')}
+              />
+            </label>
+          </div>
+        </fieldset>
+      )}
 
-      <label className="filter-option filter-check">
-        <input type="checkbox" checked={inStock} onChange={(event) => onChange({ stock: event.target.checked ? '1' : null })} />
-        <span>{t('cat.stockOnly')}</span>
-      </label>
+      {!isTenantStore && (
+        <label className="filter-option filter-check">
+          <input type="checkbox" checked={inStock} onChange={(event) => onChange({ stock: event.target.checked ? '1' : null })} />
+          <span>{t('cat.stockOnly')}</span>
+        </label>
+      )}
 
       <button type="button" className="filter-browse" onClick={onClear} disabled={!hasFilters}>
-        {t('cat.showAllFabrics')} <ArrowLeft size={14} aria-hidden="true" />
+        {isTenantStore ? 'عرض كل المنتجات' : t('cat.showAllFabrics')} <ArrowLeft size={14} aria-hidden="true" />
       </button>
     </div>
   )
