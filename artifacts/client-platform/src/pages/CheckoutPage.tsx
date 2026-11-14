@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'rea
 import { ArrowLeft, ArrowRight, Check, CircleAlert, LoaderCircle, MapPin, Navigation, Phone, RefreshCw, ShieldCheck, UserRound } from 'lucide-react'
 import { Link, useLocation } from 'wouter'
 import type { CartItem, CheckoutForm, CustomerProfile, OrderPayload } from '@/types'
-import { formatMeters, formatPrice, getCartTotals, getOrderNumber } from '@/lib/catalog'
+import { formatPrice, getCartTotals, getOrderNumber, isPieceBasedStore, formatStoreQuantity } from '@/lib/catalog'
 import { useT } from '@/lib/i18n'
 import { apiUrl } from '@/lib/site'
 import { governorates } from '@/lib/fallback-data'
@@ -184,8 +184,8 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
   const [liveMessage, setLiveMessage] = useState('')
   const totals = getCartTotals(cart)
   const siteContent = useSiteContent()
-  const isPieceStore = siteContent.tenantKey === 'mustafa-store' || siteContent.tenantKey === 'aalam-alqalaa'
-  const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : formatMeters(value)
+  const isPieceStore = isPieceBasedStore(siteContent.tenantKey)
+  const formatQuantity = (value: number) => formatStoreQuantity(value, siteContent.tenantKey)
   const boxRef = useRef<HTMLDivElement>(null)
   const restored = useRef(false)
 
@@ -236,7 +236,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
             {cart.map((item) => (
               <div className="tenant-demo-checkout__item" key={item.product.id + ':' + item.color.id}>
                 <SmartImage src={item.product.image} alt={item.product.name} sizes="64px" />
-                <span><strong>{item.product.name}</strong><small>{item.color.name} · {formatQuantity(item.length)}</small></span>
+                <span><strong>{item.product.name}</strong><small>{item.product.colorsEnabled === false ? formatQuantity(item.length) : `${item.color.name} · ${formatQuantity(item.length)}`}</small></span>
                 <b>{formatPrice(item.product.price * item.length)}</b>
               </div>
             ))}
@@ -618,7 +618,7 @@ export function CheckoutPage({ cart, onComplete }: CheckoutPageProps) {
                 <SmartImage src={item.product.image} alt="" sizes="64px" />
                 <div>
                   <strong>{item.product.name}</strong>
-                  <span>{item.color.name} · {formatQuantity(item.length)}</span>
+                  <span>{item.product.colorsEnabled === false ? formatQuantity(item.length) : `${item.color.name} · ${formatQuantity(item.length)}`}</span>
                 </div>
                 <b>{formatPrice(item.product.price * item.length)}</b>
               </div>
