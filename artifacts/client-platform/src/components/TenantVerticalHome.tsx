@@ -99,12 +99,14 @@ function ProductTile({
   products,
   wished,
   onWish,
+  onAdd,
   unit,
 }: {
   product: Product
   products: Product[]
   wished: boolean
   onWish: (slug: string) => void
+  onAdd: TenantVerticalHomeProps['onAdd']
   unit: string
 }) {
   const category = product.categoryId
@@ -132,9 +134,23 @@ function ProductTile({
         <Link href={'/product/' + product.slug} className="vhome-product__name">{product.name}</Link>
         <div className="vhome-product__bottom">
           <strong>{formatPrice(product.price)} <small>/ {unit}</small></strong>
-          <Link href={'/product/' + product.slug} className="vhome-product__open" aria-label={'عرض ' + product.name}>
-            <ArrowLeft size={16} />
-          </Link>
+          <div className="vhome-product__actions">
+            <button
+              type="button"
+              className="vhome-product__add"
+              disabled={!product.colors.some((color) => color.available)}
+              onClick={() => {
+                const color = product.colors.find((item) => item.available) || product.colors[0]
+                if (color) onAdd(product, color, 1)
+              }}
+              aria-label={'إضافة ' + product.name + ' إلى السلة'}
+            >
+              أضف للسلة
+            </button>
+            <Link href={'/product/' + product.slug} className="vhome-product__open" aria-label={'تفاصيل ' + product.name}>
+              <ArrowLeft size={16} />
+            </Link>
+          </div>
         </div>
       </div>
     </article>
@@ -145,11 +161,13 @@ function ProductGrid({
   products,
   wishlist,
   onWish,
+  onAdd,
   unit,
 }: {
   products: Product[]
   wishlist: string[]
   onWish: (slug: string) => void
+  onAdd: TenantVerticalHomeProps['onAdd']
   unit: string
 }) {
   const featured = products.filter((product) => product.isFeatured)
@@ -164,6 +182,7 @@ function ProductGrid({
           products={products}
           wished={wishlist.includes(product.slug)}
           onWish={onWish}
+          onAdd={onAdd}
           unit={unit}
         />
       ))}
@@ -198,16 +217,17 @@ function MustafaCategoryCard({category,product,index}:{category:ReturnType<typeo
   </span><span className="ms-category-card__body"><strong>{category.label}</strong><small>{category.description}</small></span>
  </Link>
 }
-function MustafaProductCard({product,wished,onWish}:{product:Product;wished:boolean;onWish:(slug:string)=>void}){
+function MustafaProductCard({product,wished,onWish,onAdd}:{product:Product;wished:boolean;onWish:(slug:string)=>void;onAdd:TenantVerticalHomeProps['onAdd']}){
  return <article className="ms-product-card"><div className="ms-product-card__media">
   <Link href={'/product/'+product.slug} aria-label={'تفاصيل '+product.name}>{product.image?<img src={product.image} alt={product.name} loading="lazy" decoding="async"/>:<span className="ms-product-card__fallback"><Smartphone size={34}/></span>}</Link>
   <span className="ms-product-card__category">{product.categoryId||product.type}</span>
   <button type="button" className={'ms-product-card__wish'+(wished?' is-active':'')} onClick={()=>onWish(product.slug)} aria-label={wished?'إزالة من المفضلة':'إضافة إلى المفضلة'} aria-pressed={wished}><Heart size={17} fill={wished?'currentColor':'none'}/></button>
  </div><div className="ms-product-card__body"><Link href={'/product/'+product.slug} className="ms-product-card__name">{product.name}</Link>
-  <div className="ms-product-card__footer"><span>السعر عند الاستفسار</span><Link href={'/product/'+product.slug} className="ms-product-card__open" aria-label={'عرض '+product.name}><ArrowLeft size={16}/></Link></div>
+  <div className="ms-product-card__footer"><span>السعر عند الاستفسار</span><Link href={'/product/'+product.slug} className="ms-product-card__open" aria-label={'تفاصيل '+product.name}><ArrowLeft size={16}/></Link></div>
+  <button type="button" className="ms-product-card__add" disabled={!product.colors.some(color=>color.available)} onClick={()=>{const color=product.colors.find(item=>item.available)||product.colors[0];if(color)onAdd(product,color,1)}}>أضف للسلة</button>
  </div></article>
 }
-function MustafaStoreHome({products,wishlist,onWish}:{products:Product[];wishlist:string[];onWish:(slug:string)=>void}){
+function MustafaStoreHome({products,wishlist,onWish,onAdd}:{products:Product[];wishlist:string[];onWish:(slug:string)=>void;onAdd:TenantVerticalHomeProps['onAdd']}){
  const content=useSiteContent();const brand=getStoreBrand('mustafa-store');
  const heroImage=content.storyImage||content.heroSlides?.[0]||products[0]?.image||'';
  const featured=products.filter(p=>p.isFeatured).slice(0,4);
@@ -229,7 +249,7 @@ function MustafaStoreHome({products,wishlist,onWish}:{products:Product[];wishlis
    <div className="ms-category-grid">{brand.categories.map((category,index)=><MustafaCategoryCard key={category.id} category={category} index={index} product={products.find((p) => p.categoryId === category.id)} />)}</div>
   </section>
   <section className="ms-section ms-featured"><div className="ms-section-heading"><div><span className="ms-section-kicker">SELECTED DEVICES</span><h2>مختارات من التشكيلة</h2><p>نماذج توضيحية لطريقة عرض الأجهزة وتفاصيل كل منتج.</p></div><Link href="/catalog" className="ms-text-link">استكشف المتجر <ArrowLeft size={16}/></Link></div>
-   <div className="ms-product-grid">{featured.map(product=><MustafaProductCard key={product.id} product={product} wished={wishlist.includes(product.slug)} onWish={onWish}/>)}</div>
+   <div className="ms-product-grid">{featured.map(product=><MustafaProductCard key={product.id} product={product} wished={wishlist.includes(product.slug)} onWish={onWish} onAdd={onAdd}/>)}</div>
   </section>
   <section className="ms-service-section"><div className="ms-service-section__intro"><span className="ms-section-kicker">MORE THAN DEVICES</span><h2>خدمات المركز، قريبة منك.</h2><p>لا تتوقف التجربة عند اختيار الهاتف؛ تواصل مع المركز للاستفسار عن البيع والشراء والصيانة وخيارات الأقساط.</p></div>
    <div className="ms-feature-list">{features.map(({title,description,Icon},index)=><div className="ms-feature" key={title}><span className="ms-feature__icon"><Icon size={20} strokeWidth={1.8}/></span><span className="ms-feature__copy"><strong>{title}</strong><small>{description}</small></span><b>0{index+1}</b></div>)}</div>
@@ -243,7 +263,7 @@ function MustafaStoreHome({products,wishlist,onWish}:{products:Product[];wishlis
 export function TenantVerticalHome({ products, wishlist, onWish, onAdd }: TenantVerticalHomeProps) {
   const content = useSiteContent()
   if (content.tenantKey === 'aalam-alqalaa') return <AalamAlqalaaHome products={products} wishlist={wishlist} onWish={onWish} onAdd={onAdd} />
-  if (content.tenantKey === 'mustafa-store') return <MustafaStoreHome products={products} wishlist={wishlist} onWish={onWish} />
+  if (content.tenantKey === 'mustafa-store') return <MustafaStoreHome products={products} wishlist={wishlist} onWish={onWish} onAdd={onAdd} />
   const key = content.tenantKey || ''
   const brand = getStoreBrand(key)
   const shopName = content.shortName || content.shopName || brand.title
@@ -320,7 +340,7 @@ export function TenantVerticalHome({ products, wishlist, onWish, onAdd }: Tenant
             title={variant === 'mustafa' ? 'هواتف وإكسسوارات مختارة' : variant === 'restaurant' ? 'مختارات من المنيو' : variant === 'fabric' ? 'خامات مختارة' : 'مختارات من التشكيلة'}
             description={variant === 'mustafa' ? 'نماذج لتجربة عرض الهواتف والملحقات. يُؤكد الموديل والسعر والتوفر مباشرة مع المركز.' : 'نماذج توضيحية لطريقة عرض المنتجات والصور والأسعار والتفاصيل ضمن متجر مستقل.'}
           />
-          <ProductGrid products={products} wishlist={wishlist} onWish={onWish} unit={unit} />
+          <ProductGrid products={products} wishlist={wishlist} onWish={onWish} onAdd={onAdd} unit={unit} />
         </section>
 
         {(content.heroSlides?.[1] || content.heroSlides?.[2]) && (
