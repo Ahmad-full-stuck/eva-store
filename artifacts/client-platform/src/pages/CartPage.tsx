@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Minus, Pencil, Plus, ShieldCheck, ShoppingBag, Trash2, Truck } from 'lucide-react'
 import { Link } from 'wouter'
 import type { CartItem } from '@/types'
-import { availableMeters, formatDinar, formatMeters, formatPrice, getCartTotals, orderKey } from '@/lib/catalog'
+import { availableMeters, formatDinar, formatPrice, getCartTotals, orderKey, isPieceBasedStore, formatStoreQuantity } from '@/lib/catalog'
 import { useT } from '@/lib/i18n'
 import { typeLabelsEn } from '@/lib/strings/product'
 import { useSiteContent, useStoreSettings } from '@/lib/site-content'
@@ -83,8 +83,8 @@ const glassStyles = `
 export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
   const { t, lang } = useT()
   const content = useSiteContent()
-  const isPieceStore = content.tenantKey === 'mustafa-store' || content.tenantKey === 'aalam-alqalaa'
-  const formatQuantity = (value: number) => isPieceStore ? `${Math.max(1, Math.round(value))} ${Math.round(value) === 1 ? 'قطعة' : 'قطع'}` : formatMeters(value)
+  const isPieceStore = isPieceBasedStore(content.tenantKey)
+  const formatQuantity = (value: number) => formatStoreQuantity(value, content.tenantKey)
   const settings = useStoreSettings()
   const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
   const totals = getCartTotals(cart)
@@ -192,8 +192,8 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
         </section>
         <aside className="order-summary glass glass-strong" aria-label={t('cart.summary')}>
           <h2>{t('cart.summary')}</h2>
-          {content.tenantKey === 'aalam-alqalaa' ? (
-            <div className="delivery-progress"><b>رسوم التوصيل تُحدد عند تأكيد الطلب</b></div>
+          {isPieceStore ? (
+            <div className="delivery-progress"><b>{content.tenantKey === 'aalam-alqalaa' ? 'رسوم التوصيل تُحدد عند تأكيد الطلب' : 'يؤكد المتجر رسوم التوصيل قبل اعتماد الطلب'}</b></div>
           ) : remaining > 0 ? (
             <div className="delivery-progress">
               <div className="delivery-progress-head">
@@ -214,14 +214,14 @@ export function CartPage({ cart, onUpdate, onRemove }: CartPageProps) {
           </div>
           <div className="summary-line">
             <span>{t('cart.delivery')} <small>{t('cart.estimated')}</small></span>
-            <strong>{content.tenantKey === 'aalam-alqalaa' ? 'عند التأكيد' : totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('cart.free')}</strong>
+            <strong>{isPieceStore ? 'عند التأكيد' : totals.deliveryFee ? formatPrice(totals.deliveryFee) : t('cart.free')}</strong>
           </div>
           <div className="summary-total">
             <span>{t('cart.total')}</span>
             <strong>{formatPrice(totals.total)}</strong>
           </div>
           <Link href="/checkout" className="button button-primary summary-button">{t('cart.checkout')} <ArrowLeft size={16} /></Link>
-          <p className="summary-note">{content.tenantKey === 'aalam-alqalaa' ? 'هذا طلب مبدئي؛ يؤكد الفريق السعر والتوفر ورسوم التوصيل معك قبل اعتماد الشراء.' : t('cart.summaryNote')}</p>
+          <p className="summary-note">{isPieceStore ? 'هذه معاينة للمتجر؛ يؤكد الفريق السعر والتوفر ورسوم التوصيل قبل اعتماد الطلب.' : t('cart.summaryNote')}</p>
           <div className="summary-trust"><ShieldCheck size={16} /><span>{t('cart.savedNote')}</span></div>
         </aside>
       </div>
