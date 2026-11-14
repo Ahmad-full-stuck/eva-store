@@ -429,7 +429,7 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
         )}
       </div>
 
-      <div className="chip-row" role="group" aria-label={t('cat.chipsAria')}>
+      <div className="chip-row" role="group" aria-label={content.tenantKey ? 'فئات المنتجات' : t('cat.chipsAria')}>
         {chips.map((chip) => {
           const active = chip.id ? chip.id === activeCategoryId : !categoryId
           const warm = () => prefetchImages(chipThumbs.get(chip.id) || [])
@@ -456,11 +456,11 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
           type="button"
           className="filter-trigger"
           aria-haspopup="dialog"
-          aria-label={activeCount > 0 ? t('cat.filterOpenActive').replace('{n}', String(activeCount)) : t('cat.filterOpen')}
+          aria-label={content.tenantKey ? 'فتح تصفية المنتجات' : activeCount > 0 ? t('cat.filterOpenActive').replace('{n}', String(activeCount)) : t('cat.filterOpen')}
           onClick={() => setFilterOpen(true)}
         >
           <SlidersHorizontal size={16} aria-hidden="true" />
-          {t('cat.filterBtn')}
+          {content.tenantKey ? 'تصفية المنتجات' : t('cat.filterBtn')}
           {activeCount > 0 && <b>{activeCount}</b>}
         </button>
       </div>
@@ -470,13 +470,13 @@ export function CatalogPage({ products, categories, status, wishlist, onWish, on
         <section ref={resultsRef} className="catalog-results" aria-label={t('cat.resultsAria')}>
           <form className="catalog-search" onSubmit={submitSearch} role="search">
             <Search size={18} aria-hidden="true" />
-            <label className="sr-only" htmlFor="catalog-search">{t('cat.searchLabel')}</label>
+            <label className="sr-only" htmlFor="catalog-search">{content.tenantKey ? 'ابحث في المنتجات' : t('cat.searchLabel')}</label>
             <input
               id="catalog-search"
               type="search"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              placeholder={t('cat.searchPlaceholder')}
+              placeholder={content.tenantKey ? 'ابحث عن اسم المنتج أو الفئة...' : t('cat.searchPlaceholder')}
               autoComplete="off"
             />
             {searchInput && (
