@@ -204,7 +204,7 @@ export function ProductPage({ slug, products, wishlist, onWish, onAdd }: Product
         })}</div>
       </section>
       <section className="product-purchase">
-        {content.tenantKey && !isAalamStore && <div className="tenant-demo-note tenant-demo-note--inline" role="note"><span className="tenant-demo-note__mark">i</span><div><strong>منتج تجريبي</strong><p>{content.announcementLeft || "الصورة والسعر والمواصفات للتوضيح فقط، وليست بيانات بيع معتمدة."}</p></div></div>}
+        {content.tenantKey && !isAalamStore && <div className="tenant-demo-note tenant-demo-note--inline" role="note"><span className="tenant-demo-note__mark">i</span><div><strong>معاينة تصميمية</strong><p>{content.announcementLeft || "الصورة والسعر والمواصفات للتوضيح فقط، وليست بيانات بيع معتمدة."}</p></div></div>}
         <div className="product-purchase-top"><div><span className="eyebrow">{lang === 'en' ? typeLabelsEn[product.type] || product.type : product.type}</span><h1>{product.name}</h1><p className="product-description">{product.description}</p></div><button type="button" className={`detail-wish ${wishlist.includes(product.slug) ? 'is-active' : ''}`} onClick={() => onWish(product.slug)} aria-label={wishlist.includes(product.slug) ? t('pd.wishRemove') : t('pd.wishAdd')} aria-pressed={wishlist.includes(product.slug)}><Heart size={20} fill={wishlist.includes(product.slug) ? 'currentColor' : 'none'} /></button></div>
         <div className="price-block"><span>{isPieceStore ? 'السعر للقطعة' : t('pd.pricePerMeter')}</span><strong>{formatPrice(product.price)}</strong>{product.compareAtPrice && <del>{formatPrice(product.compareAtPrice)}</del>}</div>
         <div className="detail-divider" />
