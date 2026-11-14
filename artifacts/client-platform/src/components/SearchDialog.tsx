@@ -72,8 +72,8 @@ export function SearchDialog({ open, onClose, products }: SearchDialogProps) {
         </div>
         <form className="search-form" onSubmit={submit} role="search">
           <Search size={20} aria-hidden="true" />
-          <label className="sr-only" htmlFor="global-search">{t('search.label')}</label>
-          <input id="global-search" autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('search.placeholder')} autoComplete="off" />
+          <label className="sr-only" htmlFor="global-search">{content.tenantKey ? 'ابحث في منتجات المتجر' : t('search.label')}</label>
+          <input id="global-search" autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder={content.tenantKey ? 'ابحث عن منتج أو فئة...' : t('search.placeholder')} autoComplete="off" />
           {query && <button type="button" className="clear-search" onClick={() => setQuery('')} aria-label={t('search.clear')}><X size={16} /></button>}
           <button type="submit" className="button button-primary button-small">{t('search.submit')}</button>
         </form>
