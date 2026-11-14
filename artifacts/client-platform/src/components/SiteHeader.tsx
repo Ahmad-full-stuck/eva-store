@@ -3,7 +3,7 @@ import { BookOpen, ChevronLeft, Heart, Home, Info, Languages, Menu, MessageCircl
 import { Link, useLocation } from 'wouter'
 import type { Product, SiteRoute } from '@/types'
 import { formatMeters } from '@/lib/catalog'
-import { useSiteContent, sectionVisible } from '@/lib/site-content'
+import { useSiteContent, sectionVisible, isDiscreteQuantityStore, formatDiscreteQuantity } from '@/lib/site-content'
 import { useT } from '@/lib/i18n'
 import { routeLabelsEn } from '@/lib/strings/header'
 import { Logo } from './Logo'
@@ -74,13 +74,13 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
   const [searchOpen, setSearchOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const content = useSiteContent()
-  const isPieceStore = content.tenantKey === 'mustafa-store' || content.tenantKey === 'aalam-alqalaa'
+  const isPieceStore = isDiscreteQuantityStore(content)
   const [aalamTheme, setAalamTheme] = useState<'light' | 'dark'>(() => {
     try { return window.localStorage.getItem('aalam-alqalaa-theme') === 'dark' ? 'dark' : 'light' } catch { return 'light' }
   })
   const { lang, setLang, t } = useT()
   const cartQuantityLabel = isPieceStore
-    ? (lang === 'en' ? `${cartMeters} ${cartMeters === 1 ? 'item' : 'items'}` : `${cartMeters} ${cartMeters === 1 ? 'قطعة' : 'قطع'}`)
+    ? formatDiscreteQuantity(cartMeters, content, lang)
     : formatMeters(cartMeters)
   const pathname = location.split('?')[0]
 
