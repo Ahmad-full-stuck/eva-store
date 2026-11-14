@@ -91,7 +91,12 @@ export function SiteHeader({ routes, products, cartMeters, wishlistCount }: Site
       const label = item.id === 'catalog' && content.tenantKey
         ? (lang === 'en' ? 'Products' : content.catalogLabel || 'المنتجات')
         : matched ? matched.label : t(item.label)
-      return { ...item, path, label: item.id === 'catalog' && content.tenantKey ? label : lang === 'en' ? routeLabelsEn[item.id] ?? label : label }
+      return {
+        ...item,
+        path,
+        label: item.id === 'catalog' && content.tenantKey ? label : lang === 'en' ? routeLabelsEn[item.id] ?? label : label,
+        ...('Icon' in item && isPieceStore ? { Icon: ShoppingBag } : {}),
+      }
     })
 
   const navItems = withRoutes(primaryNav)
