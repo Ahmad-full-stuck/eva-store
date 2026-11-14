@@ -46,14 +46,14 @@ export function FavoritesPage({ products, categories, wishlist, onWish, onAdd }:
           <div className="breadcrumbs"><Link href="/">{t('fav.breadcrumbHome')}</Link><span>›</span><span>{t('fav.title')}</span></div>
           <section className="glass empty-glass" role="status">
             <div className="empty-icon"><Heart size={25} /></div>
-            <h1>{t('fav.emptyTitle')}</h1>
-            <p>{t('fav.emptyHint')}</p>
+            <h1>{content.tenantKey ? 'لم تحفظ أي منتج بعد' : t('fav.emptyTitle')}</h1>
+            <p>{content.tenantKey ? 'اضغط علامة القلب على أي منتج لحفظه هنا والعودة إليه لاحقاً.' : t('fav.emptyHint')}</p>
             <div className="empty-actions">
               <Link href="/catalog" className="button button-primary">{content.tenantKey ? 'تصفح المنتجات' : t('fav.browse')} <ArrowLeft size={16} /></Link>
               {!content.tenantKey && <Link href="/fabric-guide" className="button button-outline">{t('fav.guide')} <ArrowLeft size={16} /></Link>}
             </div>
             <div className="local-orders">
-              <span>{t('fav.suggested')}</span>
+              <span>{content.tenantKey ? 'تصفح الفئات' : t('fav.suggested')}</span>
               {suggestedCategories.map((category) => (
                 <Link key={category.id} href={`/catalog?category=${encodeURIComponent(category.id)}`} className="chip">{category.label}</Link>
               ))}
@@ -73,7 +73,7 @@ export function FavoritesPage({ products, categories, wishlist, onWish, onAdd }:
           <div>
             <span className="eyebrow">{t('fav.eyebrow')}</span>
             <h1>{t('fav.title')}</h1>
-            <p>{favoriteCountLabel(favoriteProducts.length, t)}</p>
+            <p>{content.tenantKey ? `${favoriteProducts.length.toLocaleString('ar-IQ')} منتجات محفوظة` : favoriteCountLabel(favoriteProducts.length, t)}</p>
           </div>
           <Link href="/catalog" className="underlined-link">{t('fav.continue')} <ArrowLeft size={15} /></Link>
         </div>
@@ -92,7 +92,7 @@ export function FavoritesPage({ products, categories, wishlist, onWish, onAdd }:
           ))}
         </div>
 
-        <div className="favorites-note"><ShoppingBag size={18} /><span>{t('fav.note')}</span></div>
+        <div className="favorites-note"><ShoppingBag size={18} /><span>{content.tenantKey ? 'هذه قائمة خاصة بالمنتجات التي تحفظها للرجوع إليها.' : t('fav.note')}</span></div>
       </main>
     </>
   )
