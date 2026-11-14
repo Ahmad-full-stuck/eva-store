@@ -20,9 +20,18 @@ export const VERTICAL_TENANT_KEYS = new Set([
   'center-alsaa',
   'morvo-handmade',
   'mustafa-store',
-  'rg-team-iq3','rg-team-iq','ironman-babel','az-supps',
-  'almass-mobile','mobaelk','apple-center-amiriya','a-center-kirkuk',
-  'accessories-iq','shams-golden1','kn-fashion-woman','razan-accessories2'
+  'rg-team-iq3',
+  'rg-team-iq',
+  'ironman-babel',
+  'az-supps',
+  'almass-mobile',
+  'mobaelk',
+  'apple-center-amiriya',
+  'a-center-kirkuk',
+  'accessories-iq',
+  'shams-golden1',
+  'kn-fashion-woman',
+  'razan-accessories2'
 ])
 
 export const STORE_BRANDS: Record<string, StoreBrand> = {
