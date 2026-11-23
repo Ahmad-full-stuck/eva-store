@@ -1,0 +1,541 @@
+[
+  {
+    "id": "velvet-lipstick",
+    "slug": "velvet-lipstick",
+    "name": "أحمر شفاه مخملي",
+    "type": "مكياج",
+    "categoryId": "makeup",
+    "description": "نموذج عرض أولي من Golden Cosmetics. يضيف المتجر تفاصيل المنتج والسعر والتوفر والخيارات الفعلية قبل اعتماد الطلب.",
+    "price": 0,
+    "compareAtPrice": null,
+    "image": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85",
+    "images": [],
+    "colors": [
+      {
+        "id": "color-1",
+        "name": "وردي",
+        "hex": "#b96f7e",
+        "available": true,
+        "stockMeters": 100
+      },
+      {
+        "id": "color-2",
+        "name": "موف",
+        "hex": "#9a718b",
+        "available": true,
+        "stockMeters": 100
+      },
+      {
+        "id": "color-3",
+        "name": "نود",
+        "hex": "#b78e77",
+        "available": true,
+        "stockMeters": 100
+      }
+    ],
+    "colorsEnabled": true,
+    "specs": {
+      "composition": "تُضاف تفاصيل المكونات من المتجر",
+      "width": "يُحدد حسب العبوة",
+      "weight": "مكياج",
+      "stretch": "المكياج",
+      "isStretch": true,
+      "opacity": "حسب طبيعة المنتج",
+      "finish": "تُضاف التفاصيل من المتجر",
+      "care": "اتبعي تعليمات العبوة",
+      "use": "حسب الإرشادات المرفقة"
+    },
+    "faqs": [
+      {
+        "question": "ما تفاصيل هذا المنتج؟",
+        "answer": "تُراجع المكونات والحجم والخيارات الفعلية مع المتجر قبل تأكيد الطلب."
+      },
+      {
+        "question": "هل المنتج متوفر؟",
+        "answer": "يؤكد المتجر التوفر والدرجة أو الخيار المطلوب عند مراجعة الطلب."
+      }
+    ],
+    "isNew": true,
+    "isFeatured": true,
+    "hidden": false,
+    "stockMeters": 100,
+    "createdAt": "2026-11-24",
+    "sort_order": 1
+  },
+  {
+    "id": "lash-mascara",
+    "slug": "lash-mascara",
+    "name": "ماسكارا للرموش",
+    "type": "مكياج",
+    "categoryId": "makeup",
+    "description": "نموذج عرض أولي من Golden Cosmetics. يضيف المتجر تفاصيل المنتج والسعر والتوفر والخيارات الفعلية قبل اعتماد الطلب.",
+    "price": 0,
+    "compareAtPrice": null,
+    "image": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1000&q=85",
+    "images": [],
+    "colors": [
+      {
+        "id": "color-1",
+        "name": "أسود",
+        "hex": "#25211f",
+        "available": true,
+        "stockMeters": 100
+      }
+    ],
+    "colorsEnabled": true,
+    "specs": {
+      "composition": "تُضاف تفاصيل المكونات من المتجر",
+      "width": "يُحدد حسب العبوة",
+      "weight": "مكياج",
+      "stretch": "المكياج",
+      "isStretch": true,
+      "opacity": "حسب طبيعة المنتج",
+      "finish": "تُضاف التفاصيل من المتجر",
+      "care": "اتبعي تعليمات العبوة",
+      "use": "حسب الإرشادات المرفقة"
+    },
+    "faqs": [
+      {
+        "question": "ما تفاصيل هذا المنتج؟",
+        "answer": "تُراجع المكونات والحجم والخيارات الفعلية مع المتجر قبل تأكيد الطلب."
+      },
+      {
+        "question": "هل المنتج متوفر؟",
+        "answer": "يؤكد المتجر التوفر والدرجة أو الخيار المطلوب عند مراجعة الطلب."
+      }
+    ],
+    "isNew": true,
+    "isFeatured": true,
+    "hidden": false,
+    "stockMeters": 100,
+    "createdAt": "2026-11-24",
+    "sort_order": 2
+  },
+  {
+    "id": "foundation",
+    "slug": "foundation",
+    "name": "كريم أساس",
+    "type": "مكياج",
+    "categoryId": "makeup",
+    "description": "نموذج عرض أولي من Golden Cosmetics. يضيف المتجر تفاصيل المنتج والسعر والتوفر والخيارات الفعلية قبل اعتماد الطلب.",
+    "price": 0,
+    "compareAtPrice": null,
+    "image": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85",
+    "images": [],
+    "colors": [
+      {
+        "id": "color-1",
+        "name": "فاتح",
+        "hex": "#d9b79d",
+        "available": true,
+        "stockMeters": 100
+      },
+      {
+        "id": "color-2",
+        "name": "متوسط",
+        "hex": "#bd9275",
+        "available": true,
+        "stockMeters": 100
+      },
+      {
+        "id": "color-3",
+        "name": "داكن",
+        "hex": "#895f4e",
+        "available": true,
+        "stockMeters": 100
+      }
+    ],
+    "colorsEnabled": true,
+    "specs": {
+      "composition": "تُضاف تفاصيل المكونات من المتجر",
+      "width": "يُحدد حسب العبوة",
+      "weight": "مكياج",
+      "stretch": "المكياج",
+      "isStretch": true,
+      "opacity": "حسب طبيعة المنتج",
+      "finish": "تُضاف التفاصيل من المتجر",
+      "care": "اتبعي تعليمات العبوة",
+      "use": "حسب الإرشادات المرفقة"
+    },
+    "faqs": [
+      {
+        "question": "ما تفاصيل هذا المنتج؟",
+        "answer": "تُراجع المكونات والحجم والخيارات الفعلية مع المتجر قبل تأكيد الطلب."
+      },
+      {
+        "question": "هل المنتج متوفر؟",
+        "answer": "يؤكد المتجر التوفر والدرجة أو الخيار المطلوب عند مراجعة الطلب."
+      }
+    ],
+    "isNew": true,
+    "isFeatured": true,
+    "hidden": false,
+    "stockMeters": 100,
+    "createdAt": "2026-11-24",
+    "sort_order": 3
+  },
+  {
+    "id": "concealer",
+    "slug": "concealer",
+    "name": "كونسيلر",
+    "type": "مكياج",
+    "categoryId": "makeup",
+    "description": "نموذج عرض أولي من Golden Cosmetics. يضيف المتجر تفاصيل المنتج والسعر والتوفر والخيارات الفعلية قبل اعتماد الطلب.",
+    "price": 0,
+    "compareAtPrice": null,
+    "image": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1000&q=85",
+    "images": [],
+    "colors": [
+      {
+        "id": "color-1",
+        "name": "فاتح",
+        "hex": "#d7b79f",
+        "available": true,
+        "stockMeters": 100
+      },
+      {
+        "id": "color-2",
+        "name": "متوسط",
+        "hex": "#b8876c",
+        "available": true,
+        "stockMeters": 100
+      }
+    ],
+    "colorsEnabled": true,
+    "specs": {
+      "composition": "تُضاف تفاصيل المكونات من المتجر",
+      "width": "يُحدد حسب العبوة",
+      "weight": "مكياج",
+      "stretch": "المكياج",
+      "isStretch": true,
+      "opacity": "حسب طبيعة المنتج",
+      "finish": "تُضاف التفاصيل من المتجر",
+      "care": "اتبعي تعليمات العبوة",
+      "use": "حسب الإرشادات المرفقة"
+    },
+    "faqs": [
+      {
+        "question": "ما تفاصيل هذا المنتج؟",
+        "answer": "تُراجع المكونات والحجم والخيارات الفعلية مع المتجر قبل تأكيد الطلب."
+      },
+      {
+        "question": "هل المنتج متوفر؟",
+        "answer": "يؤكد المتجر التوفر والدرجة أو الخيار المطلوب عند مراجعة الطلب."
+      }
+    ],
+    "isNew": true,
+    "isFeatured": true,
+    "hidden": false,
+    "stockMeters": 100,
+    "createdAt": "2026-11-24",
+    "sort_order": 4
+  },
+  {
+    "id": "soft-blush",
+    "slug": "soft-blush",
+    "name": "بلاشر ناعم",
+    "type": "مكياج",
+    "categoryId": "makeup",
+    "description": "نموذج عرض أولي من Golden Cosmetics. يضيف المتجر تفاصيل المنتج والسعر والتوفر والخيارات الفعلية قبل اعتماد الطلب.",
+    "price": 0,
+    "compareAtPrice": null,
+    "image": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85",
+    "images": [],
+    "colors": [
+      {
+        "id": "color-1",
+        "name": "خوخي",
+        "hex": "#d88c75",
+        "available": true,
+        "stockMeters": 100
+      },
+      {
+        "id": "color-2",
+        "name": "وردي",
+        "hex": "#c8798a",
+        "available": true,
+        "stockMeters": 100
+      }
+    ],
+    "colorsEnabled": true,
+    "specs": {
+      "composition": "تُضاف تفاصيل المكونات من المتجر",
+      "width": "يُحدد حسب العبوة",
+      "weight": "مكياج",
+      "stretch": "المكياج",
+      "isStretch": true,
+      "opacity": "حسب طبيعة المنتج",
+      "finish": "تُضاف التفاصيل من المتجر",
+      "care": "اتبعي تعليمات العبوة",
+      "use": "حسب الإرشادات المرفقة"
+    },
+    "faqs": [
+      {
+        "question": "ما تفاصيل هذا المنتج؟",
+        "answer": "تُراجع المكونات والحجم والخيارات الفعلية مع المتجر قبل تأكيد الطلب."
+      },
+      {
+        "question": "هل المنتج متوفر؟",
+        "answer": "يؤكد المتجر التوفر والدرجة أو الخيار المطلوب عند مراجعة الطلب."
+      }
+    ],
+    "isNew": false,
+    "isFeatured": true,
+    "hidden": false,
+    "stockMeters": 100,
+    "createdAt": "2026-11-24",
+    "sort_order": 5
+  },
+  {
+    "id": "hydration-serum",
+    "slug": "hydration-serum",
+    "name": "سيروم للعناية بالبشرة",
+    "type": "عناية بالبشرة",
+    "categoryId": "skincare",
+    "description": "نموذج عرض أولي من Golden Cosmetics. يضيف المتجر تفاصيل المنتج والسعر والتوفر والخيارات الفعلية قبل اعتماد الطلب.",
+    "price": 0,
+    "compareAtPrice": null,
+    "image": "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=1000&q=85",
+    "images": [],
+    "colors": [
+      {
+        "id": "color-1",
+        "name": "الأساسي",
+        "hex": "#d2b486",
+        "available": true,
+        "stockMeters": 100
+      }
+    ],
+    "colorsEnabled": true,
+    "specs": {
+      "composition": "تُضاف تفاصيل المكونات من المتجر",
+      "width": "يُحدد حسب العبوة",
+      "weight": "عناية بالبشرة",
+      "stretch": "العناية والعطور",
+      "isStretch": false,
+      "opacity": "حسب طبيعة المنتج",
+      "finish": "تُضاف التفاصيل من المتجر",
+      "care": "اتبعي تعليمات العبوة",
+      "use": "حسب الإرشادات المرفقة"
+    },
+    "faqs": [
+      {
+        "question": "ما تفاصيل هذا المنتج؟",
+        "answer": "تُراجع المكونات والحجم والخيارات الفعلية مع المتجر قبل تأكيد الطلب."
+      },
+      {
+        "question": "هل المنتج متوفر؟",
+        "answer": "يؤكد المتجر التوفر والدرجة أو الخيار المطلوب عند مراجعة الطلب."
+      }
+    ],
+    "isNew": false,
+    "isFeatured": true,
+    "hidden": false,
+    "stockMeters": 100,
+    "createdAt": "2026-11-24",
+    "sort_order": 6
+  },
+  {
+    "id": "face-moisturizer",
+    "slug": "face-moisturizer",
+    "name": "كريم ترطيب الوجه",
+    "type": "عناية بالبشرة",
+    "categoryId": "skincare",
+    "description": "نموذج عرض أولي من Golden Cosmetics. يضيف المتجر تفاصيل المنتج والسعر والتوفر والخيارات الفعلية قبل اعتماد الطلب.",
+    "price": 0,
+    "compareAtPrice": null,
+    "image": "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1000&q=85",
+    "images": [],
+    "colors": [
+      {
+        "id": "color-1",
+        "name": "الأساسي",
+        "hex": "#e1d4c2",
+        "available": true,
+        "stockMeters": 100
+      }
+    ],
+    "colorsEnabled": true,
+    "specs": {
+      "composition": "تُضاف تفاصيل المكونات من المتجر",
+      "width": "يُحدد حسب العبوة",
+      "weight": "عناية بالبشرة",
+      "stretch": "العناية والعطور",
+      "isStretch": false,
+      "opacity": "حسب طبيعة المنتج",
+      "finish": "تُضاف التفاصيل من المتجر",
+      "care": "اتبعي تعليمات العبوة",
+      "use": "حسب الإرشادات المرفقة"
+    },
+    "faqs": [
+      {
+        "question": "ما تفاصيل هذا المنتج؟",
+        "answer": "تُراجع المكونات والحجم والخيارات الفعلية مع المتجر قبل تأكيد الطلب."
+      },
+      {
+        "question": "هل المنتج متوفر؟",
+        "answer": "يؤكد المتجر التوفر والدرجة أو الخيار المطلوب عند مراجعة الطلب."
+      }
+    ],
+    "isNew": false,
+    "isFeatured": true,
+    "hidden": false,
+    "stockMeters": 100,
+    "createdAt": "2026-11-24",
+    "sort_order": 7
+  },
+  {
+    "id": "signature-perfume",
+    "slug": "signature-perfume",
+    "name": "عطر",
+    "type": "عطور",
+    "categoryId": "fragrance",
+    "description": "نموذج عرض أولي من Golden Cosmetics. يضيف المتجر تفاصيل المنتج والسعر والتوفر والخيارات الفعلية قبل اعتماد الطلب.",
+    "price": 0,
+    "compareAtPrice": null,
+    "image": "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1000&q=85",
+    "images": [],
+    "colors": [
+      {
+        "id": "color-1",
+        "name": "الأساسي",
+        "hex": "#b99c68",
+        "available": true,
+        "stockMeters": 100
+      }
+    ],
+    "colorsEnabled": true,
+    "specs": {
+      "composition": "تُضاف تفاصيل المكونات من المتجر",
+      "width": "يُحدد حسب العبوة",
+      "weight": "عطور",
+      "stretch": "العناية والعطور",
+      "isStretch": false,
+      "opacity": "حسب طبيعة المنتج",
+      "finish": "تُضاف التفاصيل من المتجر",
+      "care": "اتبعي تعليمات العبوة",
+      "use": "حسب الإرشادات المرفقة"
+    },
+    "faqs": [
+      {
+        "question": "ما تفاصيل هذا المنتج؟",
+        "answer": "تُراجع المكونات والحجم والخيارات الفعلية مع المتجر قبل تأكيد الطلب."
+      },
+      {
+        "question": "هل المنتج متوفر؟",
+        "answer": "يؤكد المتجر التوفر والدرجة أو الخيار المطلوب عند مراجعة الطلب."
+      }
+    ],
+    "isNew": false,
+    "isFeatured": true,
+    "hidden": false,
+    "stockMeters": 100,
+    "createdAt": "2026-11-24",
+    "sort_order": 8
+  },
+  {
+    "id": "beauty-brushes",
+    "slug": "beauty-brushes",
+    "name": "مجموعة فرش مكياج",
+    "type": "مستلزمات الجمال",
+    "categoryId": "essentials",
+    "description": "نموذج عرض أولي من Golden Cosmetics. يضيف المتجر تفاصيل المنتج والسعر والتوفر والخيارات الفعلية قبل اعتماد الطلب.",
+    "price": 0,
+    "compareAtPrice": null,
+    "image": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1000&q=85",
+    "images": [],
+    "colors": [
+      {
+        "id": "color-1",
+        "name": "الأساسي",
+        "hex": "#c7a46a",
+        "available": true,
+        "stockMeters": 100
+      }
+    ],
+    "colorsEnabled": true,
+    "specs": {
+      "composition": "تُضاف تفاصيل المكونات من المتجر",
+      "width": "يُحدد حسب العبوة",
+      "weight": "مستلزمات الجمال",
+      "stretch": "العناية والعطور",
+      "isStretch": false,
+      "opacity": "حسب طبيعة المنتج",
+      "finish": "تُضاف التفاصيل من المتجر",
+      "care": "اتبعي تعليمات العبوة",
+      "use": "حسب الإرشادات المرفقة"
+    },
+    "faqs": [
+      {
+        "question": "ما تفاصيل هذا المنتج؟",
+        "answer": "تُراجع المكونات والحجم والخيارات الفعلية مع المتجر قبل تأكيد الطلب."
+      },
+      {
+        "question": "هل المنتج متوفر؟",
+        "answer": "يؤكد المتجر التوفر والدرجة أو الخيار المطلوب عند مراجعة الطلب."
+      }
+    ],
+    "isNew": false,
+    "isFeatured": true,
+    "hidden": false,
+    "stockMeters": 100,
+    "createdAt": "2026-11-24",
+    "sort_order": 9
+  },
+  {
+    "id": "lip-gloss",
+    "slug": "lip-gloss",
+    "name": "ملمع شفاه",
+    "type": "مكياج",
+    "categoryId": "makeup",
+    "description": "نموذج عرض أولي من Golden Cosmetics. يضيف المتجر تفاصيل المنتج والسعر والتوفر والخيارات الفعلية قبل اعتماد الطلب.",
+    "price": 0,
+    "compareAtPrice": null,
+    "image": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85",
+    "images": [],
+    "colors": [
+      {
+        "id": "color-1",
+        "name": "شفاف",
+        "hex": "#d8b29a",
+        "available": true,
+        "stockMeters": 100
+      },
+      {
+        "id": "color-2",
+        "name": "وردي",
+        "hex": "#cd8294",
+        "available": true,
+        "stockMeters": 100
+      }
+    ],
+    "colorsEnabled": true,
+    "specs": {
+      "composition": "تُضاف تفاصيل المكونات من المتجر",
+      "width": "يُحدد حسب العبوة",
+      "weight": "مكياج",
+      "stretch": "المكياج",
+      "isStretch": true,
+      "opacity": "حسب طبيعة المنتج",
+      "finish": "تُضاف التفاصيل من المتجر",
+      "care": "اتبعي تعليمات العبوة",
+      "use": "حسب الإرشادات المرفقة"
+    },
+    "faqs": [
+      {
+        "question": "ما تفاصيل هذا المنتج؟",
+        "answer": "تُراجع المكونات والحجم والخيارات الفعلية مع المتجر قبل تأكيد الطلب."
+      },
+      {
+        "question": "هل المنتج متوفر؟",
+        "answer": "يؤكد المتجر التوفر والدرجة أو الخيار المطلوب عند مراجعة الطلب."
+      }
+    ],
+    "isNew": false,
+    "isFeatured": true,
+    "hidden": false,
+    "stockMeters": 100,
+    "createdAt": "2026-11-24",
+    "sort_order": 10
+  }
+]

@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Layers, LayoutGrid, Sparkles, Truck, Wallet } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Layers, LayoutGrid, Sparkles, ShoppingBag } from 'lucide-react'
 import { Link } from 'wouter'
 import type { Category, Product } from '@/types'
 import { CountUp } from './CountUp'
@@ -28,8 +28,8 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
   const stats: HeroStat[] = [
     { key: 'fabrics', icon: <Layers size={16} />, value: products.length, prefix: '+', suffix: '', label: t('home.stats.fabricsLabel'), trend: t('home.stats.fabricsTrend') },
     { key: 'categories', icon: <LayoutGrid size={16} />, value: categories.length, prefix: '+', suffix: '', label: t('home.stats.categoriesLabel'), trend: t('home.stats.categoriesTrend') },
-    { key: 'delivery', icon: <Truck size={16} />, value: 18, prefix: '', suffix: '', label: t('home.stats.deliveryLabel'), trend: t('home.stats.deliveryTrend') },
-    { key: 'cash', icon: <Wallet size={16} />, value: 100, prefix: '', suffix: t('home.stats.percent'), label: t('home.stats.cashLabel'), trend: t('home.stats.cashTrend') },
+    { key: 'new', icon: <Sparkles size={16} />, value: products.filter((product) => product.isNew).length, prefix: '', suffix: '', label: t('home.stats.deliveryLabel'), trend: t('home.stats.deliveryTrend') },
+    { key: 'featured', icon: <ShoppingBag size={16} />, value: products.filter((product) => product.isFeatured).length, prefix: '', suffix: '', label: t('home.stats.cashLabel'), trend: t('home.stats.cashTrend') },
   ]
 
   // الصور تديرها الإدارة (إضافة/حذف/ترتيب). إن لم توجد صور محفوظة نرجع للافتراضية.
@@ -102,7 +102,7 @@ export function HeroSection({ products, categories }: HeroSectionProps) {
               {slides.map((slide, index) => <button key={slide.src} type="button" role="tab" aria-selected={index === activeSlide} aria-label={slide.alt} className={index === activeSlide ? 'is-active' : ''} onClick={() => { setActiveSlide(index); restart() }} />)}
             </div>
           </>}
-          <div className="hero-vertical-label" aria-hidden="true">EVA · FABRICS</div>
+          <div className="hero-vertical-label" aria-hidden="true">GOLDEN · COSMETICS</div>
         </div>
       </section>
 

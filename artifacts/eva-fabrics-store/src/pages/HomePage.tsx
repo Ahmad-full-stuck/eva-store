@@ -170,7 +170,7 @@ export function HomePage({ products, categories, wishlist, onWish, onAdd }: Home
 
       {sectionVisible(content, 'story') && (
       <section className="container-eva section-block story-section" aria-label={t('home.storyEyebrow')}>
-        <div className="story-visual"><SmartImage src="products/swfmytalk/01.jpg" alt={t('home.storyImageAlt')} sizes="(max-width: 820px) 92vw, 45vw" /><span>EVA<br /><strong>FABRICS</strong></span></div>
+        <div className="story-visual"><SmartImage src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1200&q=85" alt={t('home.storyImageAlt')} sizes="(max-width: 820px) 92vw, 45vw" /><span>GOLDEN<br /><strong>COSMETICS</strong></span></div>
         <div className="story-copy"><span className="eyebrow">{t('home.storyEyebrow')}</span><h2>{story.title}</h2><p>{story.text}</p><p>{t('home.storyText2')}</p><Link href="/about" className="button button-outline">{t('home.storyCta')} <ArrowLeft size={16} /></Link></div>
       </section>
       )}

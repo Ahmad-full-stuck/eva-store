@@ -5,7 +5,7 @@ export const SESSION_TTL_MS = 45 * 24 * 60 * 60 * 1000
 const PBKDF2_ITERATIONS = 100_000
 
 export const DEFAULT_ADMIN_USERNAME = 'admin'
-export const DEFAULT_ADMIN_PASSWORD = 'EvaStore2026'
+export const DEFAULT_ADMIN_PASSWORD = ''
 
 const sha256 = async (value: string): Promise<string> => {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))
@@ -97,10 +97,14 @@ export const ensureAuthSchema = async (env: Env): Promise<void> => {
   try {
     const count = await env.DB.prepare('SELECT COUNT(*) AS n FROM admins').first<{ n: number }>()
     if (!count?.n) {
-      const hash = await hashPassword(DEFAULT_ADMIN_PASSWORD)
-      await env.DB.prepare('INSERT INTO admins (id, username, password_hash, display_name) VALUES (?1, ?2, ?3, ?4)')
-        .bind('owner', DEFAULT_ADMIN_USERNAME, hash, 'المدير الرئيسي')
-        .run()
+      const adminPassword = env.ADMIN_PASSWORD || DEFAULT_ADMIN_PASSWORD
+      const adminUsername = env.ADMIN_USERNAME || DEFAULT_ADMIN_USERNAME
+      if (adminPassword) {
+        const hash = await hashPassword(adminPassword)
+        await env.DB.prepare('INSERT INTO admins (id, username, password_hash, display_name) VALUES (?1, ?2, ?3, ?4)')
+          .bind('owner', adminUsername.toLowerCase(), hash, 'مدير Golden Cosmetics')
+          .run()
+      }
     }
   } catch {
     /* ignore */

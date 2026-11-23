@@ -1,8 +1,8 @@
 import { apiUrl } from '@/lib/site'
 
-const TOKEN_KEY = 'eva-admin-token'
-const SERVER_CONTENT_KEY = 'eva-server-content'
-const SERVER_SETTINGS_KEY = 'eva-server-settings'
+const TOKEN_KEY = 'golden-admin-token'
+const SERVER_CONTENT_KEY = 'golden-server-content'
+const SERVER_SETTINGS_KEY = 'golden-server-settings'
 
 export const getToken = (): string => {
   try {
@@ -80,7 +80,7 @@ export const loadServerConfig = async (): Promise<void> => {
       writeServerSettings(settings.data)
       changed = true
     }
-    if (changed) window.dispatchEvent(new Event('eva-admin-changed'))
+    if (changed) window.dispatchEvent(new Event('golden-admin-changed'))
   } catch {
     /* offline — the cached copy keeps working */
   }
@@ -158,7 +158,7 @@ export const adminFetch = async <T,>(path: string, init: RequestInit = {}): Prom
       if (token) {
         setToken('')
         try {
-          window.dispatchEvent(new Event('eva-admin-expired'))
+          window.dispatchEvent(new Event('golden-admin-expired'))
         } catch {
           /* ignore */
         }

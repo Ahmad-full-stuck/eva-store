@@ -30,7 +30,7 @@ const withCors = (response: Response): Response => {
  * 1-4s to come back. Bumping CACHE_VERSION (or writing via the admin API)
  * invalidates everything at once.
  */
-const CACHE_VERSION = 'v2'
+const CACHE_VERSION = 'golden-v1'
 
 const cacheKeyFor = (request: Request): Request => {
   // The Cache API only accepts fully-qualified URLs as keys, so the version
@@ -72,7 +72,7 @@ const cachedJson = async (request: Request, ttlSeconds: number, build: () => Pro
 const purgePublicCache = async (): Promise<void> => {
   const cache = caches.default
   const keys = ['/api/products', '/api/categories', '/api/routes', '/api/content', '/api/settings'].map((path) => {
-    const url = new URL(`https://www.eva-store.workers.dev${path}`)
+    const url = new URL(`https://g.eva-store.workers.dev${path}`)
     url.searchParams.set('__eva', CACHE_VERSION)
     return new Request(url.toString())
   })
@@ -105,14 +105,14 @@ const publicProduct = (product: StoreProduct): StoreProduct => {
 }
 
 const orderNumber = (): string =>
-  `EVA-${Date.now().toString(36).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`
+  `GOLD-${Date.now().toString(36).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`
 
 const fmtDinar = (value: number): string =>
   value >= 1000 && value % 1000 === 0 ? `${value / 1000} الف دينار عراقي` : `${value.toLocaleString('en-US')} دينار عراقي`
 
 const fmtMeters = (m: number): string => {
   const s = String(m)
-  return s === '0.5' || s === '1.5' || s === '2.5' || s === '3.5' || s === '4.5' || s === '5.5' ? `${s} م` : `${s} متر`
+  return `${s} قطعة`
 }
 
 interface NotifyOrder {
@@ -171,7 +171,7 @@ const notifyOrderEmail = async (env: Env, order: NotifyOrder): Promise<boolean> 
       console.log(`[notify] order=${order.number} skipped provider=${provider}`)
       return false
     }
-    const to = String(content.emailOrdersTo ?? '').trim() || 'gdumingm@gmail.com'
+    const to = String(content.emailOrdersTo ?? '').trim()
     const action = String(content.emailFormSubmitAction ?? '').trim() || `https://formsubmit.co/${encodeURIComponent(to)}`
     const subjectTemplate = String(content.emailSubjectOrder ?? 'طلب جديد #{orderNumber}')
     const subject = subjectTemplate.replace('#{orderNumber}', `#${order.number}`).replace('{orderNumber}', order.number)

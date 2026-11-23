@@ -1,6 +1,6 @@
 const adminContent = (): Record<string, string> => {
   try {
-    const raw = window.localStorage.getItem('eva-admin-content')
+    const raw = window.localStorage.getItem('golden-admin-content')
     if (!raw) return {}
     const parsed: unknown = JSON.parse(raw)
     return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Record<string, string>) : {}
@@ -31,11 +31,11 @@ const localPhone = (() => {
 const safeInstagram = /^https?:\/\//i.test(rawInstagram) ? rawInstagram : `https://${rawInstagram.replace(/^\/+/, '')}`
 
 export const siteConfig = {
-  get name() { return adminContent().shopName || 'إيفا ستور للأقمشة' },
-  shortName: 'إيفا ستور',
+  get name() { return adminContent().shopName || 'Golden Cosmetics' },
+  shortName: 'Golden Cosmetics',
   get phone() { return adminContent().phone || localPhone },
   get instagramUrl() { return adminContent().instagram || safeInstagram },
-  get contactEmail() { return adminContent().emailOrdersTo || 'gdumingm@gmail.com' },
+  get contactEmail() { return adminContent().emailOrdersTo || '' },
   emailUrl: (subject = 'استفسار من متجر إيفا', body = 'مرحباً إيفا، أريد الاستفسار عن منتجاتكم.'): string => `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
   instagramText: 'إيفا ستور على إنستغرام',
 }

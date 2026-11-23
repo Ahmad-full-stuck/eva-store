@@ -9,11 +9,11 @@ import { adminFetch, adminLogin, adminLogout, adminWhoami, getToken, listAdmins,
 import { pushSupported, registerPushWorker, urlBase64ToUint8Array } from '@/lib/push'
 import { AdminStats } from '@/components/AdminStats'
 
-const PRODUCTS_KEY = 'eva-admin-products'
-const REMOVED_KEY = 'eva-admin-removed'
-const CATEGORIES_KEY = 'eva-admin-categories'
-const PIN_KEY = 'eva-admin-pin'
-const SESSION_KEY = 'eva-admin-session'
+const PRODUCTS_KEY = 'golden-admin-products'
+const REMOVED_KEY = 'golden-admin-removed'
+const CATEGORIES_KEY = 'golden-admin-categories'
+const PIN_KEY = 'golden-admin-pin'
+const SESSION_KEY = 'golden-admin-session'
 const DEFAULT_PIN_HASH = 'a1fb4e703a9ef1fa4936801721ff285a97ac85330856674412e054892afe6972'
 
 const sha256Hex = async (value: string): Promise<string> => {
@@ -62,7 +62,7 @@ const groupFields: { title: string; fields: TextField[] }[] = [
     ],
   },
   {
-    title: 'قسم دليل الأقمشة في الرئيسية',
+    title: 'قسم دليل المنتجات في الرئيسية',
     fields: [
       { key: 'guideEyebrow', label: 'العنوان الصغير' },
       { key: 'guideTitle', label: 'عنوان القسم', area: true, hint: 'افصلي السطور بـ |' },
@@ -86,10 +86,10 @@ const SECTION_LABELS: Record<HomeSectionKey, string> = {
   hero: 'الغلاف الرئيسي + شريط الأرقام',
   promo: 'شريط التوصيل (العروض)',
   steps: 'خطوات الطلب',
-  categories: 'أقسام القماش',
+  categories: 'أقسام المنتج',
   newArrivals: 'وصل حديثاً',
-  discovery: 'أداة اختيار القماش',
-  guide: 'معاينة دليل الأقمشة',
+  discovery: 'أداة اختيار المنتج',
+  guide: 'معاينة دليل المنتجات',
   story: 'قصة إيفا',
   trust: 'شريط الثقة والضمانات',
   newsletter: 'النشرة البريدية',
@@ -113,9 +113,9 @@ const TEXT_GROUP_LABELS: Record<string, string> = {
   track: 'تتبع الطلب',
   about: 'من نحن',
   contact: 'اتصلي بنا',
-  guide: 'دليل الأقمشة',
+  guide: 'دليل المنتجات',
   policies: 'السياسات',
-  disc: 'خصائص القماش',
+  disc: 'خصائص المنتج',
   foot: 'التذييل',
   nf: 'صفحة غير موجودة',
 }
@@ -155,7 +155,7 @@ const writeJson = (key: string, value: unknown): void => {
     /* quota */
   }
   try {
-    window.dispatchEvent(new Event('eva-admin-changed'))
+    window.dispatchEvent(new Event('golden-admin-changed'))
   } catch {
     /* ignore */
   }
@@ -275,7 +275,7 @@ const toFileDataUrl = (file: File): Promise<string> =>
 
 const adminStyles = `
 .admin-layer { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom)); background: rgba(46,24,33,.58); backdrop-filter: blur(9px) saturate(130%); -webkit-backdrop-filter: blur(9px) saturate(130%); animation: adminFade .18s ease both; }
-.admin-panel { width: min(940px, 100%); max-height: min(92vh, calc(100vh - 28px)); display: flex; flex-direction: column; overflow: hidden; background: #fffbfb; border: 1px solid rgba(255,255,255,.92); border-radius: 20px; box-shadow: 0 34px 80px -24px rgba(46,24,33,.55); animation: adminPop .22s cubic-bezier(.22,1,.36,1) both; }
+.admin-panel { width: min(940px, 100%); max-height: min(92vh, calc(100vh - 28px)); display: flex; flex-direction: column; overflow: hidden; background: #fffdf8; border: 1px solid rgba(255,255,255,.92); border-radius: 20px; box-shadow: 0 34px 80px -24px rgba(46,24,33,.55); animation: adminPop .22s cubic-bezier(.22,1,.36,1) both; }
 @supports (height: 100dvh) { .admin-panel { max-height: min(92dvh, calc(100dvh - 28px)); } }
 @keyframes adminFade { from { opacity: 0; } }
 @keyframes adminPop { from { opacity: 0; transform: translateY(14px) scale(.985); } }
@@ -287,7 +287,7 @@ const adminStyles = `
 .admin-tabs::-webkit-scrollbar { display: none; }
 .admin-tab { flex: 0 0 auto; min-height: 38px; padding: 8px 15px; border: 1px solid var(--eva-line); border-radius: 999px; background: #fff; color: var(--eva-muted); font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: color .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease; }
 .admin-tab:hover { color: var(--eva-rose); border-color: var(--eva-rose); }
-.admin-tab.is-active { color: #fff; background: var(--eva-rose); border-color: var(--eva-rose); box-shadow: 0 8px 18px -8px rgba(122, 30, 60, .55); }
+.admin-tab.is-active { color: #fff; background: var(--eva-rose); border-color: var(--eva-rose); box-shadow: 0 8px 18px -8px rgba(169, 135, 76, .55); }
 .admin-body { flex: 1 1 auto; padding: 18px 18px 22px; overflow-y: auto; overflow-x: hidden; min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; word-break: break-word; }
 .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
 .admin-card { border: 1px solid var(--eva-line); border-radius: 14px; overflow: hidden; background: #fff; }
@@ -308,7 +308,7 @@ const adminStyles = `
 .admin-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .admin-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .admin-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; padding: 9px 16px; border: 1px solid transparent; border-radius: 12px; background: var(--eva-rose); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease, color .15s ease; }
-.admin-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 22px -10px rgba(122, 30, 60, .55); }
+.admin-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 22px -10px rgba(169, 135, 76, .55); }
 .admin-btn:focus-visible { outline: 2px solid var(--eva-rose); outline-offset: 2px; }
 .admin-btn.ghost { background: #fff; color: var(--eva-ink); border-color: var(--eva-line-strong); }
 .admin-btn.ghost:hover:not(:disabled) { color: var(--eva-rose); border-color: var(--eva-rose); background: var(--eva-rose-soft); box-shadow: none; }
@@ -318,7 +318,7 @@ const adminStyles = `
 .admin-note { font-size: 12px; color: var(--eva-muted); line-height: 1.8; background: var(--eva-rose-soft); border: 1px solid var(--eva-rose-tint); border-radius: 12px; padding: 10px 12px; }
 .admin-note.ok { background: #eef7f1; border-color: #cfe7d8; color: #2f5c42; }
 .admin-login { display: grid; gap: 15px; justify-items: center; text-align: center; padding: 42px 22px; }
-.admin-login .lock { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; color: #fff; background: linear-gradient(135deg, var(--eva-rose), var(--eva-charcoal)); box-shadow: 0 16px 32px -14px rgba(122, 30, 60, .65); }
+.admin-login .lock { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; color: #fff; background: linear-gradient(135deg, var(--eva-rose), var(--eva-charcoal)); box-shadow: 0 16px 32px -14px rgba(169, 135, 76, .65); }
 .admin-login h3 { margin: 0; font-size: 18px; }
 .admin-login p { margin: 0; font-size: 12.5px; color: var(--eva-muted); max-width: 330px; line-height: 1.8; }
 .admin-pin { display: flex; gap: 9px; flex-wrap: wrap; justify-content: center; width: 100%; }
@@ -476,7 +476,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
   useEffect(() => {
     if (!getToken()) return
     void adminWhoami().catch(() => {
-      /* 401 يُطلق حدث eva-admin-expired ويغلق الجلسة */
+      /* 401 يُطلق حدث golden-admin-expired ويغلق الجلسة */
     })
   }, [])
 
@@ -496,8 +496,8 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
       }
       setToast('انتهت الجلسة، سجّلي الدخول من جديد')
     }
-    window.addEventListener('eva-admin-expired', onExpired)
-    return () => window.removeEventListener('eva-admin-expired', onExpired)
+    window.addEventListener('golden-admin-expired', onExpired)
+    return () => window.removeEventListener('golden-admin-expired', onExpired)
   }, [])
 
   useEffect(() => {
@@ -768,13 +768,13 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     setOrders((current) => current.map((row) => ((row.order_number || row.orderNumber) === number ? { ...row, status } : row)))
     // Tell the statistics panel right away so the numbers move the instant
     // the admin taps a status (not on the next tab visit).
-    window.dispatchEvent(new Event('eva-orders-changed'))
+    window.dispatchEvent(new Event('golden-orders-changed'))
     try {
       await adminFetch(`/api/admin/orders/${encodeURIComponent(number)}`, { method: 'PATCH', body: JSON.stringify({ status }) })
       setToast('تم تحديث حالة الطلب')
     } catch {
       setOrders(previous)
-      window.dispatchEvent(new Event('eva-orders-changed'))
+      window.dispatchEvent(new Event('golden-orders-changed'))
       setToast('تعذر التحديث على الخادم')
     }
   }
@@ -783,13 +783,13 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     if (!window.confirm(`حذف الطلب #${number} نهائياً؟`)) return
     const previous = orders
     setOrders((current) => current.filter((row) => (row.order_number || row.orderNumber) !== number))
-    window.dispatchEvent(new Event('eva-orders-changed'))
+    window.dispatchEvent(new Event('golden-orders-changed'))
     try {
       await adminFetch(`/api/admin/orders/${encodeURIComponent(number)}`, { method: 'DELETE' })
       setToast('تم حذف الطلب')
     } catch {
       setOrders(previous)
-      window.dispatchEvent(new Event('eva-orders-changed'))
+      window.dispatchEvent(new Event('golden-orders-changed'))
       setToast('تعذر حذف الطلب من الخادم')
     }
   }
@@ -869,7 +869,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     void adminFetch(`/api/admin/products/${encodeURIComponent(product.slug)}`, { method: 'DELETE' })
       .then(() => {
         setToast('تم حذف المنتج')
-        window.dispatchEvent(new Event('eva-store-refresh'))
+        window.dispatchEvent(new Event('golden-store-refresh'))
       })
       .catch(() => setToast('أُخفي المنتج من المتجر — تعذر حفظه في الخادم'))
   }
@@ -929,7 +929,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
     }
     persistProducts([])
     persistRemoved([])
-    window.dispatchEvent(new Event('eva-store-refresh'))
+    window.dispatchEvent(new Event('golden-store-refresh'))
     setToast(failed ? 'تمت الاستعادة محلياً — تعذر الوصول للخادم' : 'تمت استعادة المنتجات الأصلية')
   }
 
@@ -1332,11 +1332,11 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                       <div className="admin-row">
                         <div className="admin-field">
                           <label>اسم المنتج *</label>
-                          <input value={editing.name} onChange={(event) => setField('name', event.target.value)} placeholder="مثال: قماش كتان" />
+                          <input value={editing.name} onChange={(event) => setField('name', event.target.value)} placeholder="مثال: منتج كتان" />
                         </div>
                         <div className="admin-field">
                           <label>الرابط (slug)</label>
-                          <input value={editing.slug} onChange={(event) => setField('slug', event.target.value)} dir="ltr" placeholder="cotton-fabric" />
+                          <input value={editing.slug} onChange={(event) => setField('slug', event.target.value)} dir="ltr" placeholder="cotton-product" />
                         </div>
                       </div>
 
@@ -1346,7 +1346,7 @@ export function AdminSecret({ products, categories }: AdminSecretProps) {
                           <input type="number" min={0} value={editing.price} onChange={(event) => setField('price', Number(event.target.value))} dir="ltr" />
                         </div>
                         <div className="admin-field">
-                          <label>المخزون (متر)</label>
+                          <label>المخزون (قطعة)</label>
                           <input type="number" min={0} value={editing.stockMeters} onChange={(event) => setField('stockMeters', Number(event.target.value))} dir="ltr" />
                         </div>
                       </div>

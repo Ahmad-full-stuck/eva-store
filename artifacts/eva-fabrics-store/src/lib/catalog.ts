@@ -36,7 +36,7 @@ export const matchesProductSearch = (product: Product, query: string): boolean =
 
 export const getCartTotals = (cart: CartItem[]): { subtotal: number; deliveryFee: number; total: number } => {
   const settings = readStoreSettings()
-  const freeFrom = Math.max(0, settings.freeDeliveryFrom || 50000)
+  const freeFrom = Math.max(0, settings.freeDeliveryFrom ?? 50000)
   const fee = Math.max(0, settings.deliveryFee ?? 5000)
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.length, 0)
   const deliveryFee = subtotal === 0 || subtotal >= freeFrom ? 0 : fee
@@ -59,16 +59,21 @@ export const formatDinar = (value: number): string => {
 }
 
 /** «0.5» → «نصف متر» */
-export const metersLabel = (value: number): string =>
-  value === 0.5 ? tr('core.metersHalf') : `${Number(value.toFixed(2)).toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ')} ${tr('core.metersWord')}`
+export const metersLabel = (value: number): string => {
+  const count = Math.max(0, Math.round(value))
+  const locale = getCurrentLang()
+  return locale === 'en' ? `${count} ${count === 1 ? 'piece' : 'pieces'}` : `${count.toLocaleString('ar-IQ')} ${count === 1 ? 'قطعة' : 'قطع'}`
+}
 
-export const formatMeters = (value: number): string => (value === 0.5
-  ? tr('core.metersShortHalf')
-  : `${value.toLocaleString(getCurrentLang() === 'en' ? 'en-US' : 'ar-IQ', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} ${tr('core.metersShortUnit')}`)
+export const formatMeters = (value: number): string => {
+  const count = Math.max(0, Math.round(value))
+  const locale = getCurrentLang()
+  return locale === 'en' ? `${count} ${count === 1 ? 'piece' : 'pieces'}` : `${count.toLocaleString('ar-IQ')} ${count === 1 ? 'قطعة' : 'قطع'}`
+}
 
 export const normalizeHalfMeters = (value: number): number => {
   if (!Number.isFinite(value) || value <= 0) return 0
-  return Math.max(0.5, Math.ceil(value * 2) / 2)
+  return Math.max(1, Math.ceil(value))
 }
 
 export const availableMeters = (product: Product, color?: ProductColor): number => {

@@ -43,8 +43,8 @@ interface StoredOrder {
   address: string
 }
 
-const ORDERS_KEY = 'eva-orders'
-const PROFILE_KEY = 'eva-customer'
+const ORDERS_KEY = 'golden-orders'
+const PROFILE_KEY = 'golden-customer'
 
 const fieldOrder: (keyof CheckoutForm)[] = ['name', 'phone', 'governorate', 'district', 'address', 'landmark', 'email', 'notes']
 
@@ -56,19 +56,19 @@ const createLocalOrderNumber = (): string => {
   const now = new Date()
   const stamp = `${String(now.getFullYear()).slice(-2)}${padNumber(now.getMonth() + 1)}${padNumber(now.getDate())}`
   const suffix = Math.floor(1000 + Math.random() * 9000)
-  return `EVA-${stamp}-${suffix}`
+  return `GOLD-${stamp}-${suffix}`
 }
 
 const glassStyles = `
-.glass-scope { --glass-fill: rgba(255, 252, 250, .6); --glass-strong: rgba(255, 251, 250, .9); --glass-line: rgba(255, 255, 255, .74); --glass-shadow: 0 22px 48px rgba(74, 24, 43, .1); }
+.glass-scope { --glass-fill: rgba(255, 252, 250, .6); --glass-strong: rgba(255, 251, 250, .9); --glass-line: rgba(255, 255, 255, .74); --glass-shadow: 0 22px 48px rgba(50, 43, 29, .1); }
 .glass-scope .glass { position: relative; background: var(--glass-fill); border: 1px solid var(--glass-line); box-shadow: var(--glass-shadow); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); }
 .glass-scope .glass-card { border-radius: 16px; }
 .glass-scope .glass-strong { background: var(--glass-strong); border-color: rgba(255, 255, 255, .92); }
 .glass-scope .glass.checkout-summary, .glass-scope .glass.order-summary { position: sticky; top: 120px; }
-.glass-scope .glass-dark { color: #fff6f8; background: rgba(46, 24, 33, .92); border: 1px solid rgba(255, 246, 248, .18); box-shadow: 0 16px 34px rgba(46, 24, 33, .24); }
+.glass-scope .glass-dark { color: #fff6f8; background: rgba(40, 34, 26, .92); border: 1px solid rgba(255, 246, 248, .18); box-shadow: 0 16px 34px rgba(40, 34, 26, .24); }
 .glass-scope .glass-pill { border-radius: 999px; }
 .glass-scope .glass-input, .glass-scope .field-input, .glass-scope .field textarea { background: rgba(255, 255, 255, .74); border-color: rgba(255, 255, 255, .92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-.glass-scope .glass-divider { height: 1px; margin: 16px 0; background: linear-gradient(90deg, rgba(122, 30, 60, 0), rgba(122, 30, 60, .32), rgba(122, 30, 60, 0)); border: 0; }
+.glass-scope .glass-divider { height: 1px; margin: 16px 0; background: linear-gradient(90deg, rgba(169, 135, 76, 0), rgba(169, 135, 76, .32), rgba(169, 135, 76, 0)); border: 0; }
 .glass-scope .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; color: var(--eva-muted); background: rgba(255, 255, 255, .78); border: 1px solid rgba(255, 255, 255, .92); border-radius: 999px; font-size: 11.5px; line-height: 1.7; }
 .glass-scope .chip i { width: 11px; height: 11px; border: 1px solid rgba(43, 33, 36, .2); border-radius: 50%; }
 .glass-scope .review-block { background: rgba(255, 255, 255, .62); border-color: rgba(255, 255, 255, .88); }
@@ -86,7 +86,7 @@ const glassStyles = `
 .glass-scope .server-error { background: rgba(249, 236, 231, .88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .glass-scope .order-notice { display: flex; gap: 8px; align-items: flex-start; padding: 11px 13px; border-radius: 12px; background: rgba(228, 245, 235, .92); border: 1px solid rgba(60, 130, 90, .32); color: #155e38; font-size: 13px; line-height: 1.75; }
 .glass-scope .order-notice svg { flex: 0 0 auto; margin-top: 3px; }
-.glass-scope .checkout-secure.glass-dark { margin-top: 18px; padding: 12px 14px; color: #c9ecda; background: rgba(46, 24, 33, .9); border: 1px solid rgba(255, 246, 248, .18); border-radius: 12px; }
+.glass-scope .checkout-secure.glass-dark { margin-top: 18px; padding: 12px 14px; color: #c9ecda; background: rgba(40, 34, 26, .9); border: 1px solid rgba(255, 246, 248, .18); border-radius: 12px; }
 .glass-scope .empty-card { display: grid; justify-items: center; max-width: 470px; padding: 44px 32px; border-radius: 20px; text-align: center; }
 .glass-scope .empty-card p { max-width: 330px; margin-top: 7px; color: var(--eva-muted); font-size: 13.5px; line-height: 1.9; }
 .glass-scope .empty-card .button { margin-top: 24px; }
@@ -98,7 +98,7 @@ const glassStyles = `
 
 .glass-scope .order-box { padding: 30px; }
 .glass-scope .order-box-head { display: flex; align-items: flex-start; gap: 13px; margin-bottom: 24px; }
-.glass-scope .order-box-icon { display: grid; place-items: center; width: 46px; height: 46px; flex: 0 0 46px; color: #fff; background: linear-gradient(140deg, var(--eva-rose), var(--eva-rose-dark)); border-radius: 14px; box-shadow: 0 10px 22px rgba(122, 30, 60, .28); }
+.glass-scope .order-box-icon { display: grid; place-items: center; width: 46px; height: 46px; flex: 0 0 46px; color: #fff; background: linear-gradient(140deg, var(--eva-rose), var(--eva-rose-dark)); border-radius: 14px; box-shadow: 0 10px 22px rgba(169, 135, 76, .28); }
 .glass-scope .order-box-head h2 { margin: 0 0 4px; font-size: 21px; }
 .glass-scope .order-box-head p { margin: 0; color: var(--eva-muted); font-size: 13.5px; line-height: 1.8; }
 
@@ -111,17 +111,17 @@ const glassStyles = `
 .glass-scope .order-box .field-error { font-size: 12px; }
 .glass-scope .order-box .field-hint { color: var(--eva-muted); font-size: 11.5px; line-height: 1.7; }
 
-.glass-scope .order-total-strip { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 26px; padding: 16px 18px; background: linear-gradient(120deg, rgba(122, 30, 60, .07), rgba(122, 30, 60, .02)); border: 1px solid rgba(122, 30, 60, .14); border-radius: 18px; }
+.glass-scope .order-total-strip { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 26px; padding: 16px 18px; background: linear-gradient(120deg, rgba(169, 135, 76, .07), rgba(169, 135, 76, .02)); border: 1px solid rgba(169, 135, 76, .14); border-radius: 18px; }
 .glass-scope .order-total-strip > span { display: grid; gap: 2px; color: var(--eva-muted); font-size: 12.5px; }
 .glass-scope .order-total-strip strong { color: var(--eva-rose); font-size: 24px; line-height: 1.3; }
-.glass-scope .order-submit { width: 100%; min-height: 56px; margin-top: 14px; font-size: 16px; border-radius: 16px; box-shadow: 0 14px 30px rgba(122, 30, 60, .3); }
+.glass-scope .order-submit { width: 100%; min-height: 56px; margin-top: 14px; font-size: 16px; border-radius: 16px; box-shadow: 0 14px 30px rgba(169, 135, 76, .3); }
 .glass-scope .order-submit:disabled { box-shadow: none; }
 .glass-scope .consent-row {
   display: grid; grid-template-columns: 22px 1fr auto; align-items: start; gap: 9px;
   margin-top: 12px; padding: 11px 12px; background: rgba(255, 255, 255, .5);
   border: 1px solid rgba(255, 255, 255, .78); border-radius: 14px; cursor: pointer;
 }
-.glass-scope .consent-row:has(.consent-box:checked) { background: rgba(122, 30, 60, .06); border-color: rgba(122, 30, 60, .28); }
+.glass-scope .consent-row:has(.consent-box:checked) { background: rgba(169, 135, 76, .06); border-color: rgba(169, 135, 76, .28); }
 .glass-scope .consent-box {
   width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--eva-rose); cursor: pointer;
 }
@@ -140,7 +140,7 @@ const glassStyles = `
 .glass-scope .checkout-item div { display: grid; gap: 3px; }
 .glass-scope .checkout-item span { color: var(--eva-muted); font-size: 12px; }
 .glass-scope .summary-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 11px; font-size: 13.5px; }
-.glass-scope .summary-total { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding-top: 15px; border-top: 1px solid rgba(122, 30, 60, .16); font-size: 15px; }
+.glass-scope .summary-total { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding-top: 15px; border-top: 1px solid rgba(169, 135, 76, .16); font-size: 15px; }
 .glass-scope .summary-total strong { color: var(--eva-rose); font-size: 22px; }
 
 @media (max-width: 820px) {

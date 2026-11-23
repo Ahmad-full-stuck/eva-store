@@ -1,11 +1,12 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "www",
+  "name": "g",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
   "compatibility_flags": [
     "nodejs_compat"
   ],
+  "workers_dev": true,
   "assets": {
     "directory": "../eva-fabrics-store/dist/public",
     "not_found_handling": "single-page-application",
@@ -18,14 +19,12 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "eva-store",
-      "database_id": "e45faebc-0ae8-422e-a20b-0c0525b4e8db"
+      "database_name": "scoop-shop",
+      "database_id": "90bdb0e5-5f2f-4099-839c-9d9144d75224",
+      "migrations_dir": "migrations"
     }
   ],
   "vars": {
-    "STORE_ORIGIN": "https://www.eva-store.workers.dev",
-    "VAPID_PUBLIC_KEY": "BJssVonGGp_qBtx4gEGxPm30sjQFlJOEMkI5MYY8DTl8GW9eCAWwwhxe1iieyqKo_fcxklaw3VL6XDyZ5fkX5TU",
-    "VAPID_PRIVATE_KEY": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgQhKdkqar2Qvpwe6OdJmvwhLnQ7m671r+q05JESL5WcuhRANCAASbLFaJxhqf6gbceIBBsT5t9LI0BZSThDJCOTGGPA05fBlvXggFsMIcXtYonsqiqP33MZJWsN1S+lw8meX5F+U1",
-    "VAPID_SUBJECT": "mailto:admin@eva-store.workers.dev"
+    "STORE_ORIGIN": "https://g.eva-store.workers.dev"
   }
 }

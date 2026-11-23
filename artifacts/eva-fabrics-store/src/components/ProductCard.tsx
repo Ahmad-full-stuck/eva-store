@@ -19,7 +19,7 @@ const glassStyles = `
   border: 1px solid rgba(255, 255, 255, .75);
   border-radius: 20px;
   background: linear-gradient(155deg, rgba(255, 255, 255, .8), rgba(255, 250, 250, .46));
-  box-shadow: 0 14px 34px rgba(74, 24, 43, .1);
+  box-shadow: 0 14px 34px rgba(50, 43, 29, .1);
   backdrop-filter: blur(16px) saturate(1.15);
   -webkit-backdrop-filter: blur(16px) saturate(1.15);
 }
@@ -27,7 +27,7 @@ const glassStyles = `
   border: 1px solid rgba(255, 255, 255, .8);
   border-radius: 22px;
   background: linear-gradient(150deg, rgba(255, 255, 255, .78), rgba(255, 250, 250, .44));
-  box-shadow: 0 16px 38px rgba(74, 24, 43, .1);
+  box-shadow: 0 16px 38px rgba(50, 43, 29, .1);
   backdrop-filter: blur(18px) saturate(1.12);
   -webkit-backdrop-filter: blur(18px) saturate(1.12);
 }
@@ -35,7 +35,7 @@ const glassStyles = `
   border: 1px solid rgba(255, 255, 255, .85);
   border-radius: 999px;
   background: linear-gradient(140deg, rgba(255, 255, 255, .85), rgba(255, 250, 250, .55));
-  box-shadow: 0 8px 22px rgba(74, 24, 43, .08);
+  box-shadow: 0 8px 22px rgba(50, 43, 29, .08);
   backdrop-filter: blur(14px) saturate(1.1);
   -webkit-backdrop-filter: blur(14px) saturate(1.1);
 }
@@ -46,8 +46,8 @@ const glassStyles = `
 }
 .product-card.glass-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(122, 30, 60, .38);
-  box-shadow: 0 26px 48px rgba(122, 30, 60, .18);
+  border-color: rgba(169, 135, 76, .38);
+  box-shadow: 0 26px 48px rgba(169, 135, 76, .18);
 }
 @media (max-width: 560px) {
   .product-card.glass-card { padding: 10px 10px 14px; }
@@ -64,7 +64,7 @@ const glassStyles = `
   backdrop-filter: blur(9px);
   -webkit-backdrop-filter: blur(9px);
 }
-.product-card.glass-card .badge-accent { background: rgba(122, 30, 60, .85); }
+.product-card.glass-card .badge-accent { background: rgba(169, 135, 76, .85); }
 .product-card.glass-card .badge-warm { background: rgba(217, 121, 67, .88); }
 .product-card.glass-card .badge-muted { background: rgba(255, 252, 249, .88); }
 .product-card.glass-card .product-wish {
@@ -185,7 +185,7 @@ export function ProductCard({ product, wished, onWish, onAdd, priority = false }
             type="button"
             className="add-button"
             disabled={soldOut}
-            onClick={() => addColor && onAdd(product, addColor, 0.5)}
+            onClick={() => addColor && onAdd(product, addColor, 1)}
             aria-label={addLabel}
           >
             {soldOut ? t('card.soldOut') : <><ShoppingBag size={14} aria-hidden="true" /><span>{t('card.addHalf')}</span></>}
@@ -215,7 +215,7 @@ export function InlineAddButton({ product, onAdd }: { product: Product; onAdd: (
       type="button"
       className="icon-button"
       disabled={!color}
-      onClick={() => color && onAdd(product, color, 0.5)}
+      onClick={() => color && onAdd(product, color, 1)}
       aria-label={t('card.addToCartAria').replace('{name}', product.name)}
     >
       <Plus size={18} aria-hidden="true" />

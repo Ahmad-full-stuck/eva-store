@@ -132,7 +132,7 @@ export const headerStrings: Record<string, StringEntry> = {
   'home.stats.categoriesTrend': { ar: 'لكل مشروع', en: 'For every project' },
   'home.stats.deliveryLabel': { ar: 'محافظة للتوصيل', en: 'Governorates we deliver to' },
   'home.stats.deliveryTrend': { ar: 'توصيل ٥ آلاف دينار', en: 'Delivery 5,000 dinars' },
-  'home.stats.cashLabel': { ar: 'دفع عند الاستلام', en: 'Cash on delivery' },
+  'home.stats.cashLabel': { ar: 'منتج مميز', en: 'Featured products' },
   'home.stats.cashTrend': { ar: 'مريح وآمن', en: 'Easy and secure' },
   'home.stats.percent': { ar: '٪', en: '%' },
   'home.slide.colorful': { ar: 'ألوان كريب متنوعة', en: 'Vibrant crepe colors' },
