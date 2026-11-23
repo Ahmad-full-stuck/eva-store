@@ -2,10 +2,15 @@ import { useEffect, useState } from 'react'
 import { readServerContent, readServerSettings } from '@/lib/api'
 import { setTextOverrides } from '@/lib/text-overrides'
 
-export const CONTENT_KEY = 'eva-admin-content'
+export const CONTENT_KEY = 'golden-admin-content'
 
 /** الصور الافتراضية للغلاف — تُستخدم إن لم يحدّد الإدارة أي صور. */
-export const DEFAULT_HERO_SLIDES = ['home/hero-1.jpg', 'home/hero-2.jpg', 'home/hero-3.jpg', 'home/hero-4.jpg']
+export const DEFAULT_HERO_SLIDES = [
+ 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1400&q=85',
+ 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1400&q=85',
+ 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1400&q=85',
+ 'https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1400&q=85',
+]
 
 /** أقسام الصفحة الرئيسية القابلة للإخفاء/الإظهار من الإدارة. */
 export const HOME_SECTION_KEYS = [
@@ -78,48 +83,79 @@ export interface SiteContent {
 }
 
 export const defaultSiteContent: SiteContent = {
-  shopName: 'إيفا ستور للأقمشة',
-  phone: '07727282001',
-  whatsapp: '9647727282001',
-  instagram: 'https://www.instagram.com/x__illc/',
-  announcementRight: 'شحن إلى جميع محافظات العراق',
-  announcementLeft: 'التوصيل بـ ٥ آلاف دينار فقط',
-  aboutTitle: 'قصة إيفا تبدأ بسؤال واحد: ماذا ستصنعين؟',
-  aboutText: 'بدأت إيفا ستور بفكرة بسيطة: أن يرى الزبون الخامة كما تراها الخياطة، بشرح واضح للّمس والامتداد واللون قبل أن تدفع ديناراً واحداً. اليوم نعرض تشكيلة متنوعة مع مواصفات مكتوبة وطلب يبدأ من نصف متر.',
-  contactTitle: 'سؤال عن خامة أو طلب؟',
-  contactText: 'اكتبي لنا ما يدور في بالك. إن تعذّر إرسال الرسالة من الموقع مباشرة، نحوّلها تلقائياً إلى بريد إلكتروني مكتوب برسالتك نفسها.',
-  heroEyebrow: 'معرض أقمشة عربي',
-  heroTitle: 'اختاري *القماش المثالي*|لكل إبداع',
-  heroText: 'تشكيلة منتقاة من الأقمشة الفاخرة والمريحة، مع شرح واضح للخامة قبل أن تضيفيها إلى مشروعك.',
-  heroNote: 'توصيل إلى جميع محافظات العراق',
-  heroNoteAlt: 'دفع عند استلام الطلب',
-  statsTitle: 'أرقام المعرض الآن',
-  heroSlideMs: '2600',
-  heroSlides: [...DEFAULT_HERO_SLIDES],
-  hiddenSections: [],
-  categoriesEyebrow: 'اختاري من البداية',
-  categoriesTitle: 'مساحات القماش',
-  newEyebrow: 'نماذج مختارة',
-  newTitle: 'وصل حديثاً',
-  newDesc: 'أحدث الخامات التي أضفناها إلى المعرض',
-  guideEyebrow: 'قبل أن تختاري',
-  guideTitle: 'القماش قرار بصري|ولمسي في آن واحد.',
-  guideText: 'العينة الجيدة لا تخفي التفاصيل. قارني السماكة والمرونة واللمعة وطريقة سقوط القماش قبل أن تحددي الاستخدام.',
-  guideCta: 'ابدئي دليل الأقمشة',
-  newsletterEyebrow: 'نشرة إيفا',
-  newsletterTitle: 'اشتراك بالبريد',
-  newsletterText: 'خامة جديدة أو لون متجدد يصلك عبر البريد: اكتبي بريدك واضغطي الزر لتفتح البريد وتؤكدي الاشتراك.',
-  promoPill: 'توصيل لكل العراق',
-  promoLead: 'توصيل مجاني',
-  promoText: 'للطلبات فوق {price}',
-  emailOrdersTo: 'gdumingm@gmail.com',
-  emailFromName: 'إيفا ستور للأقمشة',
-  emailFrom: '',
-  emailSubjectOrder: 'طلب جديد من متجر إيفا #{orderNumber}',
-  emailTemplateOrder: '',
-  emailProvider: 'formsubmit',
-  emailFormSubmitAction: 'https://formsubmit.co/gdumingm@gmail.com',
-  texts: {},
+  shopName: "Golden Cosmetics",
+  phone: "",
+  whatsapp: "",
+  instagram: "",
+  announcementRight: "مرحباً بكِ في Golden Cosmetics",
+  announcementLeft: "السعر والتوفر يؤكدهما المتجر قبل تأكيد الطلب",
+  aboutTitle: "الجمال يبدأ من تفاصيلك",
+  aboutText: "Golden Cosmetics مساحة رقمية تجمع منتجات المكياج والعناية والعطور ضمن تجربة تسوق مرتبة. استعرضي التشكيلة، راجعي تفاصيل المنتج، واجمعي اختياراتك في السلة قبل إرسال الطلب.",
+  contactTitle: "استفسار عن منتج أو طلب؟",
+  contactText: "أرسلي استفسارك عبر نموذج التواصل، وسيراجع المتجر التفاصيل معك قبل اعتماد الطلب.",
+  heroEyebrow: "GOLDEN COSMETICS · BEAUTY STORE",
+  heroTitle: "اختاري *تفاصيل جمالك*|بكل أناقة",
+  heroText: "اكتشفي تشكيلة المكياج والعناية والعطور في تجربة تسوق هادئة، مع فئات واضحة ومسار طلب بسيط.",
+  heroNote: "استعرضي التشكيلة من داخل المتجر",
+  heroNoteAlt: "السعر والتوفر عند التأكيد",
+  statsTitle: "المتجر في لمحة",
+  heroSlideMs: "4200",
+  heroSlides: [
+    'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1400&q=85',
+    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1400&q=85',
+    'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1400&q=85',
+    'https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1400&q=85',
+  ],
+  hiddenSections: ['discovery', 'newsletter'],
+  categoriesEyebrow: "تسوّقي حسب اهتمامك",
+  categoriesTitle: "اكتشفي عالم الجمال",
+  newEyebrow: "اختيارات المتجر",
+  newTitle: "منتجات مختارة",
+  newDesc: "استعرضي المنتجات وأضيفي ما يناسبك إلى السلة",
+  guideEyebrow: "دليل الجمال والعناية",
+  guideTitle: "اختيار واعٍ|لبشرة أكثر عناية",
+  guideText: "اقرئي المكونات وتعليمات الاستخدام وتحققي من تفاصيل المنتج قبل الشراء.",
+  guideCta: "اكتشفي دليل العناية",
+  newsletterEyebrow: "Golden Cosmetics",
+  newsletterTitle: "ابقَي على اطلاع",
+  newsletterText: "تواصلي مع المتجر للاستفسار عن المنتجات والتوفر.",
+  promoPill: "تفاصيل واضحة",
+  promoLead: "اختيار أسهل",
+  promoText: "راجعي معلومات المنتج والسعر والتوفر قبل إتمام الطلب.",
+  emailOrdersTo: "",
+  emailFromName: "Golden Cosmetics",
+  emailFrom: "",
+  emailSubjectOrder: "طلب جديد من Golden Cosmetics #{orderNumber}",
+  emailTemplateOrder: "",
+  emailProvider: "mailto",
+  emailFormSubmitAction: "",
+  texts: {
+    "about.imgAlt1": "مستحضرات مكياج",
+    "about.imgAlt2": "منتجات عناية بالبشرة",
+    "about.storyP1": "بدأت Golden Cosmetics من فكرة بسيطة: جمع منتجات المكياج والعناية والعطور في مكان واحد، مع فئات واضحة وصور وتفاصيل تساعد على الاختيار.",
+    "about.storyP2": "اليوم يضم المتجر {count} منتجاً تجريبياً قابلاً للتعديل، وتتيح السلة جمع الاختيارات وإرسالها للمتجر لمراجعة السعر والتوفر قبل التجهيز.",
+    "about.timeline1Text": "ابدئي بتصفح فئات المكياج والعناية والعطور، واكتشفي المنتجات المعروضة في المتجر.",
+    "about.timeline2Text": "راجعي معلومات المنتج والمكونات والحجم والخيارات قبل إضافته إلى السلة.",
+    "about.timeline3Text": "أرسلي الطلب ليتمكن المتجر من مراجعة السعر والتوفر وتأكيد تفاصيل التجهيز.",
+    "about.valuesTitle": "تجربة واضحة من البداية",
+    "about.valuesText": "نرتب المنتجات ضمن فئات مفهومة ونوضح المعلومات المتاحة قبل إرسال الطلب.",
+    "about.value1Title": "وضوح التفاصيل",
+    "about.value1Text": "نعرض اسم المنتج وفئته والمعلومات المتاحة دون إضافة وعود غير مؤكدة.",
+    "about.value2Title": "اختيار مريح",
+    "about.value2Text": "صور وفئات واضحة تساعدك على استعراض التشكيلة.",
+    "about.value3Title": "تواصل مباشر",
+    "about.value3Text": "يمكنك مراجعة التفاصيل مع المتجر قبل تجهيز الطلب.",
+    "about.value4Title": "طلب منظم",
+    "about.value4Text": "اجمعي اختياراتك في السلة وأرسليها للمتجر بخطوات واضحة.",
+    "about.stat1Label": "منتجات في الكتالوج",
+    "about.stat1Note": "نماذج أولية قابلة للتعديل",
+    "about.stat2Label": "فئات رئيسية",
+    "about.stat2Note": "مكياج وعناية بالبشرة وعطور ومستحضرات",
+    "about.stat3Label": "خطوات الطلب",
+    "about.stat3Note": "تصفح وإضافة للسلة وتأكيد البيانات",
+    "about.stat4Label": "تفاصيل الطلب",
+    "about.stat4Note": "السعر والتوفر يؤكدهما المتجر"
+  },
 }
 
 const readJson = <T,>(key: string, fallback: T): T => {
@@ -134,10 +170,17 @@ const readJson = <T,>(key: string, fallback: T): T => {
 }
 
 export const readSiteContent = (): SiteContent => {
+  const server = readServerContent<Partial<SiteContent>>() || {}
+  const local = readJson<Partial<SiteContent>>(CONTENT_KEY, {})
   const merged: SiteContent = {
     ...defaultSiteContent,
-    ...(readServerContent<Partial<SiteContent>>() || {}),
-    ...readJson<Partial<SiteContent>>(CONTENT_KEY, {}),
+    ...server,
+    ...local,
+    texts: {
+      ...defaultSiteContent.texts,
+      ...(server.texts || {}),
+      ...(local.texts || {}),
+    },
   }
   setTextOverrides(merged.texts)
   return merged

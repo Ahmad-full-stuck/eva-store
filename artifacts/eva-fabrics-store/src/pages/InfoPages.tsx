@@ -367,9 +367,9 @@ export function AboutPage() {
             </div>
           </div>
           <div className="about-collage">
-            <SmartImage src="products/dantylfrnsyambrwdry/01.jpg" alt={t('about.imgAlt1')} sizes="(max-width: 820px) 46vw, 24vw" />
-            <SmartImage src="products/lmshalbwklywnsyjalankwra/01.jpg" alt={t('about.imgAlt2')} sizes="(max-width: 820px) 46vw, 24vw" />
-            <span>EVA<br /><strong>FABRICS</strong></span>
+            <SmartImage src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85" alt={t('about.imgAlt1')} sizes="(max-width: 820px) 46vw, 24vw" />
+            <SmartImage src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1000&q=85" alt={t('about.imgAlt2')} sizes="(max-width: 820px) 46vw, 24vw" />
+            <span>GOLDEN<br /><strong>COSMETICS</strong></span>
           </div>
         </section>
 
