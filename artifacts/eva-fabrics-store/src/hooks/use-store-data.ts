@@ -137,7 +137,7 @@ const normalizeCategory = (value: unknown, index: number): Category | null => {
   if (!isRecord(value)) return null
   const name = textFrom(value.name, '')
   const id = textFrom(value.id ?? value.slug, `category-${index + 1}`)
-  return name ? { id, slug: textFrom(value.slug, id), name, description: textFrom(value.description, 'تشكيلة من الأقمشة المختارة'), image: textFrom(value.image, ''), accent: textFrom(value.accent, '#a34163') } : null
+  return name ? { id, slug: textFrom(value.slug, id), name, description: textFrom(value.description, 'مجموعة مختارة من منتجات الجمال'), image: textFrom(value.image, ''), accent: textFrom(value.accent, '#a34163') } : null
 }
 
 const normalizeRoute = (value: unknown, index: number): SiteRoute | null => {
@@ -208,13 +208,13 @@ export const useStoreData = (): StorefrontData & { status: ApiStatus } => {
       timeout = window.setTimeout(() => controller.abort(), 3500)
       void load()
     }
-    window.addEventListener('eva-admin-changed', syncAdmin)
+    window.addEventListener('golden-admin-changed', syncAdmin)
     window.addEventListener('eva-store-refresh', refresh)
     return () => {
       disposed = true
       window.clearTimeout(timeout)
       controller.abort()
-      window.removeEventListener('eva-admin-changed', syncAdmin)
+      window.removeEventListener('golden-admin-changed', syncAdmin)
       window.removeEventListener('eva-store-refresh', refresh)
     }
   }, [])

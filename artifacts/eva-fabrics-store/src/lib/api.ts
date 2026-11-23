@@ -239,7 +239,7 @@ export const getPushStatus = async (): Promise<{ enabled: boolean; count: number
 export const sendTestPush = async (): Promise<{ sent: number; total: number }> =>
   adminFetch('/api/admin/push/test', { method: 'POST' })
 
-const PENDING_KEY = 'eva-pending-orders'
+const PENDING_KEY = 'golden-pending-orders'
 
 /** يحفظ طلباً لم يصل إلى الخادم، ليُرسل تلقائياً عند عودة الاتصال. */
 export const queuePendingOrder = (order: unknown): void => {

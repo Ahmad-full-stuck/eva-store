@@ -19,7 +19,7 @@ for (const module of MODULES) {
   }
 }
 
-const LANG_KEY = 'eva-lang'
+const LANG_KEY = 'golden-lang'
 
 const readStoredLang = (): Lang => {
   try {
@@ -83,8 +83,8 @@ export function LangProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const sync = () => setRevision((value) => value + 1)
-    window.addEventListener('eva-admin-changed', sync)
-    return () => window.removeEventListener('eva-admin-changed', sync)
+    window.addEventListener('golden-admin-changed', sync)
+    return () => window.removeEventListener('golden-admin-changed', sync)
   }, [])
 
   const setLang = useCallback((next: Lang) => setLangState(next === 'en' ? 'en' : 'ar'), [])

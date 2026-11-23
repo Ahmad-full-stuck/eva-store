@@ -14,7 +14,7 @@ const REMOVED_KEY = 'golden-admin-removed'
 const CATEGORIES_KEY = 'golden-admin-categories'
 const PIN_KEY = 'golden-admin-pin'
 const SESSION_KEY = 'golden-admin-session'
-const DEFAULT_PIN_HASH = 'a1fb4e703a9ef1fa4936801721ff285a97ac85330856674412e054892afe6972'
+const DEFAULT_PIN_HASH = '7cd09fbadd20a8964c90f0e20973602ca8a8e0f702706efb469bd5e5efa16f68'
 
 const sha256Hex = async (value: string): Promise<string> => {
   const digest = await window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))

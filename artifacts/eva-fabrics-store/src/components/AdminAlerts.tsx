@@ -4,9 +4,9 @@ import { Bell, BellRing, X } from 'lucide-react'
 import { adminFetch, AdminRequestError, getToken } from '@/lib/api'
 import { ensureSubscription, pushSupported } from '@/lib/push'
 
-const SEEN_KEY = 'eva-alerts-seen-orders'
-const PROMPT_KEY = 'eva-alerts-prompt-hidden'
-const PROMPT_SNOOZE_KEY = 'eva-alerts-prompt-snooze'
+const SEEN_KEY = 'golden-alerts-seen-orders'
+const PROMPT_KEY = 'golden-alerts-prompt-hidden'
+const PROMPT_SNOOZE_KEY = 'golden-alerts-prompt-snooze'
 // Orders are polled often enough that a new one shows up while the manager is
 // still looking at the store; focus re-polls immediately so returning to the
 // tab never shows a stale count.
@@ -118,13 +118,13 @@ export function AdminAlerts() {
   useEffect(() => {
     syncSession()
     const onChange = () => syncSession()
-    window.addEventListener('eva-admin-changed', onChange)
-    window.addEventListener('eva-admin-expired', onChange)
+    window.addEventListener('golden-admin-changed', onChange)
+    window.addEventListener('golden-admin-expired', onChange)
     window.addEventListener('storage', onChange)
     window.addEventListener('focus', onChange)
     return () => {
-      window.removeEventListener('eva-admin-changed', onChange)
-      window.removeEventListener('eva-admin-expired', onChange)
+      window.removeEventListener('golden-admin-changed', onChange)
+      window.removeEventListener('golden-admin-expired', onChange)
       window.removeEventListener('storage', onChange)
       window.removeEventListener('focus', onChange)
     }
@@ -181,11 +181,11 @@ export function AdminAlerts() {
           ]
             .filter(Boolean)
             .join(' — ')
-          const notification = new Notification(fresh.length > 1 ? `${fresh.length} طلبات جديدة • إيفا ستور` : 'طلب جديد • إيفا ستور', {
+          const notification = new Notification(fresh.length > 1 ? `${fresh.length} طلبات جديدة • Golden Cosmetics` : 'طلب جديد • Golden Cosmetics', {
             body,
             icon: 'favicon.svg',
             badge: 'favicon.svg',
-            tag: `eva-live-${newestId}`,
+            tag: `golden-live-${newestId}`,
             lang: 'ar',
             dir: 'rtl',
           })

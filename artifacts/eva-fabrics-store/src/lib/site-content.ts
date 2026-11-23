@@ -208,8 +208,8 @@ export const useStoreSettings = (): StoreSettings => {
   const [settings, setSettings] = useState<StoreSettings>(() => readStoreSettings())
   useEffect(() => {
     const sync = () => setSettings(readStoreSettings())
-    window.addEventListener('eva-admin-changed', sync)
-    return () => window.removeEventListener('eva-admin-changed', sync)
+    window.addEventListener('golden-admin-changed', sync)
+    return () => window.removeEventListener('golden-admin-changed', sync)
   }, [])
   return settings
 }
@@ -221,10 +221,10 @@ export const useSiteContent = (): SiteContent => {
   useEffect(() => {
     const sync = () => setContent(readSiteContent())
     listeners.add(sync)
-    window.addEventListener('eva-admin-changed', sync)
+    window.addEventListener('golden-admin-changed', sync)
     return () => {
       listeners.delete(sync)
-      window.removeEventListener('eva-admin-changed', sync)
+      window.removeEventListener('golden-admin-changed', sync)
     }
   }, [])
   return content
