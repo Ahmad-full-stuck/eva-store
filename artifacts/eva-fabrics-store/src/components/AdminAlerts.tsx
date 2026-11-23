@@ -86,7 +86,7 @@ function playChime(): void {
 }
 
 const styles = `
-.eva-alert-card { position: fixed; z-index: 260; inset-inline-start: 16px; inset-inline-end: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); max-width: 460px; margin-inline: auto; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; border: 1px solid rgba(122,30,60,.18); background: #fff; box-shadow: 0 22px 46px -20px rgba(46,24,33,.5); animation: evaAlertUp .22s ease both; text-align: start; }
+.eva-alert-card { position: fixed; z-index: 260; inset-inline-start: 16px; inset-inline-end: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); max-width: 460px; margin-inline: auto; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; border: 1px solid rgba(169,135,76,.18); background: #fff; box-shadow: 0 22px 46px -20px rgba(40,34,26,.5); animation: evaAlertUp .22s ease both; text-align: start; }
 .eva-alert-card .eap-ico { flex: 0 0 auto; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: #fff; background: linear-gradient(135deg, var(--eva-rose), var(--eva-charcoal)); }
 .eva-alert-card .eap-copy { flex: 1 1 auto; min-width: 0; }
 .eva-alert-card .eap-copy strong { display: block; font-size: 13.5px; font-weight: 700; color: var(--eva-ink); }
