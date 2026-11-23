@@ -1,6 +1,5 @@
 import type { Env } from './types'
 
-const DEFAULT_PIN = '2468'
 export const SESSION_TTL_MS = 45 * 24 * 60 * 60 * 1000
 const PBKDF2_ITERATIONS = 100_000
 
@@ -61,7 +60,7 @@ export const verifyPin = async (env: Env, pin: string): Promise<boolean> => {
   if (!pin) return false
   if (env.ADMIN_PIN) return pin === env.ADMIN_PIN
   const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'admin_pin'").first<{ value: string }>()
-  if (!row?.value) return pin === DEFAULT_PIN
+  if (!row?.value) return false
   if (row.value.startsWith('sha256:')) {
     const hash = await sha256(pin)
     return hash === row.value.slice('sha256:'.length)
