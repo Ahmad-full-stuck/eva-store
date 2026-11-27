@@ -186,3 +186,6 @@ jobs:
       - name: Deploy رزان للإكسسوارات storefront Worker
         working-directory: artifacts/eva-worker
         run: pnpm exec wrangler deploy --config ../client-stores/razan-accessories2/wrangler.jsonc
+      - name: Deploy Golden Cosmetics storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/golden-cosmetics/wrangler.jsonc

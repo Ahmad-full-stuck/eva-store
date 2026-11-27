@@ -26,3 +26,5 @@ Cloudflare Worker resources and workers.dev subdomains for the twelve new previe
 ## Phase 2 — bespoke visual direction
 
 The twelve new client previews now use dedicated vertical storefront home compositions selected by business category rather than only recoloring one shared home page. Their category navigation, editorial/food/device imagery, product-card treatment, hero composition and responsive layouts are separately art-directed. The shared catalog and product-detail screens also receive per-brand visual refinements. Demo imagery and catalog data remain illustrative until each client supplies approved assets and stock data.
+
+- كولدن كوزمتك — https://golden-cosmetics.eva-store.workers.dev/
