@@ -31,8 +31,6 @@ export const VERTICAL_TENANT_KEYS = new Set([
   'kn-fashion-woman',
   'razan-accessories2',
   'golden-cosmetics',
-  'amira-iraq',
-  'arin-fashion95'
 ])
 
 export const STORE_BRANDS: Record<string, StoreBrand> = {
