@@ -30,7 +30,9 @@ export const VERTICAL_TENANT_KEYS = new Set([
   'shams-golden1',
   'kn-fashion-woman',
   'razan-accessories2',
-  'golden-cosmetics'
+  'golden-cosmetics',
+  'amira-iraq',
+  'arin-fashion95'
 ])
 
 export const STORE_BRANDS: Record<string, StoreBrand> = {
@@ -146,6 +148,50 @@ export const STORE_BRANDS: Record<string, StoreBrand> = {
   "shams-golden1": {"key":"shams-golden1","mark":"SG","kicker":"SHAMS GOLDEN · ACCESSORIES","title":"قطعة بسيطة تترك أثرها","description":"تصفحي القلائد والأقراط والأساور والساعات والأطقم ضمن تجربة بوتيك هادئة وواضحة.","artLabel":"SHAMS GOLDEN · ACCESSORIES","artTitle":"SHAMS GOLDEN · JEWELRY","categories":[{"id":"قلائد وسلاسل","label":"قلائد وسلاسل","description":"قلائد وسلاسل بتصاميم مختلفة","icon":"gift"},{"id":"أقراط","label":"أقراط","description":"أقراط وقطع أذن","icon":"gift"},{"id":"أساور وخواتم","label":"أساور وخواتم","description":"أساور وخواتم","icon":"gift"},{"id":"ساعات","label":"ساعات","description":"ساعات نسائية","icon":"watch"},{"id":"هدايا وأطقم","label":"هدايا وأطقم","description":"أطقم وقطع مناسبة للهدايا","icon":"gift"}],"features":[{"title":"كل قطعة في فئتها","description":"الوصول للقلادة أو القرط أو الساعة مباشرة.","icon":"gift"},{"title":"تفاصيل القطعة","description":"الخامة والقياس والتشطيب بحسب القطعة.","icon":"check"},{"title":"تأكيد قبل الطلب","description":"اسألي عن القطعة المتاحة وتفاصيلها.","icon":"pin"}],"catalogTitle":"تشكيلة Shams Golden","catalogIntro":"نماذج عرض للإكسسوارات والأطقم؛ الصور والموديلات الفعلية تُعتمد من المتجر.","catalogAction":"تصفح المنتجات","specLabels":{"composition":"نوع القطعة","width":"المقاس أو الطول","weight":"الخامة","stretch":"اللون","opacity":"تفاصيل القطعة","finish":"القفل والتشطيب","care":"العناية","use":"الاستخدام والمناسبة"}},
   "kn-fashion-woman": {"key":"kn-fashion-woman","mark":"KN","kicker":"KN FASHION WOMAN","title":"اختاري إطلالتك من مكان واحد","description":"فساتين وأطقم وملابس يومية وحقائب وأحذية، مع أقسام تساعدك على المقارنة واختيار المقاس.","artLabel":"KN FASHION WOMAN","artTitle":"KN FASHION · WOMEN","categories":[{"id":"فساتين","label":"فساتين","description":"فساتين للمناسبات والإطلالات اليومية","icon":"dress"},{"id":"أطقم نسائية","label":"أطقم نسائية","description":"أطقم وتنسيقات جاهزة","icon":"fashion"},{"id":"ملابس يومية","label":"ملابس يومية","description":"قطع يومية مريحة","icon":"shirt"},{"id":"حقائب","label":"حقائب","description":"حقائب تكمل الإطلالة","icon":"bag"},{"id":"أحذية","label":"أحذية","description":"أحذية بمقاسات وتصاميم مختلفة","icon":"shoe"}],"features":[{"title":"تسوق حسب القطعة","description":"انتقلي إلى الفساتين أو الأطقم أو الملابس اليومية.","icon":"dress"},{"title":"المقاس والتفاصيل","description":"راجعي القياس والخامة واللون قبل الطلب.","icon":"check"},{"title":"تواصل مباشر","description":"تأكدي من المقاسات والألوان المتوفرة.","icon":"pin"}],"catalogTitle":"تشكيلة KN Fashion Woman","catalogIntro":"هذه معاينة لتقسيم متجر الأزياء النسائية، وتُستبدل بالموديلات والمقاسات المعتمدة.","catalogAction":"تصفح المنتجات","specLabels":{"composition":"الخامة","width":"المقاس","weight":"اللون","stretch":"القصة والتصميم","opacity":"تفاصيل القطعة","finish":"التشطيب","care":"العناية","use":"التنسيق والمناسبة"}},
   "razan-accessories2": {"key":"razan-accessories2","mark":"R","kicker":"RAZAN ACCESSORIES","title":"إكسسواراتك اليومية بتفاصيل أوضح","description":"قلائد وأقراط وحقائب وساعات وقطع يومية في واجهة بسيطة تسهّل الوصول لكل نوع.","artLabel":"RAZAN ACCESSORIES","artTitle":"RAZAN · ACCESSORIES","categories":[{"id":"قلائد وسلاسل","label":"قلائد وسلاسل","description":"قلائد وسلاسل","icon":"gift"},{"id":"أقراط","label":"أقراط","description":"أقراط وقطع أذن","icon":"gift"},{"id":"حقائب","label":"حقائب","description":"حقائب وإكسسوارات حمل","icon":"bag"},{"id":"ساعات","label":"ساعات","description":"ساعات نسائية","icon":"watch"},{"id":"إكسسوارات يومية","label":"إكسسوارات يومية","description":"أساور وقطع يومية","icon":"gift"}],"features":[{"title":"تصنيف القطع","description":"كل نوع من الإكسسوارات ضمن قسم واضح.","icon":"gift"},{"title":"تفاصيل ومقاسات","description":"راجعي الخامة والقياس واللون قبل الطلب.","icon":"check"},{"title":"اطلبي التفاصيل","description":"تواصلي لتأكيد القطعة المتوفرة.","icon":"pin"}],"catalogTitle":"تشكيلة رزان للإكسسوارات","catalogIntro":"نماذج أولية لعرض القطع، وتُضاف صور التشكيلة الحقيقية بعد اعتمادها.","catalogAction":"تصفح المنتجات","specLabels":{"composition":"نوع القطعة","width":"المقاس أو الطول","weight":"الخامة","stretch":"اللون","opacity":"تفاصيل القطعة","finish":"القفل والتشطيب","care":"العناية","use":"الاستخدام والمناسبة"}},
-  "golden-cosmetics": {"key":"golden-cosmetics","mark":"GC","kicker":"GOLDEN COSMETICS · BAGHDAD","title":"جمالك يبدأ من التفاصيل","description":"العطور والعدسات ومستحضرات التجميل ومنتجات العناية والإكسسوارات ضمن تجربة تصفح مرتبة.","artLabel":"GOLDEN COSMETICS","artTitle":"YOUR BEAUTY · YOUR GOLDEN TOUCH","categories":[{"id":"العطور","label":"العطور","description":"اختيارات عطرية لمختلف الأذواق","icon":"gift"},{"id":"العدسات","label":"العدسات","description":"تصفحي قسم العدسات وتفاصيلها","icon":"watch"},{"id":"الرموش","label":"الرموش","description":"خيارات متنوعة لقسم الرموش","icon":"handmade"},{"id":"المكياج","label":"المكياج","description":"مستحضرات المكياج وتفاصيلها","icon":"gift"},{"id":"العناية بالبشرة","label":"العناية بالبشرة","description":"منتجات العناية والسكرابات","icon":"handmade"},{"id":"بوكسات العناية","label":"بوكسات العناية","description":"بوكسات ومنتجات عناية متنوعة","icon":"bag"},{"id":"الإكسسوارات","label":"الإكسسوارات","description":"إكسسوارات وقطع مختارة","icon":"bag"}],"features":[{"title":"أقسام متنوعة","description":"العطور والتجميل والعناية والإكسسوارات في مكان واحد.","icon":"gift"},{"title":"موقع المتجر","description":"بغداد · الزعفرانية · الأربعة شوارع","icon":"pin"},{"title":"تواصلي مع المتجر","description":"راجعي الحساب لمعرفة التفاصيل والتوفر الفعلي.","icon":"check"}],"catalogTitle":"تشكيلة كولدن كوزمتك","catalogIntro":"تصفحي العطور ومستحضرات التجميل والعدسات والرموش ومنتجات العناية والإكسسوارات. الأسعار والتوفر الفعلي يؤكدهما المتجر.","catalogAction":"تصفح المنتجات","specLabels":{"composition":"نوع المنتج","width":"الحجم","weight":"العلامة التجارية","stretch":"اللون","opacity":"تفاصيل المنتج","finish":"التعبئة","care":"إرشادات الاستخدام","use":"الاستخدام"}}
+  "golden-cosmetics": {"key":"golden-cosmetics","mark":"GC","kicker":"GOLDEN COSMETICS · BAGHDAD","title":"جمالك يبدأ من التفاصيل","description":"العطور والعدسات ومستحضرات التجميل ومنتجات العناية والإكسسوارات ضمن تجربة تصفح مرتبة.","artLabel":"GOLDEN COSMETICS","artTitle":"YOUR BEAUTY · YOUR GOLDEN TOUCH","categories":[{"id":"العطور","label":"العطور","description":"اختيارات عطرية لمختلف الأذواق","icon":"gift"},{"id":"العدسات","label":"العدسات","description":"تصفحي قسم العدسات وتفاصيلها","icon":"watch"},{"id":"الرموش","label":"الرموش","description":"خيارات متنوعة لقسم الرموش","icon":"handmade"},{"id":"المكياج","label":"المكياج","description":"مستحضرات المكياج وتفاصيلها","icon":"gift"},{"id":"العناية بالبشرة","label":"العناية بالبشرة","description":"منتجات العناية والسكرابات","icon":"handmade"},{"id":"بوكسات العناية","label":"بوكسات العناية","description":"بوكسات ومنتجات عناية متنوعة","icon":"bag"},{"id":"الإكسسوارات","label":"الإكسسوارات","description":"إكسسوارات وقطع مختارة","icon":"bag"}],"features":[{"title":"أقسام متنوعة","description":"العطور والتجميل والعناية والإكسسوارات في مكان واحد.","icon":"gift"},{"title":"موقع المتجر","description":"بغداد · الزعفرانية · الأربعة شوارع","icon":"pin"},{"title":"تواصلي مع المتجر","description":"راجعي الحساب لمعرفة التفاصيل والتوفر الفعلي.","icon":"check"}],"catalogTitle":"تشكيلة كولدن كوزمتك","catalogIntro":"تصفحي العطور ومستحضرات التجميل والعدسات والرموش ومنتجات العناية والإكسسوارات. الأسعار والتوفر الفعلي يؤكدهما المتجر.","catalogAction":"تصفح المنتجات","specLabels":{"composition":"نوع المنتج","width":"الحجم","weight":"العلامة التجارية","stretch":"اللون","opacity":"تفاصيل المنتج","finish":"التعبئة","care":"إرشادات الاستخدام","use":"الاستخدام"}},
+
+  "amira-iraq": {
+    key:"amira-iraq",mark:"AI",kicker:"أميرة العراق · للعباية الخليجية",
+    title:"العباية الخليجية بتفاصيل تليق بك",
+    description:"تصفحي نماذج العبايات الخليجية والعبايات المفتوحة وعبايات المناسبات والشيلات ضمن متجر يحمل هوية أميرة العراق.",
+    artLabel:"أميرة العراق",artTitle:"أناقة خليجية بتفاصيل هادئة",
+    categories:[
+      {id:"عبايات خليجية",label:"عبايات خليجية",description:"قصات خليجية وإطلالات أنيقة",icon:"abaya"},
+      {id:"عبايات مفتوحة",label:"عبايات مفتوحة",description:"خيارات سهلة التنسيق",icon:"fashion"},
+      {id:"عبايات مناسبات",label:"عبايات مناسبات",description:"تفاصيل راقية للمناسبات",icon:"dress"},
+      {id:"أطقم عبايات",label:"أطقم عبايات",description:"عبايات مع شيلات متناسقة",icon:"abaya"}
+    ],
+    features:[
+      {title:"توصيل البصرة",description:"التوصيل المذكور في الحساب: 5",icon:"truck"},
+      {title:"توصيل المحافظات",description:"جميع محافظات العراق: 7",icon:"truck"},
+      {title:"تواصل مباشر",description:"اطلبي التفاصيل عبر حساب أميرة العراق",icon:"check"}
+    ],
+    catalogTitle:"تشكيلة أميرة العراق",
+    catalogIntro:"المنتجات والأسعار والصور في هذه النسخة أمثلة توضيحية لتصميم المتجر وليست مخزوناً فعلياً.",
+    catalogAction:"تصفحي العبايات",
+    specLabels:{"composition":"الخامة","width":"المقاس والطول","weight":"تفاصيل القماش","stretch":"اللون","opacity":"التفاصيل","finish":"القصة والتطريز","care":"العناية","use":"الاستخدام والمناسبة"}
+  },
+  "arin-fashion95": {
+    key:"arin-fashion95",mark:"AF",kicker:"ARIN FASHION · أزياء أرين",
+    title:"إطلالتك تبدأ من اختيارك",
+    description:"تصفحي نماذج الفساتين والأطقم والملابس اليومية والحقائب والأحذية ضمن تجربة تسوق أنيقة.",
+    artLabel:"ARIN FASHION",artTitle:"اختيارات نسائية لكل إطلالة",
+    categories:[
+      {id:"فساتين",label:"الفساتين",description:"فساتين للمناسبات والإطلالات",icon:"dress"},
+      {id:"أطقم نسائية",label:"الأطقم النسائية",description:"تنسيقات جاهزة بإطلالة متكاملة",icon:"fashion"},
+      {id:"ملابس يومية",label:"الملابس اليومية",description:"قطع عملية للستايل اليومي",icon:"shirt"},
+      {id:"حقائب",label:"الحقائب",description:"حقائب تكمل إطلالتك",icon:"bag"},
+      {id:"أحذية",label:"الأحذية",description:"اختيارات لمختلف الإطلالات",icon:"shoe"}
+    ],
+    features:[
+      {title:"فرع المنصور",description:"بغداد · شارع الأميرات · عمارة الكوخ الجديد",icon:"pin"},
+      {title:"حساب إنستغرام",description:"@arin.fashion95 · الحساب المرتبط @arin.zayona",icon:"check"},
+      {title:"تشكيلة نسائية",description:"فساتين وأطقم وملابس وحقائب وأحذية",icon:"dress"}
+    ],
+    catalogTitle:"تشكيلة Arin Fashion",
+    catalogIntro:"المنتجات والأسعار والصور في هذه النسخة أمثلة توضيحية لتصميم المتجر وليست مخزوناً فعلياً.",
+    catalogAction:"تصفحي التشكيلة",
+    specLabels:{"composition":"الخامة","width":"المقاس","weight":"تفاصيل القطعة","stretch":"اللون","opacity":"التفاصيل","finish":"القصة والتصميم","care":"العناية","use":"التنسيق والمناسبة"}
+  },
 }
 export const getStoreBrand=(key?:string):StoreBrand=>STORE_BRANDS[key||'']||STORE_BRANDS.laya
