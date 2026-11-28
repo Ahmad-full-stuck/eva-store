@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220">
+<defs><linearGradient id="frame" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#d9aa2e"/><stop offset=".52" stop-color="#f3a2c4"/><stop offset="1" stop-color="#cf2392"/></linearGradient><linearGradient id="pink" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e98bb8"/><stop offset="1" stop-color="#a92f70"/></linearGradient></defs>
+<circle cx="110" cy="110" r="106" fill="url(#frame)"/><circle cx="110" cy="110" r="98" fill="#fff" stroke="#f8dce9" stroke-width="2"/>
+<path d="M105 42 C96 47 97 60 105 65 L105 77 C99 82 91 92 84 105 L57 145 C53 151 57 157 66 160 L95 171 L94 186 L126 186 L125 171 L154 160 C163 157 167 151 163 145 L136 105 C129 92 121 82 115 77 L115 65 C123 60 124 47 115 42 Z" fill="none" stroke="url(#pink)" stroke-width="5" stroke-linejoin="round"/>
+<path d="M105 67 Q110 73 115 67 M90 100 Q110 111 130 100 M84 109 Q110 125 136 109" fill="none" stroke="#c44c87" stroke-width="3"/><path d="M57 145 Q110 178 163 145 L154 160 Q110 191 66 160 Z" fill="url(#pink)" opacity=".9"/><path d="M101 185 H130" stroke="#b53e7c" stroke-width="4" stroke-linecap="round"/><path d="M110 42 V31 M104 32 Q110 20 116 32" fill="none" stroke="#b63d7e" stroke-width="3" stroke-linecap="round"/>
+</svg>
