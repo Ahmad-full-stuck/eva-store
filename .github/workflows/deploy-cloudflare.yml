@@ -189,3 +189,10 @@ jobs:
       - name: Deploy Golden Cosmetics storefront Worker
         working-directory: artifacts/eva-worker
         run: pnpm exec wrangler deploy --config ../client-stores/golden-cosmetics/wrangler.jsonc
+
+      - name: Deploy أميرة العراق storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/amira-iraq/wrangler.jsonc
+      - name: Deploy Arin Fashion storefront Worker
+        working-directory: artifacts/eva-worker
+        run: pnpm exec wrangler deploy --config ../client-stores/arin-fashion95/wrangler.jsonc
