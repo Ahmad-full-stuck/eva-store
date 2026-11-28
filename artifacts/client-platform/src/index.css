@@ -2476,3 +2476,7 @@ html[data-aalam-theme="dark"] .tenant-app--aalam-alqalaa .site-footer strong { c
 @media (max-width:560px) {
   .tenant-app--aalam-alqalaa .header-actions .aalam-theme-toggle { display:inline-flex; }
 }
+
+.logo-symbol.logo-symbol-brand { width: 46px; height: 46px; border: 0; border-radius: 50%; background: transparent; box-shadow: none; overflow: visible; }
+.logo-symbol.logo-symbol-brand img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+@media (max-width: 560px) { .logo-symbol.logo-symbol-brand { width: 42px; height: 42px; } }
