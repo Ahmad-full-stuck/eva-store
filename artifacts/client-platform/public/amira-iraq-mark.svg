@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220">
+<defs><linearGradient id="ring" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e52aa1"/><stop offset=".45" stop-color="#c88b30"/><stop offset="1" stop-color="#f4c62a"/></linearGradient><linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f6dc88"/><stop offset=".5" stop-color="#c58c2d"/><stop offset="1" stop-color="#8b5c16"/></linearGradient></defs>
+<circle cx="110" cy="110" r="105" fill="url(#ring)"/><circle cx="110" cy="110" r="99" fill="#090909" stroke="#d7aa54" stroke-width="2"/><circle cx="110" cy="110" r="90" fill="none" stroke="#6e5428"/>
+<path d="M67 73 L73 47 L91 62 L110 34 L129 62 L147 47 L153 73 Z" fill="url(#gold)" stroke="#f2d68a" stroke-width="2"/><circle cx="73" cy="45" r="4" fill="#f6dda0"/><circle cx="110" cy="32" r="5" fill="#f6dda0"/><circle cx="147" cy="45" r="4" fill="#f6dda0"/><path d="M70 77 Q110 87 150 77" fill="none" stroke="#d6ad5f" stroke-width="2"/>
+<text x="110" y="122" text-anchor="middle" font-size="28" font-weight="700" fill="url(#gold)" font-family="Arial,sans-serif">أميرة</text><text x="110" y="157" text-anchor="middle" font-size="30" font-weight="700" fill="url(#gold)" font-family="Arial,sans-serif">العراق</text><path d="M70 171 Q110 183 150 171" fill="none" stroke="#8d6a34"/>
+</svg>
